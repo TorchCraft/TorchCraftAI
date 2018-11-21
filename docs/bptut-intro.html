@@ -44,7 +44,7 @@ The actual construction will be performed by the <a href="/TorchCraftAI/docs/mod
 As discussed above, this is not the full story and a natural approach would be to learn all of the <strong>when</strong>, <strong>what</strong> and <strong>where</strong> of unit production jointly.
 This would require more elaborate model and training setups and is hence considered outside of the scope of this example.</p>
 <p>Generally, we assume that the placement has already been restricted (by the strategy module or the built-in placement rules) to a specific <strong>area</strong> as defined by <a href="http://bwem.sourceforge.net/">BWEM</a>, the map analysis tool used in TorchCraftAI.</p>
-<p><img src="/docs/assets/bwem-areas.png" alt="BWEM areas on &quot;Heartbreak Ridge&quot;"></p>
+<p><img src="/TorchCraftAI/docs/assets/bwem-areas.png" alt="BWEM areas on &quot;Heartbreak Ridge&quot;"></p>
 <p>The image above (credit to <a href="http://bwem.sourceforge.net/">http://bwem.sourceforge.net/</a>) illustrates the concept of ares for a Brood War map.
 In a nutshell, they represent coherent regions on a map which are connected via ramps or choke points (or not connected at all, e.g. islands).</p>
 <p>To sum up, the input of our learned placement model will now be (apart from the current game state) a requested building type and a requested area.

@@ -54,7 +54,7 @@ Modules typically implement logic for</p>
 <p>To enable richer communication, UPCTuples also contain a <strong>state</strong> field supporting a variety of types.</p>
 <p>As a concrete example, consider the following (simplified) macro-management
 setup (explanation below):</p>
-<p><img src="/docs/assets/upc.gif" alt="UPCTuple communication example"></p>
+<p><img src="/TorchCraftAI/docs/assets/upc.gif" alt="UPCTuple communication example"></p>
 <p>The <a href="">Strategy</a> module begins by posting a UPCTuple with uniform distributions over units and positions, but with a sharp (dirac) distribution over <strong>commands</strong> (&quot;create&quot;) and a string identifying a <a href="">Build Order</a> as the state.
 <a href="">AutoBuild</a>, our build planning module, instantiates the specified <a href="">Build Order</a>, which (over time) results in multiple UPCTuples being posted, each one specifying a unit type to be created in the state field.
 For buildings, <a href="">BuildingPlacer</a> will refine the <strong>position</strong> distribution so that it has a probability of 1 at the selected location and 0 otherwise.

@@ -37,7 +37,7 @@ can be placed.
 There are several rules that determine whether a location is valid for a given
 building.
 For example, consider the following situation:</p>
-<p><img alt="Placement of a Zerg Evolution Chamber" width="75%" src="/docs/assets/building-placement.png"/></p>
+<p><img alt="Placement of a Zerg Evolution Chamber" width="75%" src="assets/building-placement.png"/></p>
 <p>The Brood War UI indicates which buildtiles can be used for a building and highlights them in green.
 The red tiles cannot be used, e.g. if another unit is in the way (here, the Hatchery) or if the location is considered unbuildable (a cliff, for example).
 There are further rules applying to individual buildings: Zerg buildings, with the exception of Hatcheries and Extractors, can only be placed on <a href="http://starcraft.wikia.com/wiki/Creep">creep</a> which is shown in purple in the image above.</p>
@@ -82,7 +82,7 @@ For competitive play, the maximum map size that is considered is 1024x1024 pixel
 We make sure that our model always operates on a 128x128 input by zero-padding features for smaller maps.
 For example, on <a href="https://liquipedia.net/starcraft/Heartbreak_Ridge">&quot;Heartbreak Ridge&quot;</a>, which is a 128x96 buildtile map, we would apply zero-padding of 16 buildtiles at the top and bottom of the input features.</p>
 <p>The figure below is a plot of the above features in <a href="https://github.com/facebookresearch/visdom">Visdom</a>, extracted from a human game replay from the <a href="https://github.com/TorchCraft/StarData">StarData</a> dataset.</p>
-<p><img src="/docs/assets/bptut-features.png" alt="Visualization of Building Placement Model Features"></p>
+<p><img src="/TorchCraftAI/docs/assets/bptut-features.png" alt="Visualization of Building Placement Model Features"></p>
 <h2><a class="anchor" aria-hidden="true" id="output"></a><a href="#output" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Output</h2>
 <p>The output of the model is a probability distribution over the whole map in
 buildtile resolution, i.e. for each buildtile position, we obtain a probability
@@ -93,7 +93,7 @@ This does not change the general nature of the output, however.</p>
 <h2><a class="anchor" aria-hidden="true" id="model-architecture"></a><a href="#model-architecture" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Model Architecture</h2>
 <p>We select a <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">convolutional neural network</a> (CNN) with a feature pyramid and lateral connections as our model.
 This architecture is common in image processing and has been used successfully for <a href="https://arxiv.org/abs/1612.03144">object detection</a>, for example.</p>
-<p><img src="/docs/assets/bptut-model.png" alt="Building placement model"></p>
+<p><img src="/TorchCraftAI/docs/assets/bptut-model.png" alt="Building placement model"></p>
 <p>On the left of the figure above, input features are processed using convolutional neural networks with a striding of 2.
 As a result, the 128x128 input will be transformed into a 64x64 and finally into a 32x32 pane of activations.
 At this scale, information can easily be propagated across the full map by successively applying local filters, i.e. convolutional layers with a stride of 1.

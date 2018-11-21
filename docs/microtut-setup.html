@@ -96,7 +96,7 @@ Here are again the abbreviations we use:</p>
 <h3><a class="anchor" aria-hidden="true" id="symmetric-scenarios"></a><a href="#symmetric-scenarios" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Symmetric scenarios</h3>
 <p>These are basicaly scenarios that are guaranteed to be balanced.
 Several of the scenarios with 2 unit types rely on focus firing down one of the types first.</p>
-<p><img src="/docs/assets/go+bc.microtut.gif" alt="Goliaths and Battlecruisers"></p>
+<p><img src="/TorchCraftAI/docs/assets/go+bc.microtut.gif" alt="Goliaths and Battlecruisers"></p>
 <table>
 <thead>
 <tr><th style="text-align:right">Test Win Rates</th><th style="text-align:center">weakest-closest</th><th style="text-align:center">closest</th><th style="text-align:center">attack-move</th></tr>
@@ -151,7 +151,7 @@ Several of the scenarios with 2 unit types rely on focus firing down one of the 
 <p>These formation based scenarios ideally involve the units grouping before fighting.
 However, a few of them can achieve good winrrates with good focus fire.
 Our model is not able to learn the regrouping tactic.</p>
-<p><img src="/docs/assets/conga_mu.microtut.gif" alt="Mutalisks"></p>
+<p><img src="/TorchCraftAI/docs/assets/conga_mu.microtut.gif" alt="Mutalisks"></p>
 <table>
 <thead>
 <tr><th style="text-align:right">Test Win Rates</th><th style="text-align:center">weakest-closest</th><th style="text-align:center">closest</th><th style="text-align:center">attack-move</th></tr>
@@ -181,8 +181,8 @@ Our model is not able to learn the regrouping tactic.</p>
 <h3><a class="anchor" aria-hidden="true" id="asymmetric-scenarios"></a><a href="#asymmetric-scenarios" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Asymmetric scenarios</h3>
 <p>Many of these scenarios rely on kiting to defeat a slower, melee ranged opponent.
 A few rely on spreading units apart to avoid splash damage.</p>
-<p><img src="/docs/assets/10mu_5co.microtut.gif" alt="Mutalisks vs Corsairs"></p>
-<p><img src="/docs/assets/10mr_13zg.microtut.gif" alt="Marines vs Zerglings"></p>
+<p><img src="/TorchCraftAI/docs/assets/10mu_5co.microtut.gif" alt="Mutalisks vs Corsairs"></p>
+<p><img src="/TorchCraftAI/docs/assets/10mr_13zg.microtut.gif" alt="Marines vs Zerglings"></p>
 <table>
 <thead>
 <tr><th style="text-align:right">Test Win Rates</th><th style="text-align:center">weakest-closest</th><th style="text-align:center">closest</th><th style="text-align:center">attack-move</th></tr>
@@ -233,7 +233,7 @@ In popoverlords, the reward is -1 for how long it took to kill all overlords.
 In ignorecivilians, the reward is 1 for a perfect success, and between 0-1 for each civilian we kill.
 We can see the model focuses the high templar, but isn't able to learn to completely ignore all civilians.
 One tactic we observed is that the model would oscillate between two civilians so it never managed to kill any.</p>
-<p><img src="/docs/assets/ignorecivilians.microtut.gif" alt="Ignore civilians"></p>
+<p><img src="/TorchCraftAI/docs/assets/ignorecivilians.microtut.gif" alt="Ignore civilians"></p>
 <table>
 <thead>
 <tr><th style="text-align:right">Scenario</th><th style="text-align:center">Test reward</th></tr>
