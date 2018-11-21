@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['obstaclesinsightrange',['obstaclesInSightRange',['../structcherrypi_1_1Unit.html#a2ac0f35e920d4678bf0acf4fc543a0f4',1,'cherrypi::Unit']]],
+  ['ocular_5fimplants',['Ocular_Implants',['../namespacecherrypi_1_1buildtypes.html#a000155e976d57731f74f03fc278efc31',1,'cherrypi::buildtypes']]],
+  ['offset',['offset',['../structcherrypi_1_1FeatureData.html#a80f681a54097925f5ef15d7fe955c09a',1,'cherrypi::FeatureData']]],
+  ['offx',['offx',['../structcherrypi_1_1FeaturePositionMapper.html#a251caaf037a32fcb0320aa9dddb3b4e3',1,'cherrypi::FeaturePositionMapper']]],
+  ['offy',['offy',['../structcherrypi_1_1FeaturePositionMapper.html#a607ab06646016fa19fb1a496cb72cdc6',1,'cherrypi::FeaturePositionMapper']]],
+  ['only_5fconsider_5ftypes',['only_consider_types',['../structtorchcraft_1_1Client_1_1Options.html#a4a3aa99a4e20547ed50ad26a2f9144ec',1,'torchcraft::Client::Options']]],
+  ['onpolicy_5f',['onPolicy_',['../classcpid_1_1ESTrainer.html#aade56a84e626535de48e07eb217d3b1b',1,'cpid::ESTrainer']]],
+  ['openbw_5fcommand_5fend',['OPENBW_COMMAND_END',['../namespacetorchcraft_1_1BW.html#aa46c00cb232c298c2f768f097a40e3f4',1,'torchcraft::BW']]],
+  ['opponentname',['opponentName',['../structcherrypi_1_1bos_1_1StaticData.html#af610f2907acafa9bdadf527331b64645',1,'cherrypi::bos::StaticData']]],
+  ['optical_5fflare',['Optical_Flare',['../namespacecherrypi_1_1buildtypes.html#a8b4ff7ccd45c59de16af60c37acbbe1a',1,'cherrypi::buildtypes']]],
+  ['optim_5f',['optim_',['../classcpid_1_1Trainer.html#a48445f0e117aaba61c32e0cbf317d253',1,'cpid::Trainer']]],
+  ['order_5fdiffs',['order_diffs',['../classtorchcraft_1_1replayer_1_1detail_1_1UnitDiff.html#a42734b6ce88e0404f39d5251caaed0a7',1,'torchcraft::replayer::detail::UnitDiff']]],
+  ['order_5fids',['order_ids',['../classtorchcraft_1_1replayer_1_1detail_1_1UnitDiff.html#aefa0b209d0a224a844170921f29859db',1,'torchcraft::replayer::detail::UnitDiff']]],
+  ['order_5fsize',['order_size',['../classtorchcraft_1_1replayer_1_1detail_1_1UnitDiff.html#a751d613d53eadecc11bb77911759fcfc',1,'torchcraft::replayer::detail::UnitDiff']]],
+  ['orders',['orders',['../structtorchcraft_1_1replayer_1_1Unit.html#a483d7ef8ec88eb048795e71333834396',1,'torchcraft::replayer::Unit']]],
+  ['ore',['ore',['../structtorchcraft_1_1replayer_1_1Resources.html#a19e1da6213851d44e63a23c4804cafd9',1,'torchcraft::replayer::Resources']]],
+  ['origin',['origin',['../structcherrypi_1_1UPCData.html#a53ecbe7fcc51feb8b53d73a315ac2552',1,'cherrypi::UPCData']]],
+  ['overwrite',['overwrite',['../structcherrypi_1_1EnvVar.html#af79afdcd72ca54e0ac0ec9d235690503',1,'cherrypi::EnvVar::overwrite()'],['../structcherrypi_1_1OpenBwProcess_1_1EnvVar.html#a1a59ccfdb091bf51e95e69e77cc67f32',1,'cherrypi::OpenBwProcess::EnvVar::overwrite()']]],
+  ['owner',['owner',['../structcherrypi_1_1TaskData.html#ac240ca8eea3a5684d42ca56a6c0bf22b',1,'cherrypi::TaskData']]],
+  ['owner_5f',['owner_',['../classcherrypi_1_1HarassTask.html#a3142cad5279848a59ea1a8598df9a47a',1,'cherrypi::HarassTask']]]
+];
