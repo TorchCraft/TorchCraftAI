@@ -30,7 +30,7 @@ The list of core features includes
 
 As an example, here's the complete picture for a setup in which two TorchCraftAI bots play against each other:
 
-<img src="/docs/assets/system.png" alt="Self-play setup" width="60%"/>
+<img src="assets/system.png" alt="Self-play setup" width="60%"/>
 
 In this program, two TorchCraftAI Player wrap two distinct TorchCraft clients, each controlling one party in a two-player StarCraft game.
 Two synchronized instances of StarCraft: Brood War are required for this, and each one loaded BWAPI and the TorchCraft server DLL.

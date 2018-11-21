@@ -41,11 +41,11 @@ If it succeeds, it has a significant edge over the opponent, which cannot defend
 However, the technology investment requires withstanding the Zergling pressure by placing [Sunken Colonies](https://liquipedia.net/starcraft/Sunken_Colony) for defense.
 If those are purely placed, our player gets defeated quickly.
 
-Check out two sample replays for a [game we win](/docs/assets/bprl-rules-win.rep) and a [game we lose](/docs/assets/bprl-rules-lose.rep) with the built-in placement rules.
+Check out two sample replays for a [game we win](assets/bprl-rules-win.rep) and a [game we lose](assets/bprl-rules-lose.rep) with the built-in placement rules.
 In both replays, "BWEnv1_Zerg" is the player placing the defense buildings.
 The resulting building layout looks like this, and its effectiveness in withstanding the Zergling attack (of our built-in rules) is largely determined by the direction by which enemy units approach the base.
 
-<img alt="Rule-based building placement" width="75%" src="/docs/assets/sunken-scenario-rules.png"/>
+<img alt="Rule-based building placement" width="75%" src="assets/sunken-scenario-rules.png"/>
 
 ## Training Program
 
@@ -256,7 +256,7 @@ Each of our training jobs ran on 8 machines, using 40 CPU cores and 1 GPU on eac
 
 Over 10,000 updates, intermediate win rate evaluations produced the following graphs across 3 different runs:
 
-!["RL Training Performance"](/docs/assets/sunken-scenario-wr.png)
+!["RL Training Performance"](assets/sunken-scenario-wr.png)
 
 How does this compare to the default placement rules?
 To obtain final numbers, let's run a larger evaluation with the default rules and the final models obtained by reinforcement learning, e.g. after 10000 updates using the checkpoint:
@@ -285,25 +285,25 @@ Click on the images to download the respective replays.
 
 <div class="imgrow">
   <div class="imgcol2">
-    <a href="/docs/assets/bprltut-placement-11.rep">
-      <img src="/docs/assets/bprltut-placement-11.png"/>
+    <a href="assets/bprltut-placement-11.rep">
+      <img src="assets/bprltut-placement-11.png"/>
     </a>
   </div>
   <div class="imgcol2">
-    <a href="/docs/assets/bprltut-placement-1.rep">
-      <img src="/docs/assets/bprltut-placement-1.png"/>
+    <a href="assets/bprltut-placement-1.rep">
+      <img src="assets/bprltut-placement-1.png"/>
     </a>
   </div>
 </div>
 <div class="imgrow">
   <div class="imgcol2">
-    <a href="/docs/assets/bprltut-placement-7.rep">
-      <img src="/docs/assets/bprltut-placement-7.png"/>
+    <a href="assets/bprltut-placement-7.rep">
+      <img src="assets/bprltut-placement-7.png"/>
     </a>
   </div>
   <div class="imgcol2">
-    <a href="/docs/assets/bprltut-placement-4.rep">
-      <img src="/docs/assets/bprltut-placement-4.png"/>
+    <a href="assets/bprltut-placement-4.rep">
+      <img src="assets/bprltut-placement-4.png"/>
     </a>
   </div>
 </div>

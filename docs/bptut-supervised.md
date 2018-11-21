@@ -308,7 +308,7 @@ We evaluate the model's performance using several metrics:
 
 Here are plots during training (for Zerg) that show the loss and the above metrics over 3 training runs:
 
-![Supervised Training Performance](/docs/assets/bpsup-errors.png)
+![Supervised Training Performance](assets/bpsup-errors.png)
 
 
 ### Nearest Neighbor Baselines

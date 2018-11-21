@@ -16,7 +16,7 @@ There are several rules that determine whether a location is valid for a given
 building.
 For example, consider the following situation:
 
-<img alt="Placement of a Zerg Evolution Chamber" width="75%" src="/docs/assets/building-placement.png"/>
+<img alt="Placement of a Zerg Evolution Chamber" width="75%" src="assets/building-placement.png"/>
 
 The Brood War UI indicates which buildtiles can be used for a building and highlights them in green.
 The red tiles cannot be used, e.g. if another unit is in the way (here, the Hatchery) or if the location is considered unbuildable (a cliff, for example).
@@ -66,7 +66,7 @@ For example, on ["Heartbreak Ridge"](https://liquipedia.net/starcraft/Heartbreak
 
 The figure below is a plot of the above features in [Visdom](https://github.com/facebookresearch/visdom), extracted from a human game replay from the [StarData](https://github.com/TorchCraft/StarData) dataset.
 
-![Visualization of Building Placement Model Features](/docs/assets/bptut-features.png)
+![Visualization of Building Placement Model Features](assets/bptut-features.png)
 
 ## Output
 
@@ -84,7 +84,7 @@ This does not change the general nature of the output, however.
 We select a [convolutional neural network](https://en.wikipedia.org/wiki/Convolutional_neural_network) (CNN) with a feature pyramid and lateral connections as our model.
 This architecture is common in image processing and has been used successfully for [object detection](https://arxiv.org/abs/1612.03144), for example.
 
-![Building placement model](/docs/assets/bptut-model.png)
+![Building placement model](assets/bptut-model.png)
 
 On the left of the figure above, input features are processed using convolutional neural networks with a striding of 2.
 As a result, the 128x128 input will be transformed into a 64x64 and finally into a 32x32 pane of activations.
