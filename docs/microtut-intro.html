@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Micromanagement Scenarios Tutorial · TorchCraftAI</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;In this tutorial, we will develop a model for micromanagement scenarios using Evolution Strategies&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Micromanagement Scenarios Tutorial · TorchCraftAI"/><meta property="og:type" content="website"/><meta property="og:url" content="https://torchcraft.github.io/TorchCraftAI/index.html"/><meta property="og:description" content="&lt;p&gt;In this tutorial, we will develop a model for micromanagement scenarios using Evolution Strategies&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://torchcraft.github.io/TorchCraftAI/img/tclogolinesmall.png"/><link rel="shortcut icon" href="/TorchCraftAI/img/favicon/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/atom.xml" title="TorchCraftAI Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/feed.xml" title="TorchCraftAI Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/js/code-blocks-buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script><link rel="stylesheet" href="/TorchCraftAI/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/TorchCraftAI/"><img class="logo" src="/TorchCraftAI/img/tclogosqlightgrey.png" alt="TorchCraftAI"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/TorchCraftAI/docs/bptut-intro.html" target="_self">Tutorials</a></li><li class=""><a href="/TorchCraftAI/reference/index.html" target="_self">API</a></li><li class=""><a href="/TorchCraftAI/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/TorchCraft/TorchCraftAI" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Tutorial - Micro-Manamagent</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-linux.html">Installation (Linux)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-windows.html">Installation (Windows)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-macos.html">Installation (macOS)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/play-games.html">Play games with CherryPi</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">TorchCraftAI</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/overview.html">Overview</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/architecture.html">System Architecture</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/core-abstractions.html">Core Abstractions</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/modules.html">Modules Overview</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/module-training.html">Module Training Blueprints</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Building Placement</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-intro.html">Building Placement Intro</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-model.html">Neural Network Architecture</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-supervised.html">Supervised Learning</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-rl.html">Reinforcement Learning</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Micro-Manamagent</h3><ul><li class="navListItem navListItemActive"><a class="navItem" href="/TorchCraftAI/docs/microtut-intro.html">Micromanagement Intro</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-model.html">Model</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-setup.html">Training Setup</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Micromanagement Scenarios Tutorial</h1></header><article><div><span><p>In this tutorial, we will develop a model for micromanagement scenarios using Evolution Strategies</p>
+<h2><a class="anchor" aria-hidden="true" id="introduction"></a><a href="#introduction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Introduction</h2>
+<p>Micromanagement -- controlling your units in combat situations -- is a key component of winning at StarCraft.
+By controlling your units carefully, you can destroy more enemy units while losing fewer of your own.
+One example is focus firing: by focusing your attacks onto fewer targets, you eliminate enemy units faster and reduce the damage they deal back to you.
+Another example is kiting: if you have a fast unit fighting a slower unit with shorter range or shorter cooldown, you can perform the sequence of attack-run-attack-run, taking reduced damage. If their range is shorter, you can keep them out of range and prevent their attacks. If their cooldown is longer, they can miss opportunities to attack.
+We can also withdraw a damaged unit, and use a healthy unit to take damage from the enemy to retain the damaged units' firepower.
+Micromanagement is thus a combination of precise movement and targetting that allows us turn win in unfavorable situations.</p>
+<h2><a class="anchor" aria-hidden="true" id="action-space"></a><a href="#action-space" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Action space</h2>
+<p>In order to learn a wide range of possible behaviors, we provide a simple action space: where to move, and whom to attack.
+The model outputs 3 values:</p>
+<ul>
+<li>A probability distribution over what action to take (attack, or move)</li>
+<li>A probability distribution over which units to attack</li>
+<li>A probability distribution over where to move, in a 20x20 walktile grid centered around our unit.</li>
+</ul>
+<p>The model first sample what action to take. Depending on the results, we sample where to move to or whom to attack.
+You can extend this approach to specify new actions, even actions with different output spaces. For example, you could abilities like Burrow or Psionic Storm.
+This action space is essentially a specification of the UPC, where we force a decision to be made for each unit, and the position depends on the command to execute.</p>
+<h2><a class="anchor" aria-hidden="true" id="units-and-scenarios"></a><a href="#units-and-scenarios" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Units and Scenarios</h2>
+<p>StarCraft units have drastically different attributes and benefit from being controlled in different ways.
+Here are some of the units in the training scenarios:</p>
+<ul>
+<li>SCV (<strong>sc</strong>) - Basic worker unit. High HP and damage output for a worker, but has very short range is awkward when moving.</li>
+<li>Marine (<strong>mr</strong>) - Basic ranged combat unit. Mobile, but not very fast unless using Stim Packs.</li>
+<li>Firebat (<strong>fi</strong>) - Small melee unit with an anti-ground splash attack.</li>
+<li>Vulture (<strong>vu</strong>) - Fast, ranged, anti-ground unit. Its speed and range let it kite many ground units, and it can lay dangerous anti-ground Spider Mines.</li>
+<li>Goliath (<strong>go</strong>) - Clumsy long-range attacker.</li>
+<li>Siege_Tank_Tank_Mode (<strong>st</strong>) - Long-range anti-ground unit. Can shoot in any direction and while moving. Can transform into the longer-ranged immobile Siege_Tank_Siege_Mode</li>
+<li>Wraith (<strong>wr</strong>) - Fast, mobile flying unit with strong anti-air attack and a weaker anti-ground attack. Often requires delicate control for maximum efficacy. Can be cloaked.</li>
+<li>Battlecruiser (<strong>bc</strong>) - Slow, powerful flying unit. Its Yamato Cannon can take out large targets from a safe distance.</li>
+<li>Probe (<strong>pr</strong>) - Basic worker unit. Nimble with a short ranged attack.</li>
+<li>Zealot (<strong>zl</strong>) - Sturdy melee unit. Powerful, but vulnerable to kiting.</li>
+<li>Dragoon (<strong>dr</strong>) - Sturdy, fast, ranged unit. Doesn't need to turn to fire. Can be very powerful if microed to move between attacks.</li>
+<li>Archon (<strong>ar</strong>) - Sturdy, fast, short-ranged unit that deals splash damage. Effective against small or stacked units, but vulnerable to kiting.</li>
+<li>Corsair (<strong>co</strong>) - Fast anti-air flyer. Deals splash damage, making it disproportionately strong in large fights.</li>
+<li>Scout (<strong>sc</strong>) - Slow, sturdy flyer. Has a strong anti-air attack but a very weak anti-ground attack.</li>
+<li>Drone (<strong>dn</strong>) - Basic worker unit. Nimble with a short ranged attack.</li>
+<li>Zergling (<strong>zg</strong>) - Fast, fragile melee unit with high damage output.</li>
+<li>Hydralisk (<strong>hy</strong>) - Fast, ranged combat unit. With upgrades, capable of perfect kiting against Zealots.</li>
+<li>Ultralisk (<strong>ul</strong>) - Sturdy, fast melee unit.</li>
+<li>Mutalisk (<strong>mu</strong>) - Fast, mobile flying unit. Often requires delicate control for maximum efficacy.</li>
+<li>Devourer (<strong>de</strong>) - Sturdy, slow anti-air unit which reduces the armor of enemies near its target and renders them weaker to other attacks.</li>
+<li>Infested_Terran (<strong>it</strong>) - Explodes on its target, dealing huge amounts of damage while dying in the process.</li>
+</ul>
+<p>We provide a large pool of scenarios. You can see the full list by running with <code>-list_scenarios</code> and specify which scenario to use with <code>-scenario SCENARIO_NAME</code>:</p>
+<ul>
+<li>Symmetric, same-units: 3-6 same-unit mirror matches like &quot;mr&quot;.</li>
+<li>Symmetric air+ground units: Air and ground mirror matches, like &quot;hy+mu&quot;.</li>
+<li>Scenarios in which you have weaker units that can kite the enemy's stronger units.</li>
+<li>&quot;big&quot;: Symmetric same-unit scenarios with 30 units on each side.</li>
+<li>&quot;surround&quot;: Your army starts off surrounding the enemy but with some units too far to fight.</li>
+<li>&quot;conga&quot;: Your army starts off in an inferior, &quot;conga line&quot; orientation.</li>
+</ul>
+<p>There are also non-combat scenarios with alternative rewards.</p>
+<ul>
+<li>&quot;hugmiddle&quot; and &quot;hugmiddleeasy&quot; - your goal is to send a unit to the middle of the map</li>
+<li>&quot;hugoverlords&quot; - your goal is to send units to each of two harmless Overlords</li>
+<li>&quot;popoverlords&quot; - your goal is to kill eight Overlords as quickly as possible</li>
+<li>&quot;ignorecivilians&quot; - kill enemy High Templar while ignoring enemy Civilians</li>
+</ul>
+<p>Instead of playing a specific scenario, you can play a randomly selected scenario from one of these categories:</p>
+<ul>
+<li>&quot;shuffleMirror&quot; -- Random symmetric same-unit scenarios</li>
+<li>&quot;shuffleAirGround&quot; -- Random symmetric air+ground scenarios</li>
+<li>&quot;shuffleBig&quot; -- Random big scenarios</li>
+<li>&quot;shuffleKiting&quot; -- Random kiting scenarios</li>
+<li>&quot;shuffleRegroup&quot; -- Random &quot;surround&quot; or &quot;conga&quot; scenarios</li>
+</ul>
+<p>Can you train a model which generalizes to multiple scenarios?</p>
+<p>You can also design your own scenarios and rewards. See <code>scenarios.cpp</code> and <code>reward.cpp</code>.</p>
+<h2><a class="anchor" aria-hidden="true" id="opponents"></a><a href="#opponents" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Opponents</h2>
+<p>We provide a few different types of opponents to play against, which you can select with <code>-opponent</code>:</p>
+<ul>
+<li>attack_move - This is simply an attack move towards an enemy. This mode is closest to what most previous work on reinforcement learning with micro has done, and it's essentially attack closest but without changing targets until the original is dead.</li>
+<li>closest - Attacks the closest enemy that's a valid target</li>
+<li>weakest - Attacks the weakest enemy that's a valid target, based on hp+shields, with a slight preference for closer targets.
+Closest/weakest issue a Delete UPC (which translates into an Attack command) only if the unit's target changes. This is to prevent cancelling attack animations (as can happen especially with Dragoons and Devourers).</li>
+</ul>
+<p>&quot;closest&quot; is a strong baseline that is challenging but not unreasonable to defeat.</p>
+<p>You can create your own baseline behaviors. See <code>rule_module.h</code>.</p>
+<h2><a class="anchor" aria-hidden="true" id="running-the-code"></a><a href="#running-the-code" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Running the code</h2>
+<p>The code in this example is in <code>tutorials/micro</code></p>
+<p>To run this code, please do:</p>
+<pre><code class="hljs">./build/tutorials/micro/micro_tutorial -vmodule <span class="hljs-keyword">state</span>=-<span class="hljs-number">1</span>,micro_tutorial=<span class="hljs-number">1</span> -scenario vu_zl
+</code></pre>
+<p>Some flags that may be useful for you:</p>
+<ul>
+<li><code>-enable_gui</code> shows the progress of a single worker as learning continues by visualising the SC game it is playing.</li>
+<li><code>-illustrate</code> shows in gui the commands they are performing by drawing lines to highlight the command and the target.</li>
+<li><code>-resume</code> resumes a model from a path specified by <code>-results</code></li>
+<li><code>-num_threads</code> controls the number of threads we use to run games</li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/TorchCraftAI/docs/bptut-rl.html"><span class="arrow-prev">← </span><span>Building Placement: Reinforcement Learning</span></a><a class="docs-next button" href="/TorchCraftAI/docs/microtut-model.html"><span>Micromanagement Scenarios Tutorial</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#introduction">Introduction</a></li><li><a href="#action-space">Action space</a></li><li><a href="#units-and-scenarios">Units and Scenarios</a></li><li><a href="#opponents">Opponents</a></li><li><a href="#running-the-code">Running the code</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/TorchCraftAI/" class="nav-home"><img src="/TorchCraftAI/img/tclogosqsmall.png" alt="TorchCraftAI" width="66" height="58"/></a><div><h5>Docs</h5><a href="/TorchCraftAI/docs/en/install-linux.html">Getting Started (Linux)</a><a href="/TorchCraftAI/docs/en/install-windows.html">Getting Started (Windows)</a><a href="/TorchCraftAI/docs/en/install-macos.html">Getting Started (Mac)</a><a href="reference/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discordapp.com/invite/w9wRRrF">Starcraft AI Discord</a><a href="https://www.facebook.com/groups/bwapi/">Starcraft AI Facebook group</a><a href="https://github.com/TorchCraft/TorchCraftAI">TorchCraftAI on GitHub</a></div><div><h5>More</h5><a href="https://github.com/TorchCraft/TorchCraft">TorchCraft on GitHub</a><a href="https://github.com/TorchCraft/StarData">StarData on GitHub</a><a href="/TorchCraftAI/blog">Blog</a></div></section><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/TorchCraftAI/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2018 Facebook</section></footer></div></body></html>

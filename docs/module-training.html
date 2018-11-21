@@ -1,0 +1,497 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Module Training Blueprints · TorchCraftAI</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;This page details how to use TorchCraftAI&#x27;s training library &lt;a href=&quot;https://github.com/TorchCraft/TorchCraftAI/tree/master/cpid&quot;&gt;cpid&lt;/a&gt; to setup a basic reinforcement learning training loop.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Module Training Blueprints · TorchCraftAI"/><meta property="og:type" content="website"/><meta property="og:url" content="https://torchcraft.github.io/TorchCraftAI/index.html"/><meta property="og:description" content="&lt;p&gt;This page details how to use TorchCraftAI&#x27;s training library &lt;a href=&quot;https://github.com/TorchCraft/TorchCraftAI/tree/master/cpid&quot;&gt;cpid&lt;/a&gt; to setup a basic reinforcement learning training loop.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://torchcraft.github.io/TorchCraftAI/img/tclogolinesmall.png"/><link rel="shortcut icon" href="/TorchCraftAI/img/favicon/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/atom.xml" title="TorchCraftAI Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/feed.xml" title="TorchCraftAI Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/js/code-blocks-buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script><link rel="stylesheet" href="/TorchCraftAI/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/TorchCraftAI/"><img class="logo" src="/TorchCraftAI/img/tclogosqlightgrey.png" alt="TorchCraftAI"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/TorchCraftAI/docs/bptut-intro.html" target="_self">Tutorials</a></li><li class=""><a href="/TorchCraftAI/reference/index.html" target="_self">API</a></li><li class=""><a href="/TorchCraftAI/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/TorchCraft/TorchCraftAI" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>TorchCraftAI</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-linux.html">Installation (Linux)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-windows.html">Installation (Windows)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-macos.html">Installation (macOS)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/play-games.html">Play games with CherryPi</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">TorchCraftAI</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/overview.html">Overview</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/architecture.html">System Architecture</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/core-abstractions.html">Core Abstractions</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/modules.html">Modules Overview</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/TorchCraftAI/docs/module-training.html">Module Training Blueprints</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Building Placement</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-intro.html">Building Placement Intro</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-model.html">Neural Network Architecture</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-supervised.html">Supervised Learning</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-rl.html">Reinforcement Learning</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Micro-Manamagent</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-intro.html">Micromanagement Intro</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-model.html">Model</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-setup.html">Training Setup</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Module Training Blueprints</h1></header><article><div><span><p>This page details how to use TorchCraftAI's training library <a href="https://github.com/TorchCraft/TorchCraftAI/tree/master/cpid">cpid</a> to setup a basic reinforcement learning training loop.
+We only discuss the main concepts here; see the <a href="/TorchCraftAI/docs/bptut-rl.html">Building Placement RL Tutorial</a> for a concrete use-case.</p>
+<h2><a class="anchor" aria-hidden="true" id="main-program"></a><a href="#main-program" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Main Program</h2>
+<p>The code below is a basic skeleton for a training program.
+The main ingredients:</p>
+<ul>
+<li>Create a model (<code>ag::Container</code>) and a trainer (<code>cpid::Trainer</code>) instance</li>
+<li>Launch a number of game threads, each continuously gathering experience by playing games</li>
+<li>In the main thread, periodically call <code>trainer-&gt;update()</code>.
+It returns <code>true</code> if the model has been updated, which will give you chance to monitor and log training progress.</li>
+<li><code>cpid::Trainer::isDone()</code> is used to stop the game threads</li>
+</ul>
+<pre><code class="hljs css language-cpp"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> cherrypi;
+<span class="hljs-keyword">namespace</span> dist = cpid::distributed;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">runGameThread</span><span class="hljs-params">(<span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;cpid::Trainer&gt; trainer)</span> </span>{
+  <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">runTraining</span><span class="hljs-params">(<span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;cpid::Trainer&gt; trainer)</span> </span>{
+  <span class="hljs-comment">// Launch simulation threads</span>
+  <span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-built_in">std</span>::thread&gt; gameThreads;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; FLAGS_num_game_threads; i++) {
+    gameThreads.emplace_back(runGameThread, trainer);
+  }
+
+  <span class="hljs-comment">// Main thread runs trainer-&gt;update() and can do logging, plotting, ...</span>
+  <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+    <span class="hljs-keyword">auto</span> updated = trainer-&gt;update();
+    <span class="hljs-keyword">if</span> (!updated) {
+      <span class="hljs-comment">// update() is non-blocking and returns immediately if a model update</span>
+      <span class="hljs-comment">// cannot be performed at this time. Avoid busy-waiting by sleeping for a</span>
+      <span class="hljs-comment">// a little while.</span>
+      <span class="hljs-built_in">std</span>::this_thread::sleep_for(<span class="hljs-built_in">std</span>::chrono::milliseconds(<span class="hljs-number">100</span>));
+      <span class="hljs-keyword">continue</span>;
+    }
+
+    <span class="hljs-comment">// Monitor progress, checkpointing, ...</span>
+
+    <span class="hljs-comment">// Check end conditions of training</span>
+    <span class="hljs-keyword">bool</span> stop = ...;
+    <span class="hljs-keyword">if</span> (stop) {
+      <span class="hljs-comment">// Wake up game threads blocked in a trainer function and tell them to</span>
+      <span class="hljs-comment">// stop.</span>
+      trainer-&gt;reset();
+      trainer-&gt;setDone(<span class="hljs-literal">true</span>);
+      <span class="hljs-keyword">break</span>;
+    }
+  }
+
+  <span class="hljs-comment">// Wait for game threads to finish</span>
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; thread : gameThreads) {
+    thread.join();
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span>** argv)</span> </span>{
+  <span class="hljs-comment">// Initial setup, including cherrypi::init() and dist::init()</span>
+
+  <span class="hljs-keyword">auto</span> model = MyFancyModel.make();
+  <span class="hljs-keyword">auto</span> trainer = <span class="hljs-built_in">std</span>::make_shared&lt;cpid::MyFavoriteTrainer&gt;(model, ...);
+
+  <span class="hljs-comment">// Additional synchronization across workers (e.g. broadcast model</span>
+  <span class="hljs-comment">// parameters)</span>
+
+  runTraining(trainer);
+
+  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="game-threads"></a><a href="#game-threads" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Game Threads</h3>
+<p>Each game thread continuously gathers experience by playing games and records them using the trainer instance.
+Most of the time, they will look a lot like this:</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">runGameThread</span><span class="hljs-params">(<span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;cpid::Trainer&gt; trainer)</span> </span>{
+  <span class="hljs-comment">// Here, a custom subclass of cherrypi::ScenarioProvider is used to set up the games.</span>
+  <span class="hljs-keyword">auto</span> provider = <span class="hljs-built_in">std</span>::make_unique&lt;MyScenarioProvider&gt;(...);
+
+  <span class="hljs-keyword">while</span> (!trainer-&gt;isDone()) {
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-comment">// Setup the game</span>
+      provider-&gt;cleanScenario();
+      <span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;BasePlayer&gt; player1, player2;
+      <span class="hljs-built_in">std</span>::tie(player1, player2) = provider-&gt;spawnNextScenario(setupFn, setupFn);
+
+      <span class="hljs-comment">// Any additional setup, e.g. passing trainer or module pointers to a</span>
+      <span class="hljs-comment">// custom module</span>
+
+      <span class="hljs-comment">// Inform players about current game ID</span>
+      player1-&gt;state()-&gt;board()-&gt;post(Blackboard::kGameUidKey, gameId);
+      player2-&gt;state()-&gt;board()-&gt;post(Blackboard::kGameUidKey, gameId);
+
+      <span class="hljs-comment">// Run the actual game</span>
+      <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+        <span class="hljs-keyword">if</span> (provider-&gt;isFinished(player-&gt;state()-&gt;currentFrame()) {
+          <span class="hljs-keyword">break</span>;
+        }
+        <span class="hljs-keyword">if</span> (player1-&gt;state()-&gt;gameEnded() &amp;&amp; player2-&gt;state()-&gt;gameEnded()) {
+          <span class="hljs-keyword">break</span>;
+        }
+        player1-&gt;step();
+        player2-&gt;step();
+      }
+
+      <span class="hljs-comment">// Post-game cleanup</span>
+    } <span class="hljs-keyword">catch</span> (<span class="hljs-built_in">std</span>::exception <span class="hljs-keyword">const</span>&amp; ex) {
+      <span class="hljs-comment">// Error during simulation</span>
+    }
+  }
+}
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="models-and-modules"></a><a href="#models-and-modules" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Models and Modules</h2>
+<p>We'll need two things now -- a <strong>model</strong> (that implements a trainable policy, for example) and a <strong>module</strong> which uses it and works within the general bot framework.
+The model is an <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/3rdparty/include/autogradpp/autograd.h">autograd container</a>.
+The class definition will, in essence, look like this:</p>
+<pre><code class="hljs css language-cpp">AUTOGRAD_CONTAINER_CLASS(MyFancyModel) {
+ <span class="hljs-keyword">public</span>:
+  <span class="hljs-comment">// Example for declaring additional model parameters (e.g. the number of layers)</span>
+  TORCH_ARG(<span class="hljs-keyword">int</span>, num_layers) = <span class="hljs-number">2</span>;
+
+  <span class="hljs-comment">// Initializes any child containers </span>
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">reset</span><span class="hljs-params">()</span> override</span>;
+
+  <span class="hljs-comment">// Computes the model outputs from the given inputs</span>
+  ag::<span class="hljs-function">Variant <span class="hljs-title">forward</span><span class="hljs-params">(ag::Variant input)</span> override</span>;
+};
+</code></pre>
+<p>We'll also need a TorchCraftAI module that actually plays with the model, i.e. which connects it to the <a href="core-abstractions.html#upctuples">UPC communication system</a>.
+The module setup depends heavily on the specific use-case: for example, one could re-use existing rules but use the model on select occasions to make a decision (e.g. Strategy, BuildingPlacer) or implement a low-level controller (SquadCombat behaviors, Builder).
+For a controller-based setup one could implement a custom <a href="core-abstractions.html#controllers">controller</a> that performs an action using the model every couple of steps, and have the module take care of selecting UPCs from the blackboard and spawning the controller instances if necessary.</p>
+<p>For training purposes, module code will not call <code>MyFancyModel::forward()</code> directly but use the <code>forward()</code> function of <code>cpid::Trainer</code> instead.
+This way, the trainer can avoid data races by using the model during parameter updates, batch updates from multiple game threads (<a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/cpid/batcher.h"><code>cpid::AsyncBatcher</code></a>), sample actions from the model output in a generic manner (e.g. <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/cpid/sampler.h"><code>cpid::MultinomialSampler</code></a>) or dispatch the forward call to per-episode versions of the model as in <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/cpid/estrainer.h"><code>cpid::ESTrainer</code></a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="collecting-experience"></a><a href="#collecting-experience" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Collecting Experience</h2>
+<p>In cpid, experiences are collected by submitting replay buffer frames via <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/cpid/trainer.h"><code>cpid::Trainer::step()</code></a>.
+Each episode is associated with a <strong>game</strong> ID and an optional <strong>episode</strong> ID and initially registered in the trainer with <code>cpid::Trainer::startEpisode()</code>.
+If anything goes wrong during training and the episode cannot be finished, it's <code>cpid::Trainer::forceStopEpisode()</code> needs to be called to discard it.</p>
+<p>Let's look a few different scenarios and how to best submit the collected experience to the trainer instance.
+Note that the examples below only provides a brief illustration of the functionality and need to be further extended for a functional training.</p>
+<h3><a class="anchor" aria-hidden="true" id="stand-alone-model"></a><a href="#stand-alone-model" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Stand-alone Model</h3>
+<p>This is a simplified setup, e.g. for micro-management scenarios.
+Here, the module is merely a wrapper around the model's <code>forward()</code> function, without or with only minimal interaction with the rest of the bot.
+A skeleton class of the TorchCraftAI module can look like this:</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModule1</span> :</span> <span class="hljs-keyword">public</span> cherrypi::Module {
+ <span class="hljs-keyword">public</span>:
+  <span class="hljs-comment">// The training loop sets the current trainer instance during initialization</span>
+  <span class="hljs-comment">// of a game</span>
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setTrainer</span><span class="hljs-params">(<span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;cpid::Trainer&gt; trainer)</span> </span>{
+    trainer_ = trainer;
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">onGameStart</span><span class="hljs-params">(State* state)</span> override </span>{
+    <span class="hljs-comment">// Generate new game ID for this episode</span>
+    <span class="hljs-keyword">auto</span> gameId = cpid::genGameUID(dist::globalContext()-&gt;rank);
+
+    <span class="hljs-comment">// Register this game as a new episode in the trainer.</span>
+    <span class="hljs-comment">// startEpisode() will return true if we're good to go.</span>
+    <span class="hljs-keyword">while</span> (!trainer-&gt;startEpisode(gameId)) {
+      <span class="hljs-keyword">if</span> (trainer_-&gt;isDone()) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-built_in">std</span>::runtime_error(fmt::format(<span class="hljs-string">"{} trainer is done"</span>, gameId));
+      }
+      <span class="hljs-built_in">std</span>::this_thread::sleep_for(<span class="hljs-built_in">std</span>::chrono::milliseconds(<span class="hljs-number">10</span>));
+      <span class="hljs-keyword">continue</span>;
+    }
+
+    <span class="hljs-comment">// Store the current episode information in an EpisodeHandle. If the handle</span>
+    <span class="hljs-comment">// goes out of scope and the episode is not finished yet, the destructor</span>
+    <span class="hljs-comment">// will call `trainer-&gt;forceStopEpisode()`.</span>
+    episode_ = cpid::EpisodeHandle(trainer, gameId);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">step</span><span class="hljs-params">(State* state)</span> override </span>{
+    <span class="hljs-comment">// Stop the game if told to do so</span>
+    <span class="hljs-keyword">if</span> (trainer-&gt;isDone() ||
+        !trainer-&gt;isActive(episode_.gameId, episode_.episodeKey)) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-built_in">std</span>::runtime_error(
+          fmt::format(<span class="hljs-string">"{} trainer/episode is done"</span>, episode_.gameId));
+    }
+
+    <span class="hljs-comment">// Featurize state and call forward()</span>
+    <span class="hljs-keyword">auto</span> state = featurizeStateForMyFancyModel(state);
+    <span class="hljs-keyword">auto</span> output = trainer-&gt;forward(state_, episode_.gameId);
+
+    <span class="hljs-comment">// Submit experience to the trainer. The reward we observe will be</span>
+    <span class="hljs-comment">// associated to the *previous* state and output by the trainer.</span>
+    <span class="hljs-keyword">auto</span> reward = observedReward(state);
+    <span class="hljs-keyword">auto</span> frame = trainer-&gt;makeFrame(output, state, reward);
+    trainer-&gt;step(episode_.gameId, <span class="hljs-built_in">std</span>::move(frame));
+
+    <span class="hljs-comment">// The forward() will sample an action from the model output if the trainer</span>
+    <span class="hljs-comment">// has been constructed with an appropriate sampling class. Now we'll have</span>
+    <span class="hljs-comment">// translate this action to a game action, e.g. by constructing a UPC and</span>
+    <span class="hljs-comment">// posting it to the blackboard.</span>
+    <span class="hljs-keyword">auto</span> upc = <span class="hljs-built_in">std</span>::make_shared&lt;UPCTuple&gt;();
+    <span class="hljs-comment">// Fill in upc contents...</span>
+
+    <span class="hljs-comment">// Since we did not require an upstream UPC to perform our actions, we'll</span>
+    <span class="hljs-comment">// specify the omni-present "root" UPC as a parent when posting.</span>
+    state-&gt;board()-&gt;postUPC(<span class="hljs-built_in">std</span>::move(upc), kRootUpcId, <span class="hljs-keyword">this</span>);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">onGameEnd</span><span class="hljs-params">(State* state)</span> override </span>{
+    <span class="hljs-comment">// Submit final frame of the episode</span>
+    <span class="hljs-keyword">auto</span> reward = observedReward(state);
+    <span class="hljs-keyword">auto</span> frame = trainer-&gt;makeFrame({}, {}, reward);
+    trainer-&gt;step(episode_.gameId, <span class="hljs-built_in">std</span>::move(frame), <span class="hljs-literal">true</span>);
+  }
+
+ <span class="hljs-keyword">private</span>:
+  <span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;cpid::Trainer&gt; trainer_;
+  cpid::EpisodeHandle episode_;
+};
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="low-level-controller-model"></a><a href="#low-level-controller-model" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Low-level Controller Model</h3>
+<p>This setup is an extension of the previous one and tailored towards tighter integration with existing modules.
+In the above example, we did not require an upstream UPC to initiate an action.
+This is fine for micro-scenarios, but in a full game, higher-level modules will request specific actions at different points in the game; additionally, multiple actions may be requested in parallel.
+Below, we will consider individual episodes for each UPC that should be performed with our low-level model.
+The module scans the blackboard for relevant UPCs, and, if it finds a candidate, will instantiate a <a href="core-abstractions.md#controllers">Controller</a> to perform the requested action.
+The episode is then tied to the life-time of the controller.
+The logic remains pretty similar, however instead of starting and finishing episodes in <code>onGameStart()</code> and <code>onGameEnd()</code> we'll use the controller's constructor and destructor.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyController</span> :</span> <span class="hljs-keyword">public</span> cherrypi::Controller {
+ <span class="hljs-keyword">public</span>:
+  MyController(
+      Unit* unit,
+      <span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;cpid::Trainer&gt; trainer,
+      cpid::EpisodeTuple episodeId)
+      : unit_(unit), trainer_(<span class="hljs-built_in">std</span>::move(trainer)) {
+    <span class="hljs-comment">// Register this game as a new episode in the trainer.</span>
+    <span class="hljs-comment">// startEpisode() will return true if we're good to go.</span>
+    <span class="hljs-keyword">while</span> (!trainer-&gt;startEpisode(episodeId.gameID, episodeId.episodeKey)) {
+      <span class="hljs-keyword">if</span> (trainer_-&gt;isDone()) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-built_in">std</span>::runtime_error(fmt::format(<span class="hljs-string">"{} trainer is done"</span>, gameId));
+      }
+      <span class="hljs-built_in">std</span>::this_thread::sleep_for(<span class="hljs-built_in">std</span>::chrono::milliseconds(<span class="hljs-number">10</span>));
+      <span class="hljs-keyword">continue</span>;
+    }
+
+    episode_ =
+        cpid::EpisodeHandle(trainer, episodeId.gameID, episodeId.episodeKey);
+  }
+
+  <span class="hljs-keyword">virtual</span> ~MyController() {
+    <span class="hljs-comment">// Submit final frame of the episode</span>
+    <span class="hljs-keyword">auto</span> reward = observedReward(state);
+    <span class="hljs-keyword">auto</span> frame = trainer-&gt;makeFrame({}, {}, reward);
+    trainer-&gt;step(episode_.gameId, <span class="hljs-built_in">std</span>::move(frame), <span class="hljs-literal">true</span>);
+  }
+
+  <span class="hljs-comment">// This is similar to MyModule1::step() in the previous example</span>
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">step</span><span class="hljs-params">(State* state)</span> override </span>{
+    <span class="hljs-comment">// Stop the game if told to do so</span>
+    <span class="hljs-keyword">if</span> (trainer-&gt;isDone() ||
+        !trainer-&gt;isActive(episode_.gameId, episode_.episodeKey)) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-built_in">std</span>::runtime_error(
+          fmt::format(<span class="hljs-string">"{} trainer/episode is done"</span>, episode_.gameId));
+    }
+
+    <span class="hljs-comment">// Featurize state and call forward()</span>
+    <span class="hljs-keyword">auto</span> state = featurizeStateForMyFancyModel(state);
+    <span class="hljs-keyword">auto</span> output =
+        trainer-&gt;forward(state_, episode_.gameId, episode_.episodeKey);
+
+    <span class="hljs-comment">// Submit experience to the trainer. The reward we observe will be</span>
+    <span class="hljs-comment">// associated to the *previous* state and output by the trainer.</span>
+    <span class="hljs-keyword">auto</span> reward = observedReward(state);
+    <span class="hljs-keyword">auto</span> frame = trainer-&gt;makeFrame(output, state, reward);
+    trainer-&gt;step(episode_.gameId, <span class="hljs-built_in">std</span>::move(frame));
+
+    <span class="hljs-comment">// Translate output to an appropriate UPC</span>
+    Controller::addUpc(unit_, ...);
+    Controller::postUpcs(state);
+  }
+
+ <span class="hljs-keyword">private</span>:
+  Unit* unit_;
+  <span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;cpid::Trainer&gt; trainer_;
+  cpid::EpisodeHandle episode_;
+};
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModule2</span> :</span> <span class="hljs-keyword">public</span> cherrypi::Module {
+ <span class="hljs-keyword">public</span>:
+  <span class="hljs-comment">// The training loop sets the current trainer instance during initialization</span>
+  <span class="hljs-comment">// of a game</span>
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setTrainer</span><span class="hljs-params">(<span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;cpid::Trainer&gt; trainer)</span> </span>{
+    trainer_ = trainer;
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">onGameStart</span><span class="hljs-params">(State* state)</span> </span>{
+    gameId_ = cpid::genGameUID(dist::globalContext()-&gt;rank);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">step</span><span class="hljs-params">(State* state)</span> override </span>{
+    <span class="hljs-comment">// For the current relevant UPCs on the Blackboard</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; it : relevantUpcs()) {
+      <span class="hljs-keyword">auto</span> upcId = it.first;
+      <span class="hljs-keyword">auto</span>&amp; upc = it.second;
+      state-&gt;board()-&gt;consumeUPC(upcId, <span class="hljs-keyword">this</span>);
+
+      <span class="hljs-comment">// Select a single from upc.unit</span>
+      <span class="hljs-keyword">auto</span> unit = selectUnit(upc);
+
+      <span class="hljs-comment">// Create a new task with a new controller instance</span>
+      <span class="hljs-keyword">auto</span> controller =
+          <span class="hljs-built_in">std</span>::make_shared&lt;MyController&gt;(unit, trainer, {gameId_, upcId});
+      <span class="hljs-keyword">auto</span> task = <span class="hljs-built_in">std</span>::make_shared&lt;ControllerTask&gt;(
+          upcId, <span class="hljs-built_in">std</span>::<span class="hljs-built_in">unordered_set</span>&lt;Unit*&gt;{unit}, <span class="hljs-built_in">std</span>::move(controller));
+      state-&gt;board()-&gt;postTask(<span class="hljs-built_in">std</span>::move(task), <span class="hljs-keyword">this</span>, <span class="hljs-literal">true</span>);
+    }
+
+    <span class="hljs-comment">// Update active controllers</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; task : state-&gt;board()-&gt;tasksOfModule(<span class="hljs-keyword">this</span>)) {
+      <span class="hljs-keyword">auto</span> ctask = <span class="hljs-built_in">std</span>::static_pointer_cast&lt;ControllerTask&gt;(task);
+      <span class="hljs-keyword">auto</span> controller = ctask-&gt;controller();
+      controller-&gt;step(state);
+    }
+  }
+
+ <span class="hljs-keyword">private</span>:
+  <span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;cpid::Trainer&gt; trainer_;
+  cpid::GameUID gameId_;
+};
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="higher-level-models"></a><a href="#higher-level-models" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Higher-Level Models</h3>
+<p>For learning functionality that is not tied to direct unit control, we can broadly consider two approaches.
+In the first case, the model runs in regular intervals alongside the bot and informs a rule-based model, e.g. for triggering a high-level action.
+The setup is similar to the stand-alone model then.
+Another case is the tight integration with the UPC communication system, similar to the <a href="/TorchCraftAI/docs/bptut-rl.html">building placement tutorial</a>.
+Here, upstream modules trigger model actions which are then translated to macro-actions which might be durative.</p>
+<p>Let's discuss the second case in more detail.
+The amount of book-keeping that is required depends on the rewards we want to provide to the trainer:</p>
+<ul>
+<li>A end-of-game reward only (e.g. 1 for win, -1 for lose).
+In this case, we can submit every action taken with the model as a frame to the trainer and provide the final end-of-game frame with the reward in <code>onGameEnd()</code>.</li>
+<li>Detailed tracking of the outcome of every action.
+This can be done with <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/src/task.h"><code>ProxyTask</code></a> instances for each action or (if required) additional manual tracking in the module.</li>
+</ul>
+<p>In the building placement use-case, macro-actions can be interleaved (since several buildings can be constructed at once) and are of different durations.
+As a consequence, the action outcomes will be observed out-of-order with respect to the actions taken.
+One solution to this is to submit the sequence of frames to the trainer instance only at the <strong>end</strong> of the game when all macro-actions are terminated.</p>
+<p>Here's a short example of a higher-level module that uses tasks to track the outcome of actions and constructs all episode frames at the end of the game.
+Model inputs and outputs are attached to each UPC that is being posted to avoid additional manual book-keeping.
+There'll be a final end-of-game reward and smaller rewards for individual actions based on success or failure of the macro-action.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">MyPostData</span> :</span> <span class="hljs-keyword">public</span> UpcPostData {
+  MyPostData(ag::Variant state, ag::Variant output)
+      : state(state), output(output) {}
+  <span class="hljs-keyword">virtual</span> ~MyPostData() = <span class="hljs-keyword">default</span>;
+
+  ag::Variant state;
+  ag::Variant output;
+  TaskStatus finalStatus = TaskStatus::Unknown;
+};
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyProxyTask</span> :</span> <span class="hljs-keyword">public</span> cherrypi::ProxyTask {
+ <span class="hljs-keyword">public</span>:
+  <span class="hljs-keyword">using</span> ProxyTask::ProxyTask;
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">update</span><span class="hljs-params">(State* state)</span> override </span>{
+    ProxyTasks::update(state);
+    postData(state)-&gt;finalStatus = Task::status();
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">cancel</span><span class="hljs-params">(State* state)</span> override </span>{
+    ProxyTasks::cancel(state);
+    postData(state)-&gt;finalStatus = TaskStatus::Cancelled;
+  }
+
+ <span class="hljs-keyword">private</span>:
+  <span class="hljs-function">MyPostData* <span class="hljs-title">postData</span><span class="hljs-params">(State* state)</span> <span class="hljs-keyword">const</span> </span>{
+    <span class="hljs-keyword">auto</span>* storage = state-&gt;board()-&gt;upcStorage();
+    <span class="hljs-keyword">auto</span> <span class="hljs-keyword">const</span>* post = storage-&gt;post(Task::targetUpcId_);
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">std</span>::static_pointer_cast&lt;MyPostData&gt;(post-&gt;data).get();
+  }
+};
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModule3</span> :</span> <span class="hljs-keyword">public</span> cherrypi::Module {
+ <span class="hljs-keyword">public</span>:
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setTrainer</span><span class="hljs-params">(<span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;cpid::Trainer&gt; trainer)</span> </span>{
+    trainer_ = trainer;
+  }
+
+  <span class="hljs-comment">// This is identical to MyModule1::onGameStart()</span>
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">onGameStart</span><span class="hljs-params">(State* state)</span> override </span>{
+    <span class="hljs-keyword">auto</span> gameId = cpid::genGameUID(dist::globalContext()-&gt;rank);
+    <span class="hljs-keyword">while</span> (!trainer-&gt;startEpisode(gameId)) {
+      <span class="hljs-keyword">if</span> (trainer_-&gt;isDone()) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-built_in">std</span>::runtime_error(fmt::format(<span class="hljs-string">"{} trainer is done"</span>, gameId));
+      }
+      <span class="hljs-built_in">std</span>::this_thread::sleep_for(<span class="hljs-built_in">std</span>::chrono::milliseconds(<span class="hljs-number">10</span>));
+      <span class="hljs-keyword">continue</span>;
+    }
+
+    episode_ = cpid::EpisodeHandle(trainer, gameId);
+
+    <span class="hljs-comment">// We need persistent UPC storage to retain any data we post alongside the</span>
+    <span class="hljs-comment">// actual UPCs for the duration of the game.</span>
+    state-&gt;board()-&gt;storage()-&gt;setPersistent(<span class="hljs-literal">true</span>);
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">step</span><span class="hljs-params">(State* state)</span> override </span>{
+    <span class="hljs-comment">// Stop the game if told to do so</span>
+    <span class="hljs-keyword">if</span> (trainer-&gt;isDone() ||
+        !trainer-&gt;isActive(episode_.gameId, episode_.episodeKey)) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-built_in">std</span>::runtime_error(
+          fmt::format(<span class="hljs-string">"{} trainer/episode is done"</span>, episode_.gameId));
+    }
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; it : relevantUpcs()) {
+      <span class="hljs-keyword">auto</span> upcId = it.first;
+      <span class="hljs-keyword">auto</span>&amp; upc = it.second;
+
+      <span class="hljs-comment">// Take action with model</span>
+      state_ = featurizeStateForMyFancyModel(state, upc);
+      output_ = trainer-&gt;forward(state_, episode_.gameId);
+
+      <span class="hljs-comment">// Generate UPC for macro-action</span>
+      <span class="hljs-keyword">auto</span> upc = <span class="hljs-built_in">std</span>::make_shared&lt;UPCTuple&gt;();
+      <span class="hljs-comment">// Fill in upc contents...</span>
+
+      <span class="hljs-comment">// Attach data to this UPC so that we can recover states, outputs and</span>
+      <span class="hljs-comment">// results of all actions at the end of the game.</span>
+      <span class="hljs-keyword">auto</span> data = <span class="hljs-built_in">std</span>::make_shared&lt;MyPostData&gt;(state, output);
+
+      <span class="hljs-keyword">auto</span> targetUpcId =
+          state-&gt;board()-&gt;postUpc(<span class="hljs-built_in">std</span>::move(upc), upcId, <span class="hljs-keyword">this</span>, <span class="hljs-built_in">std</span>::move(data));
+      <span class="hljs-keyword">if</span> (targetUpcId &gt;= <span class="hljs-number">0</span>) {
+        state-&gt;board()-&gt;consumeUPC(upcId, <span class="hljs-keyword">this</span>);
+        <span class="hljs-keyword">auto</span> task = <span class="hljs-built_in">std</span>::make_shared&lt;MyProxyTask&gt;(targetUpcId, upcId);
+        board-&gt;postTask(<span class="hljs-built_in">std</span>::move(task), <span class="hljs-keyword">this</span>, <span class="hljs-literal">true</span>);
+      }
+    }
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">onGameEnd</span><span class="hljs-params">(State* state)</span> override </span>{
+    <span class="hljs-comment">// Iterate over all UPCs that we posted</span>
+    <span class="hljs-keyword">float</span> reward = <span class="hljs-number">0.0f</span>;
+    <span class="hljs-keyword">int</span> frames = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">auto</span>* storage = state-&gt;board()-&gt;upcStorage();
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> <span class="hljs-keyword">const</span>* post : storage-&gt;upcPostsFrom(<span class="hljs-keyword">this</span>)) {
+      <span class="hljs-keyword">auto</span>* data = <span class="hljs-built_in">std</span>::static_pointer_cast&lt;MyPostData&gt;(post-&gt;data).get();
+      <span class="hljs-keyword">if</span> (data-&gt;finalStatus != TaskData::Success &amp;&amp;
+          data-&gt;finalStatus != TaskData::Failure) {
+        <span class="hljs-comment">// Task was cancelled or never picked up -- ignore this action</span>
+        <span class="hljs-keyword">continue</span>;
+      }
+
+      <span class="hljs-keyword">auto</span> frame = trainer-&gt;makeFrame(data-&gt;output, data-&gt;state, reward);
+      trainer-&gt;step(episode_.gameId, <span class="hljs-built_in">std</span>::move(frame));
+      frames++;
+
+      <span class="hljs-comment">// The local reward for this action will end up in the *next* frame</span>
+      reward = data-&gt;finalStatus == TaskData::Success ? <span class="hljs-number">0.2f</span> : <span class="hljs-number">-0.2f</span>;
+    }
+    <span class="hljs-keyword">if</span> (frames == <span class="hljs-number">0</span>) {
+      <span class="hljs-comment">// Empty episode</span>
+      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-comment">// Global reward</span>
+    reward += state-&gt;won() ? <span class="hljs-number">1.0f</span> : <span class="hljs-number">-1.0f</span>;
+    <span class="hljs-keyword">auto</span> frame = trainer-&gt;makeFrame({}, {}, reward);
+    trainer-&gt;step(episode_.gameId, <span class="hljs-built_in">std</span>::move(frame), <span class="hljs-literal">true</span>);
+  }
+
+ <span class="hljs-keyword">private</span>:
+  <span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;Trainer&gt; trainer_;
+  cpid::EpisodeHandle episode_;
+};
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/TorchCraftAI/docs/modules.html"><span class="arrow-prev">← </span><span>Modules Overview</span></a><a class="docs-next button" href="/TorchCraftAI/docs/bptut-intro.html"><span>Building Placement: Intro</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#main-program">Main Program</a><ul class="toc-headings"><li><a href="#game-threads">Game Threads</a></li></ul></li><li><a href="#models-and-modules">Models and Modules</a></li><li><a href="#collecting-experience">Collecting Experience</a><ul class="toc-headings"><li><a href="#stand-alone-model">Stand-alone Model</a></li><li><a href="#low-level-controller-model">Low-level Controller Model</a></li><li><a href="#higher-level-models">Higher-Level Models</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/TorchCraftAI/" class="nav-home"><img src="/TorchCraftAI/img/tclogosqsmall.png" alt="TorchCraftAI" width="66" height="58"/></a><div><h5>Docs</h5><a href="/TorchCraftAI/docs/en/install-linux.html">Getting Started (Linux)</a><a href="/TorchCraftAI/docs/en/install-windows.html">Getting Started (Windows)</a><a href="/TorchCraftAI/docs/en/install-macos.html">Getting Started (Mac)</a><a href="reference/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discordapp.com/invite/w9wRRrF">Starcraft AI Discord</a><a href="https://www.facebook.com/groups/bwapi/">Starcraft AI Facebook group</a><a href="https://github.com/TorchCraft/TorchCraftAI">TorchCraftAI on GitHub</a></div><div><h5>More</h5><a href="https://github.com/TorchCraft/TorchCraft">TorchCraft on GitHub</a><a href="https://github.com/TorchCraft/StarData">StarData on GitHub</a><a href="/TorchCraftAI/blog">Blog</a></div></section><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/TorchCraftAI/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2018 Facebook</section></footer></div></body></html>

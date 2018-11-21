@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://torchcraft.github.io/TorchCraftAI/blog</id>
+    <title>TorchCraftAI Blog</title>
+    <updated>2018-11-20T06:00:00Z</updated>
+    <generator>Feed for Node.js</generator>
+    <link rel="alternate" href="https://torchcraft.github.io/TorchCraftAI/blog"/>
+    <subtitle>The best place to stay up-to-date with the latest TorchCraftAI news and events.</subtitle>
+    <logo>https://torchcraft.github.io/TorchCraftAI/img/tclogosqlightgrey.png</logo>
+    <rights>Copyright © 2018 Facebook</rights>
+    <entry>
+        <title type="html"><![CDATA[Hello, Github!]]></title>
+        <id>https://torchcraft.github.io/TorchCraftAI/blog/2018/11/20/hello-github.html</id>
+        <link href="https://torchcraft.github.io/TorchCraftAI/blog/2018/11/20/hello-github.html">
+        </link>
+        <updated>2018-11-20T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>The CherryPi team at Facebook AI Research is very happy to open source TorchCraftAI <a href="https://github.com/TorchCraft/TorchCraftAI">on github</a>. We benefitted from the StarCraft AI bot community, and we are proud to give back.</p> <p>TorchCraftAI is a platform that lets you build agents to play (and learn ...</p>]]></summary>
+        <author>
+            <name>Gabriel Synnaeve</name>
+            <uri>http://twitter.com/syhw</uri>
+        </author>
+    </entry>
+</feed>

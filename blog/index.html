@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Blog · TorchCraftAI</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="A bot platform for machine learning research on StarCraft®: Brood War®"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Blog · TorchCraftAI"/><meta property="og:type" content="website"/><meta property="og:url" content="https://torchcraft.github.io/TorchCraftAI/index.html"/><meta property="og:description" content="A bot platform for machine learning research on StarCraft®: Brood War®"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://torchcraft.github.io/TorchCraftAI/img/tclogolinesmall.png"/><link rel="shortcut icon" href="/TorchCraftAI/img/favicon/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/atom.xml" title="TorchCraftAI Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/feed.xml" title="TorchCraftAI Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/js/code-blocks-buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script><link rel="stylesheet" href="/TorchCraftAI/css/main.css"/></head><body class="blog"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/TorchCraftAI/"><img class="logo" src="/TorchCraftAI/img/tclogosqlightgrey.png" alt="TorchCraftAI"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/TorchCraftAI/docs/bptut-intro.html" target="_self">Tutorials</a></li><li class=""><a href="/TorchCraftAI/reference/index.html" target="_self">API</a></li><li class="siteNavGroupActive siteNavItemActive"><a href="/TorchCraftAI/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/TorchCraft/TorchCraftAI" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/blog/2018/11/20/hello-github.html">Hello, Github!</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="posts"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/TorchCraftAI/blog/2018/11/20/hello-github.html">Hello, Github!</a></h1><p class="post-meta">November 20, 2018</p><div class="authorBlock"><p class="post-authorName"><a href="http://twitter.com/syhw" target="_blank" rel="noreferrer noopener">Gabriel Synnaeve</a></p><div class="authorPhoto"><a href="http://twitter.com/syhw" target="_blank" rel="noreferrer noopener"><img src="https://graph.facebook.com/636270303/picture/?height=200&amp;width=200" alt="Gabriel Synnaeve"/></a></div></div></header><article class="post-content"><div><span><p>The CherryPi team at Facebook AI Research is very happy to open source TorchCraftAI <a href="https://github.com/TorchCraft/TorchCraftAI">on github</a>. We benefitted from the StarCraft AI bot community, and we are proud to give back.</p>
+<p>TorchCraftAI is a platform that lets you build agents to play (and learn to play) StarCraft: Brood War. TorchCraftAI includes:</p>
+<ul>
+<li>A modular framework for building StarCraft agents, where modules can be hacked with, replaced by other, or by ML/RL-trained models</li>
+<li>CherryPi, a bot which plays complete games of StarCraft (1st place SSCAIT 2017-18, 2nd place AIIDE 2018)</li>
+<li>A reinforcement learning environment for full games, minigames, with models, and training loops</li>
+<li>TorchCraft support for TCP communication with StarCraft and BWAPI</li>
+<li>Support for Linux, Windows and OSX</li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"></div></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/TorchCraftAI/" class="nav-home"><img src="/TorchCraftAI/img/tclogosqsmall.png" alt="TorchCraftAI" width="66" height="58"/></a><div><h5>Docs</h5><a href="/TorchCraftAI/docs/en/install-linux.html">Getting Started (Linux)</a><a href="/TorchCraftAI/docs/en/install-windows.html">Getting Started (Windows)</a><a href="/TorchCraftAI/docs/en/install-macos.html">Getting Started (Mac)</a><a href="reference/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discordapp.com/invite/w9wRRrF">Starcraft AI Discord</a><a href="https://www.facebook.com/groups/bwapi/">Starcraft AI Facebook group</a><a href="https://github.com/TorchCraft/TorchCraftAI">TorchCraftAI on GitHub</a></div><div><h5>More</h5><a href="https://github.com/TorchCraft/TorchCraft">TorchCraft on GitHub</a><a href="https://github.com/TorchCraft/StarData">StarData on GitHub</a><a href="/TorchCraftAI/blog">Blog</a></div></section><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/TorchCraftAI/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2018 Facebook</section></footer></div></body></html>

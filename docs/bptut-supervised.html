@@ -1,0 +1,362 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Building Placement: Supervised Learning · TorchCraftAI</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;We validate the building placement model introduced in the &lt;a href=&quot;/TorchCraftAI/docs/bptut-model.html&quot;&gt;previous section&lt;/a&gt; in a supervised setup, in which we aim to predict build locations selected by human players.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Building Placement: Supervised Learning · TorchCraftAI"/><meta property="og:type" content="website"/><meta property="og:url" content="https://torchcraft.github.io/TorchCraftAI/index.html"/><meta property="og:description" content="&lt;p&gt;We validate the building placement model introduced in the &lt;a href=&quot;/TorchCraftAI/docs/bptut-model.html&quot;&gt;previous section&lt;/a&gt; in a supervised setup, in which we aim to predict build locations selected by human players.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://torchcraft.github.io/TorchCraftAI/img/tclogolinesmall.png"/><link rel="shortcut icon" href="/TorchCraftAI/img/favicon/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/atom.xml" title="TorchCraftAI Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/feed.xml" title="TorchCraftAI Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/js/code-blocks-buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script><link rel="stylesheet" href="/TorchCraftAI/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/TorchCraftAI/"><img class="logo" src="/TorchCraftAI/img/tclogosqlightgrey.png" alt="TorchCraftAI"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/TorchCraftAI/docs/bptut-intro.html" target="_self">Tutorials</a></li><li class=""><a href="/TorchCraftAI/reference/index.html" target="_self">API</a></li><li class=""><a href="/TorchCraftAI/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/TorchCraft/TorchCraftAI" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Tutorial - Building Placement</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-linux.html">Installation (Linux)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-windows.html">Installation (Windows)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-macos.html">Installation (macOS)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/play-games.html">Play games with CherryPi</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">TorchCraftAI</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/overview.html">Overview</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/architecture.html">System Architecture</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/core-abstractions.html">Core Abstractions</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/modules.html">Modules Overview</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/module-training.html">Module Training Blueprints</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Building Placement</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-intro.html">Building Placement Intro</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-model.html">Neural Network Architecture</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/TorchCraftAI/docs/bptut-supervised.html">Supervised Learning</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-rl.html">Reinforcement Learning</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Micro-Manamagent</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-intro.html">Micromanagement Intro</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-model.html">Model</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-setup.html">Training Setup</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Building Placement: Supervised Learning</h1></header><article><div><span><p>We validate the building placement model introduced in the <a href="/TorchCraftAI/docs/bptut-model.html">previous section</a> in a supervised setup, in which we aim to predict build locations selected by human players.
+Utilizing the <a href="https://github.com/TorchCraft/StarData">StarData corpus</a>, we show that the model is able to generalize to new game situations by comparing it to a few simple baselines.</p>
+<h2><a class="anchor" aria-hidden="true" id="sample-extraction"></a><a href="#sample-extraction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Sample Extraction</h2>
+<p>First, we will need to extract the necessary training data from the relevant games in StarData.
+We limit the discussion in this tutorial to building placement for Zerg even though the procedures described will work for any race.</p>
+<p>Let's start by downloading and extracting the original replays of the StarData corpus using the <a href="https://aws.amazon.com/cli/">awscli</a> command-line tool (note that the replays are a 5 GB download)</p>
+<pre><code class="hljs css language-sh">aws s3 cp --no-sign-request s3://stardata/original_replays.tar.gz .
+tar xvzf original_replays.tar.gz
+</code></pre>
+<p>The sample extraction program (<a href="https://github.com/TorchCraft/TorchCraftAI/tree/master/scripts/building-placer/collect-replay-samples.cpp">collect-replay-samples</a>) processes a set of Brood War replays and writes all relevant samples to disk.
+As a first step, we load the replay using <a href="">bwreplib</a> to gain access to game meta-data and all actions performed by the players.
+From the meta-data, we can determine the player IDs matching the race that we are interested in:</p>
+<pre><code class="hljs css language-cpp">  BWrepFile bwrep;
+  <span class="hljs-keyword">if</span> (!bwrep.Load(replayFile.c_str(), BWrepFile::LOADACTIONS)) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-built_in">std</span>::runtime_error(<span class="hljs-string">"Cannot load replay: "</span> + replayFile);
+  }
+
+  <span class="hljs-comment">// We don't want to featrurize overly large maps</span>
+  <span class="hljs-keyword">if</span> (bwrep.m_oHeader.getMapWidth() &gt; BuildingPlacerSample::kMapSize ||
+      bwrep.m_oHeader.getMapHeight() &gt; BuildingPlacerSample::kMapSize) {
+    VLOG(<span class="hljs-number">0</span>) &lt;&lt; <span class="hljs-string">"Skipping large map in "</span> &lt;&lt; replayFile &lt;&lt; <span class="hljs-string">" ("</span>
+              &lt;&lt; bwrep.m_oHeader.getMapWidth() &lt;&lt; <span class="hljs-string">"x"</span>
+              &lt;&lt; bwrep.m_oHeader.getMapHeight() &lt;&lt; <span class="hljs-string">")"</span>;
+    <span class="hljs-keyword">return</span>;
+  }
+
+  <span class="hljs-comment">// We'd like to collect samples from every player who's playing the given</span>
+  <span class="hljs-comment">// race.</span>
+  <span class="hljs-comment">// There's some confusion in bwreplib regarding player indices and player</span>
+  <span class="hljs-comment">// slots. The player ID of a specific action referes to the player's slot; for</span>
+  <span class="hljs-comment">// the replay perspective, we have to use the actual IDs.</span>
+  <span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-built_in">std</span>::pair&lt;<span class="hljs-keyword">int</span>, PlayerId&gt;&gt; players;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; bwrep.m_oHeader.getLogicalPlayerCount(); i++) {
+    BWrepPlayer player;
+    bwrep.m_oHeader.getLogicalPlayers(player, i);
+    <span class="hljs-comment">// Race enums match between bwreplib and BWAPI</span>
+    <span class="hljs-keyword">auto</span> playerRace =
+        tc::BW::Race::_from_integral(<span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-keyword">int</span>&gt;(player.getRace()));
+    <span class="hljs-keyword">if</span> (playerRace == race) {
+      players.emplace_back(i, player.getSlot());
+      VLOG(<span class="hljs-number">1</span>) &lt;&lt; <span class="hljs-string">"Found "</span> &lt;&lt; race._to_string() &lt;&lt; <span class="hljs-string">" player in "</span> &lt;&lt; replayFile
+              &lt;&lt; <span class="hljs-string">": "</span> &lt;&lt; player.getName() &lt;&lt; <span class="hljs-string">" at "</span> &lt;&lt; i;
+    }
+  }
+</code></pre>
+<p>For sample extraction, we are going to replay the game so that we gain access to the actual game state from the perspective of the respective player.
+However, the state we obtain during replay does not contain the <strong>actions</strong> performed by the players -- we merely observe the results.
+We thus scan all the actions in the replay file and collect the ones that correspond to build commands.
+As we then replay the game, we can featurize the game state at the time the action was taken.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">BuildAction</span> {</span>
+  FrameNum frame;
+  BuildType <span class="hljs-keyword">const</span>* buildType;
+  Position pos;
+
+  BuildAction(FrameNum frame, BuildType <span class="hljs-keyword">const</span>* buildType, Position <span class="hljs-keyword">const</span>&amp; pos)
+      : frame(frame), buildType(buildType), pos(pos) {}
+};
+</code></pre>
+<pre><code class="hljs css language-cpp">    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;BuildAction&gt; buildActions;
+    <span class="hljs-keyword">auto</span>&amp; actionList = bwrep.m_oActions;
+    <span class="hljs-comment">// Collect all build actions performed during the game</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; actionList.GetActionCount(); i++) {
+      <span class="hljs-keyword">auto</span>* action = actionList.GetAction(i);
+      <span class="hljs-keyword">if</span> (action-&gt;GetPlayerID() != playerSlot) {
+        <span class="hljs-keyword">continue</span>;
+      }
+      <span class="hljs-keyword">if</span> (action-&gt;GetID() != BWrepGameData::eACTIONNAME::CMD_BUILD) {
+        <span class="hljs-keyword">continue</span>;
+      }
+      <span class="hljs-keyword">auto</span>* params = <span class="hljs-keyword">static_cast</span>&lt;BWrepActionBuild::Params <span class="hljs-keyword">const</span>*&gt;(
+          action-&gt;GetParamStruct());
+      <span class="hljs-comment">// Validate the the building ID is actually corresponding to the player</span>
+      <span class="hljs-comment">// race</span>
+      <span class="hljs-keyword">if</span> (tc::BW::data::GetRace[params-&gt;m_buildingid] != race._to_string()) {
+        <span class="hljs-keyword">continue</span>;
+      }
+      buildActions.emplace_back(
+          action-&gt;GetTime(),
+          getUnitBuildType(params-&gt;m_buildingid),
+          Position(
+              params-&gt;m_pos1 * tc::BW::XYWalktilesPerBuildtile,
+              params-&gt;m_pos2 * tc::BW::XYWalktilesPerBuildtile));
+    }
+</code></pre>
+<p>Now that we gathered all relevant player actions, we replay the game from the player's perspective and featurize the game state at the appropriate frame.
+Keep in mind that not all build actions a player takes actually result in a building being constructed.
+For example, at the start of the game players will often spam build actions.
+The actions may also fail if the player runs out of resources before the building is started, or they may simply decide to cancel the action.
+In our program, we make sure to only extract data for successful actions by validating that a unit with the respective building type actually appears.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">SampleCandidate</span> {</span>
+  FrameNum frame;
+  BuildingPlacerSample sample;
+  <span class="hljs-keyword">bool</span> verified;
+
+  SampleCandidate(FrameNum frame, BuildingPlacerSample sample, <span class="hljs-keyword">bool</span> verified)
+      : frame(frame), sample(<span class="hljs-built_in">std</span>::move(sample)), verified(verified) {}
+}
+</code></pre>
+<pre><code class="hljs css language-cpp">  <span class="hljs-keyword">while</span> (actionIt != actions.end() &amp;&amp; !state-&gt;gameEnded()) {
+    replay.step();
+
+    <span class="hljs-comment">// Collect samples for any actions taken during step</span>
+    <span class="hljs-keyword">while</span> (actionIt-&gt;frame &lt;= state-&gt;currentFrame()) {
+      <span class="hljs-comment">// We assume we know the target area</span>
+      <span class="hljs-keyword">auto</span> upc = <span class="hljs-built_in">std</span>::make_shared&lt;UPCTuple&gt;();
+      upc-&gt;position = state-&gt;areaInfo().tryGetArea(actionIt-&gt;pos);
+      upc-&gt;state = UPCTuple::BuildTypeMap{{actionIt-&gt;buildType, <span class="hljs-number">1</span>}};
+
+      <span class="hljs-function">BuildingPlacerSample <span class="hljs-title">sample</span><span class="hljs-params">(state, actionIt-&gt;pos, upc)</span></span>;
+      candidates.emplace_back(state-&gt;currentFrame(), <span class="hljs-built_in">std</span>::move(sample), <span class="hljs-literal">false</span>);
+      VLOG(<span class="hljs-number">1</span>) &lt;&lt; <span class="hljs-string">"New sample at frame "</span> &lt;&lt; state-&gt;currentFrame() &lt;&lt; <span class="hljs-string">": build "</span>
+              &lt;&lt; actionIt-&gt;buildType-&gt;name &lt;&lt; <span class="hljs-string">" at "</span> &lt;&lt; actionIt-&gt;pos;
+
+      <span class="hljs-keyword">if</span> (++actionIt == actions.end()) {
+        <span class="hljs-keyword">break</span>;
+      }
+    }
+
+    <span class="hljs-keyword">auto</span> verify = [&amp;](Unit* unit) {
+      Position buildPos(unit-&gt;buildX, unit-&gt;buildY);
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> it = candidates.rbegin(); it != candidates.rend(); ++it) {
+        <span class="hljs-keyword">if</span> (!it-&gt;verified &amp;&amp; it-&gt;sample.action == buildPos) {
+          it-&gt;verified = <span class="hljs-literal">true</span>;
+          VLOG(<span class="hljs-number">1</span>) &lt;&lt; <span class="hljs-string">"Verified building "</span> &lt;&lt; utils::unitString(unit) &lt;&lt; <span class="hljs-string">" at "</span>
+                  &lt;&lt; Position(unit) &lt;&lt; <span class="hljs-string">" placed at "</span> &lt;&lt; it-&gt;frame;
+          <span class="hljs-keyword">break</span>;
+        }
+      }
+    };
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>* unit : uinfo.getNewUnits()) {
+      <span class="hljs-keyword">if</span> (!unit-&gt;isMine || !unit-&gt;type-&gt;isBuilding) {
+        <span class="hljs-keyword">continue</span>;
+      }
+      verify(unit);
+    }
+
+    <span class="hljs-comment">// For Zerg, worker units will morph into buildings</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>* unit : uinfo.getStartedMorphingUnits()) {
+      <span class="hljs-keyword">if</span> (!unit-&gt;isMine || !unit-&gt;type-&gt;isBuilding ||
+          !unit-&gt;type-&gt;builder-&gt;isWorker) {
+        <span class="hljs-keyword">continue</span>;
+      }
+      verify(unit);
+    }
+
+    <span class="hljs-comment">// Refineries will not be present in getNewUnits() since they are</span>
+    <span class="hljs-comment">// assigned to the geyser unit they are placed on. We thus keep track</span>
+    <span class="hljs-comment">// of all refineries and run verify() for every new one. </span>
+    <span class="hljs-keyword">if</span> (refineryType) {
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>* unit : uinfo.myUnitsOfType(refineryType)) {
+        <span class="hljs-keyword">if</span> (refineries.find(unit) == refineries.end()) {
+          verify(unit);
+          refineries.insert(unit);
+        }
+      }
+    }
+</code></pre>
+<p>The collected samples will be serialized to disk using <a href="https://uscilab.github.io/cereal/">Cereal</a>.
+<a href="http://facebook.github.io/zstd/">Zstandard compression</a> is used to reduce the required disk space.
+Here's an example output for our sample extraction script (with <code>-v 1</code>) when processing a game from StarData:</p>
+<pre><code class="hljs css language-sh">./build/scripts/building-placer/bp-collect-replay-samples /checkpoint/starcraft/stardata_original_replays/7/bwrep_twaw9.rep
+I64624/XXXXX [collect-replay-samples.cpp:287] Found 37 build actions <span class="hljs-keyword">in</span> /checkpoint/starcraft/stardata_original_replays/7/bwrep_twaw9.rep <span class="hljs-keyword">for</span> player 1
+I64624/XXXXX [state.cpp:438] Enemy: Manner]Stork. playing Zerg
+I64624/XXXXX [state.cpp:442] Map: bwrep_twaw9.rep
+I64624/XXXXX [state.cpp:443] Game is being played at LF2
+I64624/XXXXX [state.cpp:438] Enemy: Maul[gGee] playing Protoss
+I64624/XXXXX [state.cpp:442] Map: bwrep_twaw9.rep
+I64624/XXXXX [state.cpp:443] Game is being played at LF2
+I64624/XXXXX [collect-replay-samples.cpp:299] Wrote 16 samples to ./7/bwrep_twaw9_1/
+</code></pre>
+<p>As a final step, we partition the data into training, validation and test sets.
+We follow the partitioning in <a href="https://arxiv.org/abs/1708.02139">Lin et al.</a>, which holds out 5% of replays for both validation and testing.</p>
+<pre><code class="hljs css language-sh"><span class="hljs-built_in">cd</span> original_replays
+find $(seq 0 17) -name <span class="hljs-string">'*.rep'</span> &gt; train.list
+find 18 -name <span class="hljs-string">'*.rep'</span> &gt; valid.list
+find 19 -name <span class="hljs-string">'*.rep'</span> &gt; test.list
+find * -name <span class="hljs-string">'*.rep'</span> &gt; all.list
+</code></pre>
+<p>You can use your favorite method of parallel processing to extract the samples in parallel.
+Here's an example using<code>xargs</code>:</p>
+<pre><code class="hljs css language-sh"><span class="hljs-comment"># From the TorchCraftAI source directory</span>
+sed <span class="hljs-string">"s,^,<span class="hljs-variable">$PATH_TO_ORIGINAL_REPLAYS</span>/,"</span> <span class="hljs-variable">$PATH_TO_ORIGINAL_REPLAYS</span>/all.list \
+| xargs -P $(nproc --all) \
+   ./build/scripts/building-placer/bp-collect-replay-samples \
+  -v 1 -race Zerg -output_path <span class="hljs-variable">$OUTPUT_PATH</span>
+<span class="hljs-built_in">cd</span> <span class="hljs-variable">$OUTPUT_PATH</span>
+find $(seq 0 17) -name <span class="hljs-string">'*.bin'</span> &gt; train.list
+find 18 -name <span class="hljs-string">'*.bin'</span> &gt; valid.list
+find 19 -name <span class="hljs-string">'*.bin'</span> &gt; test.list
+find * -name <span class="hljs-string">'*.bin'</span> &gt; all.list
+</code></pre>
+<p>Running sample extraction on the whole StarData corpus takes a lot of time (i.e. several days on a single computer) but can be parallelized heavily if you have access to multiple machines.</p>
+<h2><a class="anchor" aria-hidden="true" id="training-program"></a><a href="#training-program" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Training Program</h2>
+<p>Our supervised training program (<a href="https://github.com/TorchCraft/TorchCraftAI/tree/master/scripts/building-placer/train-supervised.cpp">train-supervised</a>) implements a standard loop for mini-batch gradient decent for minimizing a loss that may be expressed in pseudo-code as follows:</p>
+<pre><code class="hljs css language-none"><span class="hljs-keywords">repeat</span> <span class="hljs-keywords">until</span> convergence {
+  foreach minibatch (<span class="hljs-symbol">x</span>, <span class="hljs-symbol">y</span>) in corpus {
+    o = M_θ(<span class="hljs-symbol">y</span>);
+    l = loss(<span class="hljs-symbol">y</span>, o);
+    ∇ = backprop(l, θ)
+    θ = optimize(θ, ∇)
+  }
+}
+</code></pre>
+<p>
+The building placement model is implemented with PyTorch's C++ API which takes care of both the forward and the backward (backprop) passes.
+We select a negative log-likelihood loss, i.e. we treat the selection of a suitable location as a classification problem where each location on the 128x128 buildtile map corresponds to a single class (this results in 16384 classes).
+Concretely, the loss is computed for a mini-batch size of \(N\), the flattened model output after softmax \(o\) and a target vector \(y\) containing ground-truth class indices as follows:
+$$L(y, o) = \frac{1}{N} \sum_{n=1}^N o_{n,y_n}$$
+</p>
+<p>
+For optimization, we use SGD with learning rate \(\alpha\) and momentum \(\beta\), which updates the model's parameters \(\theta\) using the gradients \(\nabla\) as follows:
+$$
+\begin{align}
+v_t &= \beta v_{t-1} + (1 - \beta) \nabla \\
+\theta &\leftarrow \theta - \alpha v_t
+\end{align}
+$$
+</p>
+<p>In our setting, <code>repeat until convergence</code> is implemented via early stopping on the validation set: if the loss on the validation set increases, we decimate the learning rate by a factor of 10.
+If the learning rate has been reduced three times, we stop the training loop.</p>
+<p>There are a few additional implementation details in <a href="https://github.com/TorchCraft/TorchCraftAI/tree/master/scripts/building-placer/train-supervised.cpp">train-supervised</a>:</p>
+<ul>
+<li>We use TorchCraftAI's <a href="https://github.com/TorchCraft/TorchCraftAI/tree/master/common/datareader.h">DataReader</a> class to efficiently load the extracted samples from disk and onto the GPU in background threads.</li>
+<li>TorchCraftAI's training library <a href="https://github.com/TorchCraft/TorchCraftAI/tree/master/cpid">libcpid</a> provides primitives for distributed computation that are used to offer synchronous multi-GPU training.</li>
+<li>If requested, performance metrics, validation set samples and model predictions are plotted to a <a href="https://github.com/facebookresearch/visdom">Visdom</a> instance.</li>
+</ul>
+<p>We can train our model on the extracted samples as follows (for brevity, the logging prefixes have been removed from the output):</p>
+<pre><code class="hljs">./build/scripts/building-placer/bp-train-supervised -sample_path $OUTPUT_PATH
+Gloo rank: <span class="hljs-number">0</span> running on host learnfair0485 <span class="hljs-keyword">and</span> size <span class="hljs-number">1</span>
+Training run started with <span class="hljs-number">1</span> workers
+==========================================
+adagrad_lr_decay: <span class="hljs-number">0</span>
+adam_amsgrad: <span class="hljs-literal">false</span>
+adam_beta1: <span class="hljs-number">0.90000000000000002</span>
+# And a lot of other prameters...
+visdom_port: <span class="hljs-number">8097</span>
+visdom_server: http:<span class="hljs-comment">//localhost</span>
+weight_decay: <span class="hljs-number">0</span>
+==========================================
+<span class="hljs-number">0</span>/<span class="hljs-number">100</span> cum_loss:<span class="hljs-number">7.2175</span> cur_loss:<span class="hljs-number">5.5757</span> samples/s:<span class="hljs-number">396</span>
+<span class="hljs-number">0</span>/<span class="hljs-number">200</span> cum_loss:<span class="hljs-number">6.2518</span> cur_loss:<span class="hljs-number">4.9251</span> samples/s:<span class="hljs-number">403</span>
+#
+# after several epochs...
+# 
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">1.6346</span> top1:<span class="hljs-number">0.4984</span> top5:<span class="hljs-number">0.2873</span> d1:<span class="hljs-number">0.4388</span> d3:<span class="hljs-number">0.4152</span>
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">1.0201</span> top1:<span class="hljs-number">0.2841</span> top5:<span class="hljs-number">0.1463</span> d1:<span class="hljs-number">0.2383</span> d3:<span class="hljs-number">0.2238</span> <span class="hljs-keyword">for</span> <span class="hljs-number">8667</span> Zerg_Hatcherys
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">2.2680</span> top1:<span class="hljs-number">0.6480</span> top5:<span class="hljs-number">0.4580</span> d1:<span class="hljs-number">0.5720</span> d3:<span class="hljs-number">0.5380</span> <span class="hljs-keyword">for</span> <span class="hljs-number">500</span> Zerg_Nydus_Canals
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">2.2885</span> top1:<span class="hljs-number">0.7115</span> top5:<span class="hljs-number">0.3937</span> d1:<span class="hljs-number">0.6192</span> d3:<span class="hljs-number">0.5877</span> <span class="hljs-keyword">for</span> <span class="hljs-number">1397</span> Zerg_Hydralisk_Dens
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">2.7676</span> top1:<span class="hljs-number">0.8457</span> top5:<span class="hljs-number">0.5391</span> d1:<span class="hljs-number">0.7402</span> d3:<span class="hljs-number">0.6992</span> <span class="hljs-keyword">for</span> <span class="hljs-number">512</span> Zerg_Defiler_Mounds
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">2.8183</span> top1:<span class="hljs-number">0.8315</span> top5:<span class="hljs-number">0.5391</span> d1:<span class="hljs-number">0.7413</span> d3:<span class="hljs-number">0.7076</span> <span class="hljs-keyword">for</span> <span class="hljs-number">831</span> Zerg_Queens_Nests
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">2.5533</span> top1:<span class="hljs-number">0.7591</span> top5:<span class="hljs-number">0.4649</span> d1:<span class="hljs-number">0.6890</span> d3:<span class="hljs-number">0.6520</span> <span class="hljs-keyword">for</span> <span class="hljs-number">2138</span> Zerg_Evolution_Chambers
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">2.8015</span> top1:<span class="hljs-number">0.8643</span> top5:<span class="hljs-number">0.5905</span> d1:<span class="hljs-number">0.7638</span> d3:<span class="hljs-number">0.7437</span> <span class="hljs-keyword">for</span> <span class="hljs-number">398</span> Zerg_Ultralisk_Caverns
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">2.0783</span> top1:<span class="hljs-number">0.6684</span> top5:<span class="hljs-number">0.3351</span> d1:<span class="hljs-number">0.5824</span> d3:<span class="hljs-number">0.5624</span> <span class="hljs-keyword">for</span> <span class="hljs-number">1698</span> Zerg_Spires
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">1.3006</span> top1:<span class="hljs-number">0.5365</span> top5:<span class="hljs-number">0.1712</span> d1:<span class="hljs-number">0.3816</span> d3:<span class="hljs-number">0.3468</span> <span class="hljs-keyword">for</span> <span class="hljs-number">2272</span> Zerg_Spawning_Pools
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">2.5690</span> top1:<span class="hljs-number">0.7745</span> top5:<span class="hljs-number">0.4829</span> d1:<span class="hljs-number">0.7093</span> d3:<span class="hljs-number">0.6726</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10082</span> Zerg_Creep_Colonys
+valid <span class="hljs-number">12</span>/<span class="hljs-number">123656</span>: loss:<span class="hljs-number">0.0054</span> top1:<span class="hljs-number">0.0028</span> top5:<span class="hljs-number">0.0003</span> d1:<span class="hljs-number">0.0028</span> d3:<span class="hljs-number">0.0028</span> <span class="hljs-keyword">for</span> <span class="hljs-number">5716</span> Zerg_Extractors
+Validation loss stagnating, lowering learning rate to <span class="hljs-number">1e-05</span>
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="evaluation"></a><a href="#evaluation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Evaluation</h2>
+<p>We evaluate the model's performance using several metrics:</p>
+<ul>
+<li><strong>Top-1 Error:</strong> This is the classification error, i.e. the fraction of samples for which the model produced a wrong prediction according to the <code>argmax</code> of its output.</li>
+<li><strong>Top-5 Error:</strong> The fraction of samples for which the true output was not among the top five predictions of the model.</li>
+<li><strong>D-1 Error:</strong> In many situations, missing the true location by a small margin is not too bad. Hence, this metric represents the fraction of samples for which the top prediction is not in a 3x3 buildtile square centered at the true location.</li>
+<li><strong>D-3 Error:</strong> The fraction of samples for which the top prediction is not within a 9x9 buildtile square centered at the true location.</li>
+</ul>
+<p>Here are plots during training (for Zerg) that show the loss and the above metrics over 3 training runs:</p>
+<p><img src="/docs/assets/bpsup-errors.png" alt="Supervised Training Performance"></p>
+<h3><a class="anchor" aria-hidden="true" id="nearest-neighbor-baselines"></a><a href="#nearest-neighbor-baselines" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Nearest Neighbor Baselines</h3>
+<p>When we look at the performance achieved by the trained model in isolation, we cannot judge whether the model is actually good, or how difficult the placement task is in general.
+One way to gain insights here is to evaluate the performance of simpler <strong>baseline</strong> algorithms; here, we'll focus on a <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">nearest neighbor</a> baseline, implemented in <a href="https://github.com/TorchCraft/TorchCraftAI/tree/master/scripts/building-placer/knn-baseline.cpp">nn-baseline</a>.</p>
+<p>The idea is conceptually simple: for a given sample from the validation set, we look up the closest neighbors in the training set and then use their locations as predictions.
+We perform the selection of neighboring examples in two stages:</p>
+<ol>
+<li>Retrieve relevant training samples by filtering.
+We are interested in all actions that took place on the same map and in the same
+area, and are placements of the same building type as the given validation sample.</li>
+<li>Compute a distance measure between relevant training samples from the validation sample.
+Afterwards, our prediction will be a list of locations from the relevant training samples, sorted by their distance.</li>
+</ol>
+<p>We consider several distance measures:</p>
+<ul>
+<li>Cumulative distance between all buildings of similar type in the respective area.
+This is a crude measure of &quot;similarity&quot; between game situations and also requires us to only consider training samples with the same composition of buildings as the validation sample.</li>
+<li>The L2 distance between the output of a randomly initialized building placement model for both samples.
+This allows us to judge the <a href="https://en.wikipedia.org/wiki/Inductive_bias">inductive bias</a> that we introduced by selecting our specific model architecture.</li>
+<li>The L2 distance between the output of a trained model.</li>
+<li>An &quot;oracle&quot; baseline that has access to the actual location of the validation sample and ranks relevant training samples by their distance.
+This method is of course cheating, but it provides an upper limit for algorithms that merely memorize the training data.</li>
+</ul>
+<p>The results can be summarized in a histogram plot where we break down the metrics to individual building types:</p>
+<p>Here's an example running the baseline script using the oracle distance metric (this can be sped up with the <code>-num_data_threads</code>, <code>-num_train_threads</code> and <code>-num_valid_threads</code> arguments).
+Again, we removed the glog prefixes from the output.</p>
+<pre><code class="hljs">./build/scripts/building-placer/bp-knn-baseline -sample_path $OUTPUT_PATH -distance_feature oracle
+==========================================
+distance_feature: oracle
+filter_buildings: <span class="hljs-literal">true</span>
+gpu: <span class="hljs-literal">true</span>
+map: <span class="hljs-number">-1</span>
+map_spec: scripts/building-placer/stardata_rep_map.json.zst
+model_path:
+num_data_threads: <span class="hljs-number">1</span>
+num_train_threads: <span class="hljs-number">1</span>
+num_valid_threads: <span class="hljs-number">1</span>
+sample_path: $OUTPUT_PATH
+seed: <span class="hljs-number">-1744747180</span>
+similarity_metric: l2
+==========================================
+Building database of reduced training <span class="hljs-keyword">set</span> samples
+<span class="hljs-number">1</span> samples
+<span class="hljs-number">100001</span> samples
+<span class="hljs-number">200001</span> samples
+# ... 
+Collected data <span class="hljs-keyword">from</span> <span class="hljs-number">608709</span> samples
+Scoring validation <span class="hljs-keyword">set</span>
+<span class="hljs-number">1</span> samples
+<span class="hljs-number">10001</span> samples
+<span class="hljs-number">20001</span> samples
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.3931</span> top5:<span class="hljs-number">0.3931</span> d1:<span class="hljs-number">0.2907</span> d3:<span class="hljs-number">0.2316</span>
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.2078</span> top5:<span class="hljs-number">0.2078</span> d1:<span class="hljs-number">0.1595</span> d3:<span class="hljs-number">0.1246</span> <span class="hljs-keyword">for</span> <span class="hljs-number">8667</span> Zerg_Hatcherys
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.7820</span> top5:<span class="hljs-number">0.7820</span> d1:<span class="hljs-number">0.6420</span> d3:<span class="hljs-number">0.5700</span> <span class="hljs-keyword">for</span> <span class="hljs-number">500</span> Zerg_Nydus_Canals
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.5784</span> top5:<span class="hljs-number">0.5784</span> d1:<span class="hljs-number">0.4030</span> d3:<span class="hljs-number">0.3042</span> <span class="hljs-keyword">for</span> <span class="hljs-number">1397</span> Zerg_Hydralisk_Dens
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.8711</span> top5:<span class="hljs-number">0.8711</span> d1:<span class="hljs-number">0.7422</span> d3:<span class="hljs-number">0.6445</span> <span class="hljs-keyword">for</span> <span class="hljs-number">512</span> Zerg_Defiler_Mounds
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.7653</span> top5:<span class="hljs-number">0.7653</span> d1:<span class="hljs-number">0.5752</span> d3:<span class="hljs-number">0.4477</span> <span class="hljs-keyword">for</span> <span class="hljs-number">831</span> Zerg_Queens_Nests
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.7348</span> top5:<span class="hljs-number">0.7348</span> d1:<span class="hljs-number">0.5636</span> d3:<span class="hljs-number">0.4514</span> <span class="hljs-keyword">for</span> <span class="hljs-number">2138</span> Zerg_Evolution_Chambers
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.9121</span> top5:<span class="hljs-number">0.9121</span> d1:<span class="hljs-number">0.8317</span> d3:<span class="hljs-number">0.7337</span> <span class="hljs-keyword">for</span> <span class="hljs-number">398</span> Zerg_Ultralisk_Caverns
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.4305</span> top5:<span class="hljs-number">0.4305</span> d1:<span class="hljs-number">0.2998</span> d3:<span class="hljs-number">0.2362</span> <span class="hljs-keyword">for</span> <span class="hljs-number">1698</span> Zerg_Spires
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.1290</span> top5:<span class="hljs-number">0.1290</span> d1:<span class="hljs-number">0.0779</span> d3:<span class="hljs-number">0.0673</span> <span class="hljs-keyword">for</span> <span class="hljs-number">2272</span> Zerg_Spawning_Pools
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.5789</span> top5:<span class="hljs-number">0.5789</span> d1:<span class="hljs-number">0.3993</span> d3:<span class="hljs-number">0.3022</span> <span class="hljs-keyword">for</span> <span class="hljs-number">10082</span> Zerg_Creep_Colonys
+valid <span class="hljs-number">1</span>/<span class="hljs-number">1</span>: loss:<span class="hljs-number">0.0000</span> top1:<span class="hljs-number">0.1004</span> top5:<span class="hljs-number">0.1004</span> d1:<span class="hljs-number">0.1004</span> d3:<span class="hljs-number">0.1004</span> <span class="hljs-keyword">for</span> <span class="hljs-number">5716</span> Zerg_Extractors
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/TorchCraftAI/docs/bptut-model.html"><span class="arrow-prev">← </span><span>Building Placement: Neural Network Architecture</span></a><a class="docs-next button" href="/TorchCraftAI/docs/bptut-rl.html"><span>Building Placement: Reinforcement Learning</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#sample-extraction">Sample Extraction</a></li><li><a href="#training-program">Training Program</a></li><li><a href="#evaluation">Evaluation</a><ul class="toc-headings"><li><a href="#nearest-neighbor-baselines">Nearest Neighbor Baselines</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/TorchCraftAI/" class="nav-home"><img src="/TorchCraftAI/img/tclogosqsmall.png" alt="TorchCraftAI" width="66" height="58"/></a><div><h5>Docs</h5><a href="/TorchCraftAI/docs/en/install-linux.html">Getting Started (Linux)</a><a href="/TorchCraftAI/docs/en/install-windows.html">Getting Started (Windows)</a><a href="/TorchCraftAI/docs/en/install-macos.html">Getting Started (Mac)</a><a href="reference/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discordapp.com/invite/w9wRRrF">Starcraft AI Discord</a><a href="https://www.facebook.com/groups/bwapi/">Starcraft AI Facebook group</a><a href="https://github.com/TorchCraft/TorchCraftAI">TorchCraftAI on GitHub</a></div><div><h5>More</h5><a href="https://github.com/TorchCraft/TorchCraft">TorchCraft on GitHub</a><a href="https://github.com/TorchCraft/StarData">StarData on GitHub</a><a href="/TorchCraftAI/blog">Blog</a></div></section><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/TorchCraftAI/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2018 Facebook</section></footer></div></body></html>

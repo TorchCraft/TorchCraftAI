@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Building Placement: Neural Network Architecture · TorchCraftAI</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;Here, we will provide a detailed description of the model we will use for building placement. In the later sections, we will then cover example setups for supervised and reinforcement learning.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Building Placement: Neural Network Architecture · TorchCraftAI"/><meta property="og:type" content="website"/><meta property="og:url" content="https://torchcraft.github.io/TorchCraftAI/index.html"/><meta property="og:description" content="&lt;p&gt;Here, we will provide a detailed description of the model we will use for building placement. In the later sections, we will then cover example setups for supervised and reinforcement learning.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://torchcraft.github.io/TorchCraftAI/img/tclogolinesmall.png"/><link rel="shortcut icon" href="/TorchCraftAI/img/favicon/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/atom.xml" title="TorchCraftAI Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/feed.xml" title="TorchCraftAI Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/js/code-blocks-buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script><link rel="stylesheet" href="/TorchCraftAI/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/TorchCraftAI/"><img class="logo" src="/TorchCraftAI/img/tclogosqlightgrey.png" alt="TorchCraftAI"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/TorchCraftAI/docs/bptut-intro.html" target="_self">Tutorials</a></li><li class=""><a href="/TorchCraftAI/reference/index.html" target="_self">API</a></li><li class=""><a href="/TorchCraftAI/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/TorchCraft/TorchCraftAI" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Tutorial - Building Placement</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-linux.html">Installation (Linux)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-windows.html">Installation (Windows)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-macos.html">Installation (macOS)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/play-games.html">Play games with CherryPi</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">TorchCraftAI</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/overview.html">Overview</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/architecture.html">System Architecture</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/core-abstractions.html">Core Abstractions</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/modules.html">Modules Overview</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/module-training.html">Module Training Blueprints</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Building Placement</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-intro.html">Building Placement Intro</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/TorchCraftAI/docs/bptut-model.html">Neural Network Architecture</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-supervised.html">Supervised Learning</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-rl.html">Reinforcement Learning</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Micro-Manamagent</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-intro.html">Micromanagement Intro</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-model.html">Model</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-setup.html">Training Setup</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Building Placement: Neural Network Architecture</h1></header><article><div><span><p>Here, we will provide a detailed description of the model we will use for building placement. In the later sections, we will then cover example setups for supervised and reinforcement learning.</p>
+<p>As discussed in the <a href="/TorchCraftAI/docs/bptut-intro.html">previous section</a>, our model should output probabilities for build locations.
+In StarCraft: Brood War, three different resolutions are typically considered
+when talking about locations: <strong>pixels</strong> (each point directly translates to a
+visible pixel on the screen), <strong>walktiles</strong> (comprises 8x8 pixels) and <strong>buildtiles</strong> (each tile comprises 4x4 walktiles, e.g. 32x32 pixels).
+As the name suggests, buildtiles correspond the resolution at which buildings
+can be placed.
+There are several rules that determine whether a location is valid for a given
+building.
+For example, consider the following situation:</p>
+<p><img alt="Placement of a Zerg Evolution Chamber" width="75%" src="/docs/assets/building-placement.png"/></p>
+<p>The Brood War UI indicates which buildtiles can be used for a building and highlights them in green.
+The red tiles cannot be used, e.g. if another unit is in the way (here, the Hatchery) or if the location is considered unbuildable (a cliff, for example).
+There are further rules applying to individual buildings: Zerg buildings, with the exception of Hatcheries and Extractors, can only be placed on <a href="http://starcraft.wikia.com/wiki/Creep">creep</a> which is shown in purple in the image above.</p>
+<h2><a class="anchor" aria-hidden="true" id="input"></a><a href="#input" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Input</h2>
+<p>Naturally, our model needs to be informed of the requested building type.
+We also want to provide it with an overview of the current state and with enough information about the map so that it can tell valid from invalid locations.
+For good placement, we will require even more detailed map information such as walkability.
+Ideally, the model could use this to detect ramps and choke-points and optimize defense building placement.</p>
+<p>We will use the following features for the model -- all are provided in buildtile resolution.
+The underlying data of these features is often in walktile resolution.
+In this case, we will apply simple average pooling to obtain the buildtile resolution feature.</p>
+<ul>
+<li><strong>Type</strong>:
+The requested build type as an integer corresponding to the <a href="https://github.com/TorchCraft/TorchCraft/blob/ca34a171b1a498589a9e46d9c67974f1f3f98e25/include/constants.h#L469"><code>torchcraft::BW::UnitType</code> enumeration</a>, which in turn corresponds to <a href="https://bwapi.github.io/namespace_b_w_a_p_i_1_1_unit_types_1_1_enum.html#a082c934b3011fe0df23c262311644989"><code>BWAPI::UnitTypes::Enum</code></a>.</li>
+<li><strong>Position (UPC)</strong>:
+This is the prior of the possible positions, which can be selected by a higher-level strategy module.
+In our setup, it is a binary map for which the destination area (see <a href="/TorchCraftAI/docs/bptut-intro.html">previous section</a>) is marked with 1.</li>
+<li><strong>GroundHeight</strong>:
+Every walktile has a height value of either 0, 1 or 2.</li>
+<li><strong>Walkability</strong>:
+Every walktile is either walkable (1) or not (0)</li>
+<li><strong>Buildability</strong>:
+Every buildtile is either buildable (1) or not (0)</li>
+<li><strong>FogOfWar</strong>:
+This is computed on buildtile level as well. If we currently don't have vision of a buildtile, it will be marked with 1.</li>
+<li><strong>Creep</strong>:
+All tiles with creep are marked with 1.</li>
+<li><strong>CandidateEnemyStartLocations</strong>:
+This feature marks all possible start locations for the opponent with 1.
+Common maps define either 2, 3 or 4 possible start locations.
+This feature will change if we found the enemy or scouted a start location and could determine that the opponent did not start at this position.</li>
+<li><strong>TallDoodad</strong>:
+A &quot;doodad&quot; is a non-unit object on the map, for example a tree.
+They impact buildability and can be purposed for tactical decisions.</li>
+<li><strong>Units</strong>:
+A list of all units that are currently alive.
+This includes allied units (i.e. our units), opponent units that we can observe and neutral units such as minerals or geysers.
+This is a sparse feature, represented as a simple list of unit types (with corresponding offsets per faction) and accompanying positions.</li>
+</ul>
+<p>One complication here is that Brood War maps differ in size.
+For competitive play, the maximum map size that is considered is 1024x1024 pixels, i.e. 128x128 buildtiles.
+We make sure that our model always operates on a 128x128 input by zero-padding features for smaller maps.
+For example, on <a href="https://liquipedia.net/starcraft/Heartbreak_Ridge">&quot;Heartbreak Ridge&quot;</a>, which is a 128x96 buildtile map, we would apply zero-padding of 16 buildtiles at the top and bottom of the input features.</p>
+<p>The figure below is a plot of the above features in <a href="https://github.com/facebookresearch/visdom">Visdom</a>, extracted from a human game replay from the <a href="https://github.com/TorchCraft/StarData">StarData</a> dataset.</p>
+<p><img src="/docs/assets/bptut-features.png" alt="Visualization of Building Placement Model Features"></p>
+<h2><a class="anchor" aria-hidden="true" id="output"></a><a href="#output" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Output</h2>
+<p>The output of the model is a probability distribution over the whole map in
+buildtile resolution, i.e. for each buildtile position, we obtain a probability
+for placing the building at the specified position.
+Similar to the input features, the output will always be a 128x128 tensor in buildtile resolution.</p>
+<p>For the <a href="/TorchCraftAI/docs/bptut-rl.html">reinforcement learning setup</a>, we place a mask on the output so that invalid locations will have zero probability.
+This does not change the general nature of the output, however.</p>
+<h2><a class="anchor" aria-hidden="true" id="model-architecture"></a><a href="#model-architecture" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Model Architecture</h2>
+<p>We select a <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">convolutional neural network</a> (CNN) with a feature pyramid and lateral connections as our model.
+This architecture is common in image processing and has been used successfully for <a href="https://arxiv.org/abs/1612.03144">object detection</a>, for example.</p>
+<p><img src="/docs/assets/bptut-model.png" alt="Building placement model"></p>
+<p>On the left of the figure above, input features are processed using convolutional neural networks with a striding of 2.
+As a result, the 128x128 input will be transformed into a 64x64 and finally into a 32x32 pane of activations.
+At this scale, information can easily be propagated across the full map by successively applying local filters, i.e. convolutional layers with a stride of 1.
+Finally, on the right of the figure, upsampling layers with lateral connections are employed so that the output size of the network matches the input size.
+A final softmax layer yields a probability distribution, visualized with a heatmap at the far right of the figure.</p>
+<h3><a class="anchor" aria-hidden="true" id="feature-integration"></a><a href="#feature-integration" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Feature Integration</h3>
+<p>Most of the features listed above can be presented to the network as-is, i.e. as 128x128 tensors.
+In contrast, unit information is supplied in a sparse manner for efficient processing.
+In this model, a simple lookup table is used to embed the types of units on the map (both represented as one-hot vectors) into a low-dimensional space.
+These embeddings are then placed at the positions of the units they represent.
+If multiple units are located at the same buildtile, their embeddings are simply summed up.</p>
+<p>The requested building type is integrated in a similar fashion; however, as there it does not relate to any position its embedding is simply replicated across the entire map.</p>
+<p>The feature integration happens during the forward pass of the <a href="https://github.com/TorchCraft/TorchCraftAI/tree/master/src/models/buildingplacer.cpp">BuildingPlacerModel</a>.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-comment">// Embed units and requested type</span>
+<span class="hljs-keyword">auto</span> unitsT = embedU-&gt;forward({unitsData})[<span class="hljs-number">0</span>].squeeze(<span class="hljs-number">2</span>);
+<span class="hljs-keyword">auto</span> typeT = embedT-&gt;forward({type})[<span class="hljs-number">0</span>];
+
+<span class="hljs-comment">// Place on 2D map. For now, handle each sample in the mini-batch individually</span>
+<span class="hljs-keyword">auto</span> units2d =
+    common::scatterSum2d(unitsPos, unitsT, {<span class="hljs-built_in">map</span>.size(<span class="hljs-number">2</span>), <span class="hljs-built_in">map</span>.size(<span class="hljs-number">3</span>)});
+<span class="hljs-keyword">auto</span> type2d = typeT.unsqueeze(<span class="hljs-number">2</span>).unsqueeze(<span class="hljs-number">2</span>).expand(
+    {typeT.size(<span class="hljs-number">0</span>), typeT.size(<span class="hljs-number">1</span>), <span class="hljs-built_in">map</span>.size(<span class="hljs-number">2</span>), <span class="hljs-built_in">map</span>.size(<span class="hljs-number">3</span>)});
+
+<span class="hljs-comment">// Prepare input to convolutions</span>
+torch::Tensor x = at::cat(
+    {<span class="hljs-built_in">map</span>,
+     units2d.to(<span class="hljs-built_in">map</span>.options().device()),
+     type2d.to(<span class="hljs-built_in">map</span>.options().device())},
+    <span class="hljs-number">1</span>);
+
+<span class="hljs-comment">// Up the pyramid</span>
+x = at::relu(conv1-&gt;forward({x})[<span class="hljs-number">0</span>]);
+torch::Tensor outC1 = x;
+x = at::relu(conv2-&gt;forward({x})[<span class="hljs-number">0</span>]);
+torch::Tensor outC2 = x;
+x = at::relu(conv3-&gt;forward({x})[<span class="hljs-number">0</span>]);
+torch::Tensor outC3 = x;
+
+<span class="hljs-comment">// Through top convs</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> i = <span class="hljs-number">0U</span>; i &lt; convS.size(); i++) {
+  x = at::relu(convS[i]-&gt;forward({x})[<span class="hljs-number">0</span>]);
+}
+
+<span class="hljs-comment">// Back to original output resolution</span>
+x = common::upsample(x, common::UpsampleMode::Nearest, <span class="hljs-number">2</span>);
+x = dconv2-&gt;forward({x})[<span class="hljs-number">0</span>];
+x = at::relu(x + skip2-&gt;forward({outC2})[<span class="hljs-number">0</span>]);
+x = at::relu(postskip2-&gt;forward({x})[<span class="hljs-number">0</span>]);
+
+x = common::upsample(x, common::UpsampleMode::Nearest, <span class="hljs-number">2</span>);
+x = dconv1-&gt;forward({x})[<span class="hljs-number">0</span>];
+x = at::relu(x + skip1-&gt;forward({outC1})[<span class="hljs-number">0</span>]);
+x = at::relu(postskip1-&gt;forward({x})[<span class="hljs-number">0</span>]);
+
+torch::Tensor y = out-&gt;forward({x})[<span class="hljs-number">0</span>].view({batchSize, <span class="hljs-number">-1</span>});
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/TorchCraftAI/docs/bptut-intro.html"><span class="arrow-prev">← </span><span>Building Placement: Intro</span></a><a class="docs-next button" href="/TorchCraftAI/docs/bptut-supervised.html"><span>Building Placement: Supervised Learning</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#input">Input</a></li><li><a href="#output">Output</a></li><li><a href="#model-architecture">Model Architecture</a><ul class="toc-headings"><li><a href="#feature-integration">Feature Integration</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/TorchCraftAI/" class="nav-home"><img src="/TorchCraftAI/img/tclogosqsmall.png" alt="TorchCraftAI" width="66" height="58"/></a><div><h5>Docs</h5><a href="/TorchCraftAI/docs/en/install-linux.html">Getting Started (Linux)</a><a href="/TorchCraftAI/docs/en/install-windows.html">Getting Started (Windows)</a><a href="/TorchCraftAI/docs/en/install-macos.html">Getting Started (Mac)</a><a href="reference/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discordapp.com/invite/w9wRRrF">Starcraft AI Discord</a><a href="https://www.facebook.com/groups/bwapi/">Starcraft AI Facebook group</a><a href="https://github.com/TorchCraft/TorchCraftAI">TorchCraftAI on GitHub</a></div><div><h5>More</h5><a href="https://github.com/TorchCraft/TorchCraft">TorchCraft on GitHub</a><a href="https://github.com/TorchCraft/StarData">StarData on GitHub</a><a href="/TorchCraftAI/blog">Blog</a></div></section><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/TorchCraftAI/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2018 Facebook</section></footer></div></body></html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>TorchCraftAI Blog</title>
+        <link>https://torchcraft.github.io/TorchCraftAI/blog</link>
+        <description>The best place to stay up-to-date with the latest TorchCraftAI news and events.</description>
+        <lastBuildDate>Tue, 20 Nov 2018 06:00:00 GMT</lastBuildDate>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <generator>Feed for Node.js</generator>
+        <image>
+            <title>TorchCraftAI Blog</title>
+            <url>https://torchcraft.github.io/TorchCraftAI/img/tclogosqlightgrey.png</url>
+            <link>https://torchcraft.github.io/TorchCraftAI/blog</link>
+        </image>
+        <copyright>Copyright © 2018 Facebook</copyright>
+        <item>
+            <title><![CDATA[Hello, Github!]]></title>
+            <link>https://torchcraft.github.io/TorchCraftAI/blog/2018/11/20/hello-github.html</link>
+            <guid>https://torchcraft.github.io/TorchCraftAI/blog/2018/11/20/hello-github.html</guid>
+            <pubDate>Tue, 20 Nov 2018 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>The CherryPi team at Facebook AI Research is very happy to open source TorchCraftAI <a href="https://github.com/TorchCraft/TorchCraftAI">on github</a>. We benefitted from the StarCraft AI bot community, and we are proud to give back.</p> <p>TorchCraftAI is a platform that lets you build agents to play (and learn ...</p>]]></description>
+        </item>
+    </channel>
+</rss>

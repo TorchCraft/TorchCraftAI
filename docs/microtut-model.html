@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Micromanagement Scenarios Tutorial · TorchCraftAI</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;Here, we will provide a detailed description of the model we have provided for controlling units.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Micromanagement Scenarios Tutorial · TorchCraftAI"/><meta property="og:type" content="website"/><meta property="og:url" content="https://torchcraft.github.io/TorchCraftAI/index.html"/><meta property="og:description" content="&lt;p&gt;Here, we will provide a detailed description of the model we have provided for controlling units.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://torchcraft.github.io/TorchCraftAI/img/tclogolinesmall.png"/><link rel="shortcut icon" href="/TorchCraftAI/img/favicon/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/atom.xml" title="TorchCraftAI Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/feed.xml" title="TorchCraftAI Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/js/code-blocks-buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script><link rel="stylesheet" href="/TorchCraftAI/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/TorchCraftAI/"><img class="logo" src="/TorchCraftAI/img/tclogosqlightgrey.png" alt="TorchCraftAI"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/TorchCraftAI/docs/bptut-intro.html" target="_self">Tutorials</a></li><li class=""><a href="/TorchCraftAI/reference/index.html" target="_self">API</a></li><li class=""><a href="/TorchCraftAI/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/TorchCraft/TorchCraftAI" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Tutorial - Micro-Manamagent</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-linux.html">Installation (Linux)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-windows.html">Installation (Windows)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-macos.html">Installation (macOS)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/play-games.html">Play games with CherryPi</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">TorchCraftAI</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/overview.html">Overview</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/architecture.html">System Architecture</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/core-abstractions.html">Core Abstractions</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/modules.html">Modules Overview</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/module-training.html">Module Training Blueprints</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Building Placement</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-intro.html">Building Placement Intro</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-model.html">Neural Network Architecture</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-supervised.html">Supervised Learning</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-rl.html">Reinforcement Learning</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Micro-Manamagent</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-intro.html">Micromanagement Intro</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/TorchCraftAI/docs/microtut-model.html">Model</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-setup.html">Training Setup</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Micromanagement Scenarios Tutorial</h1></header><article><div><span><p>Here, we will provide a detailed description of the model we have provided for controlling units.</p>
+<p>As discussed in the <a href="/TorchCraftAI/docs/microtut-model.html">previous section</a>, the model should output several different probabilities: whether to attack or move, where to move, and whom to attack.
+The model design, which is inspired by <a href="http://aigamedev.com/open/tutorials/potential-fields/">potential fields</a>, is designed to learn the effective ranges of units and when to approach or flee enemies.</p>
+<h2><a class="anchor" aria-hidden="true" id="input"></a><a href="#input" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Input</h2>
+<p>Our input features are somewhat raw. We consider terrain features plus unit features.</p>
+<p>The map features include:</p>
+<ul>
+<li>Walkability: Whether ground units can walk on this tile</li>
+<li>Buildability: Whether buildings can be placed on this tile</li>
+<li>Ground height: High altitude in StarCraft can cause ranged units shooting uphill to miss attacks. Map &quot;doodads&quot; like trees have the same effect.</li>
+<li>Fog of war: Whether the tile is currently visible</li>
+<li>X,Y coordinates: The (X,Y) location of the tile</li>
+</ul>
+<p>The first 4 features are the same as described in the <a href="/TorchCraftAI/docs/bptut-model.html">Building Placer</a> tutorial.</p>
+<p>The unit features are more detailed, and include:</p>
+<ul>
+<li>Location</li>
+<li>Velocity</li>
+<li>Health</li>
+<li>Shield</li>
+<li>Energy</li>
+<li>Range</li>
+<li>Damage</li>
+<li>Damage type</li>
+<li>... etc</li>
+</ul>
+<p>Full details of the featurization are in <code>unitsfeatures.cpp</code>. Many features are normalized such that their range approaches [-1, 1].</p>
+<h2><a class="anchor" aria-hidden="true" id="model"></a><a href="#model" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Model</h2>
+<p>The code for our model can be found in <code>modelpf.cpp</code></p>
+<p>The model takes 5 things as input:</p>
+<ul>
+<li><code>mapFeats</code>, the map features</li>
+<li><code>ourLocs</code>, an Ux2 tensor of our U units' locations, indexed as (y, x)</li>
+<li><code>ourFeats</code>, an UxF tensor of our U units' features.</li>
+<li><code>nmyLocs</code>, an Ux2 tensor of the enemy's U units' locations, indexed as (y, x)</li>
+<li><code>nmyFeats</code>, an UxF tensor of the enemy's U units' features.</li>
+</ul>
+<p>First, we have a combined MLP that acts as an encoder for unit features, the <code>unitBaseEncoder_</code>.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-keyword">auto</span> ourBase = at::relu(unitBaseEncoder_-&gt;forward({ourFeats})[<span class="hljs-number">0</span>]);                                                     
+<span class="hljs-keyword">auto</span> nmyBase = at::relu(unitBaseEncoder_-&gt;forward({nmyFeats})[<span class="hljs-number">0</span>]);
+</code></pre>
+<p>Then, we have four different networks to compute both an embedding an a potential field parameterization for our and our enemy's units.
+These are <code>ourEmbHead_</code>, <code>ourPotHead_</code>, <code>nmyEmbHead_</code>, <code>nmyPotHead_</code>.
+The embedding head generates an UxE tensor, and the potential field we use is parameterized with 2 parameters, so it will generate an Ux2 tensor.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-keyword">auto</span> ourEmb = ourEmbHead_-&gt;forward({ourBase})[<span class="hljs-number">0</span>];                                                                      
+<span class="hljs-keyword">auto</span> nmyEmb = nmyEmbHead_-&gt;forward({nmyBase})[<span class="hljs-number">0</span>];
+<span class="hljs-keyword">auto</span> ourPotParams = ourPotHead_-&gt;forward({ourBase})[<span class="hljs-number">0</span>];                                                                
+<span class="hljs-keyword">auto</span> nmyPotParams = nmyPotHead_-&gt;forward({nmyBase})[<span class="hljs-number">0</span>];                                                                
+</code></pre>
+<p>A potential field can be thought of as a region of influence, centered around our unit, and extending outwards.
+One example of what it could represent is the &quot;threat&quot; of a unit.
+The embedding tensor contains <em>what</em> is in the potential field, the parameterization decides how it should fall off as a afunction of distance.
+We call this parameterization the &quot;kernel&quot;, and we use a kernel with two parameters.
+Let's call the embedding <code>e_i</code> for the <code>i</code>-th unit.
+For each coordinate in our spatial grid, the potential <code>P</code> that the unit emits is a function of <code>d</code>, the distance from the unit to the point in the grid:</p>
+<p>$$
+F(e, w_1, w_2) =
+e \times
+\begin{cases}
+1 &amp; d &lt;= w_1 \cr
+\frac{w_2 + w_1 - d}{w_1} &amp; w_1 &lt; d &lt;= w_1 + w_2 \cr
+0 &amp; d &gt; w_2
+\end{cases}
+$$</p>
+<p>In essence, this function looks something like:</p>
+<pre><code class="hljs"> |<span class="hljs-string">
+ </span>|<span class="hljs-string">---------
+ </span>|<span class="hljs-string">         \
+ </span>|<span class="hljs-string">          \
+ ------------------------
+          </span>|<span class="hljs-string">  </span>|
+        w_1  w_2
+</code></pre>
+<p>And <code>w_1</code> and <code>w_2</code> are the two parameters outputted by the kernel parameterization head.</p>
+<p>Now, we can finally do the sum and max of potentials generated at each x-y coordinate across all units, to create a HxWx2E spatial potential field.
+The spatial embedding for each unit is the value of the field at the unit's location.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-keyword">auto</span> ourPot = kernel_-&gt;forward(ourLocs, ourPotParams);                                                                 
+<span class="hljs-keyword">auto</span> nmyPot = kernel_-&gt;forward(nmyLocs, nmyPotParams);                                                                 
+
+<span class="hljs-keyword">auto</span> spatialPotFieldSum = ourPot.matmul(ourEmb) + nmyPot.matmul(nmyEmb);                                               
+<span class="hljs-keyword">auto</span> spatialPotFieldMax =                                                                                              
+  at::cat({ourPot.unsqueeze(<span class="hljs-number">-1</span>) * ourEmb, nmyPot.unsqueeze(<span class="hljs-number">-1</span>) * nmyEmb}, <span class="hljs-number">2</span>)                                         
+  .max_values(<span class="hljs-number">2</span>);                                                                                                
+<span class="hljs-keyword">auto</span> spatialPotField = at::cat({spatialPotFieldSum, spatialPotFieldMax}, <span class="hljs-number">2</span>);
+
+<span class="hljs-keyword">auto</span> ourSpatialEmbs = indexSpatialEmbeddings(ourLocsCPU);
+<span class="hljs-keyword">auto</span> nmySpatialEmbs = indexSpatialEmbeddings(nmyLocsCPU);
+</code></pre>
+<p>Check out the code for how the kernel works!</p>
+<p>For the movement action head, we take a 20x20 slice of the spatial potential plane around our unit and run a small 3-layer convolutional networks to generate the movement scores.</p>
+<p>We call the &quot;final unit embeddings&quot; the concatentation of the unit embeddings with the spatial embeddings for each unit.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-keyword">auto</span> ourFinalEmb = at::cat({ourEmb, ourSpatialEmbs}, <span class="hljs-number">1</span>);                                                               
+<span class="hljs-keyword">auto</span> nmyFinalEmb = at::cat({nmyEmb, nmySpatialEmbs}, <span class="hljs-number">1</span>); 
+</code></pre>
+<p>Then, the action score, for whether our unit <code>i</code> should attack enemy unit <code>j</code> is an MLP on the concatentation of <code>ourFinalEmb[i]</code> with <code>nmyFinalEmb[j]</code>.
+We also use their relative distances as an extra feature:</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-keyword">auto</span> ourActionEmbs = at::cat(                                                                                          
+    {ourFinalEmb.unsqueeze(<span class="hljs-number">1</span>).expand({<span class="hljs-number">-1</span>, nmyNumUnits, <span class="hljs-number">-1</span>}),                                                           
+    nmyFinalEmb.unsqueeze(<span class="hljs-number">0</span>).expand({ourNumUnits, <span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>}),                                                           
+    relDist},                                                                                                         
+    <span class="hljs-number">2</span>);
+ourActionEmbs = ourActionEmbs.view({<span class="hljs-number">-1</span>, ourActionEmbs.size(<span class="hljs-number">2</span>)});                                                       
+<span class="hljs-keyword">auto</span> ourAttackScores = attackNetwork_-&gt;forward({ourActionEmbs})[<span class="hljs-number">0</span>].view({ourNumUnits, nmyNumUnits}); 
+</code></pre>
+<p>Finally, the command scores of whether we should attack or move is simply dependent on our final embedding.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-keyword">auto</span> ourCommandScores = commandNetwork_-&gt;forward({ourFinalEmb})[<span class="hljs-number">0</span>]; 
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/TorchCraftAI/docs/microtut-intro.html"><span class="arrow-prev">← </span><span>Micromanagement Scenarios Tutorial</span></a><a class="docs-next button" href="/TorchCraftAI/docs/microtut-setup.html"><span>Micromanagement Scenarios Tutorial</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#input">Input</a></li><li><a href="#model">Model</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/TorchCraftAI/" class="nav-home"><img src="/TorchCraftAI/img/tclogosqsmall.png" alt="TorchCraftAI" width="66" height="58"/></a><div><h5>Docs</h5><a href="/TorchCraftAI/docs/en/install-linux.html">Getting Started (Linux)</a><a href="/TorchCraftAI/docs/en/install-windows.html">Getting Started (Windows)</a><a href="/TorchCraftAI/docs/en/install-macos.html">Getting Started (Mac)</a><a href="reference/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discordapp.com/invite/w9wRRrF">Starcraft AI Discord</a><a href="https://www.facebook.com/groups/bwapi/">Starcraft AI Facebook group</a><a href="https://github.com/TorchCraft/TorchCraftAI">TorchCraftAI on GitHub</a></div><div><h5>More</h5><a href="https://github.com/TorchCraft/TorchCraft">TorchCraft on GitHub</a><a href="https://github.com/TorchCraft/StarData">StarData on GitHub</a><a href="/TorchCraftAI/blog">Blog</a></div></section><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/TorchCraftAI/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2018 Facebook</section></footer></div></body></html>

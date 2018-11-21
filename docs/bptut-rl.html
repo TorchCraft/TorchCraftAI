@@ -1,0 +1,303 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Building Placement: Reinforcement Learning · TorchCraftAI</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;In the &lt;a href=&quot;/TorchCraftAI/docs/bptut-supervised.html&quot;&gt;previous section&lt;/a&gt;, we demonstrated that our building placement model works well in a supervised setup.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Building Placement: Reinforcement Learning · TorchCraftAI"/><meta property="og:type" content="website"/><meta property="og:url" content="https://torchcraft.github.io/TorchCraftAI/index.html"/><meta property="og:description" content="&lt;p&gt;In the &lt;a href=&quot;/TorchCraftAI/docs/bptut-supervised.html&quot;&gt;previous section&lt;/a&gt;, we demonstrated that our building placement model works well in a supervised setup.&lt;/p&gt;
+"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://torchcraft.github.io/TorchCraftAI/img/tclogolinesmall.png"/><link rel="shortcut icon" href="/TorchCraftAI/img/favicon/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/atom.xml" title="TorchCraftAI Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/feed.xml" title="TorchCraftAI Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/js/code-blocks-buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script><link rel="stylesheet" href="/TorchCraftAI/css/main.css"/></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/TorchCraftAI/"><img class="logo" src="/TorchCraftAI/img/tclogosqlightgrey.png" alt="TorchCraftAI"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/TorchCraftAI/docs/bptut-intro.html" target="_self">Tutorials</a></li><li class=""><a href="/TorchCraftAI/reference/index.html" target="_self">API</a></li><li class=""><a href="/TorchCraftAI/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/TorchCraft/TorchCraftAI" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Tutorial - Building Placement</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-linux.html">Installation (Linux)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-windows.html">Installation (Windows)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/install-macos.html">Installation (macOS)</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/play-games.html">Play games with CherryPi</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">TorchCraftAI</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/overview.html">Overview</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/architecture.html">System Architecture</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/core-abstractions.html">Core Abstractions</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/modules.html">Modules Overview</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/module-training.html">Module Training Blueprints</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Building Placement</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-intro.html">Building Placement Intro</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-model.html">Neural Network Architecture</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/bptut-supervised.html">Supervised Learning</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/TorchCraftAI/docs/bptut-rl.html">Reinforcement Learning</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Tutorial - Micro-Manamagent</h3><ul><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-intro.html">Micromanagement Intro</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-model.html">Model</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/docs/microtut-setup.html">Training Setup</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Building Placement: Reinforcement Learning</h1></header><article><div><span><p>In the <a href="/TorchCraftAI/docs/bptut-supervised.html">previous section</a>, we demonstrated that our building placement model works well in a supervised setup.
+Here, we'll discuss how to learn placement in a reinforcement learning (RL) setting.
+We assume familiarity with common RL concepts that can, if necessary, be acquired through various online classes.
+Prominent examples are <a href="http://www0.cs.ucl.ac.uk/staff/D.Silver/web/Teaching.html">David Silver's course at UCL</a> or the <a href="http://rail.eecs.berkeley.edu/deeprlcourse/">Deep Reinforcement Learning course at Berekely</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="action-space-restriction-by-masking"></a><a href="#action-space-restriction-by-masking" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Action Space Restriction by Masking</h2>
+<p>As discussed in the <a href="/TorchCraftAI/docs/bptut-model.html">Neural Network Architecture section</a>, the model outputs a probability distribution for every possible build location on the entire map.
+In an RL setup, this results in 128x128 = 16384 actions, many of which are impossible to perform due to limited terrain buildability or game constraints (e.g. most Zerg structures can only placed on <a href="https://liquipedia.net/starcraft/Buildings#Zerg_Buildings_.28_.C2.B7_.29">creep</a>).
+Furthermore, we formulated the building placement problem as to be restricted to a target BWEM area in the <a href="/TorchCraftAI/docs/bptut-intro.html">introduction</a>.</p>
+<p>In order to speed up learning, we want to avoid needless exploration and will thus restrict the action space of the model to the valid placement positions at the time when the placement action is taken.
+A location is considered valid if</p>
+<ul>
+<li>It is within the target BWEM area</li>
+<li>It is on buildable terrain</li>
+<li>If a couple of hard-coded placement checks are successful. These account for the size of the building to be placed and positions of other buildings that have been placed but for which construction has not been started, for example.</li>
+</ul>
+<p>
+For the supervised training setup, we provided the model with an input that marked the target area.
+However, learning the mapping from multiple inputs to valid and invalid actions is time-consuming in reinforcement learning.
+We thus opt for masking out invalid actions instead, so that the probabilities computed by the model will be non-zero for valid locations only.
+This is achieved by applying a mask \(m\) of valid actions (i.e. with values 1 for valid and 0 for invalid actions) during the softmax computation as follows:
+$$\operatorname{masked\_softmax}({\bf x}, {\bf m})_i = \frac{m_i e^{x_i}}{\sum_i m_i e^{x_i}}$$
+</p>
+<p>In the scenario we consider below, this reduces the action space from 16384 to 10 to 50, depending on the respective game state.
+In fact, in some cases we will consider only a single valid action and bypass the model completely: placing extractors and expansions.</p>
+<h2><a class="anchor" aria-hidden="true" id="example-scenario"></a><a href="#example-scenario" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Scenario</h2>
+<p>In the example scenario we consider, expansion placement is crucial for winning the game.
+Both players play Zerg and are implemented with TorchCraftAI.
+The opponent quickly builds up pressure by producing Zerglings, while the player that we're considering for learning tries to transition to Mutalisks.
+If it succeeds, it has a significant edge over the opponent, which cannot defend against air attacks.
+However, the technology investment requires withstanding the Zergling pressure by placing <a href="https://liquipedia.net/starcraft/Sunken_Colony">Sunken Colonies</a> for defense.
+If those are purely placed, our player gets defeated quickly.</p>
+<p>Check out two sample replays for a <a href="/docs/assets/bprl-rules-win.rep">game we win</a> and a <a href="/docs/assets/bprl-rules-lose.rep">game we lose</a> with the built-in placement rules.
+In both replays, &quot;BWEnv1_Zerg&quot; is the player placing the defense buildings.
+The resulting building layout looks like this, and its effectiveness in withstanding the Zergling attack (of our built-in rules) is largely determined by the direction by which enemy units approach the base.</p>
+<p><img alt="Rule-based building placement" width="75%" src="/docs/assets/sunken-scenario-rules.png"/></p>
+<h2><a class="anchor" aria-hidden="true" id="training-program"></a><a href="#training-program" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Training Program</h2>
+<p>From a high-level perspective, our training setup and code follows the training blueprint for a <a href="/TorchCraftAI/docs/module-training.html#higher-level-models">high-level model</a> since we're not interested micro-control of individual units but rather take a macro-action that will be carried out by the rule-based BuilderModule.
+We'll discuss the individual files in the tutorial folder (<a href="https://github.com/TorchCraft/TorchCraftAI/tree/master/tutorials/building-placer">tutorials/building-placer</a>) below.</p>
+<h3><a class="anchor" aria-hidden="true" id="rlbuildingplacermodule"></a><a href="#rlbuildingplacermodule" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>RLBuildingPlacerModule</h3>
+<p>The module implementation in <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/tutorials/building-placer/rlbuildingplacer.cpp">rlbuildingplacer.cpp</a> closely follows the stock <a href="/TorchCraftAI/docs/modules.html#buildingplacer">BuildingPlacer</a> module but contains additional logic and book-keeping to enable RL training.
+<code>RLBuildingPlacer::upcWithPositionForBuilding()</code> contains the code that executes <code>Trainer::forward()</code> and translates the action sampled from the model output to a UPCTuple.
+Specifically, it</p>
+<ul>
+<li>uses the built-in placement rules to obtain a seed position.
+This position determines the BWEM area we'll pass to the model</li>
+<li>falls back to the seed position for actions we don't want to let the model take, e.g. placing expansions</li>
+<li>constructs a <code>BuildingPlacerSample</code> object from the current game state</li>
+<li>calls <code>Trainer::forward()</code></li>
+<li>constructs a <code>RLBPUpcData</code> instance containing the sample and the model output.
+The <code>RLBPUpcData</code> instance will then be posted to the Blackboard alongside the UPCTuple as discussed in the <a href="/TorchCraftAI/docs/module-training.html#higher-level-models">training blueprint</a>.</li>
+</ul>
+<p>The module also implements a custom proxy task to react to cancellations and to detect whether a building has been started.
+One implementation detail of the rule-based TorchCraftAI modules is that the build order will cancel the building creation task <strong>as soon as</strong> the building appears in the game state.
+Hence, extra tracking for successful building creation is performed in <code>RLBuildingPlacerModule::step()</code>:</p>
+<pre><code class="hljs css language-cpp">  <span class="hljs-comment">// Check ongoing constructions</span>
+  <span class="hljs-keyword">auto</span> constructions = state-&gt;board()-&gt;get(
+      kOngoingConstructionsKey, <span class="hljs-built_in">std</span>::<span class="hljs-built_in">unordered_map</span>&lt;<span class="hljs-keyword">int</span>, <span class="hljs-keyword">int</span>&gt;());
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; entry : constructions) {
+    <span class="hljs-keyword">auto</span> upcId = entry.first;
+    <span class="hljs-keyword">auto</span>* unit = state-&gt;unitsInfo().getUnit(entry.second);
+    <span class="hljs-keyword">if</span> (unit-&gt;completed()) {
+      markConstructionFinished(state, upcId);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (unit-&gt;dead) {
+      markConstructionFailed(state, upcId);
+    }
+  }
+</code></pre>
+<p>
+Finally, the trainer frames for each action \( a_t \) are submitted in <code>onGameEnd()</code> using the following reward scheme:
+$$
+\begin{equation}
+R(a_t) = 
+\begin{cases}
++0.5 ,& \text{building for $a_t$ was started and the game was won} \\
+-0.5 ,& \text{building for $a_t$ was started and the game was list} \\
+0,&  \text{otherwise} \\
+\end{cases}
+\end{equation}
+$$
+</p>
+<h3><a class="anchor" aria-hidden="true" id="main-loop"></a><a href="#main-loop" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Main Loop</h3>
+<p>The main training loop is implemented in <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/tutorials/building-placer/train-rl.cpp">train-rl.cpp</a> and can perform both RL training and evaluation of either trained models or the built-in rules.
+The training can either be run for a maximum number of updates or a maximum number of training games.</p>
+<p>During training, intermediate models are regularly evaluated; by default, this happens after 500 model updates.
+The evaluation frequency can be adjusted with the <code>-evaluate_every</code> command-line flag.
+Code-wise, training and evaluation work similarly.
+We create a <code>cpid::Evaluator</code> with a sampler that always takes the action with the maximum probability and plays a fixed number of games.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">runEvaluation</span><span class="hljs-params">(
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;Trainer&gt; trainer,
+    <span class="hljs-keyword">int</span> numGames,
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;MetricsContext&gt; metrics)</span> </span>{
+  <span class="hljs-keyword">int</span> gamesPerWorker = numGames / dist::globalContext()-&gt;size;
+  <span class="hljs-keyword">int</span> remainder = numGames % dist::globalContext()-&gt;size;
+  <span class="hljs-keyword">if</span> (dist::globalContext()-&gt;rank &lt; remainder) {
+    gamesPerWorker++;
+  }
+
+  trainer-&gt;model()-&gt;eval();
+  <span class="hljs-keyword">auto</span> evaluator = trainer-&gt;makeEvaluator(
+      gamesPerWorker, <span class="hljs-built_in">std</span>::make_unique&lt;DiscreteMaxSampler&gt;(<span class="hljs-string">"output"</span>));
+  evaluator-&gt;setMetricsContext(metrics);
+  metrics-&gt;setCounter(<span class="hljs-string">"timeout"</span>, <span class="hljs-number">0</span>);
+  metrics-&gt;setCounter(<span class="hljs-string">"wins_p1"</span>, <span class="hljs-number">0</span>);
+  metrics-&gt;setCounter(<span class="hljs-string">"wins_p2"</span>, <span class="hljs-number">0</span>);
+
+  <span class="hljs-comment">// Launch environments. The main thread just waits until everything is done</span>
+  <span class="hljs-built_in">std</span>::<span class="hljs-built_in">vector</span>&lt;<span class="hljs-built_in">std</span>::thread&gt; threads;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> i = <span class="hljs-number">0</span>; i &lt; FLAGS_num_game_threads; i++) {
+    threads.emplace_back(runGameThread, evaluator, i);
+  }
+
+  <span class="hljs-keyword">while</span> (!evaluator-&gt;update()) {
+    <span class="hljs-built_in">std</span>::this_thread::sleep_for(<span class="hljs-built_in">std</span>::chrono::milliseconds(<span class="hljs-number">100</span>));
+  }
+
+  evaluator-&gt;setDone();
+  evaluator-&gt;reset();
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; thread : threads) {
+    thread.join();
+  }
+
+  <span class="hljs-comment">// Sync relevant metrics</span>
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">float</span> mvec[<span class="hljs-number">3</span>];
+  mvec[<span class="hljs-number">0</span>] = metrics-&gt;getCounter(<span class="hljs-string">"games_played"</span>);
+  mvec[<span class="hljs-number">1</span>] = metrics-&gt;getCounter(<span class="hljs-string">"wins_p1"</span>);
+  mvec[<span class="hljs-number">2</span>] = metrics-&gt;getCounter(<span class="hljs-string">"wins_p2"</span>);
+  dist::allreduce(mvec, <span class="hljs-number">3</span>);
+  metrics-&gt;setCounter(<span class="hljs-string">"total_games_played"</span>, mvec[<span class="hljs-number">0</span>]);
+  metrics-&gt;setCounter(<span class="hljs-string">"total_wins_p1"</span>, mvec[<span class="hljs-number">1</span>]);
+  metrics-&gt;setCounter(<span class="hljs-string">"total_wins_p2"</span>, mvec[<span class="hljs-number">2</span>]);
+
+  trainer-&gt;model()-&gt;train();
+}
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">trainLoop</span><span class="hljs-params">(
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;Trainer&gt; trainer,
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;visdom::Visdom&gt; vs)</span> </span>{
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-keyword">auto</span> evaluate = [&amp;]() -&gt; <span class="hljs-keyword">float</span> {
+    gResultsDir = fmt::format(<span class="hljs-string">"eval-{:05d}"</span>, numModelUpdates);
+    fsutils::mkdir(gResultsDir);
+
+    <span class="hljs-keyword">auto</span> evalMetrics = <span class="hljs-built_in">std</span>::make_shared&lt;MetricsContext&gt;();
+    runEvaluation(trainer, FLAGS_num_eval_games, evalMetrics);
+    evalMetrics-&gt;dumpJson(
+        fmt::format(
+            <span class="hljs-string">"{}/{}-metrics.json"</span>, gResultsDir, dist::globalContext()-&gt;rank));
+    <span class="hljs-keyword">auto</span> total = evalMetrics-&gt;getCounter(<span class="hljs-string">"total_games_played"</span>);
+    <span class="hljs-keyword">auto</span> winsP1 = evalMetrics-&gt;getCounter(<span class="hljs-string">"total_wins_p1"</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">float</span>(winsP1) / total;
+  };
+
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="scenario"></a><a href="#scenario" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Scenario</h3>
+<p>The scenario we'll consider is defined in <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/tutorials/building-placer/scenarios.cpp">scenarios.cpp</a> and set up with a provider called <code>SunkenPlacementScenairoProvider</code>.
+For each game, a map from a pre-defined map pool will be selected at random, and players will be set up to play custom buildorders defined in <a href="https://github.com/TorchCraft/TorchCraftAI/tree/master/tutorials/building-placer/buildorders">tutorials/building-placer/buildoders</a>.
+The players returned from from <code>spawnNextScenario()</code> are ready to be used for playing a game.</p>
+<pre><code class="hljs css language-cpp"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SunkenPlacementScenarioProvider</span> :</span> <span class="hljs-keyword">public</span> BuildingPlacerScenarioProvider {
+ <span class="hljs-keyword">public</span>:
+  SunkenPlacementScenarioProvider(<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> mapPool, <span class="hljs-keyword">bool</span> gui = <span class="hljs-literal">false</span>)
+      : BuildingPlacerScenarioProvider(kMaxFrames, <span class="hljs-built_in">std</span>::move(mapPool), gui) {}
+
+  <span class="hljs-keyword">virtual</span> <span class="hljs-built_in">std</span>::pair&lt;<span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;BasePlayer&gt;, <span class="hljs-built_in">std</span>::<span class="hljs-built_in">shared_ptr</span>&lt;BasePlayer&gt;&gt;
+  spawnNextScenario(
+      <span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::function&lt;<span class="hljs-keyword">void</span>(BasePlayer*)&gt;&amp; setup1,
+      <span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::function&lt;<span class="hljs-keyword">void</span>(BasePlayer*)&gt;&amp; setup2) override {
+    map_ = selectMap(mapPool_);
+    loadMap&lt;Player&gt;(
+        map_,
+        tc::BW::Race::Zerg,
+        tc::BW::Race::Zerg,
+        GameType::Melee,
+        replayPath_);
+
+    setupLearningPlayer(player1_.get());
+    setupRuleBasedPlayer(player2_.get());
+
+    <span class="hljs-comment">// Set a fixed build for both players</span>
+    build1_ = <span class="hljs-string">"9poolspeedlingmutacustom"</span>;
+    build2_ = <span class="hljs-string">"10hatchlingcustom"</span>;
+    player1_-&gt;state()-&gt;board()-&gt;post(Blackboard::kBuildOrderKey, build1_);
+    player2_-&gt;state()-&gt;board()-&gt;post(Blackboard::kBuildOrderKey, build2_);
+
+    <span class="hljs-comment">// Finish with custom setup</span>
+    setup1(player1_.get());
+    setup2(player2_.get());
+
+    <span class="hljs-built_in">std</span>::static_pointer_cast&lt;Player&gt;(player1_)-&gt;init();
+    <span class="hljs-built_in">std</span>::static_pointer_cast&lt;Player&gt;(player2_)-&gt;init();
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">std</span>::make_pair(player1_, player2_);
+  }
+};
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="custom-policy-gradient-trainer"></a><a href="#custom-policy-gradient-trainer" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Custom Policy Gradient Trainer</h3>
+<p>In this tutorial, we opt for implementing a custom <code>cpid::Trainer</code> in <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/tutorials/building-placer/bpgtrainer.h">bpgtrainer.h</a>.
+It is largely inspired by <code>cpid::BatchedPGTrainer</code> but differs in a few details:
+For one, experience frames are sampled on a per-transition bases rather than on a per-episode basis.
+This ensures equal mini-batch sizes across updates, which in turns stabilizes learning.</p>
+<p>
+The trainer also adds an entropy regularization term to the standard REINFORCE criterion in order to encourage exploration by smoothing the model output
+The scaling factor of the entropy term takes the varying action space between model decisions into account (which originates from state-dependent masking as discussed above) and is defined on the model output \(o\) and mask \(m\) as
+$$
+L_E({\bf o}, {\bf m}) = \frac{1}{\eta * \ln \left( \sum_i m_i - 1 \right)} \sum_i o_i \ln o_i
+$$
+\( \eta \) is hyper-parameter to scale the general influence of the entropy loss and hence defines the peakiness of the model output distribution.
+</p>
+<p>Last but not least, support for value functions was removed as we did not find it helpful for the specific setup discussed here.</p>
+<h2><a class="anchor" aria-hidden="true" id="training-and-evaluation"></a><a href="#training-and-evaluation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Training and Evaluation</h2>
+<p>The training can be run by starting <code>./build/tutorials/building-placer/bp-train-rl</code>.
+The program povides many options (see the start of <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/tutorials/building-placer/train-rl.cpp">train-rl.cpp</a> or, for a full list of command-line flags, pass <code>-help</code>), but the default settings produced stable learning in our runs.
+For less verbose output from the main bot code, run the program as
+<code>./build/tutorials/building-placer/bp-train-rl -v -1 -vmodule train-rl=1</code>.</p>
+<p>Note that in order to run distributed (multi-machine) training, additional arguments are required:</p>
+<ul>
+<li><code>-c10d_size N</code> to specify the total number of processes</li>
+<li><code>-c10d_rank I</code> to specify the rank of each process that is started</li>
+<li><code>-c10d_rdvu file:LOCATION</code> to perform the initial process rendez-vous using the file path LOCATION.
+This path must be accessible from all processes, i.e. reside on a shared file system.
+Each of our training jobs ran on 8 machines, using 40 CPU cores and 1 GPU on each host, but we've seen resonable learning progress with fewer machines as well.</li>
+</ul>
+<p>Over 10,000 updates, intermediate win rate evaluations produced the following graphs across 3 different runs:</p>
+<p><img src="/docs/assets/sunken-scenario-wr.png" alt="&quot;RL Training Performance&quot;"></p>
+<p>How does this compare to the default placement rules?
+To obtain final numbers, let's run a larger evaluation with the default rules and the final models obtained by reinforcement learning, e.g. after 10000 updates using the checkpoint:</p>
+<pre><code class="hljs css language-sh">./build/tutorials/building-placer/bp-train-rl -evaluate rules -num_eval_games 5000
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># ... after quite a lot of output, and possibly quite some time:</span>
+<span class="hljs-comment">#</span>
+I81060/XXXXX [train-rl.cpp:749] Done! Win rates <span class="hljs-keyword">for</span> 5000 games: 65.8% 34.2%
+
+./build/tutorials/building-placer/train-rl -evaluate argmax -num_eval_games 5000 -checkpoint /path/to/final/checkpoint
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># ...</span>
+<span class="hljs-comment">#</span>
+I30983/XXXXX [train-rl.cpp:749] Done! Win rates <span class="hljs-keyword">for</span> 5000 games: 78.5% 21.5%
+</code></pre>
+<p>The rules have an average win rate of 65.8% while an RL-trained model achieves 78.5% -- an improvement of over 10% absolute.
+The final win rates of our trained models vary a bit from run to run but final results should be in the mid-70s.</p>
+<p>Let's look at the layout that the model produces for the different starting
+positions on <a href="https://liquipedia.net/starcraft/Fighting_Spirit">Fighting Spirit</a>.
+For illustration purposes, the direction in which enemy units have to take to
+enter the main base via the ramp is indicated with a green arrow.
+Click on the images to download the respective replays.</p>
+<div class="imgrow">
+  <div class="imgcol2">
+    <a href="/docs/assets/bprltut-placement-11.rep">
+      <img src="/docs/assets/bprltut-placement-11.png"/>
+    </a>
+  </div>
+  <div class="imgcol2">
+    <a href="/docs/assets/bprltut-placement-1.rep">
+      <img src="/docs/assets/bprltut-placement-1.png"/>
+    </a>
+  </div>
+</div>
+<div class="imgrow">
+  <div class="imgcol2">
+    <a href="/docs/assets/bprltut-placement-7.rep">
+      <img src="/docs/assets/bprltut-placement-7.png"/>
+    </a>
+  </div>
+  <div class="imgcol2">
+    <a href="/docs/assets/bprltut-placement-4.rep">
+      <img src="/docs/assets/bprltut-placement-4.png"/>
+    </a>
+  </div>
+</div>
+<p>The two highlighted Sunken Colonies are placed very differently for each spawning position of the map and roughly correspond to the angle of the early Zergling atttack.
+A notable observation is that in the lower right, the <a href="https://liquipedia.net/starcraft/Spire">Spire</a> is exposed as it was placed outside of the Sunken range.
+This is an artifact of playing against the built-in rules: the attacker will simply ignore the Spire and rush straight into the base.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/TorchCraftAI/docs/bptut-supervised.html"><span class="arrow-prev">← </span><span>Building Placement: Supervised Learning</span></a><a class="docs-next button" href="/TorchCraftAI/docs/microtut-intro.html"><span>Micromanagement Scenarios Tutorial</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#action-space-restriction-by-masking">Action Space Restriction by Masking</a></li><li><a href="#example-scenario">Example Scenario</a></li><li><a href="#training-program">Training Program</a><ul class="toc-headings"><li><a href="#rlbuildingplacermodule">RLBuildingPlacerModule</a></li><li><a href="#main-loop">Main Loop</a></li><li><a href="#scenario">Scenario</a></li><li><a href="#custom-policy-gradient-trainer">Custom Policy Gradient Trainer</a></li></ul></li><li><a href="#training-and-evaluation">Training and Evaluation</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/TorchCraftAI/" class="nav-home"><img src="/TorchCraftAI/img/tclogosqsmall.png" alt="TorchCraftAI" width="66" height="58"/></a><div><h5>Docs</h5><a href="/TorchCraftAI/docs/en/install-linux.html">Getting Started (Linux)</a><a href="/TorchCraftAI/docs/en/install-windows.html">Getting Started (Windows)</a><a href="/TorchCraftAI/docs/en/install-macos.html">Getting Started (Mac)</a><a href="reference/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discordapp.com/invite/w9wRRrF">Starcraft AI Discord</a><a href="https://www.facebook.com/groups/bwapi/">Starcraft AI Facebook group</a><a href="https://github.com/TorchCraft/TorchCraftAI">TorchCraftAI on GitHub</a></div><div><h5>More</h5><a href="https://github.com/TorchCraft/TorchCraft">TorchCraft on GitHub</a><a href="https://github.com/TorchCraft/StarData">StarData on GitHub</a><a href="/TorchCraftAI/blog">Blog</a></div></section><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/TorchCraftAI/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2018 Facebook</section></footer></div></body></html>
