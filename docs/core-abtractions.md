@@ -41,7 +41,7 @@ To enable richer communication, UPCTuples also contain a **state** field support
 As a concrete example, consider the following (simplified) macro-management
 setup (explanation below):
 
-![UPCTuple communication example](/docs/assets/upc.gif)
+![UPCTuple communication example](assets/upc.gif)
 
 The [Strategy]() module begins by posting a UPCTuple with uniform distributions over units and positions, but with a sharp (dirac) distribution over **commands** ("create") and a string identifying a [Build Order]() as the state.
 [AutoBuild](), our build planning module, instantiates the specified [Build Order](), which (over time) results in multiple UPCTuples being posted, each one specifying a unit type to be created in the state field.

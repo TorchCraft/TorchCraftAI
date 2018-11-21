@@ -86,7 +86,7 @@ Here are the results of training our model on a variety of scenarios:
 These are basicaly scenarios that are guaranteed to be balanced.
 Several of the scenarios with 2 unit types rely on focus firing down one of the types first.
 
-![Goliaths and Battlecruisers](/docs/assets/go+bc.microtut.gif)
+![Goliaths and Battlecruisers](assets/go+bc.microtut.gif)
 
 | Test Win Rates | weakest-closest  |  closest  |  attack-move |
 |---:|:---:|:---:|:---:|
@@ -140,7 +140,7 @@ These formation based scenarios ideally involve the units grouping before fighti
 However, a few of them can achieve good winrrates with good focus fire.
 Our model is not able to learn the regrouping tactic.
 
-![Mutalisks](/docs/assets/conga_mu.microtut.gif)
+![Mutalisks](assets/conga_mu.microtut.gif)
 
 | Test Win Rates | weakest-closest  |  closest  |  attack-move |
 |---:|:---:|:---:|:---:|
@@ -170,9 +170,9 @@ Our model is not able to learn the regrouping tactic.
 Many of these scenarios rely on kiting to defeat a slower, melee ranged opponent. 
 A few rely on spreading units apart to avoid splash damage.
 
-![Mutalisks vs Corsairs](/docs/assets/10mu_5co.microtut.gif)
+![Mutalisks vs Corsairs](assets/10mu_5co.microtut.gif)
 
-![Marines vs Zerglings](/docs/assets/10mr_13zg.microtut.gif)
+![Marines vs Zerglings](assets/10mr_13zg.microtut.gif)
 
 | Test Win Rates | weakest-closest  |  closest  |  attack-move |
 |---:|:---:|:---:|:---:|
@@ -222,7 +222,7 @@ In ignorecivilians, the reward is 1 for a perfect success, and between 0-1 for e
 We can see the model focuses the high templar, but isn't able to learn to completely ignore all civilians.
 One tactic we observed is that the model would oscillate between two civilians so it never managed to kill any.
 
-![Ignore civilians](/docs/assets/ignorecivilians.microtut.gif)
+![Ignore civilians](assets/ignorecivilians.microtut.gif)
 
 | Scenario | Test reward |
 |---:|:---:|

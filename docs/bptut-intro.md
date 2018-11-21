@@ -29,7 +29,7 @@ This would require more elaborate model and training setups and is hence conside
 
 Generally, we assume that the placement has already been restricted (by the strategy module or the built-in placement rules) to a specific **area** as defined by [BWEM](http://bwem.sourceforge.net/), the map analysis tool used in TorchCraftAI.
 
-![BWEM areas on "Heartbreak Ridge"](/docs/assets/bwem-areas.png)
+![BWEM areas on "Heartbreak Ridge"](assets/bwem-areas.png)
 
 The image above (credit to [http://bwem.sourceforge.net/](http://bwem.sourceforge.net/)) illustrates the concept of ares for a Brood War map.
 In a nutshell, they represent coherent regions on a map which are connected via ramps or choke points (or not connected at all, e.g. islands).
