@@ -1,0 +1,32 @@
+{
+  "docs": {
+    "Getting Started": [
+      "install-linux",
+      "install-windows",
+      "install-macos",
+      "play-games"
+    ],
+    "TorchCraftAI": [
+      "overview",
+      "architecture",
+      "core-abstractions",
+      "modules",
+      "module-training"
+    ],
+    "Tutorial - Building Placement": [
+      "bptut-intro",
+      "bptut-model",
+      "bptut-supervised",
+      "bptut-rl"
+    ],
+    "Tutorial - Micro-Manamagent": [
+      "microtut-intro",
+      "microtut-model",
+      "microtut-setup"
+    ],
+    "Help": [
+      "faq",
+      "api"
+    ]
+  }
+}
