@@ -13,7 +13,7 @@ See guides for:
 
 - [Linux](https://torchcraft.github.io/TorchCraftAI/docs/install-linux.html)
 - [Windows](https://torchcraft.github.io/TorchCraftAI/docs/install-windows.html)
-- [OSX](https://torchcraft.github.io/TorchCraftAI/docs/install-osx.html)
+- [OSX](https://torchcraft.github.io/TorchCraftAI/docs/install-macos.html)
 
 ## Documentation
 
