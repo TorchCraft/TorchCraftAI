@@ -4,7 +4,7 @@
         <title>TorchCraftAI Blog</title>
         <link>https://torchcraft.github.io/TorchCraftAI/blog</link>
         <description>The best place to stay up-to-date with the latest TorchCraftAI news and events.</description>
-        <lastBuildDate>Tue, 20 Nov 2018 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 28 Nov 2018 06:00:00 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>Feed for Node.js</generator>
         <image>
@@ -13,6 +13,13 @@
             <link>https://torchcraft.github.io/TorchCraftAI/blog</link>
         </image>
         <copyright>Copyright © 2018 Facebook</copyright>
+        <item>
+            <title><![CDATA[Build Order Switch Retraining Has Arrived]]></title>
+            <link>https://torchcraft.github.io/TorchCraftAI/blog/2018/11/28/build-order-switch-retraining-has-arrived.html</link>
+            <guid>https://torchcraft.github.io/TorchCraftAI/blog/2018/11/28/build-order-switch-retraining-has-arrived.html</guid>
+            <pubDate>Wed, 28 Nov 2018 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>For this year's <a href="https://www.cs.mun.ca/~dchurchill/starcraftaicomp/2018">AIIDE competition</a>, we deployed a machine learning model for high-level strategy selection dubbed Build Order Switch (BOS). Our competition model was trained by playing against publicly available bots, e.g. from the <a href="https://sscaitournament.com/">SSCAIT ladder</a>. Natu...</p>]]></description>
+        </item>
         <item>
             <title><![CDATA[Hello, Github!]]></title>
             <link>https://torchcraft.github.io/TorchCraftAI/blog/2018/11/20/hello-github.html</link>

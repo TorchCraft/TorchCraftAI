@@ -2,12 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://torchcraft.github.io/TorchCraftAI/blog</id>
     <title>TorchCraftAI Blog</title>
-    <updated>2018-11-20T06:00:00Z</updated>
+    <updated>2018-11-28T06:00:00Z</updated>
     <generator>Feed for Node.js</generator>
     <link rel="alternate" href="https://torchcraft.github.io/TorchCraftAI/blog"/>
     <subtitle>The best place to stay up-to-date with the latest TorchCraftAI news and events.</subtitle>
     <logo>https://torchcraft.github.io/TorchCraftAI/img/tclogosqlightgrey.png</logo>
     <rights>Copyright © 2018 Facebook</rights>
+    <entry>
+        <title type="html"><![CDATA[Build Order Switch Retraining Has Arrived]]></title>
+        <id>https://torchcraft.github.io/TorchCraftAI/blog/2018/11/28/build-order-switch-retraining-has-arrived.html</id>
+        <link href="https://torchcraft.github.io/TorchCraftAI/blog/2018/11/28/build-order-switch-retraining-has-arrived.html">
+        </link>
+        <updated>2018-11-28T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>For this year's <a href="https://www.cs.mun.ca/~dchurchill/starcraftaicomp/2018">AIIDE competition</a>, we deployed a machine learning model for high-level strategy selection dubbed Build Order Switch (BOS). Our competition model was trained by playing against publicly available bots, e.g. from the <a href="https://sscaitournament.com/">SSCAIT ladder</a>. Natu...</p>]]></summary>
+        <author>
+            <name>Jonas Gehring</name>
+            <uri>https://github.com/jgehring</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Hello, Github!]]></title>
         <id>https://torchcraft.github.io/TorchCraftAI/blog/2018/11/20/hello-github.html</id>
