@@ -11,7 +11,7 @@ Naturally, we could neither train nor test it against the updated and new bots t
 
 Now that the tournament is over, many authors provided new versions of their bots to the public.
 We added a new opening and simply re-trained our model against newly available and updated opponents.
-In internal evaluations, our win rate against the AIIDE 2018 winner [SAIDA](https:/sscaitournament.com/index.php?action=botDetails&bot=SAIDA) is now at about 55-60% (SSCAIT version from 11/14) , up from 17% with the AIIDE versions.
+In internal evaluations, our win rate against the AIIDE 2018 winner [SAIDA](https://sscaitournament.com/index.php?action=botDetails&bot=SAIDA) is now at about 55-60% (SSCAIT version from 11/14) , up from 17% with the AIIDE versions.
 
 The new model is [available on S3](https://s3.amazonaws.com/torchcraftai/models/1.0/bos_model_20181128.bin) and can be used as described in [the documentation](docs/play-games.html):
 ```bash
