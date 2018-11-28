@@ -36,8 +36,11 @@ In internal evaluations, our win rate against the AIIDE 2018 winner <a href="htt
 cherrypi[.exe] -hostname 127.0.0.1 -port 11111 -bos_model bwapi-data/AI/bos_model.bin -bp_model bwapi-data/AI/bp_model.bin
 </code></pre>
 <p>You can get more details about the Build Order Switch model and the training setup in <a href="https://arxiv.org/abs/1811.08568">our recent paper</a> which will be presented at the <a href="https://sites.google.com/site/rlponips2018">NeurIPS RL PO workshop</a> in Montréal next week.
-For the model that we are making available now, we put an emphasis on newer and stronger bots and increased the training time.
-Below are a few games and the value outputs of the BOS model for different build orders.
+For the model that we are making available now, we put an emphasis on newer and stronger bots and increased the training time.</p>
+<p>Below are a few games and the value outputs of the BOS model for different build orders.
+Throughout the game, the model estimates the probability of winning when switching to one of the available build orders.
+If the advantage over the currently active build order is higher than a threshold, CherryPi will transition to the one with the highest estimated value.
+These transitions are highlighted in the plots with vertical lines.
 Click on the graphs to view the full-resolution versions.</p>
 <h4><a class="anchor" aria-hidden="true" id="game-1-replay-https-s3amazonawscom-torchcraftai-assets-bos-game1rep"></a><a href="#game-1-replay-https-s3amazonawscom-torchcraftai-assets-bos-game1rep" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Game 1 [<a href="https://s3.amazonaws.com/torchcraftai/assets/bos-game1.rep">replay</a>]</h4>
 <p>Played against SAIDA (SSCAIT version from 11/14).
