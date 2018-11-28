@@ -87,6 +87,7 @@ class StrategyModule : public Module {
   std::unique_ptr<bos::ModelRunner> bosRunner_ = nullptr;
   FrameNum nextBosForwardFrame_ = 0;
   float bosStartTime_ = 0;
+  bool bosMapVerified_ = false;
 #endif // HAVE_TORCH
 };
 

@@ -351,6 +351,7 @@ void StrategyModule::onGameStart(State* state) {
   bosRunner_ = makeBosRunner(state);
   nextBosForwardFrame_ = 0;
   bosStartTime_ = std::stof(FLAGS_bos_start) * 60;
+  bosMapVerified_ = false;
 #endif // HAVE_TORCH
 }
 
@@ -571,7 +572,18 @@ std::string StrategyModule::stepBos(State* state) {
 
   ag::Variant output;
   if (state->currentFrame() >= nextBosForwardFrame_) {
-    output = bosRunner_->forward(bosRunner_->takeSample(state));
+    auto sample = bosRunner_->takeSample(state);
+    // Lazy check for currently supported maps
+    if (!bosMapVerified_) {
+      auto mapId = sample.featurize(bos::BosFeature::MapId).item<int64_t>();
+      if (mapId < 1) {
+        VLOG(0) << "Disabling BOS on unknown map " << state->mapName();
+        bosRunner_ = nullptr;
+        return currentBuildOrder_;
+      }
+      bosMapVerified_ = true;
+    }
+    output = bosRunner_->forward(sample);
     if (VLOG_IS_ON(1)) {
       auto heads = output["vHeads"].squeeze().to(at::kCPU);
       auto probs = std::map<std::string, float>();
