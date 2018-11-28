@@ -30,7 +30,7 @@ Our competition model was trained by playing against publicly available bots, e.
 Naturally, we could neither train nor test it against the updated and new bots that we were going to compete against.</p>
 <p>Now that the tournament is over, many authors provided new versions of their bots to the public.
 We added a new opening and simply re-trained our model against newly available and updated opponents.
-In internal evaluations, our win rate against the AIIDE 2018 winner <a href="https:/sscaitournament.com/index.php?action=botDetails&amp;bot=SAIDA">SAIDA</a> is now at about 55-60% (SSCAIT version from 11/14) , up from 17% with the AIIDE versions.</p>
+In internal evaluations, our win rate against the AIIDE 2018 winner <a href="https://sscaitournament.com/index.php?action=botDetails&amp;bot=SAIDA">SAIDA</a> is now at about 55-60% (SSCAIT version from 11/14) , up from 17% with the AIIDE versions.</p>
 <p>The new model is <a href="https://s3.amazonaws.com/torchcraftai/models/1.0/bos_model_20181128.bin">available on S3</a> and can be used as described in <a href="docs/play-games.html">the documentation</a>:</p>
 <pre><code class="hljs css language-bash">curl -o bwapi-data/AI/bos_model.bin https://s3.amazonaws.com/torchcraftai/models/1.0/bos_model_20181128.bin
 cherrypi[.exe] -hostname 127.0.0.1 -port 11111 -bos_model bwapi-data/AI/bos_model.bin -bp_model bwapi-data/AI/bp_model.bin
