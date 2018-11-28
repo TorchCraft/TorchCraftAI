@@ -7,7 +7,7 @@ Once you've compiled CherryPi (Instructions for [Linux](https://torchcraft.githu
 
 ## (Recommended) Get trained models
 
-If you have an NVIDIA GPU and are using CUDA, you'll want to download the trained models of the [Build Order Switcher](https://s3.amazonaws.com/torchcraftai/models/1.0/bos_model.bin) and the [Building Placer](https://s3.amazonaws.com/torchcraftai/models/1.0/bp_model.bin).
+If you have an NVIDIA GPU and are using CUDA, you'll want to download the trained models of the [Build Order Switcher](https://s3.amazonaws.com/torchcraftai/models/1.0/bos_model_20181128.bin) and the [Building Placer](https://s3.amazonaws.com/torchcraftai/models/1.0/bp_model.bin).
 
 To enable the trained models, add the command line arguments specified under "Run the client". CherryPi can play without the trained models, but will be at reduced strength.
 
