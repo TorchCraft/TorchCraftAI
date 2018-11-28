@@ -21,7 +21,11 @@ cherrypi[.exe] -hostname 127.0.0.1 -port 11111 -bos_model bwapi-data/AI/bos_mode
 
 You can get more details about the Build Order Switch model and the training setup in [our recent paper](https://arxiv.org/abs/1811.08568) which will be presented at the [NeurIPS RL PO workshop](https://sites.google.com/site/rlponips2018) in Montréal next week.
 For the model that we are making available now, we put an emphasis on newer and stronger bots and increased the training time.
+
 Below are a few games and the value outputs of the BOS model for different build orders.
+Throughout the game, the model estimates the probability of winning when switching to one of the available build orders.
+If the advantage over the currently active build order is higher than a threshold, CherryPi will transition to the one with the highest estimated value.
+These transitions are highlighted in the plots with vertical lines.
 Click on the graphs to view the full-resolution versions.
 
 #### Game 1 [[replay](https://s3.amazonaws.com/torchcraftai/assets/bos-game1.rep)]
