@@ -25,12 +25,12 @@ struct ResourceWorkers {
  public:
   void assignWorker(Unit* worker, Unit* resource);
   void unassignWorker(Unit* worker);
-  void includeResource(Unit* resource);  
-  bool excludeResource(Unit* resource);  
+  void includeResource(Unit* resource);
+  bool excludeResource(Unit* resource);
   bool containsResource(Unit* resource);
   Unit* getResource(Unit* worker) const;
   size_t countWorkers(Unit* resource) const;
-  
+
   /// Start iterator for worker assignments; allows treatment as a C++ Range
   auto begin() {
     return workersByResource.begin();

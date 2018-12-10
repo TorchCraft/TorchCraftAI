@@ -24,9 +24,7 @@ IF(MSVC)
 ENDIF(MSVC)
 
 
-FILE(GLOB SRCS *.cpp modules/*.cpp buildorders/*.cpp models/*.cpp utils/*.cpp modules/squadcombat/*.cpp modules/gatherer/*.cpp)
-FILE(GLOB UNIXSRCS features/*.cpp models/bos/*.cpp)
-LIST(APPEND SRCS ${UNIXSRCS})
+FILE(GLOB_RECURSE SRCS *.cpp)
 
 # On Linux/MacOS, build a library plus executable.
 # On Windows, build a monotholitic executable so we can run on SSCAIT,

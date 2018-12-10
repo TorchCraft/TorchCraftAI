@@ -25,19 +25,16 @@ int main(int argc, char** argv) {
   viz.text("Hello world3", win1);
   viz.close(win2); // TODO: Not working?
 
-#ifdef HAVE_TORCH
   auto random = torch::rand({8, 5});
   viz.heatmap(
       random,
       makeOpts(
           {{"title", "Random heatmap"},
            {"columnnames", {"a", "b", "c", "d", "e"}}}));
-#endif // HAVE_TORCH
 
   viz.text("It's bar", {}, "foo");
   viz.save({"main", "foo"});
 
-#ifdef HAVE_TORCH
   auto Y = torch::rand({100});
   viz.scatter(
       torch::rand({100, 2}),
@@ -131,7 +128,6 @@ int main(int argc, char** argv) {
           .t(),
       torch::arange(0, 10));
 
-#endif // HAVE_TORCH
 
   return EXIT_SUCCESS;
 }

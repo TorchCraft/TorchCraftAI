@@ -267,9 +267,7 @@ inline void drawUnitCommand(
 std::map<std::string, std::string> gflagsValues(
     std::string const& sourcePath = std::string());
 
-#ifdef HAVE_TORCH
 std::string visualizeHeatmap(torch::Tensor);
-#endif // HAVE_TORCH
 
 } // namespace utils
 } // namespace cherrypi

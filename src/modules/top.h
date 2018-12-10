@@ -11,8 +11,6 @@
 
 namespace cherrypi {
 
-struct UPCTuple;
-
 /**
  * The first module run in each frame.
  *
@@ -25,9 +23,6 @@ class TopModule : public Module {
   virtual ~TopModule() = default;
 
   virtual void step(State* s);
-
- private:
-  std::shared_ptr<UPCTuple> upc_;
 };
 
 } // namespace cherrypi

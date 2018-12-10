@@ -7,10 +7,8 @@
 
 #include "rand.h"
 
-#ifdef HAVE_TORCH
 #include <ATen/CPUGenerator.h>
 #include <autogradpp/autograd.h>
-#endif // HAVE_TORCH
 
 #include <glog/logging.h>
 
@@ -23,10 +21,8 @@ std::mutex Rand::randEngineMutex_;
 thread_local bool Rand::hasLocalSeed_ = false;
 thread_local std::mt19937 Rand::localRandEngine_;
 
-#ifdef HAVE_TORCH
 std::unique_ptr<at::Generator> Rand::torchEngine_;
 thread_local std::unique_ptr<at::Generator> Rand::localTorchEngine_;
-#endif // HAVE_TORCH
 
 int64_t Rand::defaultRandomSeed() {
   return hires_clock::now().time_since_epoch().count();
@@ -40,7 +36,6 @@ void Rand::setSeed(int64_t seed) {
   // deterministically (if it happens to use rand()).
   std::srand(seed);
 
-#ifdef HAVE_TORCH
   try {
     torch::manual_seed(static_cast<uint32_t>(seed));
     torchEngine_ = std::make_unique<at::CPUGenerator>(&at::globalContext());
@@ -48,14 +43,12 @@ void Rand::setSeed(int64_t seed) {
   } catch (std::exception const& ex) {
     LOG(WARNING) << "Failed to set torch random seed: " << ex.what();
   }
-#endif // HAVE_TORCH
 }
 
 void Rand::setLocalSeed(int64_t seed) {
   std::seed_seq ss{uint32_t(seed & 0xFFFFFFFF), uint32_t(seed >> 32)};
   localRandEngine_.seed(ss);
   hasLocalSeed_ = true;
-#ifdef HAVE_TORCH
   try {
     localTorchEngine_ =
         std::make_unique<at::CPUGenerator>(&at::globalContext());
@@ -63,7 +56,6 @@ void Rand::setLocalSeed(int64_t seed) {
   } catch (std::exception const& ex) {
     LOG(WARNING) << "Failed to set torch random seed: " << ex.what();
   }
-#endif // HAVE_TORCH
 }
 
 uint64_t Rand::rand() {
@@ -74,13 +66,11 @@ uint64_t Rand::rand() {
   return randEngine_();
 }
 
-#ifdef HAVE_TORCH
 at::Generator* Rand::gen() {
   if (hasLocalSeed_) {
     return localTorchEngine_.get();
   }
   return torchEngine_.get();
 }
-#endif // HAVE_TORCH
 
 } // namespace common

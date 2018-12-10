@@ -84,7 +84,8 @@ DEFINE_int32(
 
 namespace cherrypi {
 
-/// How far a resource can be from our base before it's considered long-distance mining
+/// How far a resource can be from our base before it's considered long-distance
+/// mining
 constexpr double kDistanceMining = 4 * 12;
 
 void GathererAssignments::addUnit(Unit* unit) {
@@ -253,7 +254,7 @@ void GathererAssignments::step(State* state) {
   //
   // When a new resource is available:
   // Prioritize workers closest to the new resource.
-  // 
+  //
   // Otherwise:
   // Sort workers by frames since update, descending.
   bool respectCooldown = true;
@@ -300,7 +301,6 @@ void GathererAssignments::step(State* state) {
   int workerUpdates = 0;
   const int currentFrame = state->currentFrame();
   for (Unit* worker : workersToUpdate) {
-    
     // Cap the number of worker updates (for performance reasons).
     ++workerUpdates;
     if (workerUpdates >= FLAGS_gatherer_worker_updates) {

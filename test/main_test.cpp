@@ -87,6 +87,48 @@ std::string encode_xml(std::string const& data) {
   return buffer;
 }
 
+struct testresult {
+  testresult(std::string j) : job_name(std::move(j)) {}
+  std::string job_name;
+  std::unique_ptr<lest::message> fail_message;
+};
+
+class testresultsdumper : public std::vector<testresult> {
+  std::ostream& os;
+
+ public:
+  testresultsdumper(std::ostream& o) : os(o) {}
+  void dumpMaybe() {
+    if (FLAGS_junit_xml_dump.empty()) {
+      return;
+    }
+    try {
+      std::ofstream f(FLAGS_junit_xml_dump);
+      f << "<testsuite tests='" << size() << "'>" << std::endl;
+      for (auto& r : *this) {
+        auto split = cherrypi::utils::stringSplit(r.job_name, '/', 1);
+        auto class_name = encode_xml(split[0]);
+        auto test_name = split.size() == 2 ? encode_xml(split[1]) : "";
+        f << "<testcase classname=\"" << class_name << "\" name=\"" << test_name
+          << "\"";
+        if (r.fail_message) {
+          std::string fail_str = r.fail_message->where.file + ":" +
+              std::to_string(r.fail_message->where.line) + ": " +
+              r.fail_message->what();
+          f << "><failure type=\"" << encode_xml(r.fail_message->kind) << "\">"
+            << encode_xml(fail_str) << "</failure></testcase>";
+        } else {
+          f << "/>";
+        }
+        f << std::endl;
+      }
+      f << "</testsuite>" << std::endl;
+    } catch (std::exception& e) {
+      os << "Exception while writing test JUnit XML file: " << e.what();
+    }
+  }
+};
+
 // Parallel test runner for lest
 // It's not super pretty but should do the job.
 struct prun : lest::action {
@@ -104,12 +146,6 @@ struct prun : lest::action {
     std::string out;
   };
 
-  struct testresult {
-    testresult(std::string j) : job_name(std::move(j)) {}
-    std::string job_name;
-    std::unique_ptr<lest::message> fail_message;
-  };
-
   lest::env output;
   lest::options option;
   int njobs = 1;
@@ -121,7 +157,7 @@ struct prun : lest::action {
   std::mutex jobMutex;
   std::condition_variable jobFinished;
   std::list<jobresult> jobs;
-  std::vector<testresult> testresults;
+  testresultsdumper testresults;
   std::thread mth;
 
   prun(std::ostream& os, lest::options option, int njobs)
@@ -129,6 +165,7 @@ struct prun : lest::action {
         output(os, option.pass),
         option(option),
         njobs(njobs),
+        testresults(os),
         mth(&prun::monitor, this) {}
 
   ~prun() {
@@ -144,31 +181,8 @@ struct prun : lest::action {
          << lest::colourise("passed.\n");
     }
     // This dtor is called several times (because we fork)
-    if (!FLAGS_junit_xml_dump.empty() && is_parent) {
-      try {
-        std::ofstream f(FLAGS_junit_xml_dump);
-        f << "<testsuite tests='" << testresults.size() << "'>" << std::endl;
-        for (auto& r : testresults) {
-          auto split = cherrypi::utils::stringSplit(r.job_name, '/', 1);
-          auto class_name = encode_xml(split[0]);
-          auto test_name = split.size() == 2 ? encode_xml(split[1]) : "";
-          f << "<testcase classname=\"" << class_name << "\" name=\""
-            << test_name << "\"";
-          if (r.fail_message) {
-            std::string fail_str = r.fail_message->where.file + ":" +
-                std::to_string(r.fail_message->where.line) + ": " +
-                r.fail_message->what();
-            f << "><failure type=\"" << encode_xml(r.fail_message->kind)
-              << "\">" << encode_xml(fail_str) << "</failure></testcase>";
-          } else {
-            f << "/>";
-          }
-          f << std::endl;
-        }
-        f << "</testsuite>" << std::endl;
-      } catch (std::exception& e) {
-        os << "Exception while writing test JUnit XML file: " << e.what();
-      }
+    if (is_parent) {
+      testresults.dumpMaybe();
     }
   }
 
@@ -320,6 +334,30 @@ struct prun : lest::action {
   }
 };
 
+struct seqrun : lest::confirm {
+  testresultsdumper testresults;
+  seqrun(std::ostream& os, lest::options option)
+      : lest::confirm(os, option), testresults(os) {}
+
+  ~seqrun() {
+    testresults.dumpMaybe();
+  }
+
+  seqrun& operator()(lest::test testing) {
+    testresults.emplace_back(testing.name);
+    try {
+      ++selected;
+      testing.behaviour(output(testing.name));
+    } catch (lest::message const& e) {
+      testresults.back().fail_message = std::make_unique<lest::message>(
+          e.kind, e.where, e.what(), e.note.info);
+      ++failures;
+      report(os, e, testing.name);
+    }
+    return *this;
+  }
+};
+
 // Set up lest options from gflags
 std::tuple<lest::options, lest::texts> parseLestArguments(
     int argc,
@@ -381,7 +419,7 @@ int runLest(
 
     if (FLAGS_j == 0) {
       return lest::for_test(
-          specification, in, lest::confirm(os, option), option.repeat);
+          specification, in, seqrun(os, option), option.repeat);
     } else {
       return lest::for_test(
           specification, in, prun(os, option, FLAGS_j), option.repeat);

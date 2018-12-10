@@ -7,9 +7,7 @@
 
 #pragma once
 
-#ifdef HAVE_TORCH
 #include "common/autograd.h"
-#endif // HAVE_TORCH
 #include "common/utils.h"
 
 namespace cherrypi {

@@ -9,13 +9,13 @@
  * bot.
  */
 
-#include "botscenario.h"
+#include "gameutils/botscenario.h"
 #include "upcstorage.h"
 
 #include <glog/logging.h>
 
 #include "botcli-inl.h"
-#include "openbwprocess.h"
+#include "gameutils/openbwprocess.h"
 
 #include <regex>
 

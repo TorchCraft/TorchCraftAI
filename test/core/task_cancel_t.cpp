@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <fstream>
 
-#include "scenario.h"
+#include "gameutils/scenario.h"
 #include "test.h"
 
 #include <glog/logging.h>

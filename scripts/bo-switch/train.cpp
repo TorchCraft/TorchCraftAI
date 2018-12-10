@@ -16,9 +16,9 @@
 #include "forkserver.h"
 #include "fsutils.h"
 #include "models/bandit.h"
-#include "openbwprocess.h"
+#include "gameutils/openbwprocess.h"
 #include "player.h"
-#include "selfplayscenario.h"
+#include "gameutils/selfplayscenario.h"
 #include "upcstorage.h"
 #include "zstdstream.h"
 

@@ -7,7 +7,7 @@
 
 #include "replayer.h"
 
-#include "openbwprocess.h"
+#include "gameutils/openbwprocess.h"
 #include "state.h"
 
 namespace cherrypi {

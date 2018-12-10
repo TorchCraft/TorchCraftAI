@@ -163,15 +163,21 @@ void BasePlayer::step() {
     firstStepDone_ = true;
   }
 
+  auto isDrawCommand = [](tc::Client::Command const& cmd) {
+    return cmd.code >= tc::BW::Command::DrawLine &&
+        cmd.code <= tc::BW::Command::DrawTextScreen;
+  };
+  // Dump draw cmds to bot trace dumper - if available
+  if (auto traceModule = findModule<CherryVisDumperModule>()) {
+    for (auto const& cmd : commands) {
+      if (isDrawCommand(cmd)) {
+        traceModule->onDrawCommand(state_, cmd);
+      }
+    }
+  }
   if (!draw_) {
     commands.erase(
-        std::remove_if(
-            commands.begin(),
-            commands.end(),
-            [](auto const& cmd) {
-              return cmd.code >= tc::BW::Command::DrawLine &&
-                  cmd.code <= tc::BW::Command::DrawTextScreen;
-            }),
+        std::remove_if(commands.begin(), commands.end(), isDrawCommand),
         commands.end());
   }
 

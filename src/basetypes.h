@@ -48,7 +48,6 @@ constexpr int kLarvaFrames = 342;
         static_cast<std::underlying_type_t<Type>>(b)); \
   }
 
-
 template <typename T>
 class Vec2T {
  public:
@@ -62,14 +61,15 @@ class Vec2T {
   template <typename U>
   explicit Vec2T(U* other) : x(other->x), y(other->y) {}
   template <typename U, typename V>
-  explicit Vec2T(std::pair<U, V> const& other) : x(other.first), y(other.second) {}
+  explicit Vec2T(std::pair<U, V> const& other)
+      : x(other.first), y(other.second) {}
 
   Vec2T& operator=(Vec2T const& other) {
     x = other.x;
     y = other.y;
     return *this;
   }
-  
+
   bool operator==(Vec2T const& other) const {
     return x == other.x && y == other.y;
   }
@@ -80,7 +80,7 @@ class Vec2T {
   bool operator<(Vec2T<T> const& other) const {
     return x < other.x || (x == other.x && y < other.y);
   }
-  
+
   Vec2T operator+(T scalar) const {
     return Vec2T(x + scalar, y + scalar);
   }
@@ -327,7 +327,8 @@ enum Command : uint64_t {
   Flee              = 1 << 7,
   SetCreatePriority = 1 << 8,
   ReturnCargo       = 1 << 9,
-  MAX               = 1 << 10,
+  Cast              = 1 << 10,
+  MAX               = 1 << 11,
   // clang-format on
 };
 

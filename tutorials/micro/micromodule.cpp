@@ -29,12 +29,12 @@ MicroModule::MicroModule(
     unsigned int threadId,
     std::shared_ptr<TrainingSetup> training,
     std::shared_ptr<cpid::Trainer> trainer,
-    std::function<std::unique_ptr<Reward>()>& reward)
+    std::unique_ptr<MicroFixedScenario::Reward>&& reward)
     : Module(),
       threadId_(threadId),
       training_(training),
       trainer_(trainer),
-      reward_(reward()) {
+      reward_(std::move(reward)) {
   setName("MicroLearner");
   featurizer_ = training->model->getFeaturizer();
 }

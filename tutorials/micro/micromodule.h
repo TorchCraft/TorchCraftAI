@@ -13,8 +13,8 @@
 #include <vector>
 
 #include "modules.h"
-#include "reward.h"
 #include "trainingsetup.h"
+#include "gameutils/microfixedscenario.h"
 
 namespace cp = cherrypi;
 
@@ -31,7 +31,7 @@ class MicroModule : public cp::Module {
   float firstAllyCount_, firstEnemyCount_, firstAllyHp_, firstEnemyHp_;
   std::shared_ptr<TrainingSetup> training_;
   std::shared_ptr<cpid::Trainer> trainer_;
-  std::shared_ptr<Reward> reward_;
+  std::shared_ptr<cp::MicroFixedScenario::Reward> reward_;
   std::unique_ptr<cpid::EpisodeHandle> episode_;
   cpid::GameUID gameUID_;
   // Keep track of unit attacks to avoid repetition
@@ -42,7 +42,7 @@ class MicroModule : public cp::Module {
       unsigned int threadId,
       std::shared_ptr<TrainingSetup>,
       std::shared_ptr<cpid::Trainer>,
-      std::function<std::unique_ptr<Reward>()>&);
+      std::unique_ptr<cp::MicroFixedScenario::Reward>&&);
   void onGameStart(cp::State* state) override;
   void step(cp::State* state) override;
   void onGameEnd(cp::State* state) override;

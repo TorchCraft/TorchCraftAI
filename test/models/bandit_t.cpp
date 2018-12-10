@@ -7,7 +7,7 @@
 
 #include "fsutils.h"
 #include "modules.h"
-#include "selfplayscenario.h"
+#include "gameutils/selfplayscenario.h"
 #include "test.h"
 
 using namespace cherrypi;

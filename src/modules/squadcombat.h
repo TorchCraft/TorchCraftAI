@@ -21,7 +21,8 @@ struct EnemyState {
 /**
  * Module which controls ("micromanages") units into and out of combat.
  *
- * SquadCombat reads diffuse Delete ("Fight") or Flee UPCs from the Blackboard and
+ * SquadCombat reads diffuse Delete ("Fight") or Flee UPCs from the Blackboard
+ * and
  * reposts them as sharp UPCs for commands like Delete or Move.
  *
  * SquadCombatModule is a thin orchestrator for micromanagement. Most of the

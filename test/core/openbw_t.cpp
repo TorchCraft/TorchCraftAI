@@ -12,7 +12,7 @@
 #include "cherrypi.h"
 #include "modules.h"
 #include "player.h"
-#include "selfplayscenario.h"
+#include "gameutils/selfplayscenario.h"
 
 #include <torchcraft/constants.h>
 

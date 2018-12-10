@@ -6,9 +6,6 @@
  */
 
 #pragma once
-#ifndef HAVE_TORCH
-#error "ATen required"
-#endif // HAVE_TORCH
 
 #include "cherrypi.h"
 #include "unitsinfo.h"

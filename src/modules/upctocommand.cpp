@@ -181,6 +181,56 @@ void UPCToCommandModule::stepUPC(
             targetPos.y);
       }
     }
+  } else if (
+      upc->unit.size() == 1 && upc->command[Command::Cast] == 1 &&
+      upc->state.is<UPCTuple::BuildTypeMap>()) {
+    auto& spellType = upc->state.get_unchecked<UPCTuple::BuildTypeMap>();
+    if (spellType.size() != 1) {
+      VLOG(4) << "No single spell type in state. Skipping.";
+      return;
+    }
+    const BuildType* spell = spellType.begin()->first;
+    UnitId targetId = -1;
+    Position targetPos;
+    if (upc->position.is<UPCTuple::UnitMap>()) {
+      auto& map = upc->position.get_unchecked<UPCTuple::UnitMap>();
+      if (map.empty()) {
+        VLOG(0) << "Empty unit map for UPC position";
+        return;
+      }
+      if (map.begin()->second == 1) {
+        targetId = map.begin()->first->id;
+      } else {
+        VLOG(0) << "Non-sharp unit map element for UPC position";
+        return;
+      }
+    } else {
+      targetPos = upc->positionArgMax().first;
+    }
+
+    for (auto& uprob : upc->unit) {
+      if (uprob.second == 0) {
+        continue;
+      }
+      auto unit = uprob.first;
+      if (targetId >= 0) {
+        issue(
+            unit,
+            tc::BW::UnitCommandType::Use_Tech_Unit,
+            targetId,
+            0,
+            0,
+            spell->tech);
+      } else {
+        issue(
+            unit,
+            tc::BW::UnitCommandType::Use_Tech_Position,
+            -1,
+            targetPos.x,
+            targetPos.y,
+            spell->tech);
+      }
+    }
   } else if (upc->commandProb(Command::Cancel) == 1) {
     for (auto& uprob : upc->unit) {
       if (uprob.second == 0) {

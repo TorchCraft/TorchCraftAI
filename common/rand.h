@@ -11,9 +11,7 @@
 #include <mutex>
 #include <random>
 
-#ifdef HAVE_TORCH
 #include <ATen/Generator.h>
-#endif // HAVE_TORCH
 
 namespace common {
 
@@ -50,7 +48,6 @@ class Rand {
     return distrib(randEngine_);
   }
 
-#ifdef HAVE_TORCH
   /**
    * This allows to use a custom seed in torch.
    * For example: at::normal(mean, dev, Rand::gen());
@@ -58,7 +55,6 @@ class Rand {
    * is set
    */
   static at::Generator* gen();
-#endif // HAVE_TORCH
 
  protected:
   static std::mt19937 randEngine_;
@@ -67,10 +63,8 @@ class Rand {
   static thread_local bool hasLocalSeed_;
   static thread_local std::mt19937 localRandEngine_;
 
-#ifdef HAVE_TORCH
   static std::unique_ptr<at::Generator> torchEngine_;
   static thread_local std::unique_ptr<at::Generator> localTorchEngine_;
-#endif // HAVE_TORCH
 };
 
 // This method was originally written by Christopher Smith at

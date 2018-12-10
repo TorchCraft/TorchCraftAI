@@ -68,3 +68,7 @@ CASE("autograd/variant/list/oob") {
   EXPECT_THROWS(test[2]);
   EXPECT_THROWS(test[10]);
 }
+
+CASE("autograd/yay_cuda_is_working") {
+  torch::randn({100}, torch::kCUDA).sum();
+}

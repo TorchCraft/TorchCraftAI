@@ -16,9 +16,7 @@
 #include "module.h"
 #include "state.h"
 
-#ifdef HAVE_TORCH
 #include "models/bos/runner.h"
-#endif // HAVE_TORCH
 
 namespace cherrypi {
 
@@ -72,23 +70,19 @@ class StrategyModule : public Module {
       tc::BW::Race enemyRace,
       const std::string& mapName,
       const std::string& enemyName);
-#ifdef HAVE_TORCH
   std::unique_ptr<bos::ModelRunner> makeBosRunner(State* state);
   std::string stepBos(State* state);
   bool shouldListenToBos(State* state);
-#endif // HAVE_TORCH
 
   Duty duties_;
   int nbScoutingOverlords_ = 0;
   int nbScoutingExplorers_ = 0;
   int nbScoutingWorkers_ = 0;
 
-#ifdef HAVE_TORCH
   std::unique_ptr<bos::ModelRunner> bosRunner_ = nullptr;
   FrameNum nextBosForwardFrame_ = 0;
   float bosStartTime_ = 0;
   bool bosMapVerified_ = false;
-#endif // HAVE_TORCH
 };
 
 DEFINE_FLAG_OPERATORS(StrategyModule::Duty);

@@ -107,6 +107,10 @@ class UpcStorage {
   std::vector<UpcPost const*> upcPostsFrom(Module* module, FrameNum frame = -1)
       const;
 
+  std::vector<UpcPost> const& getAllUpcs() const {
+    return posts_;
+  }
+
  private:
   /// The UPC IDs we provide are indices to this container.
   /// However, the indices actually start at 1.

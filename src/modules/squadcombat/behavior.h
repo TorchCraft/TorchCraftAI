@@ -62,7 +62,6 @@ class Behavior {
   virtual MicroAction onPerform(Agent&) = 0;
 };
 
-
 // Class declarations for micro Behaviors
 #define CPI_DEFINE_BEHAVIOR(NAME)                   \
   class Behavior##NAME : public Behavior {          \

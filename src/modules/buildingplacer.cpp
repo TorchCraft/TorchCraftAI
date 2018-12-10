@@ -14,10 +14,7 @@
 
 #include <glog/logging.h>
 
-DEFINE_string(
-    bp_model,
-    "",
-    "Path to building placer model");
+DEFINE_string(bp_model, "", "Path to building placer model");
 
 namespace cherrypi {
 
@@ -120,7 +117,6 @@ void BuildingPlacerModule::step(State* state) {
     }
   }
 
-#ifdef HAVE_TORCH
   // Fully initialize the model by doing a dummy forward pass in the first
   // frame; we'll have enough time there then.
   if (firstStep_) {
@@ -134,7 +130,6 @@ void BuildingPlacerModule::step(State* state) {
     upc.state = UPCTuple::BuildTypeMap{{buildtypes::Zerg_Hatchery, 1}};
     upcWithPositionForBuilding(state, upc, buildtypes::Zerg_Hatchery);
   }
-#endif // HAVE_TORCH
 
   for (auto const& upct : board->upcsWithSharpCommand(Command::Create)) {
     auto upcId = upct.first;
@@ -206,8 +201,8 @@ void BuildingPlacerModule::step(State* state) {
 
     std::shared_ptr<UPCTuple> newUpc;
     if (bptask->type->isBuilding && bptask->type->builder->isWorker) {
-      newUpc = upcWithPositionForBuilding(
-          state, *bptask->sourceUpc, bptask->type);
+      newUpc =
+          upcWithPositionForBuilding(state, *bptask->sourceUpc, bptask->type);
     }
 
     if (newUpc == nullptr) {
@@ -226,7 +221,6 @@ void BuildingPlacerModule::step(State* state) {
 }
 
 void BuildingPlacerModule::onGameStart(State* state) {
-#ifdef HAVE_TORCH
   if (model_ == nullptr && !FLAGS_bp_model.empty()) {
     model_ = BuildingPlacerModel().make();
     VLOG(0) << "Loading building placer model from " << FLAGS_bp_model;
@@ -257,14 +251,13 @@ void BuildingPlacerModule::onGameStart(State* state) {
 
   staticData_ = nullptr;
   firstStep_ = true;
-#endif // HAVE_TORCH
   baseLocations_.clear();
 }
 
 std::shared_ptr<UPCTuple> BuildingPlacerModule::upcWithPositionForBuilding(
-      State* state,
-      UPCTuple const& upc,
-      BuildType const* type) {
+    State* state,
+    UPCTuple const& upc,
+    BuildType const* type) {
   // Perform placement with rules so we a) have a fallback and b) a candidate
   // area for the model.
   std::shared_ptr<UPCTuple> seedUpc =
@@ -274,11 +267,9 @@ std::shared_ptr<UPCTuple> BuildingPlacerModule::upcWithPositionForBuilding(
   // - a refinery is requested
   // - placement fails
   // - an expansion is requested
-#ifdef HAVE_TORCH
   if (model_ == nullptr) {
     return seedUpc;
   }
-#endif // HAVE_TORCH
   if (type->isRefinery || seedUpc == nullptr) {
     return seedUpc;
   }
@@ -301,7 +292,6 @@ std::shared_ptr<UPCTuple> BuildingPlacerModule::upcWithPositionForBuilding(
     }
   }
 
-#ifdef HAVE_TORCH
   // Prepare input sample
   auto sampleUpc = std::make_shared<UPCTuple>(*seedUpc);
   Position seedPos;
@@ -335,9 +325,6 @@ std::shared_ptr<UPCTuple> BuildingPlacerModule::upcWithPositionForBuilding(
   sampleUpc->position = pos;
   VLOG(1) << "Seed pos " << seedPos << ", predicted pos " << pos;
   return sampleUpc;
-#else // HAVE_TORCH
-  return seedUpc;
-#endif // HAVE_TORCH
 }
 
 } // namespace cherrypi

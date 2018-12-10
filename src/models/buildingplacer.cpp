@@ -316,8 +316,8 @@ std::pair<ag::Variant, ag::Variant> BuildingPlacerModel::makeBatch(
   }
 
   auto target = ag::VariantDict{{"target", targets.to(device)}};
-  auto result =
-      std::make_pair(makeInputBatch(samples, device), std::move(target));
+  std::pair<ag::Variant, ag::Variant> result =
+      std::make_pair(makeInputBatch(samples, device), target);
   return result;
 }
 

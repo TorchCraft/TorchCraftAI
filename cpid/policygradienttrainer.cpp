@@ -145,7 +145,7 @@ void BatchedPGTrainer::updateModel() {
             batcher_->unBatch(
                 model_->forward(batcher_->makeBatch({state})), false, -1)[0]);
       } else {
-        out = std::move(model_->forward(state));
+        out = model_->forward(state);
       }
 
       torch::Tensor value = out[kValueKey];

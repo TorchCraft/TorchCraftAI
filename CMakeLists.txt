@@ -3,7 +3,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)
 CMAKE_POLICY(VERSION 3.0)
 PROJECT(CherryPi)
 ENABLE_TESTING()
@@ -15,6 +15,12 @@ SET(CMAKE_CXX_STANDARD 14)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 OPTION(ONLY_BENCH "Only build cpid and distributed_bench w/o SC environments (requires linux)" OFF)
 OPTION(ASAN "ASAN-enabled build" OFF)
+OPTION(TSAN "TSAN-enabled build" OFF)
+OPTION(BUILD_OPENBW "Build BWAPI/OpenBW with CherryPi" OFF)
+
+IF(BUILD_OPENBW)
+  add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/3rdparty/openbw)
+ENDIF(BUILD_OPENBW)
 
 IF(MSVC)
   ADD_DEFINITIONS(-DWITHOUT_POSIX)
@@ -65,12 +71,11 @@ OPTION(WITH_CPIDLIB "Include training library" ON)
 IF(APPLE OR MSVC)
   SET(WITH_CPIDLIB OFF)
 ENDIF(APPLE OR MSVC)
+FIND_PACKAGE(Torch REQUIRED)
+ADD_SUBDIRECTORY(common)
 
 IF(ONLY_BENCH)
-  FIND_PACKAGE(Torch REQUIRED)
-  ADD_DEFINITIONS(-DHAVE_TORCH)
   ADD_SUBDIRECTORY(cpid)
-  ADD_SUBDIRECTORY(common)
   ADD_SUBDIRECTORY(./scripts/distributed_bench)
   TARGET_INCLUDE_DIRECTORIES(distributed_bench PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -81,26 +86,31 @@ ELSE(ONLY_BENCH)
     ADD_SUBDIRECTORY(3rdparty/torchcraft/BWEnv)
     TARGET_COMPILE_OPTIONS(BWEnv PRIVATE "${CHERRYPI_WARNINGS}")
   ENDIF(NOT MSVC)
-  
-  FIND_PACKAGE(Torch REQUIRED)
-  ADD_DEFINITIONS(-DHAVE_TORCH)
 
   ADD_SUBDIRECTORY(3rdparty/bwapilib EXCLUDE_FROM_ALL)
   IF(MSVC)
     LINK_DIRECTORIES("${PROJECT_SOURCE_DIR}/deps")
   ENDIF(MSVC)
 
+  IF(ASAN AND TSAN)
+    message( FATAL_ERROR "You can not build with both ASAN and TSAN" )
+  ENDIF(ASAN AND TSAN)
+
   IF(ASAN)
     # Enable ASAN for the following sub-projects only. We can't load an
     # ASAN-enabled BWEnv.dll in a non-ASAN OpenBW.
     SET(CMAKE_CXX_FLAGS
         "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+  ELSE(ASAN)
+    IF(TSAN)
+      SET(CMAKE_CXX_FLAGS
+        "${CMAKE_CXX_FLAGS} -fsanitize=thread -fno-omit-frame-pointer")
+    ENDIF(TSAN)
   ENDIF(ASAN)
 
   ADD_SUBDIRECTORY(3rdparty/torchcraft EXCLUDE_FROM_ALL)
   ADD_SUBDIRECTORY(tcbwapi)
   ADD_SUBDIRECTORY(3rdparty/bwem EXCLUDE_FROM_ALL)
-  ADD_SUBDIRECTORY(common)
   IF(NOT MSVC)
     IF(WITH_CPIDLIB)
       ADD_SUBDIRECTORY(cpid)

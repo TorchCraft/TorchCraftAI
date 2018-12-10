@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "botscenario.h"
+#include "gameutils/botscenario.h"
 
 #include "models/bandit.h"
 

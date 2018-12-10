@@ -20,7 +20,7 @@ namespace cherrypi {
  * Manages worker units for resource gathering.
  *
  * GathererModule is a thin orchestrator of GatherControllers.
- * Most gathering logic happens in gathererassignments.cpp or 
+ * Most gathering logic happens in gathererassignments.cpp or
  * gatherermicro.cpp
  */
 class GathererModule : public Module {

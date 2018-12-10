@@ -7,9 +7,7 @@
 
 #pragma once
 
-#ifdef HAVE_TORCH
 #include <autogradpp/autograd.h>
-#endif
 #include <mapbox/variant.hpp>
 
 #include <string>
@@ -34,17 +32,12 @@ struct ConnectionParams {
 
 using StringList = std::vector<std::string>;
 using StringListMap = std::unordered_map<int, StringList>;
-#ifdef HAVE_TORCH
 using OptionValue = mapbox::util::variant<bool,
                                           double,
                                           std::string,
                                           StringList,
                                           StringListMap,
                                           torch::Tensor>;
-#else // HAVE_TORCH
-using OptionValue =
-    mapbox::util::variant<bool, double, std::string, StringList, StringListMap>;
-#endif // HAVE_TORCH
 using Options = std::unordered_map<std::string, OptionValue>;
 
 struct OptionPair {
@@ -127,7 +120,6 @@ class Visdom {
       std::string const& env,
       Options const& opts = Options());
 
-#ifdef HAVE_TORCH
   /**
    * This function draws a heatmap.
    * It takes as input an `NxM` tensor `X` that specifies the value at each
@@ -322,7 +314,6 @@ class Visdom {
       std::string const& name,
       Options const& opts = Options(),
       UpdateMethod update = UpdateMethod::None);
-#endif // HAVE_TORCH
 
  private:
   VisdomImpl* d_;

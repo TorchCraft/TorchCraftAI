@@ -9,7 +9,7 @@
 
 #include "microplayer.h"
 #include "modules.h"
-#include "scenarioprovider.h"
+#include "gameutils/microfixedscenario.h"
 
 using namespace cherrypi;
 

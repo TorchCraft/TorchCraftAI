@@ -16,8 +16,6 @@ namespace microbattles {
 
 constexpr int kMapHeight = 256; // Note: hard-coded - maps should be this size
 constexpr int kMapWidth = 256;
-constexpr double kMapDiagonal =
-    sqrt(kMapWidth * kMapWidth + kMapHeight * kMapHeight);
 
 std::tuple<float, float, float, float> getUnitCountsHealth(
     cherrypi::State* state);

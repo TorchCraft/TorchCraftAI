@@ -18,7 +18,7 @@ class SquadTask;
 
 /**
  * An Agent represents the micromanagement state of one of our units.
- * 
+ *
  * Agents belong to a SquadTask, which invokes microFlee() or microDelete().
  *
  * From there, the Agent, will forward control to a series of Behaviors,
@@ -90,7 +90,7 @@ class Agent {
   /// This is the Agent's assigned formation position, which it may use before
   /// fighting.
   Position formationPosition = kInvalidPosition;
-  
+
   /// Used by SquadTask in calculating formations
   int formationCounter = 0;
 
@@ -100,7 +100,7 @@ class Agent {
  public:
   /// Hand control of the unit over to the Agent for fighting.
   std::shared_ptr<UPCTuple> microDelete();
-  
+
   /// Hand control of the unit over to the Agent for fleeing.
   std::shared_ptr<UPCTuple> microFlee();
 

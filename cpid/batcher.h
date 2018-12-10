@@ -7,13 +7,13 @@
 
 #pragma once
 #include "prioritymutex.h"
-#include "trainer.h"
 #include <future>
 #include <glog/logging.h>
 #include <memory>
 #include <mutex>
 #include <thread>
 
+#include <autogradpp/autograd.h>
 #include <torch/torch.h>
 
 namespace cpid {

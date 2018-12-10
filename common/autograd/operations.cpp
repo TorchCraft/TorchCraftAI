@@ -458,10 +458,11 @@ torch::Tensor tensorFromNpyArray(
   }
   at::IntList size(size_vec);
 
-  auto tensor = torch::from_blob(array.data<void>(), size, op.device_index(-1));
+  auto tensor =
+      torch::from_blob(array.data<void>(), size, op.device(torch::kCPU));
   return tensor.clone().to(op.device());
 }
-#endif //WITHOUT_POSIX
+#endif // WITHOUT_POSIX
 
 torch::Tensor squash(torch::Tensor x, int i, int j) {
   auto inputSize = x.sizes();

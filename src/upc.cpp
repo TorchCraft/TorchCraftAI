@@ -23,16 +23,12 @@ std::pair<Position, float> UPCTuple::positionArgMax() const {
       [&](UnitMap const&) {
         auto amax = positionUArgMax();
         return std::make_pair(Position(amax.first), amax.second);
-      }
-#ifdef HAVE_TORCH
-      ,
+      },
       [&](torch::Tensor const& t) {
         auto amax = utils::argmax(t, scale);
         return std::make_pair(
             Position(std::get<0>(amax), std::get<1>(amax)), std::get<2>(amax));
-      }
-#endif // HAVE_TORCH
-      );
+      });
 }
 
 std::pair<Unit*, float> UPCTuple::positionUArgMax() const {
@@ -86,9 +82,7 @@ float UPCTuple::positionProb(int x, int y) const {
           }
         }
         return 0.0f;
-      }
-#ifdef HAVE_TORCH
-      ,
+      },
       [&](torch::Tensor const& t) {
         // TODO: Should assert this
         if (t.defined() && t.dim() == 2) {
@@ -101,9 +95,7 @@ float UPCTuple::positionProb(int x, int y) const {
         }
         // Unspecified position: we assume that any position is good.
         return 0.5f;
-      }
-#endif // HAVE_TORCH
-      );
+      });
 }
 
 float UPCTuple::commandProb(Command c) const {
@@ -114,7 +106,6 @@ float UPCTuple::commandProb(Command c) const {
   return 0.;
 }
 
-#ifdef HAVE_TORCH
 torch::Tensor UPCTuple::positionTensor(State* state) const {
   auto tensor = torch::zeros({state->mapHeight(), state->mapWidth()});
   auto acc = tensor.accessor<float, 2>();
@@ -177,7 +168,6 @@ torch::Tensor UPCTuple::positionTensor(State* state) const {
 
   return tensor;
 }
-#endif // HAVE_TORCH
 
 std::pair<BuildType const*, float> UPCTuple::createTypeArgMax() const {
   BuildType const* type = nullptr;

@@ -7,10 +7,10 @@
 
 #include "test.h"
 
-#include "openbwprocess.h"
+#include "gameutils/openbwprocess.h"
 #include "player.h"
-#include "scenario.h"
-#include "selfplayscenario.h"
+#include "gameutils/scenario.h"
+#include "gameutils/selfplayscenario.h"
 #include "utils.h"
 
 #include <fcntl.h>

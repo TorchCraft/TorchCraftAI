@@ -12,10 +12,17 @@
 #include "controller.h"
 #include "fsutils.h"
 #include "state.h"
+#include "upcstorage.h"
 #include "utils.h"
 #include "zstdstream.h"
 
 using json = nlohmann::json;
+
+DEFINE_bool(
+    trace_upc_details,
+    false,
+    "Dump UPCs with all their details - "
+    "enables persistent storage of UPCs in the Blackboard");
 
 namespace cherrypi {
 
@@ -41,9 +48,16 @@ void CherryVisDumperModule::step(State* s) {
     UnitData& infos = unitsInfos_[unit->id];
     int32_t current_task_id = getUnitTaskId(s, unit);
     if (infos.lastSeenTask != current_task_id) {
-      json& j = unitsUpdates_[std::to_string(unit->id)];
-      j[std::to_string(s->currentFrame())] = {{"task", current_task_id}};
+      json& j = unitsUpdates_[std::to_string(unit->id)]
+                             [std::to_string(s->currentFrame())];
+      j["task"] = current_task_id;
       infos.lastSeenTask = current_task_id;
+    }
+    if (infos.lastSeenType != unit->type->unit) {
+      json& j = unitsUpdates_[std::to_string(unit->id)]
+                             [std::to_string(s->currentFrame())];
+      j["type"] = unit->type->unit;
+      infos.lastSeenType = unit->type->unit;
     }
   }
 
@@ -65,6 +79,7 @@ void CherryVisDumperModule::step(State* s) {
     boardUpdates_[std::to_string(s->currentFrame())] =
         std::move(currentFrameUpdates);
   }
+  drawCommands_[std::to_string(s->currentFrame())];
 }
 
 void CherryVisDumperModule::onGameStart(State* s) {
@@ -75,9 +90,15 @@ void CherryVisDumperModule::onGameStart(State* s) {
   unitsFirstSeen_.clear();
   boardUpdates_.clear();
   boardKnownValues_.clear();
+  drawCommands_.clear();
+  trees_.clear();
+  treesMetadata_.clear();
   logSink_.reset();
   logs_.clear();
   logSink_ = std::make_unique<CherryVisLogSink>(this);
+  if (FLAGS_trace_upc_details) {
+    s->board()->upcStorage()->setPersistent(true);
+  }
 }
 
 void CherryVisDumperModule::onGameEnd(State* s) {
@@ -95,6 +116,9 @@ void CherryVisDumperModule::onGameEnd(State* s) {
   // Stop logging
   logSink_.reset();
 
+  // Dump all UPCs
+  dumpGameUpcs(s);
+
   // Create JSON
   json bot_dump = {{"types_names", buildTypesToName},
                    {"tasks", tasks_},
@@ -102,6 +126,8 @@ void CherryVisDumperModule::onGameEnd(State* s) {
                    {"units_updates", unitsUpdates_},
                    {"units_first_seen", unitsFirstSeen_},
                    {"board_updates", boardUpdates_},
+                   {"draw_commands", drawCommands_},
+                   {"trees", treesMetadata_},
                    {"_version", 0}};
 
   // TODO: We need to parse "replayFileName_"
@@ -119,6 +145,8 @@ void CherryVisDumperModule::onGameEnd(State* s) {
     // game_summary.json
     writeGameSummary(s, dumpDirectory + "game_summary.json");
 
+    // tree__XXXX.json.zstd
+    writeTrees(dumpDirectory);
   } catch (std::exception& e) {
     LOG(ERROR) << "Exception while writing bot trace for CVis: " << e.what();
   }
@@ -133,6 +161,30 @@ void CherryVisDumperModule::handleLog(
        {"file", std::string(full_filename)},
        {"message", std::move(message)},
        {"sev", severity}});
+}
+
+void CherryVisDumperModule::onDrawCommand(
+    State* s,
+    tc::Client::Command const& command) {
+  std::vector<int> cherryPiUnitsIdsArgs;
+  switch (command.code) {
+    case tc::BW::Command::DrawUnitLine:
+      cherryPiUnitsIdsArgs = {0, 1};
+      break;
+    case tc::BW::Command::DrawUnitPosLine:
+    case tc::BW::Command::DrawUnitCircle:
+      cherryPiUnitsIdsArgs = {0};
+      break;
+    default:
+      break;
+  }
+  drawCommands_[std::to_string(s->currentFrame())].push_back(
+      {
+          {"code", command.code},
+          {"args", command.args},
+          {"str", command.str},
+          {"cherrypi_ids_args_indices", cherryPiUnitsIdsArgs},
+      });
 }
 
 int32_t CherryVisDumperModule::getUnitTaskId(State* s, Unit* unit) {
@@ -163,18 +215,21 @@ void CherryVisDumperModule::writeGameSummary(
           {"p0_race", s->myRace()._to_string()},
           {"p0_win", s->won()},
           {"p0_cherrypi_crash", false}, // If we are here, we didnt crash...
-          {"p1_name", s->board()->get<std::string>(Blackboard::kEnemyNameKey)},
           {"p1_race", s->raceFromClient(s->firstOpponent())._to_string()},
           {"p1_win", s->lost() && s->currentFrame() != 0},
           {"draw", s->currentFrame() == 0},
           {"game_duration_frames", s->currentFrame()},
-          // Additional fields
           {"map", s->mapName()},
-          {"cp_opening_bo",
-           s->board()->get<std::string>(Blackboard::kOpeningBuildOrderKey)},
-          {"cp_final_bo",
-           s->board()->get<std::string>(Blackboard::kBuildOrderKey)},
       });
+
+  auto addBlackboardValue = [&](std::string const& k, std::string const& bk) {
+    if (s->board()->hasKey(bk) && s->board()->get(bk).is<std::string>()) {
+      summary[k] = s->board()->get<std::string>(bk);
+    }
+  };
+  addBlackboardValue("p1_name", Blackboard::kEnemyNameKey);
+  addBlackboardValue("cp_opening_bo", Blackboard::kOpeningBuildOrderKey);
+  addBlackboardValue("cp_final_bo", Blackboard::kBuildOrderKey);
 
   // ... add other metrics below, and see them in the ladder visualizer :)
 
@@ -214,5 +269,63 @@ struct BoardValueToString {
 std::string CherryVisDumperModule::getBoardValueAsString(
     Blackboard::Data const& value) {
   return mapbox::util::apply_visitor(BoardValueToString(), value);
+}
+
+void CherryVisDumperModule::dumpGameUpcs(State* s) {
+  // 1- Construct the tree in the right order
+  std::unordered_map<UpcId /* source */, std::vector<UpcId> /* children */>
+      tree;
+  UpcStorage* storage = s->board()->upcStorage();
+  auto const& allUpcs = storage->getAllUpcs();
+  for (auto const& upcPost : allUpcs) {
+    tree[upcPost.sourceId].push_back(upcPost.upcId);
+  }
+
+  // 2- Dump!
+  auto dump_node = [&allUpcs](UpcId id, std::shared_ptr<TreeNode> node) {
+    node->setId(id, "u");
+    if (id == 0) {
+      node->setFrame(0);
+      node->setModule("Init");
+      *node << "Origin";
+      return;
+    }
+    auto upc = allUpcs[id - 1];
+    node->setFrame(upc.frame);
+    node->setModule(upc.module->name());
+    if (upc.upc) {
+      for (auto u : upc.upc->unit) {
+        node->addUnitWithProb(u.first, u.second);
+      }
+    }
+    *node << utils::upcString(upc.upc, id);
+  };
+  auto get_children = [&tree](UpcId id) { return tree[id]; };
+  addTree(s, "gameupcs", dump_node, get_children, UpcId(0));
+}
+
+void CherryVisDumperModule::writeTrees(std::string const& dumpDirectory) {
+  std::vector<nlohmann::json> children;
+  for (auto& g : trees_) {
+    auto const& allNodes = g.second.allNodes;
+    std::unordered_map<std::shared_ptr<TreeNode>, nlohmann::json> nodes(
+        allNodes.size());
+    // Given the order in which we dump the trees
+    // And because the tree is acyclic and directed,
+    //   the following works
+    for (int i = allNodes.size() - 1; i >= 0; --i) {
+      auto curNode = allNodes[i];
+      nodes[curNode] = curNode->to_json();
+      children.clear();
+      for (auto c : curNode->children) {
+        children.push_back(std::move(nodes[c]));
+      }
+      nodes[curNode]["children"] = std::move(children);
+    }
+
+    zstd::ofstream treeFile(dumpDirectory + g.first);
+    treeFile << nodes[allNodes[0]].dump(-1, ' ', true);
+    treeFile.close();
+  }
 }
 }

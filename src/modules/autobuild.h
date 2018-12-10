@@ -81,7 +81,6 @@ struct BuildState {
 // have to figure this out together with the Windows build. If we can't get it
 // to work it's not dramatic, we just might have to add a few ifdefs to the BOS
 // training code.
-#ifdef HAVE_TORCH
 template <class Archive>
 void save(Archive& archive, BuildStateUnit const& stu);
 template <class Archive>
@@ -94,7 +93,6 @@ template <class Archive>
 void save(Archive& archive, BuildState const& stu);
 template <class Archive>
 void load(Archive& archive, BuildState& stu);
-#endif // HAVE_TORCH
 
 } // namespace autbuild
 

@@ -137,7 +137,7 @@ void GathererController::step(State* state) {
       }();
     }
   }
-  
+
   // Track our defensive bastions, which we might want to protect with workers
   for (Unit* unit : state->unitsInfo().myUnits()) {
     if (unit->type->hasGroundWeapon && !unit->type->isWorker &&
@@ -156,8 +156,8 @@ void GathererController::step(State* state) {
   //
   // We want to tear down proxied enemy buildings, and make sure they aren't
   // hiding any out of view.
-   
-  // Track proxies and proxy builders  
+
+  // Track proxies and proxy builders
   auto inOurBase = [&](Unit* unit, float distance) {
     for (auto& basePosition : basePositions) {
       if (utils::distance(basePosition, unit) < distance &&
@@ -204,7 +204,7 @@ void GathererController::step(State* state) {
   VLOG_IF(1, !proxies.empty()) << "Proxies: " << proxies.size();
   VLOG_IF(1, !proxyBuilders.empty()) << "Proxy builders: "
                                      << proxyBuilders.size();
-  
+
   // Track workers who aren't yet assigned to defense or gathering
   std::unordered_set<Unit*> freeWorkers;
   for (auto& pair : assignments.workers) {
@@ -245,7 +245,8 @@ void GathererController::step(State* state) {
     } else if (proxy->type == buildtypes::Zerg_Sunken_Colony) {
       workersRequired = 3;
     } else if (proxy->type == buildtypes::Protoss_Pylon) {
-      // Keep vision on the Pylon, just in case they try to add any Cannons later
+      // Keep vision on the Pylon, just in case they try to add any Cannons
+      // later
       workersRequired = 1;
     }
     while (workersRequired > 0) {
@@ -313,7 +314,6 @@ void GathererController::step(State* state) {
 }
 
 void GathererController::micro(State* state, Unit* worker, Unit* resource) {
-  
   // Should this worker run away?
   double distance = utils::distance({worker}, {resource});
   bool shouldFlee = distance > FLAGS_gatherer_fearless_move &&
@@ -456,7 +456,6 @@ void GathererController::gather(
     Unit* worker,
     Unit* resource,
     bool dropResources) {
-  
   // Should this worker return cargo?
   bool shouldReturn = dropResources
       ? (resource->type->isGas ? worker->carryingGas()
@@ -472,8 +471,9 @@ void GathererController::gather(
     }
     return;
   }
-  
-  // If the resource is far away or invisible, move to it instead of trying to gather.
+
+  // If the resource is far away or invisible, move to it instead of trying to
+  // gather.
   auto moveTo = movefilters::pathMoveTo(state, worker, resource->pos());
   bool resourceFar = utils::distance({resource}, moveTo) >= 30;
   if (resourceFar || !resource->visible || !resource->completed()) {
@@ -481,7 +481,7 @@ void GathererController::gather(
     vlog(4, worker, resource, "moves to resource");
     return;
   }
-  
+
   // Do we need to issue a new gather command?
   bool shouldCommand = [&]() {
     if (order(worker).targetId != resource->id) {
@@ -499,7 +499,6 @@ void GathererController::gather(
     vlog(5, worker, resource, "is already gathering");
   }
 }
-
 
 /// Issue a UPC to command a worker to flee.
 void GathererController::flee(State* state, Unit* worker, Unit* resource) {

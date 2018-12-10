@@ -45,3 +45,7 @@ DEFINE_bool(resume, false, "Resume training from previous checkpoint");
 DEFINE_bool(evaluate, false, "Evaluation mode");
 DEFINE_bool(gpu, true, "Use GPU");
 DEFINE_bool(sample_command, true, "Sample or argmax on the command");
+DEFINE_string(dump_replays, "eval",
+    "When to dump game replays (train|eval|always|never)");
+DEFINE_uint64(dump_replays_rate, 200,
+    "Replays sampling rate (default = 200: will dump 0.5% of the games)");

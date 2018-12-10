@@ -11,9 +11,7 @@
 #include "cherrypi.h"
 #include "module.h"
 
-#ifdef HAVE_TORCH
 #include "models/buildingplacer.h"
-#endif // HAVE_TORCH
 
 namespace cherrypi {
 
@@ -50,11 +48,9 @@ class BuildingPlacerModule : public Module {
       UPCTuple const& upc,
       BuildType const* type);
 
-#ifdef HAVE_TORCH
   std::shared_ptr<BuildingPlacerModel> model_;
   std::shared_ptr<BuildingPlacerSample::StaticData> staticData_;
   bool firstStep_ = true;
-#endif // HAVE_TORCH
   std::unordered_set<Position> baseLocations_;
 };
 

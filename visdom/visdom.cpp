@@ -55,7 +55,6 @@ rj::Value rjvalue(StringListMap const& slmap, Allocator&& alloc) {
   return value;
 }
 
-#ifdef HAVE_TORCH
 template <typename T, typename Allocator>
 rj::Value rjtensor(
     torch::TensorAccessor<T, 1> acc,
@@ -135,7 +134,6 @@ rjvalue(torch::Tensor tensor, Allocator&& alloc, bool nanAsNull = false) {
       throw std::runtime_error("Cannot handle tensor type");
   }
 }
-#endif // HAVE_TORCH
 
 template <typename T>
 T optget(Options const& opts, std::string const& key, T defaultValue) {
@@ -199,11 +197,9 @@ void objAddOptions(rj::Value& obj, Options const& opts, Allocator&& alloc) {
         },
         [&](StringListMap v) {
           dest.AddMember(keyval, rjvalue(v, alloc).Move(), alloc);
-#ifdef HAVE_TORCH
         },
         [&](torch::Tensor v) {
           dest.AddMember(keyval, rjvalue(v, alloc).Move(), alloc);
-#endif // HAVE_TORCH
         });
   }
 
@@ -325,7 +321,6 @@ void checkOpts(Options const& opts) {
   }
 }
 
-#ifdef HAVE_TORCH
 OptionValue markerColorCheck(
     OptionValue const& val,
     torch::Tensor X,
@@ -394,7 +389,6 @@ OptionValue markerColorCheck(
   return ret;
 }
 
-#endif // HAVE_TORCH
 
 size_t curlWriteCallback(char* ptr, size_t size, size_t nmemb, void* userdata) {
   std::string* dest = reinterpret_cast<std::string*>(userdata);
@@ -518,7 +512,6 @@ std::string Visdom::text(
   return d_->send(msg);
 }
 
-#ifdef HAVE_TORCH
 std::string Visdom::heatmap(
     torch::Tensor tensor,
     std::string const& win,
@@ -826,6 +819,5 @@ std::string Visdom::line(
 
   return scatter(linedata, labels, win, env, name, defopts, update);
 }
-#endif // HAVE_TORCH
 
 } // namespace visdom

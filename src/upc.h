@@ -10,10 +10,8 @@
 #include "buildtype.h"
 #include "cherrypi.h"
 
-#include <mapbox/variant.hpp>
-#ifdef HAVE_TORCH
 #include <autogradpp/autograd.h>
-#endif // HAVE_TORCH
+#include <mapbox/variant.hpp>
 
 #include <unordered_map>
 
@@ -56,7 +54,6 @@ struct UPCTuple {
 
   /// A typedef for the unit distribution.
   using UnitT = UnitMap;
-#ifdef HAVE_TORCH
   /// A typedef for the position distribution.
   /// Possible values:
   /// - Empty: unspecified position, i.e. uniform over the entire map
@@ -71,12 +68,8 @@ struct UPCTuple {
   ///   second is X.
   using PositionT =
       mapbox::util::variant<Empty, Position, Area*, UnitMap, torch::Tensor>;
-#else // HAVE_TORCH
-  using PositionT = mapbox::util::variant<Empty, Position, Area*, UnitMap>;
-#endif // HAVE_TORCH
   /// A typedef for the command distribution
   using CommandT = CommandMap;
-#ifdef HAVE_TORCH
   /// A typedef for additional structured information ("state").
   /// Possible values:
   /// - Empty: unspecified state
@@ -91,13 +84,6 @@ struct UPCTuple {
                                        Position,
                                        SetCreatePriorityState,
                                        torch::Tensor>;
-#else // HAVE_TORCH
-  using StateT = mapbox::util::variant<Empty,
-                                       BuildTypeMap,
-                                       std::string,
-                                       Position,
-                                       SetCreatePriorityState>;
-#endif // HAVE_TORCH
 
   /// A distribution over units that we can control.
   UnitT unit;
@@ -129,10 +115,8 @@ struct UPCTuple {
   /// Returns the probability of a given command
   float commandProb(Command c) const;
 
-#ifdef HAVE_TORCH
   /// Returns walk tile resolution tensor of position probabilities
   torch::Tensor positionTensor(State* state) const;
-#endif // HAVE_TORCH
 
   /// Returns argmax and probability of the BuildTypeMap distribution in the
   /// UPC's `state` field.

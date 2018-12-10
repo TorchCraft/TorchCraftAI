@@ -19,7 +19,7 @@ using common::MLP;
 
 namespace {
 
-static constexpr BoundingBox<21> bounds;
+static constexpr BoundingBox<21> bounds{};
 
 std::vector<torch::Tensor> initializeMesh() {
   auto lst = std::vector<torch::Tensor>();

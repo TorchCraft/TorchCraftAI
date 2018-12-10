@@ -9,9 +9,7 @@
 
 #include "fsutils.h"
 
-#ifdef HAVE_TORCH
 #include "autogradpp/autograd.h"
-#endif // HAVE_TORCH
 
 #include "fmt/format.h"
 #include <ctime>
@@ -112,7 +110,6 @@ std::string curTimeString(char const* format) {
   return oss.str();
 }
 
-#ifdef HAVE_TORCH
 std::string visualizeHeatmap(torch::Tensor inp) {
   if (inp.ndimension() != 2) {
     return "Can only visualize a 2 dim tensor as a heatmap";
@@ -133,7 +130,6 @@ std::string visualizeHeatmap(torch::Tensor inp) {
   ss << "\033[0m";
   return ss.str();
 }
-#endif // HAVE_TORCH
 
 } // namespace utils
 } // namespace cherrypi

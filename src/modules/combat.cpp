@@ -255,14 +255,12 @@ bool CombatModule::formNewSquad(
         pos.x * sourceUpc->scale, pos.y * sourceUpc->scale, nullptr);
     VLOG(2) << "Targeting single position at " << targets.back().x << ","
             << targets.back().y;
-#ifdef HAVE_TORCH
   } else if (sourceUpc->position.is<torch::Tensor>()) {
     auto argmax = utils::argmax(
         sourceUpc->position.get_unchecked<torch::Tensor>(), sourceUpc->scale);
     targets.emplace_back(std::get<0>(argmax), std::get<1>(argmax), nullptr);
     VLOG(2) << "Targeting position argmax at " << targets.back().x << ","
             << targets.back().y;
-#endif // HAVE_TORCH
   } else {
     VLOG(0) << "No targets to attack in " << utils::upcString(sourceUpcId);
     return false;

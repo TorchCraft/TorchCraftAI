@@ -9,9 +9,7 @@
 
 #include "buildtype.h"
 
-#ifdef HAVE_TORCH
 #include "features/features.h"
-#endif
 
 #include "common/rand.h"
 #include "modules.h"
@@ -277,9 +275,7 @@ void init(int64_t randomSeed) {
     ::torchcraft::init();
     buildtypes::initialize();
 
-#ifdef HAVE_TORCH
     features::initialize();
-#endif
     installSignalHandlers();
   };
 

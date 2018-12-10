@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "batcher.h"
 #include "common/rand.h"
 #include "metrics.h"
 

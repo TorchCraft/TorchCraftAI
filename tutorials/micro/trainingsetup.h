@@ -9,7 +9,6 @@
 
 #include "cpid/trainer.h"
 #include "model.h"
-#include "reward.h"
 #include <autogradpp/autograd.h>
 #include <string>
 

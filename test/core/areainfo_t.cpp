@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "scenario.h"
+#include "gameutils/scenario.h"
 #include "test.h"
 
 #include "buildorders/base.h"

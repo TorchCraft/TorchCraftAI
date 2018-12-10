@@ -1648,7 +1648,6 @@ void AutoBuildTask::draw(State* state) {
 }
 
 // Cerealization
-#ifdef HAVE_TORCH
 namespace autobuild {
 
 using BuildTypeId = uint32_t;
@@ -1811,5 +1810,4 @@ template void load<cereal::JSONInputArchive>(
     BuildState& stu);
 
 } // namespace autobuild
-#endif // HAVE_TORCH
 } // namespace cherrypi

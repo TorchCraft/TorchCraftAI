@@ -15,9 +15,7 @@
 #include "state.h"
 #include "utils.h"
 
-#ifdef HAVE_TORCH
 #include "models/bos/models.h"
-#endif // HAVE_TORCH
 
 #include <fmt/format.h>
 #include <gflags/gflags.h>
@@ -114,12 +112,8 @@ void StrategyModule::step(State* state) {
 void StrategyModule::stepBuildOrder(State* state) {
   auto board = state->board();
 
-// Build order switching support
-#ifdef HAVE_TORCH
+  // Build order switching support
   auto nextBO = stepBos(state);
-#else // HAVE_TORCH
-  auto nextBO = currentBuildOrder_;
-#endif // HAVE_TORCH
   auto boardBO = board->get<std::string>(Blackboard::kBuildOrderKey);
   if (boardBO != currentBuildOrder_) {
     nextBO = boardBO;
@@ -347,12 +341,10 @@ void StrategyModule::onGameStart(State* state) {
       Blackboard::kOpeningBuildOrderKey, std::string(openingBuildOrder));
   board->post(Blackboard::kBuildOrderKey, std::move(openingBuildOrder));
 
-#ifdef HAVE_TORCH
   bosRunner_ = makeBosRunner(state);
   nextBosForwardFrame_ = 0;
   bosStartTime_ = std::stof(FLAGS_bos_start) * 60;
   bosMapVerified_ = false;
-#endif // HAVE_TORCH
 }
 
 std::string StrategyModule::getOpeningBuildOrder(State* state) {
@@ -497,7 +489,6 @@ std::string StrategyModule::selectBO(
   return selectedName;
 }
 
-#ifdef HAVE_TORCH
 std::unique_ptr<bos::ModelRunner> StrategyModule::makeBosRunner(State* state) {
   if (!state->board()->get<bool>(
           Blackboard::kBuildOrderSwitchEnabledKey, true)) {
@@ -653,7 +644,6 @@ bool StrategyModule::shouldListenToBos(State* state) {
   }
   return false;
 }
-#endif // HAVE_TORCH
 
 std::shared_ptr<ProxyTask> StrategyModule::getProxyTaskWithCommand(
     State* state,

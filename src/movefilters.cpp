@@ -212,7 +212,9 @@ PPositionFilter getCloserTo(std::vector<Position> coordinates) {
         auto distanceToUnit = tgtPos.distanceTo(unit);
         // there are peculiarities here if we very close already ***
         auto distanceToTarget = tgtPos.distanceTo(pos);
-        return (distanceToUnit > kMinDistToTargetPos && distanceToTarget < distanceToUnit);
+        return (
+            distanceToUnit > kMinDistToTargetPos &&
+            distanceToTarget < distanceToUnit);
       },
       [](Unit* unit, Position const& pos, Position tgt) {
         return pos.distanceTo(tgt);

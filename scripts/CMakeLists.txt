@@ -4,6 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 
 ADD_SUBDIRECTORY(botplay)
+ADD_SUBDIRECTORY(defogger)
 IF(WITH_CPIDLIB)
   ADD_SUBDIRECTORY(bo-switch)
   ADD_SUBDIRECTORY(building-placer)

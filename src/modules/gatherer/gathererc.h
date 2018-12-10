@@ -35,15 +35,15 @@ class GathererController : public SharedController {
   std::vector<Unit*> proxies;
   std::vector<Unit*> invaders;
   std::vector<Unit*> bastions;
-  
+
   /// True if we have ever been proxied (an enemy attempted to build structures
   /// in or near our base
   bool wasProxied = false;
-  
+
   /// Decide what to do with a worker this frame.
   void micro(State*, Unit* worker, Unit* resource);
-  
-  void gather(State*, Unit* worker, Unit* resource, bool dropResources=false);  
+
+  void gather(State*, Unit* worker, Unit* resource, bool dropResources = false);
   void flee(State*, Unit* worker, Unit* resource);
   void chase(State*, Unit* worker, Unit* target);
   void attack(State*, Unit* worker, Unit* target);

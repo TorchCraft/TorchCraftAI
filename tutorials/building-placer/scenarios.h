@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "scenarioprovider.h"
+#include "gameutils/scenarioprovider.h"
 
 namespace cherrypi {
 

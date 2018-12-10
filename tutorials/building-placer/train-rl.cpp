@@ -10,7 +10,7 @@
 #include "scenarios.h"
 
 #include "fsutils.h"
-#include "openbwprocess.h"
+#include "gameutils/openbwprocess.h"
 #include "player.h"
 #include "upcstorage.h"
 #include "utils.h"

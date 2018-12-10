@@ -13,9 +13,7 @@
 #include <type_traits>
 #include <vector>
 
-#ifdef HAVE_TORCH
 #include <autogradpp/autograd.h>
-#endif // HAVE_TORCH
 
 #include "buildtype.h"
 #include "cherrypi.h"
@@ -251,7 +249,6 @@ std::unordered_set<Unit*> findNearbyEnemyUnits(State* state, Units&& units) {
   return nearby;
 }
 
-#ifdef HAVE_TORCH
 // Returns argmax (x,y) and value in walktiles
 inline std::tuple<int, int, float> argmax(torch::Tensor const& pos, int scale) {
   if (!pos.defined() || pos.dim() != 2) {
@@ -275,7 +272,6 @@ inline std::tuple<int, int, float> argmax(torch::Tensor const& pos, int scale) {
 
   return std::make_tuple(xmax * scale, ymax * scale, max);
 }
-#endif // HAVE_TORCH
 
 template <typename T>
 inline void inplace_flat_vector_add(

@@ -166,7 +166,6 @@ bool SquadCombatModule::formNewSquad(
     task = std::make_shared<SquadTask>(
         sourceUpcId, sourceUpc, units, pos.x, pos.y, &enemyStates_, &agents_);
     VLOG(2) << "Targeting single position at " << pos.x << "," << pos.y;
-#ifdef HAVE_TORCH
   } else if (sourceUpc->position.is<torch::Tensor>()) {
     auto argmax = utils::argmax(
         sourceUpc->position.get_unchecked<torch::Tensor>(), sourceUpc->scale);
@@ -175,7 +174,6 @@ bool SquadCombatModule::formNewSquad(
     task = std::make_shared<SquadTask>(
         sourceUpcId, sourceUpc, units, x, y, &enemyStates_, &agents_);
     VLOG(2) << "Targeting position argmax at " << x << "," << y;
-#endif // HAVE_TORCH
   } else {
     VLOG(0) << "No targets to attack in " << upcString;
     return false;

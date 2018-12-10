@@ -30,7 +30,6 @@
 #include "micromodule.h"
 #include "model.h"
 #include "rule_module.h"
-#include "scenarios.h"
 
 namespace {
 
@@ -69,30 +68,25 @@ void runEnvironmentInThread(
   while (!state.finish) {
     std::shared_ptr<MicroModule> microModule;
     try {
-      // Load the map only once.
-      // Note that this means we can't train
-      // across scenarios with different maps
-      auto mapRelative = getScenario(FLAGS_scenario).map;
-      auto mapPath = std::string(FLAGS_map_path_prefix);
-      auto mapAbsolute = mapPath + "/" + mapRelative;
       auto provider = std::make_shared<MicroFixedScenario>(
           FLAGS_max_frames - 1,
-          SpawnList(),
-          SpawnList(),
-          mapAbsolute,
+          FLAGS_scenario,
           FLAGS_enable_gui && threadId == 0);
+      std::string replayFile = "";
       auto respawn = [&]() {
-        auto scenario = getScenario(FLAGS_scenario);
-        provider->setSpawns(scenario.allyList, scenario.enemyList);
+        provider->setSpawns(FLAGS_scenario);
         return provider->spawnNextScenario(
             [&](BasePlayer* bot) {
               bot->addModule(Module::make<TopModule>());
               bot->addModule(
                   Module::make<MicroModule>(
-                      threadId, state.training, trainer, scenario.reward));
+                      threadId, state.training, trainer, provider->getReward()));
               bot->addModule(Module::make<UPCToCommandModule>());
               bot->setLogFailedCommands(false);
               bot->setRealtimeFactor(FLAGS_realtime);
+              if (!replayFile.empty()) {
+                bot->dumpTraceAlongReplay(replayFile);
+              }
             },
             [&](BasePlayer* bot) {
               bot->addModule(Module::make<TopModule>());
@@ -102,11 +96,35 @@ void runEnvironmentInThread(
               bot->setRealtimeFactor(-1);
             });
       };
-
       int nsteps = 0;
+      auto computeReplayPath = [&]() -> std::string {
+        if ((rand() % std::min(FLAGS_dump_replays_rate, 1UL)) != 0) {
+          return "";
+        }
+        if (FLAGS_dump_replays == "never") {
+          return "";
+        }
+        else if (FLAGS_dump_replays == "eval" && !state.testing) {
+          return "";
+        }
+        else if (FLAGS_dump_replays == "train" && state.testing) {
+          return "";
+        }
+        std::string folder = FLAGS_results + "/replays-"
+            + (state.testing ? "eval" : "train")
+            + "/upd" + std::to_string(state.numUpdates.load());
+        fsutils::mkdir(folder);
+        return folder
+            + "/rank" + std::to_string(cpid::distributed::globalContext()->rank)
+            + "_thread" + std::to_string(threadId)
+            + "_step" + std::to_string(nsteps)
+            + ".rep";
+      };
       std::shared_ptr<BasePlayer> p1, p2;
       while (!state.finish) {
         provider->cleanScenario();
+        replayFile = computeReplayPath();
+        provider->setReplay(replayFile);
         auto setup = respawn();
         p1 = setup.first;
         p2 = setup.second;
@@ -213,6 +231,7 @@ int run(int argc, char** argv) {
   VLOG(0) << fmt::format("Resume: {}", FLAGS_resume);
   VLOG(0) << fmt::format("Evaluate: {}", FLAGS_evaluate);
 
+  cherrypi::MicroFixedScenario::setMapPathPrefix(FLAGS_map_path_prefix);
   std::string resultsDir = FLAGS_results;
   std::string resultsJSON = fmt::format(
       "{}/metrics-rank-{}.json", resultsDir, dist::globalContext()->rank);
@@ -384,7 +403,7 @@ int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
   if (FLAGS_list_scenarios) {
-    auto scenarioNames = microbattles::listScenarios();
+    auto scenarioNames = cherrypi::MicroFixedScenario::listScenarios();
     for (auto& scenarioName : scenarioNames) {
       std::cout << scenarioName << std::endl;
     }

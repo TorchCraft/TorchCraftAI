@@ -32,3 +32,5 @@ DECLARE_bool(resume);
 DECLARE_bool(evaluate);
 DECLARE_bool(gpu);
 DECLARE_bool(sample_command);
+DECLARE_string(dump_replays);
+DECLARE_uint64(dump_replays_rate);

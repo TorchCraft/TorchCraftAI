@@ -73,7 +73,7 @@ class SquadTask : public Task {
 
   /// Stateful information about enemy units
   std::unordered_map<Unit const*, EnemyState>* enemyStates_;
-  
+
   /// Stateful information about our units
   std::unordered_map<Unit const*, Agent>* agents_;
 
@@ -128,7 +128,7 @@ class SquadTask : public Task {
 
   void pickTargets(State* state);
   void formation(State* state);
-  
+
   std::vector<std::shared_ptr<UPCTuple>> makeUPCs(State* state);
 
   bool isIrrelevantTarget(Unit const* u) const;

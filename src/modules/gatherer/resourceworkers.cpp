@@ -67,7 +67,7 @@ Unit* ResourceWorkers::getResource(Unit* worker) const {
   return utils::contains(resourceByWorker, worker) ? resourceByWorker.at(worker)
                                                    : nullptr;
 }
-  
+
 /// How many workers are assigned to this resource?
 size_t ResourceWorkers::countWorkers(Unit* resource) const {
   return utils::contains(workersByResource, resource)
