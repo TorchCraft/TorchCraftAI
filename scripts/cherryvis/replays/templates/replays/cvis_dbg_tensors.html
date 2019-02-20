@@ -1,0 +1,255 @@
+<li>
+    <a href=".tensors-view" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fas fa-square-root-alt"></i>
+        Tensors
+    </a>
+    <div class="tensors-view collapse">
+      <ul class="nav nav-tabs" id="tensors-tabs-nav" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="tensors-summary-tab" data-toggle="tab" href="#tensors-summary" role="tab" aria-controls="tensors-summary" aria-selected="true">Summaries</a>
+        </li>
+        <li>
+          <a class="nav-link" id="tensors-load-tab" data-toggle="tab" href="#tensors-load" role="tab" aria-controls="tensors-load" aria-selected="false">Heatmaps</a>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="tensors-tabs">
+        <!-- LOAD HEATMAPS -->
+        <div class="tab-pane fade" id="tensors-load" role="tabpanel">
+          <ul class="list-unstyled" id="cdbHeatmapsView">
+            <li>
+              <div class="sidebar-item-container">
+                <div class="form-group row">
+                  <input type="text" class="form-control" id="cdbHeatmapsSearch" placeholder="Search in heatmaps">
+                </div>
+                <div class="cvis-hide-when-disabled">
+                  <span class="cvis-num-results"></span> results (<span class="cvis-num-results-displayed"></span> displayed)
+                </div>
+              </div>
+              <div class="sidebar-item-container">
+                <div class="row">
+                  <div class="col-md-4">FIRST FRAME</div>
+                  <div class="col-md-8">NAME</div>
+                </div>
+              </div>
+            </li>
+            <li class="cvis-has-frame-id template collapse">
+              <div class="sidebar-item-container row">
+                <div class="col-md-4">
+                  <a class="cvis-link-frame heatmap-first-dump-frame"></a>
+                </div>
+                <div class="col-md-5">
+                  <p class="tensor-name"></p>
+                </div>
+                <div class="col-md-3">
+                  <button type="button" class="btn btn-primary btn-sm load-heatmap-button">Load</button>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- TENSORS SUMMARIES -->
+        <div class="tab-pane fade show active" id="tensors-summary" role="tabpanel">
+          <ul class="list-unstyled" id="cdbTensorsSummariesList">
+            <li>
+              <div class="sidebar-item-container">
+                <div class="form-group row">
+                  <input type="text" class="form-control" id="cdbTensorsSummariesSearch" placeholder="Search in tensor summaries">
+                </div>
+                <div class="cvis-hide-when-disabled">
+                  <span class="cvis-num-results"></span> results (<span class="cvis-num-results-displayed"></span> displayed)
+                    within <span class="summaries-current-frame cvis-link-frame">f???</span> summary.
+                </div>
+              </div>
+            </li>
+            <li class="template collapse">
+              <div class="row lighten-when-hover sidebar-item-container">
+                <div class="col-sm-6">
+                  <p class="summary-name tensor-name">TENSOR_NAME</p>
+                </div>
+                <div class="col-sm-4 summary-shape tensor-value">
+                  [??]
+                </div>
+                <div class="col-sm-2">
+                  <button type="button" class="btn btn-secondary btn-sm see-more"><i class="fas fa-info"></i></button>
+                </div>
+              </div>
+              <ul class="list-unstyled tensor-append-summary collapse see-more-target">
+              </ul>
+            </li>
+          </ul>
+        </div>
+          <!-- LOADED HEATMAP TAB -->
+        <div class="tab-pane fade template" id="tensors-details" role="tabpanel">
+          <ul class="list-unstyled">
+            <li>
+              <div class="sidebar-item-container">
+                <div class="row">
+                  <div class="col-sm-12">Dump frames</div>
+                </div>
+                <ul class="list-unstyled">
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-6">Previous value at</div>
+                      <div class="col-sm-6 cvis-has-frame-id"><a class="cvis-link-frame prev-frame"></a></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-6">Current overlay</div>
+                      <div class="col-sm-6 cvis-has-frame-id"><a class="cvis-link-frame current-frame"></a></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-6">Next value at</div>
+                      <div class="col-sm-6 cvis-has-frame-id"><a class="cvis-link-frame next-frame"></a></div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <li>
+              <div class="sidebar-item-container">
+                <div class="row">
+                  <div class="col-sm-12">Current overlay</div>
+                </div>
+                <ul class="list-unstyled tensor-append-summary">
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-4">
+                        Cursor pos (px)
+                      </div>
+                      <div class="col-sm-4 overlay-cursorpxx tensor-value">
+                        ??
+                      </div>
+                      <div class="col-sm-4 overlay-cursorpxy tensor-value">
+                        ??
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-4">
+                        Cursor value
+                      </div>
+                      <div class="col-sm-8 overlay-cursorval tensor-value">
+                        ??
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-4">
+                        Shape
+                      </div>
+                      <div class="col-sm-8 summary-shape tensor-value">
+                        ??
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <li>
+              <div class="sidebar-item-container">
+                <div class="row">
+                  <div class="col-sm-12">Normalization</div>
+                </div>
+                <ul class="list-unstyled">
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-5">Center on <span class="overlay-meanshift-val"></span>+mean</div>
+                      <div class="col-sm-1"><input class="form-check-input overlay-substract-mean" type="checkbox" checked></div>
+                      <div class="col-sm-6">
+                        <input type="range" class="overlay-meanshift form-control-range" min="-1" max="1" step="0.02" value="0">
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-5">Divide by (<span class="overlay-stddevm-val"></span>*stddev)</div>
+                      <div class="col-sm-1"><input class="form-check-input overlay-divide-stddev" type="checkbox" checked></div>
+                      <div class="col-sm-6">
+                        <input type="range" class="overlay-stddevm form-control-range" min="0.1" max="20" step="0.02" value="3">
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <li>
+              <div class="sidebar-item-container">
+                <div class="row">
+                  <div class="col-sm-12">Display settings</div>
+                </div>
+                <ul class="list-unstyled">
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-8">Use fast rendering (increases FPS)</div>
+                      <div class="col-sm-4"><input class="form-check-input overlay-fast-rendering" type="checkbox"></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-8">Overlay alpha</div>
+                      <div class="col-sm-4">
+                        <input type="range" class="overlay-alpha disable-if-fast-rendering form-control-range" min="0" max="100" value="25">
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-8">Game saturation under overlay</div>
+                      <div class="col-sm-4">
+                        <input type="range" class="overlay-saturation disable-if-fast-rendering form-control-range" min="0" max="100" value="75">
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="collapse">
+      <ul id="tensor-summary-items">
+        <li>
+          <div class="row sidebar-item-container">
+            <div class="col-sm-4">Min / Max</div>
+            <div class="col-sm-4 summary-min tensor-value">??</div>
+            <div class="col-sm-4 summary-max tensor-value">??</div>
+          </div>
+        </li>
+        <li>
+          <div class="row sidebar-item-container">
+            <div class="col-sm-4">Mean / Std</div>
+            <div class="col-sm-4 summary-mean tensor-value">??</div>
+            <div class="col-sm-4 summary-stddev tensor-value">??</div>
+          </div>
+        </li>
+        <!--
+        <li>
+          <div class="row sidebar-item-container">
+            <div class="col-sm-4">median / abs_median</div>
+            <div class="col-sm-4 summary-median tensor-value">??</div>
+            <div class="col-sm-4 summary-absmedian tensor-value">??</div>
+          </div>
+        </li>
+        -->
+        <li>
+          <div class="row sidebar-item-container">
+            <div class="col-sm-12 summary-histogram">
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+</li>

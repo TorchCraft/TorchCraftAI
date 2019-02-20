@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>List replays - CherryVis</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href='{% static "lib/dagview.css" %}'>
+    <link rel="stylesheet" href='{% static "replays/layout.css" %}'>
+    <link rel="stylesheet" href='{% static "replays/viewer/infobar.css" %}'>
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.4.1/js/all.js" integrity="sha384-L469/ELG4Bg9sDQbl0hvjMq8pOcqFgkSpwhwnslzvVVGpDjYJ6wJJyYjvG3u8XW7" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="hide-when-game-on content-padding">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand text-light">CherryVis</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="container-fluid">
+              <div class="collapse navbar-collapse" id="mpq_status">
+                  <ul class="nav navbar-nav ml-auto">
+                      <li class="nav-item text-warning">
+                          <span id="mpq_status_text"></span>
+                      </li>
+                      <li class="nav-item" style="margin:10px">
+                      </li>
+                      <li class="nav-item text-warning active">
+                        <strong id="mpq_status_title"></strong>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="wrapper">
+        <!-- Page Content  -->
+        <div class="content">
+          <div class="hide-when-game-on content-padding">
+            <div class="mpq-setup-hide-when-done mpq-setup container collapse">
+              <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">First time setup</h4>
+                <p>Please select <strong>StarDat.mpq</strong>, <strong>BrooDat.mpq</strong> and <strong>patch_rt.mpq</strong> from your StarCraft directory.</p>
+                <p>You will only have to do it once [*]</p>
+                <hr>
+                <p class="mb-0"><strong>[*]</strong> ... technically once per domain name (localhost != 127.0.0.1) per browser</p>
+              </div>
+              <p></p>
+              <div id="mpq_specify">
+        				<input id="mpq_files" type="file" accept=".mpq" multiple />
+        				<ul id="list">
+        				</ul>
+        			</div>
+            </div>
+            <div class="show-when-download-failed container collapse">
+              <div class="alert alert-danger" role="alert">
+                <strong>Woops!</strong> Unable to fetch the replay - double check that the server is running and reload the page.
+              </div>
+            </div>
+            <div class="mpq-setup-show-when-done container list-of-replays-main-page collapse">
+              <h2>Select a replay from the list below</h2>
+              <ul class="list-group selectReplayMenu">
+                <li class="list-group-item form-group justify-content-between align-items-center">
+                  <input type="text" class="form-control" id="searchReplaysPattern" placeholder="Replays path (or pattern with wildcards)">
+                </li>
+                <li class="list-group-item list-group-item-light">
+                  Displaying <span class="cvis-replays-display-count">0</span>/<span class="cvis-replays-total">0</span> replays for <strong class="cvis-search-pattern">(loading...)</strong>
+                </li>
+                <div class='selectReplayMenuTemplate' style="display: none">
+                  <a href="#" class="cvis-replay-link">
+                    <button type="button" class="list-group-item w-100 d-flex justify-content-between align-items-center list-group-item-primary">
+                      <span class="cvis-replay-long"></span>
+                      <span class="badge badge-pill badge-light cvis-replay-time"></span>
+                    </button>
+                  </a>
+                </div>
+                <div data-replay='*'>
+                  <button type="button" class="list-group-item w-100 d-flex justify-content-between align-items-center list-group-item-primary">
+                    Loading...
+                  </button>
+                </div>
+              </ul>
+            </div>
+          </div>
+          <div class="no-content-padding flex-basic-row show-when-game-on collapse">
+              <!-- Game display -->
+              <div class="game-and-controls">
+                {% include "replays/game_area.html" %}
+                <!-- Game resources and time control -->
+                {% include "replays/resources_and_time_controls.html" %}
+              </div>
+              {% include "replays/cvis_dbg.html" %}
+          </div>
+        </div>
+    </div>
+    <div id="footer-container">
+    </div>
+
+    <!-- jQuery CDN -->
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js?ver=1'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script src="https://d3js.org/d3.v3.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.0.0/build/d3-flextree.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+      var cvis_autostart_replay = "{{ rep|escapejs }}";
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    </script>
+    <!-- OpenBW replay viewer -->
+    <script src='{% static "replays/viewer/start.js" %}'></script>
+    <script async defer src='{% static "replays/viewer/test.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_utils.js" %}'></script>
+
+    <script src='{% static "replays/cdb/cvis_dbg_lib.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg_drawcommands.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg_blackboard.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg_logs.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg_logs_attachments.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg_unitslist.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg_matching.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg_tasks.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg_trees.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg_heatmaps.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg_tensors_summaries.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg_values_graph.js" %}'></script>
+    <script src='{% static "replays/cdb/cvis_dbg.js" %}'></script>
+
+    <script src='{% static "replays/viewer/infobar.js" %}'></script>
+    <script src='{% static "lib/domlist.js" %}'></script>
+    <script src='{% static "lib/urlutils.js" %}'></script>
+    <script src='{% static "replays/available_replays.js" %}'></script>
+    <script src='{% static "replays/viewer/foundation_2_6_1.js" %}'></script>
+    <script src='{% static "replays/viewer/foundation_2_6_1.js" %}'></script>
+    <script src='{% static "replays/viewer/wp-embed_4_8_7.js" %}'></script>
+
+    <script src="{% static "lib/dagview.js" %}" type="text/javascript"></script>
+</body>
+
+</html>
