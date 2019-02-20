@@ -42,7 +42,7 @@ class Work {
   Work(std::function<void()> onFinish);
   Work(Work const&) = delete;
   Work(Work&&);
-  ~Work();
+  ~Work() noexcept(false);
 
   // Checks if request has completed. Non-blocking operation.
   bool isCompleted();
@@ -68,20 +68,20 @@ class Work {
   void synchronize();
 
   // Waits until request completes. Blocking operation.
-  // Returns false if the work completed with an exception.
+  // Throws if the work completed with an exception.
   //
   // Functionally equivalent to:
   //
   //   while (!isCompleted()) { /* nop */ }
   //   auto success = isSuccess();
-  //   if (success) { synchronize(); }
+  //   if (!success) { std::rethrow_exception(exception()); }
   //   return success;
   //
-  bool wait();
+  void wait();
 
   // Returns exception if wait() returned false.
   // This will return the first exception encountered.
-  const std::exception& exception() const;
+  const std::exception_ptr exception() const;
 
  private:
   Work() = default;
@@ -97,22 +97,25 @@ class Work {
 // Let's provide some type-safety. We can only send types that has a
 // torch::Dtype
 template <typename T>
-using IsTorchDType =
-    typename std::enable_if_t<std::is_same<T, uint8_t>::value || // Byte
-                              std::is_same<T, char>::value || // Char
-                              std::is_same<T, int8_t>::value || // Char
-                              std::is_same<T, int16_t>::value || // Short
-                              std::is_same<T, int32_t>::value || // Int
-                              std::is_same<T, int64_t>::value || // Long
-                              std::is_same<T, float>::value ||
-                              std::is_same<T, double>::value>;
+using IsTorchDType = typename std::enable_if_t<
+    std::is_same<T, uint8_t>::value || // Byte
+    std::is_same<T, char>::value || // Char
+    std::is_same<T, int8_t>::value || // Char
+    std::is_same<T, int16_t>::value || // Short
+    std::is_same<T, int32_t>::value || // Int
+    std::is_same<T, int64_t>::value || // Long
+    std::is_same<T, float>::value || std::is_same<T, double>::value>;
 
 // The Context contains 2 instantiations of the C10D
 // processgroup, and will automatically reroute tensors to NCCL or Gloo,
 // depending on whether we use CPU or GPU
 class Context {
  public:
-  Context(std::shared_ptr<Store> store, int rank, int size);
+  Context(
+      std::shared_ptr<Store> store,
+      int rank,
+      int size,
+      std::chrono::milliseconds timeout = std::chrono::seconds(1000));
 
   int rank;
   int size;
@@ -136,6 +139,8 @@ class Context {
   template <typename T, IsTorchDType<T>* = nullptr>
   Work allgather(T* out, torch::Tensor in);
   Work allgather(torch::Tensor, torch::Tensor);
+
+  Work barrier();
 
  private:
   std::shared_ptr<ProcessGroup> glooPG_;
@@ -163,6 +168,8 @@ Work allgather(T* out, T* in, int64_t s);
 template <typename T, IsTorchDType<T>* = nullptr>
 Work allgather(T* out, torch::Tensor in);
 Work allgather(torch::Tensor, torch::Tensor);
+
+Work barrier();
 
 void init();
 /// Sets CUDA device to the local (if available) or MPI rank, both modulo the

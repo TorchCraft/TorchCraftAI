@@ -104,4 +104,4 @@ class ABBOzvz12poolhydras : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzvz12poolhydras, UpcId, State*, Module*);
-}
+} // namespace cherrypi

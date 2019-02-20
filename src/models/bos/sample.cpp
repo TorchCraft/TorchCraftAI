@@ -303,8 +303,8 @@ Sample::Sample(
 
 torch::Tensor Sample::featurize(BosFeature feature, torch::Tensor buffer)
     const {
-  auto destTensor = [&](
-      at::IntList sizes, torch::TensorOptions options) -> torch::Tensor {
+  auto destTensor = [&](at::IntList sizes,
+                        torch::TensorOptions options) -> torch::Tensor {
     if (!buffer.defined()) {
       return torch::zeros(sizes, options);
     } else {
@@ -463,6 +463,9 @@ std::map<int, autobuild::BuildState> Sample::simulateAbbo(
     State* state,
     std::string const& buildOrder,
     std::vector<int> const& frameOffsets) {
+  if (!std::is_sorted(frameOffsets.begin(), frameOffsets.end())) {
+    throw std::runtime_error("Frame offsets must be sorted for simulateAbbo");
+  }
   std::map<int, autobuild::BuildState> states;
 
   auto task = buildorders::createTask(kRootUpcId, buildOrder, state, nullptr);
@@ -472,11 +475,11 @@ std::map<int, autobuild::BuildState> Sample::simulateAbbo(
   for (int t : frameOffsets) {
     task->simEvaluateFor(st, t - o);
     states[t] = st;
-    o += t;
+    o = t;
   }
 
   return states;
 }
 
-} // namespcae bos
-} // namespcae cherrypi
+} // namespace bos
+} // namespace cherrypi

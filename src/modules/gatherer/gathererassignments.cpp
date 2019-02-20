@@ -289,7 +289,6 @@ void GathererAssignments::step(State* state) {
       return newGasDistance(a) < newGasDistance(b);
     }
     return workers[a].framesSinceUpdate > workers[b].framesSinceUpdate;
-
   };
   std::vector<Unit*> workersToUpdate;
   for (auto& workerPair : workers) {

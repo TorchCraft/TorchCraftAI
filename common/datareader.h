@@ -219,8 +219,9 @@ class DataReader {
   /// This function will be available for data readers without transforms.
   template <typename FF = F>
   std::unique_ptr<DataReaderIterator<T>> iterator(
-      typename std::enable_if_t<std::is_same<FF, DataReader_NoTransform>::value,
-                                bool> = true) {
+      typename std::enable_if_t<
+          std::is_same<FF, DataReader_NoTransform>::value,
+          bool> = true) {
     return std::make_unique<DataReaderIterator<T>>(
         paths_, numThreads_, batchSize_, pathPrefix_, init_);
   }

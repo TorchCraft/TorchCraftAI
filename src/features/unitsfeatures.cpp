@@ -55,12 +55,12 @@ UnitAttributeFeaturizer::Data UnitAttributeFeaturizer::extract(
   } else {
     data.boundingBox = boundingBox;
   }
-  if (units.empty()) {
-    return data;
-  }
 
   data.positions = torch::zeros({int(units.size()), 2}, torch::kI32);
   data.data = torch::zeros({int(units.size()), numChannels});
+  if (units.empty()) {
+    return data;
+  }
 
   FeaturePositionMapper mapper(data.boundingBox, state->mapRect());
   auto& jr = *jitter.get();

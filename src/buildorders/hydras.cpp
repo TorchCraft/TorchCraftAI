@@ -80,4 +80,4 @@ class ABBOhydras : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOhydras, UpcId, State*, Module*);
-}
+} // namespace cherrypi

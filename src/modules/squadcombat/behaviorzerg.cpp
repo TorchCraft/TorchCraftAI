@@ -5,11 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "behavior.h"
 #include "agent.h"
+#include "behavior.h"
 #include "common/rand.h"
 #include "fmt/format.h"
 #include "squadtask.h"
+#include <autogradpp/autograd.h>
 
 namespace cherrypi {
 
@@ -109,8 +110,8 @@ MicroAction BehaviorAsZergling::onPerform(Agent& agent) {
   }
 
   auto targetDistanceBB = utils::distanceBB(unit, target);
-  auto canMoveInDirection = [&](
-      Vec2 dir, float distance = DFOASG(4.0f * 2, 4.0f)) {
+  auto canMoveInDirection = [&](Vec2 dir,
+                                float distance = DFOASG(4.0f * 2, 4.0f)) {
     dir = dir.normalize();
     for (float d = 4.0f; d <= distance; d += 4.0f) {
       Position pos = Position(unit->posf() + dir * d);
@@ -581,9 +582,8 @@ MicroAction BehaviorAsLurker::onPerform(Agent& agent) {
                buildings.begin(), buildings.end(), [&](Unit* const neighbor) {
                  return utils::distance(Position(neighbor), Position(lurker)) <
                      attackRange ||
-                     std::addressof(
-                         state->areaInfo().getArea(Position(neighbor))) ==
-                     std::addressof(lurkerArea);
+                     std::addressof(state->areaInfo().getArea(
+                         Position(neighbor))) == std::addressof(lurkerArea);
                });
   }();
 
@@ -607,9 +607,11 @@ MicroAction BehaviorAsLurker::onPerform(Agent& agent) {
       // Prepared to face consequences of unburrowing
       (!threatened || agent.wantsToFight)
       // Has motivation to unburrow
-      && (framesBeforeTargetIsInRange >
-              kLurkerBurrowFrames + kLurkerUnburrowFrames ||
-          farFromTarget);
+      && (!targetsInRange ||
+          (detected && lurker->cd() > lurker->maxCdGround() / 2)) &&
+      (framesBeforeTargetIsInRange >
+           kLurkerBurrowFrames + kLurkerUnburrowFrames ||
+       farFromTarget);
 
   bool shouldBurrow =
       !burrowed && !mustNotBurrow && !mustBeUnburrowed && wantToBurrow;
@@ -695,8 +697,8 @@ MicroAction BehaviorAsHydralisk::onPerform(Agent& agent) {
     return false;
   };
 
-  auto canMoveInDirection = [&](
-      Vec2 dir, float distance = DFOASG(4.0f * 2, 4.0f)) {
+  auto canMoveInDirection = [&](Vec2 dir,
+                                float distance = DFOASG(4.0f * 2, 4.0f)) {
     dir = dir.normalize();
     for (float d = 4.0f; d <= distance; d += 4.0f) {
       Position pos = Position(unit->posf() + dir * d);
@@ -759,6 +761,88 @@ MicroAction BehaviorAsHydralisk::onPerform(Agent& agent) {
       return pass;
     }
     return doAction(agent.moveTo(targetPos));
+  }
+  return pass;
+}
+
+MicroAction BehaviorAsDefiler::onPerform(Agent& agent) {
+  auto* defiler = agent.unit;
+
+  if (defiler->type != buildtypes::Zerg_Defiler) {
+    return pass;
+  }
+
+  // The cast range is 9, but we don't necessarily want to dive
+  double range = 4 * (agent.wantsToFight ? 7 : 5);
+  auto plagueValue = [&](Unit* const target) {
+    if (target->plagued())
+      return 0.0;
+    if (target->unit.max_health <= 0)
+      return 0.0;
+    return target->type->subjectiveValue * target->unit.health /
+        (target->unit.max_health + target->unit.max_shield) *
+        (target->isEnemy ? 1.0 : -1.0) * range /
+        std::max(range, double(utils::distance(defiler, target)));
+  };
+  auto swarmValue = [&](Unit* const target) {
+    if (target->underDarkSwarm())
+      return 0.0;
+    if (!target->type->restrictedByDarkSwarm)
+      return 0.0;
+
+    return target->type->subjectiveValue * (target->isEnemy ? 1.0 : -1.0) *
+        range / std::max(range, double(utils::distance(defiler, target)));
+  };
+  auto consumeValue = [&](Unit* const target) {
+    if (!target->isMine)
+      return -1.;
+    double typeValue = 0;
+    if (target->type == buildtypes::Zerg_Zergling) {
+      typeValue = 1.0;
+    }
+    if (target->type == buildtypes::Zerg_Overlord) {
+      typeValue = 0.1;
+    }
+    if (target->type == buildtypes::Zerg_Drone) {
+      typeValue = 0.1;
+    }
+    if (target->type == buildtypes::Zerg_Hydralisk) {
+      typeValue = 0.1;
+    }
+    if (typeValue <= 0) {
+      return typeValue;
+    }
+    return typeValue / std::max(1.f, utils::distance(target, agent.unit));
+  };
+
+  auto energy = agent.unit->unit.energy;
+  if (energy >= 150) {
+    auto upc = agent.tryCastSpellOnArea(
+        buildtypes::Plague,
+        16,
+        16,
+        plagueValue,
+        3 * buildtypes::Zerg_Zergling->subjectiveValue);
+    if (upc)
+      return doAction(upc);
+  }
+  if (energy >= 100) {
+    auto upc = agent.tryCastSpellOnArea(
+        buildtypes::Dark_Swarm,
+        24,
+        24,
+        swarmValue,
+        3 * buildtypes::Zerg_Zergling->subjectiveValue,
+        [&](auto p) {
+          return p.project(defiler->pos(), agent.wantsToFight ? 16 : 8);
+        });
+    if (upc)
+      return doAction(upc);
+  }
+  if (energy < 195) {
+    auto upc = agent.tryCastSpellOnUnit(buildtypes::Consume, consumeValue, 0.0);
+    if (upc)
+      return doAction(upc);
   }
 
   return pass;

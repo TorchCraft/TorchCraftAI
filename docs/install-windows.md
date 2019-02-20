@@ -49,6 +49,8 @@ xcopy 3rdparty\pytorch\torch\lib\c10.dll $WORKDIR
 xcopy 3rdparty\pytorch\torch\lib\torch.dll $WORKDIR
 xcopy 3rdparty\pytorch\torch\lib\caffe2.dll $WORKDIR
 
+PyTorch will run most performantly using the environment variable `OMP_NUM_THREADS=1`. If you have no specific need for this value to differ, we recommend setting this as the system default.
+
 #### If you have an NVIDIA GPU
 xcopy 3rdparty\pytorch\torch\lib\caffe2_gpu.dll $WORKDIR
 

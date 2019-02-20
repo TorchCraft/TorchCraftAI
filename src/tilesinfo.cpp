@@ -42,8 +42,8 @@ TilesInfo::TilesInfo(State* state) : state_(state) {
       bool entirelyWalkable = true;
       for (int suby = 0; suby != tc::BW::XYWalktilesPerBuildtile; ++suby) {
         for (int subx = 0; subx != tc::BW::XYWalktilesPerBuildtile; ++subx) {
-          if (!tcstate->walkable_data[(t.y + suby) * tcstate->map_size[0] +
-                                      (t.x + subx)]) {
+          if (!tcstate->walkable_data
+                   [(t.y + suby) * tcstate->map_size[0] + (t.x + subx)]) {
             entirelyWalkable = false;
             break;
           }
@@ -115,9 +115,9 @@ void TilesInfo::postUnitsUpdate() {
       const bool wasCreep = u->type == buildtypes::Zerg_Sunken_Colony ||
           u->type == buildtypes::Zerg_Spore_Colony;
       const int firstSpewFrame = (u->completed() || wasHatch || wasCreep)
-          ? u->firstSeen + ((isHatch || wasHatch)
-                                ? buildtypes::Zerg_Hatchery->buildTime
-                                : buildtypes::Zerg_Creep_Colony->buildTime)
+          ? u->firstSeen +
+              ((isHatch || wasHatch) ? buildtypes::Zerg_Hatchery->buildTime
+                                     : buildtypes::Zerg_Creep_Colony->buildTime)
           : frame + u->remainingBuildTrainTime;
 
       if (frame - firstSpewFrame > 24 * 60 * 2) {
@@ -159,10 +159,12 @@ void TilesInfo::postUnitsUpdate() {
             tile->expectsCreepUpdated_ = frame;
             if (VLOG_IS_ON(1)) {
               const int radius = 1 +
-                  int(3 * (1.0 - utils::clamp(
-                                     (tile->expectsCreepFrame_ - frame) / 240.0,
-                                     0.0,
-                                     1.0)));
+                  int(3 *
+                      (1.0 -
+                       utils::clamp(
+                           (tile->expectsCreepFrame_ - frame) / 240.0,
+                           0.0,
+                           1.0)));
               utils::drawCircle(
                   state_,
                   {tile->x + 2, tile->y + 2},

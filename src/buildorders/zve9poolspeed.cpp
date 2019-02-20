@@ -30,8 +30,9 @@ class ABBOzve9poolspeed : public ABBOBase {
         ? 0
         : std::max(0, 100 - int(bst.gas));
     gasDrones = utils::clamp(gasNeeded / 8, 0, std::max(0, myDroneCount - 3));
-    shouldScout = shouldScout || (countPlusProduction(bst, Zerg_Drone) >= 9 &&
-                                  isInProduction(bst, Zerg_Spawning_Pool));
+    shouldScout = shouldScout ||
+        (countPlusProduction(bst, Zerg_Drone) >= 9 &&
+         isInProduction(bst, Zerg_Spawning_Pool));
     postBlackboardKey("GathererMinGasGatherers", gasDrones);
     postBlackboardKey("GathererMaxGasGatherers", gasDrones);
     postBlackboardKey(Blackboard::kMinScoutFrameKey, shouldScout ? 1 : 0);
@@ -39,7 +40,12 @@ class ABBOzve9poolspeed : public ABBOBase {
   }
 
   virtual void buildStep2(BuildState& bst) override {
-    buildN(Zerg_Hatchery, (1 + countPlusProduction(bst, Zerg_Drone) / 3));
+    int hatcheryCount = 1 + countPlusProduction(bst, Zerg_Drone) / 3;
+    if (enemyRace == +tc::BW::Race::Zerg) {
+      buildN(Zerg_Hatchery, hatcheryCount);
+    } else {
+      takeNBases(bst, hatcheryCount);
+    }
     build(Zerg_Zergling);
     upgrade(Metabolic_Boost);
     buildN(Zerg_Zergling, 12);
@@ -60,4 +66,4 @@ class ABBOzve9poolspeed : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzve9poolspeed, UpcId, State*, Module*);
-}
+} // namespace cherrypi

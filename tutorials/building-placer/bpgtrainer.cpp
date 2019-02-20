@@ -20,14 +20,11 @@ float constexpr kImportanceRatioTruncation = 1.0f;
 namespace cpid {
 namespace dist = cpid::distributed;
 
-ag::Variant BPGTrainer::forward(
-    ag::Variant inp,
-    GameUID const& gameUID,
-    EpisodeKey const& key) {
+ag::Variant BPGTrainer::forward(ag::Variant inp, EpisodeHandle const& handle) {
   MetricsContext::Timer forwardTimer(
       metricsContext_, "trainer:forward", kFwdMetricsSubsampling);
   std::shared_lock<std::shared_timed_mutex> lock(updateMutex_);
-  return Trainer::forward(inp, gameUID, key);
+  return Trainer::forward(inp, handle);
 }
 
 void BPGTrainer::stepEpisode(
@@ -195,9 +192,6 @@ void BPGTrainer::updateModel() {
       optim_->step();
     }
     optim_->zero_grad();
-    if (dist::globalContext()->rank == 0) {
-      checkpoint();
-    }
   }
 
   // Remove old transitions from seenTransitions_. If we removed all transitions
@@ -240,7 +234,7 @@ std::shared_ptr<Evaluator> BPGTrainer::makeEvaluator(
       model_,
       std::move(sampler),
       n,
-      [this](ag::Variant inp, GameUID const& id, EpisodeKey const& key) {
+      [this](ag::Variant inp, EpisodeHandle const&) {
         torch::NoGradGuard g;
         return model_->forward(inp);
       });

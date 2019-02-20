@@ -9,9 +9,10 @@
 
 #include "models/bos/sample.h"
 
-#include "utils/parallel.h"
+#include <common/parallel.h>
 
 #include <cpid/centraltrainer.h>
+#include <cpid/checkpointer.h>
 
 #include <autogradpp/autograd.h>
 #include <visdom/visdom.h>
@@ -26,6 +27,7 @@ struct UpdateLoop {
   ag::Container model;
   ag::Optimizer optim;
   cpid::CentralTrainer* trainer = nullptr;
+  std::unique_ptr<cpid::Checkpointer> checkpointer;
   int batchSize;
   std::shared_ptr<visdom::Visdom> vs;
 
@@ -87,9 +89,10 @@ struct UpdateLoop {
 
  private:
   // For easier debugging, change the type of these to ...0>> fooC_;
-  std::unique_ptr<BufferedConsumer<std::vector<EpisodeSamples>, 4>> preprocC_;
+  std::unique_ptr<common::BufferedConsumer<std::vector<EpisodeSamples>>>
+      preprocC_;
   std::unique_ptr<
-      BufferedConsumer<std::pair<ag::tensor_list, ag::tensor_list>, 1>>
+      common::BufferedConsumer<std::pair<ag::tensor_list, ag::tensor_list>>>
       updateC_;
   std::map<std::string, std::string> vsWindows_;
 };

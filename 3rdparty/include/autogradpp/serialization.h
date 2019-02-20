@@ -179,10 +179,8 @@ void saveBinary(Archive& archive, void const* data, size_t size) {
   archive(v);
 }
 template <>
-inline void saveBinary(
-    BinaryOutputArchive& archive,
-    void const* data,
-    size_t size) {
+inline void
+saveBinary(BinaryOutputArchive& archive, void const* data, size_t size) {
   // Writes to output stream without extra copy
   archive.saveBinary(data, size);
 }
@@ -253,7 +251,8 @@ void load(Archive& archive, torch::Tensor& tensor) {
   archive(CEREAL_NVP(backendId), CEREAL_NVP(sizes));
 
   at::Backend backend = ::ag::detail::backendFromId(backendId);
-  if (!tensor.defined() || torch::typeMetaToScalarType(tensor.dtype()) != type) {
+  if (!tensor.defined() ||
+      torch::typeMetaToScalarType(tensor.dtype()) != type) {
     tensor = torch::empty({}, at::TensorOptions(backend).dtype(type));
   }
   const auto required_grad = tensor.requires_grad();
@@ -275,29 +274,170 @@ void load(Archive& archive, torch::Tensor& tensor) {
         tensor.data_ptr(),
         tensor.numel() * tensor.type().elementSizeInBytes());
   }
+  tensor.detach_();
 }
 
-template <typename...> struct WhichType;
+namespace detail {
+enum VariantTag : int8_t {
+  Tensor = 0,
+  TensorVector = 1,
+  String = 2,
+  Float = 3,
+  Double = 4,
+  Bool = 5,
+  Int32 = 6,
+  Int64 = 7,
+  VariantVector = 8,
+  VariantMap = 9,
+};
+}
+
+template <class Archive>
+void save(Archive& ar, ag::Variant const& var) {
+  using namespace detail;
+  var.value().match(
+      [&](torch::Tensor const& t) {
+        ar(static_cast<int8_t>(VariantTag::Tensor), t);
+      },
+      [&](std::vector<torch::Tensor> const& v) {
+        ar(static_cast<int8_t>(VariantTag::TensorVector), v);
+      },
+      [&](std::string const& s) {
+        ar(static_cast<int8_t>(VariantTag::String), s);
+      },
+      [&](float v) { ar(static_cast<int8_t>(VariantTag::Float), v); },
+      [&](double v) { ar(static_cast<int8_t>(VariantTag::Double), v); },
+      [&](bool v) { ar(static_cast<int8_t>(VariantTag::Bool), v); },
+      [&](int32_t v) { ar(static_cast<int8_t>(VariantTag::Int32), v); },
+      [&](int64_t v) { ar(static_cast<int8_t>(VariantTag::Int64), v); },
+      [&](std::vector<ag::Variant> const& v) {
+        ar(static_cast<int8_t>(VariantTag::VariantVector), v);
+      },
+      [&](std::unordered_map<std::string, ag::Variant> const& m) {
+        ar(static_cast<int8_t>(VariantTag::VariantMap), m);
+      });
+}
+
+template <class Archive>
+void load(Archive& ar, ag::Variant& var) {
+  using namespace detail;
+  int8_t tag;
+  ar(tag);
+  var = [&]() -> ag::Variant {
+    switch (tag) {
+      case VariantTag::Tensor: {
+        torch::Tensor t;
+        ar(t);
+        return t;
+      }
+      case VariantTag::TensorVector: {
+        std::vector<torch::Tensor> v;
+        ar(v);
+        return v;
+      }
+      case VariantTag::String: {
+        std::string s;
+        ar(s);
+        return s;
+      }
+      case VariantTag::Float: {
+        float v;
+        ar(v);
+        return v;
+      }
+      case VariantTag::Double: {
+        double v;
+        ar(v);
+        return v;
+      }
+      case VariantTag::Bool: {
+        bool v;
+        ar(v);
+        return v;
+      }
+      case VariantTag::Int32: {
+        int32_t v;
+        ar(v);
+        return v;
+      }
+      case VariantTag::Int64: {
+        int64_t v;
+        ar(v);
+        return v;
+      }
+      case VariantTag::VariantVector: {
+        std::vector<ag::Variant> v;
+        ar(v);
+        return v;
+      }
+      case VariantTag::VariantMap: {
+        std::unordered_map<std::string, ag::Variant> m;
+        ar(m);
+        return m;
+      }
+      default:
+        throw std::runtime_error(
+            "Unsupported variant tag " + std::to_string(int32_t(tag)));
+    }
+  }();
+}
+
+template <typename...>
+struct WhichType;
+
+constexpr size_t kTochNNModuleMagic = 0xF00DF00D;
+constexpr size_t kSerializationVersion = 1;
 
 template <class Archive>
 void save(Archive& ar, torch::nn::Module const& module) {
   auto params = module.named_parameters();
   size_t size = params.size();
+  ar(kTochNNModuleMagic);
+  ar(kSerializationVersion);
   ar(size);
   for (auto p : params) {
+    ar(p.key(), p.value());
+  }
+
+  auto buffers = module.named_buffers();
+  size = buffers.size();
+  ar(size);
+  for (auto p : buffers) {
     ar(p.key(), p.value());
   }
 }
 
 template <class Archive>
 void load(Archive& ar, torch::nn::Module module) {
+  size_t magic, version, size;
+  ar(magic);
+  if (magic == kTochNNModuleMagic) {
+    ar(version);
+    ar(size);
+  }
+  else {
+    size = version;
+    version = 0;
+  }
+
   auto params = module.named_parameters();
-  size_t size;
-  ar(size);
   std::string name;
   for (size_t i = 0; i < size; i++) {
     ar(name);
     ar(params[name]);
+  }
+
+  auto buffers = module.named_buffers();
+  if (version == 0) {
+    LOG_IF(WARNING, buffers.size())
+      << "Warning: torch::nn::Module serialization didnt include buffers"
+        " - this will likely break BatchNorm, ...";
+    return;
+  }
+  ar(size);
+  for (size_t i = 0; i < size; i++) {
+    ar(name);
+    ar(buffers[name]);
   }
 }
 
@@ -318,4 +458,3 @@ void load(Archive& archive, torch::optim::Optimizer& optimizer) {
 }
 
 } // namespace cereal
-

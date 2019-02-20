@@ -207,7 +207,6 @@ void UPCToCommandModule::stepUPC(
     } else {
       targetPos = upc->positionArgMax().first;
     }
-
     for (auto& uprob : upc->unit) {
       if (uprob.second == 0) {
         continue;

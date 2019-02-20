@@ -12,6 +12,7 @@
 #include "sampler.h"
 #include <fmt/format.h>
 #include <random>
+#include <unistd.h>
 
 using Episode = cpid::ReplayBuffer::Episode;
 using Store = cpid::ReplayBuffer::Store;
@@ -20,10 +21,21 @@ namespace cpid {
 
 namespace {
 std::atomic<uint64_t> atomicID_;
+std::string getRandomPrefix() {
+  static std::string s = "";
+  static std::once_flag once;
+  std::call_once(once, []() { s = common::randId(5); });
+
+  return s;
 }
-GameUID genGameUID(int rank) {
+} // namespace
+
+GameUID genGameUID() {
   uint64_t id = atomicID_++;
-  return std::to_string(rank) + "-" + std::to_string(id);
+  char hostname[HOST_NAME_MAX];
+  gethostname(hostname, HOST_NAME_MAX);
+
+  return fmt::format("{}-{}-{}", hostname, getRandomPrefix(), id);
 }
 
 Episode& ReplayBuffer::append(
@@ -133,10 +145,8 @@ ReplayBuffer::getAllEpisodes() {
       episodes;
   for (auto& game : dones_) {
     for (auto& ep : game.second) {
-      episodes.push_back(
-          std::make_pair(
-              EpisodeTuple{game.first, ep},
-              std::ref(storage_[game.first][ep])));
+      episodes.push_back(std::make_pair(
+          EpisodeTuple{game.first, ep}, std::ref(storage_[game.first][ep])));
     }
   }
   return episodes;
@@ -160,12 +170,10 @@ Trainer::Trainer(
   if (optim_) {
     optim_->zero_grad();
   }
+  epGuard_ = std::make_shared<HandleGuard>();
 };
 
-ag::Variant Trainer::forward(
-    ag::Variant inp,
-    GameUID const& /*gameUID*/,
-    EpisodeKey const& /*key*/) {
+ag::Variant Trainer::forward(ag::Variant inp, EpisodeHandle const& handle) {
   ag::Variant out;
   if (batcher_) {
     out = batcher_->batchedForward(inp);
@@ -176,12 +184,24 @@ ag::Variant Trainer::forward(
   return out;
 }
 
+ag::Variant Trainer::forwardUnbatched(ag::Variant in, ag::Container model) {
+  if (!model) {
+    model = model_;
+  }
+  if (batcher_) {
+    auto out = model_->forward(batcher_->makeBatch({in}));
+    return batcher_->unBatch(out, false, -1)[0];
+  }
+  return model_->forward(in);
+}
+
 void Trainer::step(
-    GameUID const& uid,
-    EpisodeKey const& k,
+    EpisodeHandle const& handle,
     std::shared_ptr<ReplayBufferFrame> v,
     bool isDone) {
   std::lock_guard<std::shared_timed_mutex> lock(activeMapMutex_);
+  auto& uid = handle.gameID();
+  auto& k = handle.episodeKey();
   if (!(actives_.find(uid) != actives_.end() &&
         actives_[uid].find(k) != actives_[uid].end())) {
     VLOG(3) << fmt::format("({},{}) is not active!\n", uid, k);
@@ -240,14 +260,17 @@ void Trainer::setDone(bool done) {
   done_.store(done);
 }
 
-bool Trainer::startEpisode(GameUID const& uid, EpisodeKey const& k) {
+Trainer::EpisodeHandle Trainer::startEpisode() {
   std::lock_guard<std::shared_timed_mutex> lock(activeMapMutex_);
-  actives_[uid].insert(k);
-  return true;
+  auto uid = genGameUID();
+  actives_[uid].insert(kDefaultEpisodeKey);
+  return EpisodeHandle(this, uid, kDefaultEpisodeKey);
 }
 
-void Trainer::forceStopEpisode(GameUID const& uid, EpisodeKey const& k) {
+void Trainer::forceStopEpisode(EpisodeHandle const& handle) {
   std::lock_guard<std::shared_timed_mutex> lock(activeMapMutex_);
+  auto& uid = handle.gameID();
+  auto& k = handle.episodeKey();
   if (actives_.find(uid) != actives_.end() &&
       actives_[uid].find(k) != actives_[uid].end()) {
     replayer_.erase(uid, k);
@@ -258,24 +281,26 @@ void Trainer::forceStopEpisode(GameUID const& uid, EpisodeKey const& k) {
   }
 }
 
-bool Trainer::isActive(GameUID const& uid, EpisodeKey const& k) {
+bool Trainer::isActive(EpisodeHandle const& handle) {
   std::shared_lock<std::shared_timed_mutex> lock(activeMapMutex_);
+  auto& uid = handle.gameID();
+  auto& k = handle.episodeKey();
   return actives_.find(uid) != actives_.end() &&
       actives_[uid].find(k) != actives_[uid].end();
 }
 
 void Trainer::reset() {
-  auto forceStopEpisodeWithoutLock = [this](
-      GameUID const& uid, EpisodeKey const& k) {
-    if (actives_.find(uid) != actives_.end() &&
-        actives_[uid].find(k) != actives_[uid].end()) {
-      replayer_.erase(uid, k);
-      actives_[uid].erase(k);
-      if (actives_[uid].size() == 0) {
-        actives_.erase(uid);
-      }
-    }
-  };
+  auto forceStopEpisodeWithoutLock =
+      [this](GameUID const& uid, EpisodeKey const& k) {
+        if (actives_.find(uid) != actives_.end() &&
+            actives_[uid].find(k) != actives_[uid].end()) {
+          replayer_.erase(uid, k);
+          actives_[uid].erase(k);
+          if (actives_[uid].size() == 0) {
+            actives_.erase(uid);
+          }
+        }
+      };
   std::lock_guard<std::shared_timed_mutex> lock(activeMapMutex_);
   ReplayBuffer::UIDKeyStore activesCopy(actives_);
   for (auto const& iter : activesCopy) {
@@ -286,35 +311,66 @@ void Trainer::reset() {
   actives_.clear();
 }
 
-void Trainer::step(
-    GameUID const& uid,
-    std::shared_ptr<ReplayBufferFrame> value,
-    bool isDone) {
-  step(uid, kDefaultEpisodeKey, value, isDone);
-}
-
-void Trainer::setCheckpointFrequency(int x) {
-  checkpointFrequency_ = x;
-}
-
-void Trainer::setCheckpointLocation(std::string const& x) {
-  checkpointLocation_ = x;
-}
-
-bool Trainer::checkpoint(bool force) {
-  if (checkpointFrequency_ > 0 && checkpointLocation_ != "") {
-    nUpdates_++;
-    if (force || nUpdates_ % checkpointFrequency_ == 0) {
-      VLOG(2) << "Checkingpointing model to " << checkpointLocation_;
-      ag::save(checkpointLocation_, this);
-      return true;
-    }
-  }
-  return false;
-}
-
 ag::Variant Trainer::sample(ag::Variant in) {
   return sampler_->sample(std::move(in));
+}
+
+void Trainer::setBatcher(std::unique_ptr<AsyncBatcher> batcher) {
+  batcher_ = std::move(batcher);
+}
+
+EpisodeHandle::EpisodeHandle(Trainer* trainer, GameUID id, EpisodeKey k)
+    : trainer_(trainer),
+      gameID_(std::move(id)),
+      episodeKey_(std::move(k)),
+      guard_(trainer->epGuard_){};
+
+EpisodeHandle::operator bool() const {
+  return trainer_ && !guard_.expired();
+}
+
+EpisodeHandle::~EpisodeHandle() {
+  if (*this) {
+    // The trainer still there.
+    trainer_->forceStopEpisode(*this);
+  }
+}
+
+EpisodeHandle::EpisodeHandle(EpisodeHandle&& other)
+    : EpisodeHandle(other.trainer_, other.gameID_, other.episodeKey_) {
+  other.trainer_ = nullptr;
+}
+
+EpisodeHandle& EpisodeHandle::operator=(EpisodeHandle&& other) {
+  if (*this) {
+    trainer_->forceStopEpisode(*this);
+  }
+  trainer_ = other.trainer_;
+  gameID_ = std::move(other.gameID_);
+  episodeKey_ = std::move(other.episodeKey_);
+  guard_ = std::move(other.guard_);
+  other.trainer_ = nullptr;
+
+  return *this;
+}
+
+EpisodeKey const& Trainer::EpisodeHandle::episodeKey() const {
+  if (!(*this)) {
+    throw std::runtime_error("Stale EpisodeHandle");
+  }
+  return episodeKey_;
+}
+
+GameUID const& Trainer::EpisodeHandle::gameID() const {
+  if (!(*this)) {
+    throw std::runtime_error("Stale EpisodeHandle");
+  }
+  return gameID_;
+}
+
+std::ostream& operator<<(std::ostream& os, EpisodeHandle const& handle) {
+  os << handle.gameID();
+  return os;
 }
 
 } // namespace cpid

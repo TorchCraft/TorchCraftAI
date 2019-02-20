@@ -15,10 +15,15 @@
 
 #include "../buildorders/base.h"
 #include "bandit.h"
-#include "fsutils.h"
+
+#include <common/fsutils.h>
 #include <common/rand.h>
-#include <fstream>
+
 #include <glog/logging.h>
+
+#include <fstream>
+
+namespace fsutils = common::fsutils;
 
 namespace cherrypi {
 
@@ -309,7 +314,7 @@ std::string chooseBuildOrder(
   return bestBuildOrder;
 }
 
-} // namepsace score
+} // namespace score
 
 } // namespace model
 

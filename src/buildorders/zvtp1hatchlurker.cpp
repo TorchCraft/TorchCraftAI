@@ -22,7 +22,7 @@ class ABBOzvtp1hatchlurker : public ABBOBase {
   // In theory, a weak build that's easily answered. In practice, bots struggle
   // with the challenges posed by early Lurkers.
   //
-  // Transitions into Mutalisks after establishing early Lurkers.
+  // Transitions into Defilers after establishing early Lurkers.
 
   Position sunkenPosition;
   virtual void preBuild2(autobuild::BuildState& bst) override {
@@ -32,30 +32,27 @@ class ABBOzvtp1hatchlurker : public ABBOBase {
   }
 
   virtual void buildStep2(BuildState& bst) override {
-    autoUpgrade = false;
+    autoUpgrade = bases > 3;
     autoExpand = mineralFields < 7;
     buildExtraOverlordsIfLosingThem = false;
-    bst.autoBuildRefineries = false;
 
     if (has(bst, Lurker_Aspect)) {
+      int hydras = enemyVultureCount + enemyAirArmySupply;
       build(Zerg_Zergling);
-      buildN(Zerg_Extractor, geysers);
-      build(Zerg_Mutalisk);
-      if (countPlusProduction(bst, Zerg_Zergling) > 8) {
-        upgrade(Metabolic_Boost);
-      }
+      build(Zerg_Lurker);
+      upgrade(Adrenal_Glands);
+      buildN(Zerg_Defiler, 2);
+      upgrade(Consume);
+      buildN(Zerg_Extractor, bases);
+      upgrade(Metabolic_Boost);
       takeNBases(bst, 1 + myDroneCount / 8);
-      buildN(Zerg_Mutalisk, 6);
-      buildN(Zerg_Drone, utils::safeClamp(9 * myCompletedHatchCount, 12, 40));
+      buildN(Zerg_Drone, utils::safeClamp(9 * bases, 12, 40));
       buildN(Zerg_Extractor, myCompletedHatchCount);
-      if (!enemyVultureCount) {
-        takeNBases(bst, 2);
-      }
-      buildN(Zerg_Spire, 1);
+      hydras > 0 && upgrade(Grooved_Spines) && hydras > 3 &&
+          upgrade(Muscular_Augments);
+      takeNBases(bst, 2);
+      buildN(Zerg_Hydralisk, hydras);
       buildN(Zerg_Lurker, 5);
-      if (enemyVultureCount) {
-        buildSunkens(bst, myCompletedHatchCount, sunkenPosition);
-      }
     } else {
       build(Zerg_Zergling);
       if (has(bst, Zerg_Spawning_Pool)) {
@@ -84,4 +81,4 @@ class ABBOzvtp1hatchlurker : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzvtp1hatchlurker, UpcId, State*, Module*);
-}
+} // namespace cherrypi

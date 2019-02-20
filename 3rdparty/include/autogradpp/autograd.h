@@ -32,7 +32,7 @@ using Optimizer = std::shared_ptr<torch::optim::Optimizer>;
 
 // This clone keeps container-ness, instead of falling into torch::Modules
 template <typename Ptr>
-inline Container clone(Ptr&& model, at::optional<at::Device> = c10::nullopt);
+inline Container clone(Ptr&& model, at::optional<at::Device> const& = c10::nullopt);
 
 class ContainerImpl : public virtual torch::nn::Module {
  public:
@@ -104,9 +104,10 @@ struct Sequential : public Container_CRTP<Sequential> {
   /// Special cloning function for `Sequential` because it does not use
   /// `reset()`.
   std::shared_ptr<torch::nn::Module> clone(
-      at::optional<at::Device> = c10::nullopt) const override;
+      at::optional<at::Device> const& = c10::nullopt) const override;
 
   std::vector<Container> list_;
+  std::vector<std::string> listNames_;
 };
 
 // Copied from torch::nn::Functional
@@ -133,7 +134,7 @@ struct Functional : public Container_CRTP<Functional> {
 
   void reset() override {}
   Variant forward(Variant inp) override {
-    return Variant(tensor_list{function_(inp.getTensorList()[0])});
+    return Variant(tensor_list{function_(inp[0])});
   }
 
  private:
@@ -143,7 +144,7 @@ struct Functional : public Container_CRTP<Functional> {
 /************** IMPEMENTATIONS *********************/
 
 template <typename Ptr>
-inline Container clone(Ptr&& model, at::optional<at::Device> device) {
+inline Container clone(Ptr&& model, at::optional<at::Device> const& device) {
   auto clone = std::dynamic_pointer_cast<ContainerImpl>(model->clone(device));
   return clone;
 }
@@ -179,15 +180,16 @@ inline Sequential& Sequential::append(Container m, std::string name) {
     name = std::to_string(size());
   }
   list_.push_back(m);
+  listNames_.push_back(name);
   ContainerImpl::add(list_.back(), name);
   return *this;
 }
 
 inline std::shared_ptr<torch::nn::Module> Sequential::clone(
-    at::optional<at::Device> device) const {
+    at::optional<at::Device> const& device) const {
   auto clone = Sequential().make();
-  for (const auto& module : list_) {
-    clone->append(::ag::clone(module, device));
+  for (auto i = 0U; i < list_.size(); ++i) {
+    clone->append(::ag::clone(list_[i], device), listNames_[i]);
   }
   return clone;
 }

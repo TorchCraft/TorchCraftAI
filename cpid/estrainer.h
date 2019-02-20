@@ -39,9 +39,10 @@ class ESTrainer : public Trainer {
   std::unordered_map<std::pair<int, int64_t>, ag::Container, pairhash>
       modelCache_;
   // (GameUID, Key) => (generation, seed) for the active local models
-  std::unordered_map<std::pair<GameUID, EpisodeKey>,
-                     std::pair<int, int64_t>,
-                     pairhash>
+  std::unordered_map<
+      std::pair<GameUID, EpisodeKey>,
+      std::pair<int, int64_t>,
+      pairhash>
       gameToGenerationSeed_;
   std::shared_timed_mutex modelStorageMutex_;
 
@@ -66,7 +67,6 @@ class ESTrainer : public Trainer {
 
   std::mutex updateMutex_;
   size_t gamesStarted_ = 0;
-  bool resetThreads_ = false;
   std::condition_variable batchBarrier_;
 
   size_t gatherSize_;
@@ -99,15 +99,10 @@ class ESTrainer : public Trainer {
       bool onPolicy);
 
   ag::Container getGameModel(GameUID const& gameIUID, EpisodeKey const& key);
-  void forceStopEpisode(GameUID const&, EpisodeKey const& = kDefaultEpisodeKey)
-      override;
-  bool startEpisode(GameUID const&, EpisodeKey const& = kDefaultEpisodeKey)
-      override;
+  void forceStopEpisode(EpisodeHandle const&) override;
+  EpisodeHandle startEpisode() override;
   bool update() override;
-  virtual ag::Variant forward(
-      ag::Variant inp,
-      GameUID const& gameIUID,
-      EpisodeKey const& key) override;
+  virtual ag::Variant forward(ag::Variant inp, EpisodeHandle const&) override;
   std::shared_ptr<Evaluator> makeEvaluator(
       size_t n,
       std::unique_ptr<BaseSampler> sampler =

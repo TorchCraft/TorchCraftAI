@@ -33,6 +33,7 @@ class CombatSim {
     int armor = 0;
     int maxSpeed = 0;
     bool flying = false;
+    bool underDarkSwarm = false;
     const BuildType* type = nullptr;
     SimUnit* target = nullptr;
     bool targetInRange = false;
@@ -59,4 +60,4 @@ class CombatSim {
 
   void run(int frames);
 };
-}
+} // namespace cherrypi

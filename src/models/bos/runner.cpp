@@ -31,16 +31,15 @@ struct FfwdModelRunner : ModelRunner {
   using ModelRunner::ModelRunner;
 
   ag::Variant makeInput(Sample const& sample) const override {
-    auto features = sample.featurize(
-        {BosFeature::BagOfUnitCounts,
-         BosFeature::BagOfUnitCountsAbs5_15_30,
-         BosFeature::MapId,
-         BosFeature::Race,
-         BosFeature::Resources5Log,
-         BosFeature::TechUpgradeBits,
-         BosFeature::PendingTechUpgradeBits,
-         BosFeature::TimeAsFrame,
-         BosFeature::ActiveBo});
+    auto features = sample.featurize({BosFeature::BagOfUnitCounts,
+                                      BosFeature::BagOfUnitCountsAbs5_15_30,
+                                      BosFeature::MapId,
+                                      BosFeature::Race,
+                                      BosFeature::Resources5Log,
+                                      BosFeature::TechUpgradeBits,
+                                      BosFeature::PendingTechUpgradeBits,
+                                      BosFeature::TimeAsFrame,
+                                      BosFeature::ActiveBo});
     return ag::VariantDict{{"features", features}};
   }
 
@@ -55,7 +54,7 @@ struct FfwdModelRunner : ModelRunner {
   }
 
 #ifdef HAVE_CPID
-  ag::Variant trainerForward(ag::Variant input, GameUID const& gameId)
+  ag::Variant trainerForward(ag::Variant input, EpisodeHandle const& handle)
       override {
     torch::NoGradGuard ng;
     input.getDict()["features"] = common::applyTransform(
@@ -63,7 +62,7 @@ struct FfwdModelRunner : ModelRunner {
           // Model expects extra batch dimension
           return x.to(trainer->model()->options().device()).unsqueeze(0);
         });
-    return trainer->forward(input, gameId);
+    return trainer->forward(input, handle);
   }
 #endif // HAVE_CPID
 };
@@ -76,39 +75,36 @@ struct RecurrentModelRunner : ModelRunner {
   virtual ag::Variant makeInput(Sample const& sample) const override {
     auto features = [&]() -> ag::tensor_list {
       if (modelType == "mclstm") {
-        return sample.featurize(
-            {BosFeature::Map,
-             BosFeature::Race,
-             BosFeature::Units,
-             BosFeature::Resources5Log,
-             BosFeature::TechUpgradeBits,
-             BosFeature::PendingTechUpgradeBits,
-             BosFeature::TimeAsFrame,
-             BosFeature::ActiveBo});
+        return sample.featurize({BosFeature::Map,
+                                 BosFeature::Race,
+                                 BosFeature::Units,
+                                 BosFeature::Resources5Log,
+                                 BosFeature::TechUpgradeBits,
+                                 BosFeature::PendingTechUpgradeBits,
+                                 BosFeature::TimeAsFrame,
+                                 BosFeature::ActiveBo});
       } else if (modelType == "celstm") {
-        return sample.featurize(
-            {BosFeature::Map,
-             BosFeature::MapId,
-             BosFeature::Race,
-             BosFeature::Units,
-             BosFeature::BagOfUnitCounts,
-             BosFeature::BagOfUnitCountsAbs5_15_30,
-             BosFeature::Resources5Log,
-             BosFeature::TechUpgradeBits,
-             BosFeature::PendingTechUpgradeBits,
-             BosFeature::TimeAsFrame,
-             BosFeature::ActiveBo});
+        return sample.featurize({BosFeature::Map,
+                                 BosFeature::MapId,
+                                 BosFeature::Race,
+                                 BosFeature::Units,
+                                 BosFeature::BagOfUnitCounts,
+                                 BosFeature::BagOfUnitCountsAbs5_15_30,
+                                 BosFeature::Resources5Log,
+                                 BosFeature::TechUpgradeBits,
+                                 BosFeature::PendingTechUpgradeBits,
+                                 BosFeature::TimeAsFrame,
+                                 BosFeature::ActiveBo});
       } else {
-        return sample.featurize(
-            {BosFeature::BagOfUnitCounts,
-             BosFeature::BagOfUnitCountsAbs5_15_30,
-             BosFeature::MapId,
-             BosFeature::Race,
-             BosFeature::Resources5Log,
-             BosFeature::TechUpgradeBits,
-             BosFeature::PendingTechUpgradeBits,
-             BosFeature::TimeAsFrame,
-             BosFeature::ActiveBo});
+        return sample.featurize({BosFeature::BagOfUnitCounts,
+                                 BosFeature::BagOfUnitCountsAbs5_15_30,
+                                 BosFeature::MapId,
+                                 BosFeature::Race,
+                                 BosFeature::Resources5Log,
+                                 BosFeature::TechUpgradeBits,
+                                 BosFeature::PendingTechUpgradeBits,
+                                 BosFeature::TimeAsFrame,
+                                 BosFeature::ActiveBo});
       }
     }();
 
@@ -128,7 +124,7 @@ struct RecurrentModelRunner : ModelRunner {
   }
 
 #ifdef HAVE_CPID
-  ag::Variant trainerForward(ag::Variant input, GameUID const& gameId)
+  ag::Variant trainerForward(ag::Variant input, EpisodeHandle const& handle)
       override {
     torch::NoGradGuard ng;
     input.getDict()["features"] = common::applyTransform(
@@ -136,7 +132,7 @@ struct RecurrentModelRunner : ModelRunner {
           // Model expects extra batch dimension
           return x.to(trainer->model()->options().device()).unsqueeze(0);
         });
-    auto output = trainer->forward(input, gameId);
+    auto output = trainer->forward(input, handle);
     hidden = output.getDict()["hidden"].getTensorList();
     return output;
   }
@@ -167,18 +163,20 @@ ag::Variant ModelRunner::makeInput(Sample const&) const {
   return {};
 }
 
-ag::Variant ModelRunner::forward(Sample const& sample, GameUID const& gameId) {
-  return forward(makeInput(sample), sample, gameId);
+ag::Variant ModelRunner::forward(
+    Sample const& sample,
+    EpisodeHandle const& handle) {
+  return forward(makeInput(sample), sample, handle);
 }
 
 ag::Variant ModelRunner::forward(
     ag::Variant input,
     Sample const& sample,
-    GameUID const& gameId) {
+    EpisodeHandle const& handle) {
   ag::Variant output;
 #ifdef HAVE_CPID
   if (trainer) {
-    output = trainerForward(input, gameId);
+    output = trainerForward(input, handle);
     boMask = boMask.to(trainer->model()->options().device());
     output["vHeads"] = output["vHeads"] * boMask;
     output = trainer->sample(output);
@@ -190,7 +188,7 @@ ag::Variant ModelRunner::forward(
         ag::Variant(std::get<1>(output["vHeads"].max(1)));
   }
 #else // HAVE_CPID
-  (void)gameId;
+  (void)handle;
   output = modelForward(input);
   boMask = boMask.to(model->options().device());
   output["vHeads"] = output["vHeads"] * boMask;
@@ -216,7 +214,7 @@ ag::Variant ModelRunner::modelForward(ag::Variant) {
 }
 
 #ifdef HAVE_CPID
-ag::Variant ModelRunner::trainerForward(ag::Variant, GameUID const&) {
+ag::Variant ModelRunner::trainerForward(ag::Variant, EpisodeHandle const&) {
   return {};
 }
 #endif // HAVE_CPID

@@ -8,6 +8,7 @@
 #pragma once
 
 #include <streambuf>
+#include <string_view>
 
 // Place these here for convenience
 #include <cereal/archives/binary.hpp>
@@ -32,6 +33,7 @@ namespace common {
 class IMembuf : public std::streambuf {
  public:
   explicit IMembuf(std::vector<char> const& data);
+  explicit IMembuf(std::string_view sv);
 };
 
 /**

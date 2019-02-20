@@ -51,32 +51,32 @@ class priority_mutex {
   /// Constructs a mutex
   /// @param maxPrio is the maximal priority level accepted
   priority_mutex(int maxPrio) : maxPrio_(maxPrio) {
-    queueCount_.resize(maxPrio_, 0);
+    queueCount_.resize(maxPrio_ + 1, 0);
   }
   priority_mutex(const priority_mutex&) = delete;
   priority_mutex& operator=(const priority_mutex&) = delete;
   priority_mutex(priority_mutex&&) = delete;
 
   void lock(int prio = 0) {
-    if (prio < 0 || prio >= maxPrio_) {
-      std::runtime_error("Invalid priority level");
+    if (prio < 0 || prio > maxPrio_) {
+      throw std::runtime_error("Invalid priority level");
     }
     {
-      std::lock_guard<std::mutex> lock(queueMutex_);
+      std::lock_guard lock(queueMutex_);
       queueCount_[prio]++;
     }
     permanent_lock<std::mutex> lock(dataMutex_);
     queueCV_.wait(lock, [this, prio]() { return canGo(prio); });
 
     {
-      std::lock_guard<std::mutex> lock(queueMutex_);
+      std::lock_guard lock(queueMutex_);
       queueCount_[prio]--;
     }
   }
 
   bool try_lock(int prio = 0) {
-    if (prio < 0 || prio >= maxPrio_) {
-      std::runtime_error("Invalid priority level");
+    if (prio < 0 || prio > maxPrio_) {
+      throw std::runtime_error("Invalid priority level");
     }
     // we can ignore the prio, because if there is a thread holding the
     // dataMutex, we can't lock, no matter the priority
@@ -90,7 +90,8 @@ class priority_mutex {
 
  protected:
   bool canGo(int prio) {
-    for (int i = prio + 1; i < maxPrio_; ++i) {
+    std::lock_guard lock(queueMutex_);
+    for (int i = prio + 1; i <= maxPrio_; ++i) {
       if (queueCount_[i] != 0)
         return false;
     }

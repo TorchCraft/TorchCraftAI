@@ -7,6 +7,7 @@
 
 #include "modules/once.h"
 #include "common/rand.h"
+#include "utils.h"
 
 namespace cherrypi {
 
@@ -30,48 +31,40 @@ void OnceModule::step(State* state) {
   }
 }
 
-std::shared_ptr<Module> OnceModule::makeWithCommands(
-    std::vector<tc::Client::Command> commands,
-    std::string name) {
-  return Module::make<OnceModule>(
-      [commands{std::move(commands)}](State * state) {
-        for (auto& comm : commands) {
-          state->board()->postCommand(comm, kRootUpcId);
-        }
-      },
-      std::move(name));
+int getSpawnCoordinate(State* state, int base, int max, float noiseMax) {
+  auto noise = noiseMax < 1e-4
+      ? 0.0
+      : common::Rand::sample(std::normal_distribution<double>(0., noiseMax));
+  return int(
+      tc::BW::XYPixelsPerWalktile * utils::clamp(int(base + noise), 0, max));
 }
-
 std::vector<tc::Client::Command> OnceModule::makeSpawnCommands(
-    std::vector<OnceModule::SpawnInfo> spawns,
+    const std::vector<SpawnPosition>& spawns,
+    State* state,
     int playerId) {
   std::vector<tc::Client::Command> cmds;
-  for (auto& si : spawns) {
-    std::normal_distribution<double> distribX(
-        0., std::max(si.randomPositionSpreadX, 1e-4));
-    std::normal_distribution<double> distribY(
-        0., std::max(si.randomPositionSpreadY, 1e-4));
-    double noiseX =
-        (si.randomPositionSpreadX < 1e-4) ? 0 : common::Rand::sample(distribX);
-    double noiseY =
-        (si.randomPositionSpreadY < 1e-4) ? 0 : common::Rand::sample(distribY);
-    cmds.emplace_back(
-        tc::BW::Command::CommandOpenbw,
-        tc::BW::OpenBWCommandType::SpawnUnit,
-        playerId,
-        si.type,
-        int((si.x + noiseX) * tc::BW::XYPixelsPerWalktile),
-        int((si.y + noiseY) * tc::BW::XYPixelsPerWalktile));
+  for (auto& spawn : spawns) {
+    for (int i = 0; i < spawn.count; ++i) {
+      cmds.emplace_back(
+          tc::BW::Command::CommandOpenbw,
+          tc::BW::OpenBWCommandType::SpawnUnit,
+          playerId,
+          spawn.type,
+          getSpawnCoordinate(
+              state, spawn.x, state->mapWidth() - 1, spawn.spreadX),
+          getSpawnCoordinate(
+              state, spawn.y, state->mapHeight() - 1, spawn.spreadY));
+    }
   }
   return cmds;
 }
 
 LambdaModule::StepFunctionState OnceModule::makeSpawnFn(
-    std::vector<OnceModule::SpawnInfo> spawns,
+    const std::vector<SpawnPosition>& spawns,
     bool enemy) {
-  return [ spawns{std::move(spawns)}, enemy ](State * state) mutable {
+  return [spawns{std::move(spawns)}, enemy](State* state) mutable {
     auto cmds = makeSpawnCommands(
-        spawns, enemy ? 1 - state->playerId() : state->playerId());
+        spawns, state, enemy ? 1 - state->playerId() : state->playerId());
     for (const auto& c : cmds) {
       state->board()->postCommand(c, kRootUpcId);
     }
@@ -79,14 +72,14 @@ LambdaModule::StepFunctionState OnceModule::makeSpawnFn(
 }
 
 std::shared_ptr<Module> OnceModule::makeWithSpawns(
-    std::vector<SpawnInfo> spawns,
+    const std::vector<SpawnPosition>& spawns,
     std::string name) {
   return Module::make<OnceModule>(
       makeSpawnFn(std::move(spawns), false), std::move(name));
 }
 
 std::shared_ptr<Module> OnceModule::makeWithEnemySpawns(
-    std::vector<SpawnInfo> spawns,
+    const std::vector<SpawnPosition>& spawns,
     std::string name) {
   return Module::make<OnceModule>(
       makeSpawnFn(std::move(spawns), true), std::move(name));

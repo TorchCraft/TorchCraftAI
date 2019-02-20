@@ -8,7 +8,6 @@
 #pragma once
 
 #include "cherrypi.h"
-#include "fsutils.h"
 #include "utils.h"
 
 #include "cpid/metrics.h"

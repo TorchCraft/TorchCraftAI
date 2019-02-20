@@ -26,56 +26,48 @@ class ABBOzvt3hatchlurker : public ABBOBase {
   //
   // Against bio/unknown:
   // * Open with standard 3-Hatch Lurker
-  // * Transition into Lurkers, then take a third base
-  // * Get upgrades, up to Adrenal Glands
-  // * Build out Lurker-Ling army
-  // * Take a fourth base
+  // * Transition into Defiler -> Ling-Lurker-Ultra-Defiler
   //
   // Against mech/2-port:
   // * Get an early Sunken and Hydralisks to prevent Vulture runbys
-  // * Get a Hydra-Muta composition, then take a third base
-  // * Get upgrades; if 2-Port, include Overlord speed
-  // * Build out Hydra-Muta army
-  // * Take a fourth base
-  //
-  // Late game:
-  // * Continue with appropriate composition
-  // * Add Ultralisks
+  // * Hydra-Muta composition -> Third base
+  // * Get Consume -> Transition to Ling-Ultra-Defiler
 
   bool readyToScout = false;
-  bool completedBuildOrder = false;
   bool completedMutalisks = false;
   bool tookThirdBase = false;
-  bool enemyIsAffirmativelyBio = false;
-  bool enemyIsAffirmativelyMech = false;
+  bool enemyOpenedBio = false;
+  bool enemyOpenedMech = false;
+  bool enemyMoreBio = false;
   int netGroundStrength = 0;
 
   void updateArmyStrength() {
     netGroundStrength = 1 * myZerglingCount + 2 * myHydraliskCount +
-        3 * myMutaliskCount + 4 * myLurkerCount + 5 * myUltraliskCount -
-        1 * enemyMarineCount - 2 * enemyMedicCount - 2 * enemyVultureCount -
-        2 * enemyGoliathCount - 4 * enemyTankCount;
+        3 * myMutaliskCount + 4 * myLurkerCount + 5 * myUltraliskCount +
+        5 * myDefilerCount - 1 * enemyMarineCount - 2 * enemyMedicCount -
+        2 * enemyVultureCount - 2 * enemyGoliathCount - 4 * enemyTankCount;
   }
 
   void updateBuildProgress() {
     readyToScout = readyToScout || bases > 1 || state_->resources().ore >= 276;
-    completedBuildOrder = completedBuildOrder ||
-        !state_->unitsInfo().myUnitsOfType(Zerg_Lair).empty();
     completedMutalisks = completedMutalisks ||
         !state_->unitsInfo().myCompletedUnitsOfType(Zerg_Mutalisk).empty();
     tookThirdBase = tookThirdBase || bases >= 3;
   }
 
   void detectEnemyBuild() {
-    if (enemyIsAffirmativelyBio || enemyIsAffirmativelyMech) {
+    enemyMoreBio =
+        3 * enemyMarineCount - 2 * enemyVultureCount - 3 * enemyGoliathCount >
+        0;
+    if (enemyOpenedBio || enemyOpenedMech) {
       return;
     }
-    enemyIsAffirmativelyMech = enemyIsAffirmativelyMech ||
-        enemyVultureCount >= 3 || enemyGoliathCount || enemyTankCount ||
-        enemyWraithCount || enemyFactoryCount;
-    enemyIsAffirmativelyBio = enemyIsAffirmativelyBio ||
-        enemyBarracksCount > 1 || enemyMarineCount >= 8 || enemyMedicCount ||
-        enemyFirebatCount || (enemyAcademyCount && !enemyIsAffirmativelyMech);
+    enemyOpenedMech = enemyOpenedMech || enemyVultureCount >= 3 ||
+        enemyGoliathCount || enemyTankCount || enemyWraithCount ||
+        enemyFactoryCount;
+    enemyOpenedBio = enemyOpenedBio || enemyBarracksCount > 1 ||
+        enemyMarineCount >= 8 || enemyMedicCount || enemyFirebatCount ||
+        (enemyAcademyCount && !enemyOpenedMech);
   }
 
   Position vultureSunken;
@@ -86,22 +78,15 @@ class ABBOzvt3hatchlurker : public ABBOBase {
 
     // Scout as we take our natural (readyToScout)
     // Reclaim the Drone once we figure out what they're doing
-    auto scout =
-        readyToScout && !enemyIsAffirmativelyBio && !enemyIsAffirmativelyMech;
+    auto scout = readyToScout && !enemyOpenedBio && !enemyOpenedMech;
     postBlackboardKey(Blackboard::kMinScoutFrameKey, scout ? 1 : 0);
 
     vultureSunken = findSunkenPos(Zerg_Sunken_Colony, false, true);
 
-    // Attack once we have Mutalisks
-    // Attack if the opponent has no Vultures
-    auto shouldAttack = completedMutalisks || enemyVultureCount < 2;
-    postBlackboardKey("TacticsAttack", shouldAttack);
-  }
-
-  void expand(BuildState& bst) {
-    if (!bst.isExpanding) {
-      build(Zerg_Hatchery, nextBase);
-    }
+    postBlackboardKey(
+        "TacticsAttack",
+        tookThirdBase || enemyMoreBio || completedMutalisks ||
+            !enemyVultureCount);
   }
 
   void sneakDrones(BuildState& bst, int consecutive) {
@@ -112,79 +97,79 @@ class ABBOzvt3hatchlurker : public ABBOBase {
     }
   }
 
-  void lateGame(BuildState& bst) {
-    const int lurkerTarget =
-        std::max(
-            0, enemyMarineCount + enemyMedicCount + 2 * enemyFirebatCount) /
-        3;
-    const int hydraTarget = enemyVultureCount + 2 * enemyWraithCount +
-        3 * enemyValkyrieCount + 5 * enemyBattlecruiserCount;
-    const int zerglingTarget = 4 + 5 * enemyTankCount +
-        (enemyIsAffirmativelyMech ? 0 : 12 + 2 * enemyMarineCount +
-                 3 * enemyMedicCount + 3 * enemyGoliathCount);
-
+  void lateGameBio(BuildState& bst) {
     build(Zerg_Zergling);
     buildN(Zerg_Drone, 50);
-    if (bases < countPlusProduction(bst, Zerg_Drone) / 12) {
-      expand(bst);
-    }
-    if (countPlusProduction(bst, Zerg_Extractor) >= 4) {
-      build(Zerg_Ultralisk);
-      upgrade(Chitinous_Plating) && upgrade(Anabolic_Synthesis);
-    } else if (enemyIsAffirmativelyBio) {
-      build(Zerg_Lurker);
-    } else {
-      build(Zerg_Hydralisk);
-      buildN(Zerg_Mutalisk, countPlusProduction(bst, Zerg_Hydralisk) / 3);
-    }
-    upgrade(Zerg_Flyer_Carapace_2) && upgrade(Zerg_Flyer_Attacks_2);
-    upgrade(Pneumatized_Carapace);
+    takeNBases(bst, 1 + countPlusProduction(bst, Zerg_Drone) / 12);
+    build(Zerg_Ultralisk);
+    upgrade(Chitinous_Plating) && upgrade(Anabolic_Synthesis);
+    upgrade(Plague);
     upgrade(Adrenal_Glands);
-    if (enemyIsAffirmativelyBio) {
-      buildN(Zerg_Zergling, bases * 8);
-      buildN(Zerg_Mutalisk, bases * 4);
-      buildN(Zerg_Lurker, bases * 4);
-      upgrade(Zerg_Carapace_2) && upgrade(Zerg_Melee_Attacks_2) &&
-          upgrade(Zerg_Carapace_3) && upgrade(Zerg_Melee_Attacks_3);
-    } else if (enemyIsAffirmativelyMech) {
-      buildN(Zerg_Mutalisk, bases * 4);
-      buildN(Zerg_Hydralisk, bases * 10);
-      upgrade(Zerg_Missile_Attacks_2) && upgrade(Zerg_Carapace_2) &&
-          upgrade(Zerg_Missile_Attacks_3) && upgrade(Zerg_Carapace_3);
+    upgrade(Zerg_Carapace_3) && upgrade(Zerg_Melee_Attacks_3);
+    upgrade(Consume);
+    buildN(
+        Zerg_Zergling,
+        8 + 5 * enemyTankCount + 2 * enemyMarineCount + 3 * enemyMedicCount +
+            3 * enemyGoliathCount);
+    buildN(
+        Zerg_Lurker,
+        std::min(
+            8,
+            (enemyMarineCount + enemyMedicCount + 2 * enemyFirebatCount) / 3));
+    if (hasOrInProduction(bst, Consume)) {
+      buildN(Zerg_Defiler, 2 + myUltraliskCount / 4);
     }
-    if (enemyCloakedUnitCount || enemyVultureCount) {
-      upgrade(Pneumatized_Carapace);
-    }
-    if (enemyIsAffirmativelyMech && enemyVultureCount) {
-      buildSunkens(bst, bases - 1, vultureSunken, true);
-    }
-    buildN(Zerg_Zergling, zerglingTarget);
-    buildN(Zerg_Hydralisk, hydraTarget);
-    if (countPlusProduction(bst, Zerg_Zergling) >= 6) {
-      upgrade(Metabolic_Boost);
-    }
-    if (countPlusProduction(bst, Zerg_Hydralisk) >= 3) {
-      upgrade(Grooved_Spines) && upgrade(Muscular_Augments);
-    }
-    buildN(Zerg_Mutalisk, 2 * enemyTankCount);
-    buildN(Zerg_Lurker, lurkerTarget);
+    int hydralisks = enemyAirArmySupply + enemyVultureCount;
+    hydralisks > 1 && upgrade(Grooved_Spines) && hydralisks > 3 &&
+        upgrade(Muscular_Augments);
+    buildN(Zerg_Hydralisk, hydralisks);
+    upgrade(Metabolic_Boost);
     buildN(Zerg_Extractor, std::min(myDroneCount / 9, bases));
     sneakDrones(bst, netGroundStrength > 0 ? 2 : 1);
   }
 
+  void lateGameMech(BuildState& bst) {
+    bool goLingUltraDefiler = hasOrInProduction(bst, Consume);
+
+    if (goLingUltraDefiler) {
+      build(Zerg_Zergling);
+      build(Zerg_Ultralisk);
+      buildN(Zerg_Scourge, 3 * enemyScienceVesselCount);
+    }
+    upgrade(Zerg_Melee_Attacks_3) && upgrade(Zerg_Carapace_3);
+    upgrade(Adrenal_Glands);
+    upgrade(Anabolic_Synthesis) && upgrade(Chitinous_Plating);
+    takeNBases(bst, 1 + countPlusProduction(bst, Zerg_Drone) / 12);
+    buildN(Zerg_Defiler, 2 + myUltraliskCount / 4);
+    upgrade(Consume);
+    if (!goLingUltraDefiler) {
+      if (enemyCloakedUnitCount || enemyVultureCount > 5) {
+        upgrade(Pneumatized_Carapace);
+      }
+      buildN(
+          Zerg_Hydralisk,
+          enemyVultureCount + 2 * enemyWraithCount + 3 * enemyValkyrieCount +
+              5 * enemyBattlecruiserCount);
+      upgrade(Grooved_Spines) && upgrade(Muscular_Augments);
+      buildN(Zerg_Mutalisk, 2 * enemyTankCount - enemyGoliathCount);
+    }
+    buildN(Zerg_Extractor, std::min(myDroneCount / 9, bases));
+    sneakDrones(bst, netGroundStrength > 0 ? 3 : 1);
+  }
+
   void buildOrder(BuildState& bst) {
-    const int hydraTarget = (enemyIsAffirmativelyMech ? 3 : 0) +
-        enemyVultureCount + enemyWraithCount + 2 * enemyGoliathCount;
+    const int hydraTarget = (enemyOpenedMech ? 3 : 0) + enemyVultureCount +
+        enemyWraithCount + 2 * enemyGoliathCount;
 
     build(Zerg_Zergling);
     buildN(Zerg_Drone, 44);
-    expand(bst);
+    takeNBases(bst, 3);
     buildN(Zerg_Drone, 30);
-    if (enemyIsAffirmativelyBio) {
+    if (enemyOpenedBio) {
       build(Zerg_Lurker);
     }
     buildN(Zerg_Hydralisk_Den, 1);
-    if (enemyIsAffirmativelyMech) {
+    if (enemyOpenedMech) {
       buildN(Zerg_Hydralisk, hydraTarget);
       sneakDrones(bst, 1);
       if (bst.gas >= std::min(100.0, bst.minerals)) {
@@ -197,8 +182,7 @@ class ABBOzvt3hatchlurker : public ABBOBase {
         countPlusProduction(bst, Zerg_Drone) >= 18) {
       buildN(Zerg_Extractor, 2);
     }
-    if (enemyIsAffirmativelyBio ||
-        countPlusProduction(bst, Zerg_Zergling) >= 6) {
+    if (enemyOpenedBio || countPlusProduction(bst, Zerg_Zergling) >= 6) {
       upgrade(Metabolic_Boost);
     }
     buildN(Zerg_Lair, 1);
@@ -207,8 +191,7 @@ class ABBOzvt3hatchlurker : public ABBOBase {
     buildSunkens(bst, 1);
     buildN(Zerg_Extractor, 1);
     buildN(
-        Zerg_Zergling,
-        std::max(4, enemyIsAffirmativelyMech ? 0 : 2 * enemyMarineCount));
+        Zerg_Zergling, std::max(4, enemyOpenedMech ? 0 : 2 * enemyMarineCount));
     buildN(Zerg_Hatchery, 3, naturalPos);
     buildN(Zerg_Spawning_Pool, 1);
     buildN(Zerg_Drone, 13);
@@ -220,11 +203,15 @@ class ABBOzvt3hatchlurker : public ABBOBase {
 
   virtual void buildStep2(BuildState& bst) override {
     autoUpgrade = false;
-    preferSafeExpansions = !enemyIsAffirmativelyMech;
+    preferSafeExpansions = !enemyOpenedMech;
     bst.autoBuildRefineries = countPlusProduction(bst, Zerg_Drone) >= 26;
 
     if (tookThirdBase) {
-      lateGame(bst);
+      if (enemyMoreBio) {
+        lateGameBio(bst);
+      } else {
+        lateGameMech(bst);
+      }
     } else {
       buildOrder(bst);
     }
@@ -232,4 +219,4 @@ class ABBOzvt3hatchlurker : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzvt3hatchlurker, UpcId, State*, Module*);
-}
+} // namespace cherrypi

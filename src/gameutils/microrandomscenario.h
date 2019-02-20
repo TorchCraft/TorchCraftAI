@@ -53,7 +53,6 @@ class MicroRandomScenario : public BaseMicroScenario {
                                                   {tc::BW::Race::Terran, 55},
                                                   {tc::BW::Race::Zerg, 50}},
       bool checkCompatibility = true,
-      std::string map = "test/maps/micro-empty2.scm",
       bool gui = false);
 
   void setParams(
@@ -63,10 +62,7 @@ class MicroRandomScenario : public BaseMicroScenario {
       bool checkCompatibility);
 
  protected:
-  std::pair<std::vector<OnceModule::SpawnInfo>,
-            std::vector<OnceModule::SpawnInfo>>
-  getSpawnInfo() override;
-
+  ScenarioInfo getScenarioInfo() override;
   std::vector<tc::BW::Race> allowedRaces_;
   bool randomSize_;
   std::map<tc::BW::Race, int> maxSupplyMap_;

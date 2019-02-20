@@ -37,12 +37,11 @@ BatchedPGTrainer::BatchedPGTrainer(
 
 ag::Variant BatchedPGTrainer::forward(
     ag::Variant x,
-    GameUID const& gameUID,
-    EpisodeKey const& key) {
+    EpisodeHandle const& handle) {
   MetricsContext::Timer forwardTimer(
       metricsContext_, "trainer:forward", kFwdMetricsSubsampling);
   std::shared_lock<std::shared_timed_mutex> lock(updateMutex_);
-  return Trainer::forward(x, gameUID, key);
+  return Trainer::forward(x, handle);
 }
 
 void BatchedPGTrainer::stepEpisode(
@@ -141,9 +140,8 @@ void BatchedPGTrainer::updateModel() {
 
       ag::Variant out;
       if (batcher_) {
-        out = std::move(
-            batcher_->unBatch(
-                model_->forward(batcher_->makeBatch({state})), false, -1)[0]);
+        out = std::move(batcher_->unBatch(
+            model_->forward(batcher_->makeBatch({state})), false, -1)[0]);
       } else {
         out = model_->forward(state);
       }
@@ -198,9 +196,6 @@ void BatchedPGTrainer::updateModel() {
       optim_->step();
     }
     optim_->zero_grad();
-    if (dist::globalContext()->rank == 0) {
-      checkpoint();
-    }
     /*
     for (auto& pair : model_ ->parameters()) {
       std::cout << "Rank " << dist::globalContext()->rank << " " << pair.first
@@ -229,10 +224,9 @@ std::shared_ptr<Evaluator> BatchedPGTrainer::makeEvaluator(
       model_,
       std::move(sampler),
       n,
-      [this](ag::Variant inp, GameUID const& id, EpisodeKey const& key) {
+      [this](ag::Variant inp, EpisodeHandle const&) {
         torch::NoGradGuard g;
-        auto out = this->model_->forward(inp);
-        return out;
+        return this->model_->forward(inp);
       });
 }
 

@@ -801,4 +801,4 @@ class ABBOzvpomutas : public ABBOzvpoverpoolbase {
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzvpohydras, UpcId, State*, Module*);
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzvpomutas, UpcId, State*, Module*);
-}
+} // namespace cherrypi

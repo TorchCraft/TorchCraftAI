@@ -80,10 +80,7 @@ class BatchedPGTrainer : public Trainer {
       override;
 
  public:
-  ag::Variant forward(
-      ag::Variant inp,
-      GameUID const& gameUID,
-      EpisodeKey const& key = kDefaultEpisodeKey) override;
+  ag::Variant forward(ag::Variant inp, EpisodeHandle const&) override;
   bool update() override;
   void doOnlineUpdatesInstead();
 

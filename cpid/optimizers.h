@@ -43,4 +43,4 @@ ag::Optimizer selectOptimizer(std::shared_ptr<torch::nn::Module>);
 
 std::map<std::string, std::string> optimizerFlags();
 
-} // namespace cherrypi
+} // namespace cpid

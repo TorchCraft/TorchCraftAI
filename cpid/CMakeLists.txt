@@ -4,6 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 
 FIND_PACKAGE(ZMQ REQUIRED)
+FIND_PACKAGE(Hiredis REQUIRED)
 
 FIND_PACKAGE(CUDA)
 IF(CUDA_FOUND)
@@ -48,12 +49,12 @@ FIND_LIBRARY(GLOO_BUILDER gloo_builder
   PATHS "${PROJECT_SOURCE_DIR}/3rdparty/pytorch/torch/lib/tmp_install/lib"
   NO_DEFAULT_PATH
 )
-TARGET_LINK_LIBRARIES(cpid 
+TARGET_LINK_LIBRARIES(cpid
   "${C10D}"
   "${GLOO}"
   "${GLOO_BUILDER}"
-  glog Torch fmt ${ZMQ_LIBRARIES} visdom pthread nccl
+  glog Torch fmt ${ZMQ_LIBRARIES} visdom pthread nccl hiredis
   )
 TARGET_INCLUDE_DIRECTORIES(cpid PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/include")
-TARGET_INCLUDE_DIRECTORIES(cpid PRIVATE "${ZMQ_INCLUDE_DIR}")
+TARGET_INCLUDE_DIRECTORIES(cpid SYSTEM PRIVATE "${ZMQ_INCLUDE_DIR}")
 TARGET_INCLUDE_DIRECTORIES(cpid PUBLIC "${PROJECT_SOURCE_DIR}")

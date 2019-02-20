@@ -34,7 +34,7 @@ double damageTypeModifier(int damageType, int unitSize) {
   }
   return 1.0;
 }
-}
+} // namespace
 
 bool cherrypi::CombatSim::addUnit(Unit* u) {
   if (u->type->isNonUsable || !u->active()) {
@@ -59,6 +59,7 @@ bool cherrypi::CombatSim::addUnit(Unit* u) {
   su.armor = u->unit.armor;
   su.maxSpeed = u->topSpeed * 256 * speedMult;
   su.flying = u->flying();
+  su.underDarkSwarm = u->underDarkSwarm();
 
   su.type = u->type;
 
@@ -115,6 +116,7 @@ void cherrypi::CombatSim::run(int frames) {
         if (u.hp <= 0.0) {
           continue;
         }
+
         SimUnit* target = u.target;
         if (target && target->hp <= 0.0) {
           target = nullptr;
@@ -170,6 +172,10 @@ void cherrypi::CombatSim::run(int frames) {
                 damage -= target->armor;
                 if (damage < 0.5) {
                   damage = 0.5;
+                }
+                if (u.type->restrictedByDarkSwarm &&
+                    (u.underDarkSwarm || target->underDarkSwarm)) {
+                  damage = 0.0;
                 }
                 target->hp -= damage;
                 if (target->hp < 0.0) {

@@ -157,4 +157,4 @@ class ABBO10HatchLing : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBO10HatchLing, UpcId, State*, Module*);
-}
+} // namespace cherrypi

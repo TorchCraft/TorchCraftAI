@@ -33,6 +33,14 @@ using EpisodeKey = std::string;
 const constexpr auto kDefaultEpisodeKey = "";
 class Evaluator;
 
+inline const std::string kValueKey = "V";
+inline const std::string kQKey = "Q";
+inline const std::string kPiKey = "Pi";
+inline const std::string kSigmaKey = "std";
+inline const std::string kActionQKey = "actionQ";
+inline const std::string kActionKey = "action";
+inline const std::string kPActionKey = "pAction";
+
 struct pairhash {
  public:
   template <typename T, typename U>
@@ -47,10 +55,22 @@ struct EpisodeTuple {
 };
 
 // Creates UIDs for each rank, uint64_t unique ids (will wrap when exhausted)
-GameUID genGameUID(int rank = 0);
+GameUID genGameUID();
 
+/**
+ * Stub base class for replay buffer frames.
+ *
+ * Frames that are serializable need to implement serialize() or load()/save()
+ * and register themselves in global scope with
+ * `CEREAL_REGISTER_TYPE(MyReplayBufferFrame)` and (depending on how you
+ * serialize) `CEREAL_REGISTER_POLYMORPHIC_RELATION(ReplayBufferFrame,
+ * MyReplayBufferFrame)`
+ */
 struct ReplayBufferFrame {
   virtual ~ReplayBufferFrame() = default;
+
+  template <class Archive>
+  void serialize(Archive& ar) {}
 };
 
 struct RewardBufferFrame : ReplayBufferFrame {
@@ -110,6 +130,9 @@ class ReplayBuffer {
 
 class AsyncBatcher;
 class BaseSampler;
+
+struct HandleGuard {};
+
 /**
  * The Trainer should be shared amongst multiple different nodes, and
  * attached to a single Module.
@@ -129,70 +152,59 @@ class BaseSampler;
  *      - A replay buffer, as implemented below and forced by subclassing the
  *        algorithm. Each algorithm will expect its own replay buffer.
  *
- * Checkpointing is supported, but the algorithm will have to choose when to
- * checkpoint. When checkpoint() is called the checkpointFrequency number of
- * times, rank 0 of the MPI process will save it to the checkpoint location.
  */
 class Trainer {
- protected:
-  virtual void
-  stepFrame(GameUID const&, EpisodeKey const&, ReplayBuffer::Episode&){};
-  virtual void
-  stepEpisode(GameUID const&, EpisodeKey const&, ReplayBuffer::Episode&){};
-  // Currently, stepGame is not called from anywhere. TODO
-  virtual void stepGame(GameUID const& game){};
-
-  ag::Container model_;
-  ag::Optimizer optim_;
-  std::shared_ptr<MetricsContext> metricsContext_;
-  ReplayBuffer replayer_;
-  int checkpointFrequency_ = 0;
-  std::string checkpointLocation_ = "";
-  int nUpdates_ = 0;
-  bool train_ = true;
-  std::atomic<bool> done_{false};
-  std::mutex modelWriteMutex_;
-  std::shared_timed_mutex activeMapMutex_;
-
-  std::unique_ptr<BaseSampler> sampler_;
-  std::unique_ptr<AsyncBatcher> batcher_;
-
-  template <typename T>
-  std::vector<T const*> cast(ReplayBuffer::Episode const& e);
-
-  using ForwardFunction = std::function<
-      ag::Variant(ag::Variant, GameUID const&, EpisodeKey const&)>;
-  // Private for trainers to use if they want to support evaluation
-  static std::shared_ptr<Evaluator> evaluatorFactory(
-      ag::Container model,
-      std::unique_ptr<BaseSampler> s,
-      size_t n,
-      ForwardFunction func);
-
-  ReplayBuffer::UIDKeyStore actives_;
-  /// We subsample kFwdMetricsSubsampling of the forward() events
-  /// when measuring their duration
-  static constexpr float kFwdMetricsSubsampling = 0.1;
-
  public:
+  struct EpisodeHandle {
+    EpisodeHandle(Trainer* trainer, GameUID id, EpisodeKey k);
+
+    // No trainer = no handle
+    EpisodeHandle() = default;
+    explicit operator bool() const;
+
+    GameUID const& gameID() const;
+    EpisodeKey const& episodeKey() const;
+
+    ~EpisodeHandle();
+
+    // Can't copy or assign
+    EpisodeHandle(EpisodeHandle&) = delete;
+    EpisodeHandle(EpisodeHandle const&) = delete;
+    EpisodeHandle& operator=(EpisodeHandle&) = delete;
+    EpisodeHandle& operator=(EpisodeHandle const&) = delete;
+
+    // Move is possible, and it will invalidate other episode
+    EpisodeHandle(EpisodeHandle&&);
+    // In move assignment, if we have a existing episode, it's force stopped
+    EpisodeHandle& operator=(EpisodeHandle&&);
+
+    friend std::ostream& operator<<(std::ostream&, EpisodeHandle const&);
+
+   private:
+    Trainer* trainer_;
+    GameUID gameID_;
+    EpisodeKey episodeKey_;
+    std::weak_ptr<HandleGuard> guard_;
+  };
   Trainer(
       ag::Container model,
       ag::Optimizer optim,
       std::unique_ptr<BaseSampler>,
       std::unique_ptr<AsyncBatcher> batcher = nullptr);
-  virtual ag::Variant forward(
-      ag::Variant inp,
-      GameUID const& gameUID,
-      EpisodeKey const& key = kDefaultEpisodeKey);
+  virtual ag::Variant forward(ag::Variant inp, EpisodeHandle const&);
+
+  /// Convenience function when one need to forward a single input. This will
+  /// make it look batched and forward it, so that the model has no problem
+  /// handling it.
+  /// If \param{model} is not provided, will use the trainer's model_.
+  ag::Variant forwardUnbatched(ag::Variant in, ag::Container model = nullptr);
+
   // Runs the training loop once. The return value is whether the model
   // succesfully updated. Sometimes, algorithms will be blocked while waiting
   // for new episodes, and this update will return false;
   virtual bool update() = 0;
   virtual ~Trainer() = default;
 
-  void setCheckpointFrequency(int);
-  void setCheckpointLocation(std::string const& fn);
-  bool checkpoint(bool force = false);
   void setTrain(bool = true);
   bool isTrain() const {
     return train_;
@@ -215,15 +227,8 @@ class Trainer {
   }
 
   virtual void step(
-      GameUID const& uid,
-      EpisodeKey const& k,
+      EpisodeHandle const&,
       std::shared_ptr<ReplayBufferFrame> v,
-      bool isDone = false);
-  // This is assuming we only have one "episode" in a "game",
-  // EpisodeKey k = kDefaultEpisodeKey
-  virtual void step(
-      GameUID const& key,
-      std::shared_ptr<ReplayBufferFrame> value,
       bool isDone = false);
   virtual std::shared_ptr<ReplayBufferFrame>
   makeFrame(ag::Variant trainerOutput, ag::Variant state, float reward) = 0;
@@ -231,15 +236,11 @@ class Trainer {
   /// After
   /// receiving false, a worker thread should check stopping conditins and
   /// re-try.
-  virtual bool startEpisode(
-      GameUID const&,
-      EpisodeKey const& = kDefaultEpisodeKey);
+  virtual EpisodeHandle startEpisode();
   // For when an episode is not done and you want to remove it from training
   // because it is corrupted or for some other reason.
-  virtual void forceStopEpisode(
-      GameUID const&,
-      EpisodeKey const& = kDefaultEpisodeKey);
-  bool isActive(GameUID const&, EpisodeKey const& = kDefaultEpisodeKey);
+  virtual void forceStopEpisode(EpisodeHandle const&);
+  bool isActive(EpisodeHandle const&);
   /// Releases all the worker threads so that they can be joined.
   /// For the off-policy trainers, labels all games as inactive. For the
   /// on-policy trainers, additionally un-blocks all threads that could be
@@ -258,7 +259,48 @@ class Trainer {
 
   TORCH_ARG(float, noiseStd) = 1e-2;
   TORCH_ARG(bool, continuousActions) = false;
+
+  void setBatcher(std::unique_ptr<AsyncBatcher> batcher);
+
+ protected:
+  virtual void
+  stepFrame(GameUID const&, EpisodeKey const&, ReplayBuffer::Episode&){};
+  virtual void
+  stepEpisode(GameUID const&, EpisodeKey const&, ReplayBuffer::Episode&){};
+  // Currently, stepGame is not called from anywhere. TODO
+  virtual void stepGame(GameUID const& game){};
+
+  ag::Container model_;
+  ag::Optimizer optim_;
+  std::shared_ptr<MetricsContext> metricsContext_;
+  ReplayBuffer replayer_;
+  bool train_ = true;
+  std::atomic<bool> done_{false};
+  std::mutex modelWriteMutex_;
+  std::shared_timed_mutex activeMapMutex_;
+
+  std::unique_ptr<BaseSampler> sampler_;
+  std::unique_ptr<AsyncBatcher> batcher_;
+
+  std::shared_ptr<HandleGuard> epGuard_;
+  template <typename T>
+  std::vector<T const*> cast(ReplayBuffer::Episode const& e);
+
+  using ForwardFunction =
+      std::function<ag::Variant(ag::Variant, EpisodeHandle const&)>;
+  // Private for trainers to use if they want to support evaluation
+  static std::shared_ptr<Evaluator> evaluatorFactory(
+      ag::Container model,
+      std::unique_ptr<BaseSampler> s,
+      size_t n,
+      ForwardFunction func);
+
+  ReplayBuffer::UIDKeyStore actives_;
+  /// We subsample kFwdMetricsSubsampling of the forward() events
+  /// when measuring their duration
+  static constexpr float kFwdMetricsSubsampling = 0.1;
 };
+using EpisodeHandle = Trainer::EpisodeHandle;
 
 /********************* IMPLEMENTATIONS *************************/
 
@@ -327,29 +369,4 @@ inline Trainer& Trainer::setMetricsContext(
 inline std::shared_ptr<MetricsContext> Trainer::metricsContext() const {
   return metricsContext_;
 }
-
-struct EpisodeHandle {
-  std::weak_ptr<Trainer> trainer;
-  GameUID gameID;
-  EpisodeKey episodeKey;
-  EpisodeHandle() = default;
-  EpisodeHandle(
-      std::shared_ptr<Trainer> trainer,
-      GameUID gameID,
-      EpisodeKey episodeKey = kDefaultEpisodeKey)
-      : trainer(trainer),
-        gameID(std::move(gameID)),
-        episodeKey(std::move(episodeKey)) {}
-  ~EpisodeHandle() {
-    if (auto ptr = trainer.lock()) {
-      // The trainer still there.
-      ptr->forceStopEpisode(gameID, episodeKey);
-    }
-  }
-
-  EpisodeHandle(EpisodeHandle const&) = delete;
-  EpisodeHandle& operator=(EpisodeHandle const&) = delete;
-  EpisodeHandle(EpisodeHandle&&) = default;
-  EpisodeHandle& operator=(EpisodeHandle&&) = default;
-};
 } // namespace cpid

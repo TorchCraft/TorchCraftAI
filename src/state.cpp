@@ -131,7 +131,14 @@ void State::update() {
     map_->Initialize(tcbGame_.get());
     map_->EnableAutomaticPathAnalysis();
     if (!map_->FindBasesForStartingLocations()) {
-      VLOG(0) << "Failed to find BWEM bases for starting locations";
+      for (auto& playerUnits : tcstate_->frame->units) {
+        for (auto& unit : playerUnits.second) {
+          if (unit.resources > 0) {
+            VLOG(0) << "Failed to find BWEM bases for starting locations";
+            break;
+          }
+        }
+      }
     }
     auto duration = hires_clock::now() - start;
     VLOG(1) << "Analysis done, found " << map_->Areas().size() << " areas and "
@@ -434,13 +441,12 @@ void State::findEnemyInfo() {
     }
   }
 
-  if (foundEnemy) {
-    VLOG(0) << "Enemy: " << ename << " playing " << erace._to_string();
-  } else {
-    LOG(WARNING) << "No enemy information found, assuming defaults";
+  VLOG(0) << "Playing " << myRace() << " on " << mapName() << " at LF"
+          << latencyFrames() << " against " << (foundEnemy ? ename : "nobody")
+          << " (" << erace << ")";
+  if (!foundEnemy) {
+    LOG(WARNING) << "No enemy information found";
   }
-  VLOG(0) << "Map: " << mapName();
-  VLOG(0) << "Game is being played at LF" << latencyFrames();
   board_->post(Blackboard::kEnemyNameKey, ename);
   board_->post(Blackboard::kEnemyRaceKey, erace._to_integral());
 }

@@ -94,7 +94,7 @@ void save(Archive& archive, BuildState const& stu);
 template <class Archive>
 void load(Archive& archive, BuildState& stu);
 
-} // namespace autbuild
+} // namespace autobuild
 
 /**
  * AutoBuildTasks are "build orders" in the colloquial sense.

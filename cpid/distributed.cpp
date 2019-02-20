@@ -6,6 +6,7 @@
  */
 
 #include "distributed.h"
+
 #include "common/utils.h"
 #include "netutils.h"
 
@@ -48,12 +49,18 @@ namespace distributed {
 
 Work::Work(std::function<void()> onFinish) : onFinish_(onFinish){};
 
-Work::~Work() {
-  if (!wait()) {
-    LOG(FATAL) << "Distributed operation failed! " << exception().what();
-  }
-  if (onFinish_) {
-    onFinish_();
+Work::~Work() noexcept(false) {
+  try {
+    wait();
+    if (onFinish_) {
+      onFinish_();
+    }
+  } catch (std::exception const& ex) {
+    if (std::uncaught_exceptions() == 0) {
+      throw;
+    }
+    LOG(WARNING) << "Detected exception during stack unwinding, ignoring: {}"
+                 << ex.what();
   }
 }
 
@@ -86,18 +93,15 @@ void Work::synchronize() {
   }
 }
 
-bool Work::wait() {
+void Work::wait() {
   for (auto& work : works_) {
-    if (!work->wait()) {
-      // No need to wait for the remaining work to finish when we find that
-      // one of them failed...
-      return false;
+    if (!work->isCompleted()) {
+      work->wait();
     }
   }
-  return true;
 }
 
-const std::exception& Work::exception() const {
+const std::exception_ptr Work::exception() const {
   for (auto& work : works_) {
     if (!work->isSuccess()) {
       return work->exception();
@@ -119,7 +123,7 @@ void Work::add(Work&& other) {
     works_.push_back(std::move(work));
   }
   other.works_.clear();
-  auto func = [ tof = this->onFinish_, oof = other.onFinish_ ]() {
+  auto func = [tof = this->onFinish_, oof = other.onFinish_]() {
     if (tof) {
       tof();
     }
@@ -206,9 +210,7 @@ void init() {
       VLOG(2) << "Using filestore at " << rdvu;
       store = std::make_shared<FileStore>(rdvu, FLAGS_c10d_size);
     }
-    store->setTimeout(
-        std::chrono::duration_cast<std::chrono::seconds>(
-            c10d::Store::kNoTimeout));
+    store->setTimeout(std::chrono::seconds::zero());
 
     // Initialize the Process Groups
     // The destructor of the global context can conflict with the
@@ -338,46 +340,37 @@ Work Context::broadcast(ag::Container const& model, int root) {
 FOR_ALL_TYPES(ALLGATHER)
 #undef ALLGATHER
 
-// XXX This is super silly, but allgather is not bound in gloo with c10d, so
-// we'll have to copy it to GPU, and use NCCL... Once c10d binds gloo allgather,
-// we can simplify this function a lot
 Work Context::allgather(torch::Tensor out, torch::Tensor in) {
   out = out.detach();
-  if (in.is_cuda()) {
-    std::vector<torch::Tensor> tin({in.detach()});
-    std::vector<std::vector<torch::Tensor>> tout;
-    tout.emplace_back();
-    for (auto i = 0; i < out.size(0); i++) {
-      tout.back().emplace_back(out[i]);
-    }
-    return Work({ncclPG_->allgather(tout, tin)});
-  } else {
-    auto inCopy = in.to(torch::kCUDA);
-    auto outCopy = out.to(torch::kCUDA);
-
-    std::vector<torch::Tensor> tin({inCopy.detach()});
-    std::vector<std::vector<torch::Tensor>> tout;
-    tout.emplace_back();
-    for (auto i = 0; i < out.size(0); i++) {
-      tout.back().emplace_back(outCopy[i]);
-    }
-
-    auto onFinish = [inCopy, outCopy, in, out]() mutable {
-      in.copy_(inCopy);
-      out.copy_(outCopy);
-    };
-    Work work(onFinish);
-    work.add(ncclPG_->allgather(tout, tin));
-    return work;
+  if (globalContext()->size == 1) {
+    out.copy_(in);
+    return Work();
   }
+  std::vector<torch::Tensor> tin({in.detach()});
+  std::vector<std::vector<torch::Tensor>> tout;
+  tout.emplace_back();
+  for (auto i = 0; i < out.size(0); i++) {
+    tout.back().emplace_back(out[i]);
+  }
+  return Work({devicePG(in)->allgather(tout, tin)});
 }
 
-Context::Context(std::shared_ptr<Store> store, int rank, int size)
+Work Context::barrier() {
+  Work work;
+  work.add(glooPG_->barrier());
+  return work;
+}
+
+Context::Context(
+    std::shared_ptr<Store> store,
+    int rank,
+    int size,
+    std::chrono::milliseconds timeout)
     : rank(rank),
       size(size),
       ncclPG_(std::make_shared<ProcessGroupNCCL>(store, rank, size)) {
   ProcessGroupGloo::Options opts;
-  opts.timeout = std::chrono::milliseconds(0); // No timeout
+  opts.timeout = timeout;
   auto addr = netutils::getInterfaceAddresses();
   opts.devices.emplace_back(
       gloo::transport::tcp::CreateDevice(addr.front().c_str()));
@@ -428,6 +421,10 @@ Work allgather(T* out, torch::Tensor in) {
 }
 Work allgather(torch::Tensor out, torch::Tensor in) {
   return globalContext()->allgather(out, in);
+}
+
+Work barrier() {
+  return globalContext()->barrier();
 }
 
 #define FORCE_INSTANTIATION(T, TORCH_TYPE)                 \

@@ -30,6 +30,8 @@ LDSHARED="cc -dynamiclib -undefined dynamic_lookup" REL_WITH_DEB_INFO=1 python b
 popd
 ```
 
+PyTorch will run most performantly using the environment variable `OMP_NUM_THREADS=1`. If you have no specific need for this value to differ, we recommend setting this in your dotfiles.
+
 ### Build and Install OpenBW
 ```bash
 pushd 3rdparty/openbw

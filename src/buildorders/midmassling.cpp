@@ -287,6 +287,10 @@ class ABBOmidmassling : public ABBOBase {
         buildN(Zerg_Drone, 70);
       }
       if (armySupply >= 28.0) {
+        upgrade(Plague);
+        buildN(Zerg_Defiler, 3);
+        upgrade(Consume);
+
         upgrade(Zerg_Carapace_1) && upgrade(Zerg_Carapace_2) &&
             upgrade(Zerg_Carapace_3);
         upgrade(Zerg_Melee_Attacks_1) && upgrade(Zerg_Melee_Attacks_2) &&
@@ -421,8 +425,9 @@ class ABBOmidmassling : public ABBOBase {
 
     bool wantsSunkens = false;
     if (bases >= 2 && enemyRace == +tc::BW::Race::Protoss &&
-        (enemyIsOneBase || (droneCount >= 32 && enemyZealotCount >= 6 &&
-                            enemyArmySupply > armySupply))) {
+        (enemyIsOneBase ||
+         (droneCount >= 32 && enemyZealotCount >= 6 &&
+          enemyArmySupply > armySupply))) {
       int n = 1;
       if (enemyArmySupply > armySupply + 4.0) {
         ++n;
@@ -553,4 +558,4 @@ class ABBOmidmassling : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOmidmassling, UpcId, State*, Module*);
-}
+} // namespace cherrypi

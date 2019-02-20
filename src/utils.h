@@ -22,6 +22,5 @@ using namespace ::common;
 #include "utils/filter.h"
 #include "utils/gamemechanics.h"
 #include "utils/interpretstate.h"
-#include "utils/parallel.h"
 #include "utils/syntax.h"
 #include "utils/upcs.h"

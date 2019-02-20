@@ -1,4 +1,4 @@
-# Build Orders
+#Build Orders
 
 Strategies encompassing, usually:
 - A fixed set of things to build at the beginning of the game

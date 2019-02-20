@@ -150,4 +150,4 @@ class ABBO3BasePoolLings : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBO3BasePoolLings, UpcId, State*, Module*);
-}
+} // namespace cherrypi

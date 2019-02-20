@@ -5,7 +5,7 @@ sidebar_label: Building Placement Intro
 ---
 
 In this tutorial, we will develop a neural network model for building placement.
-If you'd like to learn the basic ideas ideas around machine learning or neural networks first, we recommend [this course](https://course.fast.ai/ml) as an introduction to machine learning and [these](https://www.youtube.com/watch?v=bxe2T-V8XRs&list=PLiaHhY2iBX9hdHaRr6b7XevZtgZRa1PoU) [videos](https://www.youtube.com/playlist?list=PL3FW7Lu3i5JvHM8ljYj-zLfQRF3EO8sYv) for neural networks.
+If you'd like to learn the basic ideas ideas around machine learning or neural networks first, we recommend [this course](https://course18.fast.ai/ml) as an introduction to machine learning and [these](https://www.youtube.com/watch?v=bxe2T-V8XRs&list=PLiaHhY2iBX9hdHaRr6b7XevZtgZRa1PoU) [videos](https://www.youtube.com/playlist?list=PL3FW7Lu3i5JvHM8ljYj-zLfQRF3EO8sYv) for neural networks.
 
 ## Problem Description
 

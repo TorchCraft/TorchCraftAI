@@ -7,6 +7,7 @@
 
 #include "debug.h"
 #include <fmt/ostream.h>
+#include <torch/csrc/autograd/function.h>
 
 namespace common {
 
@@ -71,6 +72,17 @@ std::string variantInfo_impl(ag::Variant x, int depth) {
   }
   return oss.str();
 }
+
+struct CustomFunctionPostHook : torch::autograd::FunctionPostHook {
+  HookFunction func_;
+  CustomFunctionPostHook(HookFunction func) : func_(std::move(func)){};
+  virtual VarList operator()(
+      const VarList& gradInput,
+      const VarList& gradOutput) {
+    return func_(gradInput, gradOutput);
+  };
+};
+
 } // namespace
 
 std::string variantInfo(ag::Variant x) {
@@ -98,19 +110,26 @@ void checkTensor(torch::Tensor x, bool logOnError) {
   }
 }
 
+torch::Tensor const& addHook(torch::Tensor const& tensor, HookFunction&& f) {
+  auto& var = torch::autograd::as_variable_ref(tensor);
+  if (auto grad_fn = var.grad_fn()) {
+    grad_fn->add_post_hook(std::make_unique<CustomFunctionPostHook>(f));
+  }
+  return tensor;
+}
+
 void assertSize(
     const std::string& name,
     const torch::Tensor& tensor,
     at::IntList sizes) {
   auto dimensionsExpected = (int64_t)sizes.size();
   auto dimensionsActual = tensor.dim();
+  auto error = fmt::format(
+      "Expected tensor {} to have sizes {}, but are actually {}",
+      name,
+      sizes,
+      tensor.sizes());
   if (dimensionsExpected != dimensionsActual) {
-    auto error = fmt::format(
-        "Expected tensor {} to be  {} dimensions but was {}: {}",
-        name,
-        dimensionsExpected,
-        dimensionsActual,
-        tensorInfo(tensor));
     LOG(ERROR) << error;
     throw std::range_error(std::move(error));
   }
@@ -118,12 +137,6 @@ void assertSize(
     auto expected = sizes[i];
     auto actual = tensor.size(i);
     if (expected >= 0 && expected != actual) {
-      auto error = fmt::format(
-          "Expected tensor {} dimension {} to be {} but was {}",
-          name,
-          i,
-          expected,
-          actual);
       LOG(ERROR) << error;
       throw std::range_error(error);
     }
@@ -149,7 +162,7 @@ WeightSummary::WeightSummary(torch::nn::Module& module) {
 }
 std::string WeightSummary::toString() const {
   return fmt::format(
-      "Weights: {}\t\tZeroes: {}\t\tNaNs: {}\t\tNorm1: {:.6f}\t\tNorm2: "
+      "Weights: {:<11} Zeroes: {:<11} NaNs: {:<11} Norm1: {:.6f} Norm2: "
       "{:.6f}b",
       weights,
       zeroes,

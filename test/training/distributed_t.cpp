@@ -3,21 +3,24 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
+ *
+ * Tests tagged '.distributed' should be run with ./distrun.
  */
 
 #ifdef HAVE_CPID
 #include "test.h"
 
-#include "fsutils.h"
 #include "utils.h"
 
 #include <c10d/FileStore.hpp>
 
 #include <autogradpp/autograd.h>
 #include <common/autograd/utils.h>
+#include <common/fsutils.h>
 #include <cpid/distributed.h>
 
 using namespace cherrypi;
+using namespace common;
 namespace dist = cpid::distributed;
 
 CASE("distributed/allreduce[.distributed]") {
@@ -122,10 +125,10 @@ CASE("distributed/allgather[.distributed]") {
   }
 }
 
-CASE("distributed/context[.distributed]") {
+CASE("distributed/context") {
   auto file = fsutils::mktemp();
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(file); });
-  constexpr auto nThreads = 3;
+  auto constexpr nThreads = 3;
 
   std::vector<torch::Tensor> tensors;
   for (auto i = 0; i < nThreads; i++) {
@@ -136,8 +139,8 @@ CASE("distributed/context[.distributed]") {
   }
 
   auto test = [&](int rank) {
-    auto store = std::make_shared<dist::FileStore>(file, 3);
-    auto ctx = std::make_shared<dist::Context>(store, rank, 3);
+    auto store = std::make_shared<dist::FileStore>(file, nThreads);
+    auto ctx = std::make_shared<dist::Context>(store, rank, nThreads);
     ctx->allreduce(tensors[rank]);
   };
 
@@ -152,6 +155,76 @@ CASE("distributed/context[.distributed]") {
   for (auto& tensor : tensors) {
     EXPECT(tensor.sum().item<float>() == 25 * nThreads);
   }
+}
+
+CASE("distributed/barrier") {
+  auto file = fsutils::mktemp();
+  auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(file); });
+  auto constexpr nThreads = 3;
+
+  std::atomic<int> atBarrier = 0;
+  std::atomic<int> finished = 0;
+  auto test = [&](int rank) {
+    auto store = std::make_shared<dist::FileStore>(file, nThreads + 1);
+    auto ctx = std::make_shared<dist::Context>(store, rank, nThreads + 1);
+    ++atBarrier;
+    ctx->barrier();
+    ++finished;
+  };
+
+  std::vector<std::thread> threads;
+  for (auto i = 0; i < nThreads; i++) {
+    threads.emplace_back(test, i);
+  }
+
+  // Extra context in main to control execution
+  auto store = std::make_shared<dist::FileStore>(file, nThreads + 1);
+  auto ctx = std::make_shared<dist::Context>(store, nThreads, nThreads + 1);
+  while (atBarrier.load() < nThreads) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+  EXPECT(finished.load() == 0);
+  std::this_thread::sleep_for(std::chrono::milliseconds(50));
+  EXPECT(finished.load() == 0);
+  ctx->barrier();
+
+  for (auto& thread : threads) {
+    thread.join();
+  }
+  EXPECT(finished.load() == 3);
+}
+
+CASE("distributed/barrier_timeout") {
+  auto file = fsutils::mktemp();
+  auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(file); });
+  auto constexpr nThreads = 3;
+
+  std::atomic<int> failed = 0;
+  auto test = [&](int rank) {
+    auto store = std::make_shared<dist::FileStore>(file, nThreads);
+    auto timeout = std::chrono::seconds(1);
+    store->setTimeout(timeout);
+    auto ctx = std::make_shared<dist::Context>(store, rank, nThreads, timeout);
+
+    if (rank == 0) { // delay for rank 0 to let everyone fail
+      std::this_thread::sleep_for(timeout * 2);
+    }
+
+    try {
+      ctx->barrier();
+    } catch (...) {
+      ++failed;
+    }
+  };
+
+  std::vector<std::thread> threads;
+  for (auto i = 0; i < nThreads; i++) {
+    threads.emplace_back(test, i);
+  }
+  for (auto& thread : threads) {
+    thread.join();
+  }
+  EXPECT(failed == nThreads);
 }
 
 #endif // HAVE_CPID

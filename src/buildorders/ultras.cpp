@@ -55,4 +55,4 @@ class ABBOultras : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOultras, UpcId, State*, Module*);
-}
+} // namespace cherrypi

@@ -8,9 +8,9 @@
 #include "test.h"
 
 #include "gameutils/openbwprocess.h"
-#include "player.h"
 #include "gameutils/scenario.h"
 #include "gameutils/selfplayscenario.h"
+#include "player.h"
 #include "utils.h"
 
 #include <fcntl.h>

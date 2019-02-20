@@ -370,6 +370,9 @@ void UnitsInfo::update() {
       u->goneFrame = frame;
       destroyUnits_.push_back(u);
       updateGroups(u);
+      if (u->isMine) {
+        updateMyGroups = true;
+      }
     }
   }
 

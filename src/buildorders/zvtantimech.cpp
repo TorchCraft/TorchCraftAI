@@ -196,4 +196,4 @@ class ABBOzvtantimech : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzvtantimech, UpcId, State*, Module*);
-}
+} // namespace cherrypi

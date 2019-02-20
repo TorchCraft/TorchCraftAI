@@ -15,6 +15,8 @@
 #include "modules.h"
 
 #include <backward/backward.hpp>
+#include <fmt/format.h>
+#include <fmt/time.h>
 #include <glog/logging.h>
 #include <torchcraft/client.h>
 
@@ -37,6 +39,22 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+
+// Detect TSAN
+#if defined(__SANITIZE_THREAD__) // GCC
+#define WITH_TSAN
+#elif defined(__has_feature)
+#if __has_feature(thread_sanitizer) // clang
+#define WITH_TSAN
+#endif
+#else
+#undef WITH_TSAN
+#endif
+
+DEFINE_string(
+    vfilter,
+    "",
+    "verbose log filters based on the full path of a file");
 
 namespace cherrypi {
 
@@ -167,27 +185,35 @@ class PrefixLogSink : public google::LogSink {
       size_t messageLen) override {
     // Log to stderr or file depending on flag
     auto& chan = (logToStderr_) ? std::cerr : logFilesForSink[severity];
-
-    switch (severity) {
-      case google::GLOG_INFO:
-        chan << "I";
-        break;
-      case google::GLOG_WARNING:
-        chan << "W";
-        break;
-      case google::GLOG_ERROR:
-        chan << "E";
-        break;
-      case google::GLOG_FATAL:
-        chan << "F";
-        break;
-      default:
-        chan << "?";
-        break;
+    static auto vfilter =
+        std::regex(FLAGS_vfilter, std::regex_constants::egrep);
+    if (!FLAGS_vfilter.empty() && !std::regex_search(fullFilename, vfilter)) {
+      return;
     }
 
-    chan << std::setfill('0') << std::setw(5) << threadId() << "/";
-    chan << logPrefix << " [" << baseFilename << ":" << line << "] ";
+    auto prefix = [](auto severity) {
+      switch (severity) {
+        case google::GLOG_INFO:
+          return "I";
+        case google::GLOG_WARNING:
+          return "W";
+        case google::GLOG_ERROR:
+          return "E";
+        case google::GLOG_FATAL:
+          return "F";
+        default:
+          return "?";
+      }
+    };
+
+    chan << fmt::format(
+        "{}{:>5}/{} {:%m/%d %T} [{}:{}] ",
+        prefix(severity),
+        threadId(),
+        logPrefix,
+        *tmTime,
+        baseFilename,
+        line);
     chan.write(message, messageLen);
     chan << std::endl;
   }
@@ -264,7 +290,11 @@ std::string createLogFileName(
 } // namespace
 
 void init(int64_t randomSeed) {
+  // Don't use backward under TSAN to prevent infinite loops (signal-unsafe call
+  // (i.e. malloc) inside of a signal)
+#ifndef WITH_TSAN
   static backward::SignalHandling sh;
+#endif // !WITH_TSAN
   // Needed for timers in our bot
   static_assert(
       hires_clock::is_steady, "Steady high-resolution clock required");

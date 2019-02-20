@@ -73,4 +73,15 @@ at::Generator* Rand::gen() {
   return torchEngine_.get();
 }
 
+std::string randId(size_t len) {
+  static std::mt19937 rng = std::mt19937(std::random_device()());
+  static const char alphanum[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+  std::uniform_int_distribution<int> dis(0, sizeof(alphanum) - 2);
+  std::string s(len, 0);
+  for (size_t i = 0; i < len; i++) {
+    s[i] = alphanum[dis(rng)];
+  }
+  return s;
+}
+
 } // namespace common

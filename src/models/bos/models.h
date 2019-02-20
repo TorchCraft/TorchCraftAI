@@ -51,19 +51,19 @@ AUTOGRAD_CONTAINER_CLASS(MapRaceEcoTimeFeaturize) {
   void reset() override;
 
   /** Expected input:
-  * - a Bx1 tensor containing the map ID,
-  * - a Bx2 tensor containing the races,
-  * - a Bx4 tensor containing resource features.
-  * - a Bx142 tensor containing upgrades and techonology features.
-  * - a Bx142 tensor containing pending upgrades and techonology features.
-  * - a Bx1 tensor containing the current time (in frames)
-  * - a Bx1 tensor containing the active build
-  *
-  * B can also be TxB.
-  *
-  * Returns:
-  * - a BxN tensor, with N being the sum of all embeddings
-  */
+   * - a Bx1 tensor containing the map ID,
+   * - a Bx2 tensor containing the races,
+   * - a Bx4 tensor containing resource features.
+   * - a Bx142 tensor containing upgrades and techonology features.
+   * - a Bx142 tensor containing pending upgrades and techonology features.
+   * - a Bx1 tensor containing the current time (in frames)
+   * - a Bx1 tensor containing the active build
+   *
+   * B can also be TxB.
+   *
+   * Returns:
+   * - a BxN tensor, with N being the sum of all embeddings
+   */
   ag::Variant forward(ag::Variant input) override;
 
  protected:

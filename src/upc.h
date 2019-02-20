@@ -78,12 +78,13 @@ struct UPCTuple {
   /// - std::string: An arbitrary string.
   /// - Position: An arbitrary position.
   /// - torch::Tensor: An arbitrary tensor.
-  using StateT = mapbox::util::variant<Empty,
-                                       BuildTypeMap,
-                                       std::string,
-                                       Position,
-                                       SetCreatePriorityState,
-                                       torch::Tensor>;
+  using StateT = mapbox::util::variant<
+      Empty,
+      BuildTypeMap,
+      std::string,
+      Position,
+      SetCreatePriorityState,
+      torch::Tensor>;
 
   /// A distribution over units that we can control.
   UnitT unit;
@@ -126,6 +127,36 @@ struct UPCTuple {
 
   /// Creates a uniform distribution over all game commands.
   static CommandT uniformCommand();
+};
+
+/**
+ * Represents a decision of how to control a unit.
+ */
+struct MicroAction {
+  /// If true:
+  /// * This MicroAction's UPC is the final decision on what command to issue
+  ///   this unit. If the UPC is null, the decision is to issue no command.
+  ///
+  /// If false:
+  /// * This MicroAction represents the absence of a decision on what a unit
+  ///   should do. Allow downstream entities to make a decision of what to do.
+  bool isFinal = false;
+
+  /// if (isFinal):
+  /// * This UPC is the final decision on what this unit should do.
+  ///
+  /// if (!isFinal):
+  /// * This UPC should be ignored.
+  std::shared_ptr<UPCTuple> upc = nullptr;
+
+  /// if (isFinal):
+  /// * Returns the UPC, which may be null.
+  ///
+  /// if (!isFinal):
+  /// * The UPC doesn't matter; returns null.
+  std::shared_ptr<UPCTuple> getFinalUPC() const {
+    return isFinal ? upc : nullptr;
+  }
 };
 
 } // namespace cherrypi

@@ -76,4 +76,4 @@ class ABBO2BaseMutas : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBO2BaseMutas, UpcId, State*, Module*);
-}
+} // namespace cherrypi

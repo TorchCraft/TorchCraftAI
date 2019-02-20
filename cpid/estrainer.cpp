@@ -18,6 +18,35 @@
 #include <math.h>
 
 namespace cpid {
+namespace {
+struct Fan {
+  explicit Fan(torch::Tensor& tensor) {
+    const auto dimensions = tensor.ndimension();
+    AT_CHECK(
+        dimensions >= 2,
+        "Fan in and fan out can not be computed for tensor with fewer than 2 "
+        "dimensions");
+
+    if (dimensions == 2) {
+      in = tensor.size(1);
+      out = tensor.size(0);
+    } else {
+      in = tensor.size(1) * tensor[0][0].numel();
+      out = tensor.size(0) * tensor[0][0].numel();
+    }
+  }
+
+  int64_t in;
+  int64_t out;
+};
+} // namespace
+
+float kaiming_normal_(torch::Tensor tensor, double gain) {
+  // Use Fan_in as default
+  torch::NoGradGuard guard;
+  Fan fan(tensor);
+  return gain / std::sqrt(fan.in);
+}
 
 ESTrainer::ESTrainer(
     ag::Container model,
@@ -240,7 +269,6 @@ bool ESTrainer::update() {
       modelsHistory_.pop_front();
     }
   }
-  checkpoint();
   if (metricsContext_) {
     metricsContext_->pushEvent("trainer:batch_policy_loss", 0.0);
     metricsContext_->pushEvent("trainer:batch_value_loss", 0.0);
@@ -273,40 +301,43 @@ bool ESTrainer::update() {
   return true;
 }
 
-void ESTrainer::forceStopEpisode(GameUID const& uid, EpisodeKey const& k) {
-  if (onPolicy_ && isActive(uid, k)) {
+void ESTrainer::forceStopEpisode(EpisodeHandle const& handle) {
+  {
     std::unique_lock<std::mutex> updateLock(updateMutex_);
-    gamesStarted_--;
+    if (onPolicy_ && isActive(handle)) {
+      LOG_IF(FATAL, gamesStarted_ == 0)
+          << "Stopping episode but gamesStarted_=0 already";
+      gamesStarted_--;
+    }
   }
-  Trainer::forceStopEpisode(uid, k);
+  Trainer::forceStopEpisode(handle);
 }
 
-bool ESTrainer::startEpisode(GameUID const& uid, EpisodeKey const& k) {
+Trainer::EpisodeHandle ESTrainer::startEpisode() {
   using namespace std::chrono_literals;
 
-  if (onPolicy_) {
+  auto handle = [&]() {
     std::unique_lock<std::mutex> updateLock(updateMutex_);
-    while (true) {
-      // we need to produce a game, so we proceed
-      if (gamesStarted_ < batchSize_) {
-        break;
+    if (onPolicy_) {
+      while (true) {
+        // we need to produce a game, so we proceed
+        if (gamesStarted_ < batchSize_) {
+          break;
+        }
+        auto wakeReason = batchBarrier_.wait_for(updateLock, 100ms);
+        if (wakeReason == std::cv_status::timeout) {
+          return EpisodeHandle();
+        }
       }
-      auto wakeReason = batchBarrier_.wait_for(updateLock, 100ms);
-      if (wakeReason == std::cv_status::timeout) {
-        return false;
-      }
+      gamesStarted_++;
     }
-    if (!Trainer::startEpisode(uid, k)) {
-      return false;
-    }
-    gamesStarted_++;
-  } else {
-    if (!Trainer::startEpisode(uid, k)) {
-      return false;
-    }
+    return Trainer::startEpisode();
+  }();
+  if (!handle) {
+    return handle;
   }
 
-  auto modelKey = std::make_pair(uid, k);
+  auto modelKey = std::make_pair(handle.gameID(), handle.episodeKey());
   int64_t seed;
   // To implement the variance reduction via antithetic variates,
   // we always generate seeds in pairs with swapped signs: seed and -seed.
@@ -332,7 +363,7 @@ bool ESTrainer::startEpisode(GameUID const& uid, EpisodeKey const& k) {
     gameToGenerationSeed_[modelKey] = generationSeed;
     modelCache_[generationSeed] = model;
   }
-  return true;
+  return handle;
 }
 
 ag::Container ESTrainer::getGameModel(
@@ -388,22 +419,23 @@ ag::Container ESTrainer::generateModel(int generation, int64_t seed) {
   generator->manualSeed(seed < 0 ? -seed : seed);
   auto clonedParams = perturbed->parameters();
   for (auto& tensor : clonedParams) {
-    auto delta = at::zeros_like(tensor).normal_(0, std_, generator.get());
+    float realStd = std_;
+    if (tensor.ndimension() != 1) {
+      realStd *= kaiming_normal_(tensor, std::sqrt(2.0));
+    }
+    auto delta = at::zeros_like(tensor).normal_(0, realStd, generator.get());
     tensor.add_(delta, seed < 0 ? -1.0 : 1.0);
   }
   return perturbed;
   // END NoGradGuard
 }
 
-ag::Variant ESTrainer::forward(
-    ag::Variant inp,
-    GameUID const& gameUID,
-    EpisodeKey const& key) {
+ag::Variant ESTrainer::forward(ag::Variant inp, EpisodeHandle const& handle) {
   MetricsContext::Timer forwardTimer(
       metricsContext_, "trainer:forward", kFwdMetricsSubsampling);
-  ag::Container model = getGameModel(gameUID, key);
+  ag::Container model = getGameModel(handle.gameID(), handle.episodeKey());
   torch::NoGradGuard g;
-  return model->forward(inp);
+  return forwardUnbatched(inp, model);
 }
 
 std::shared_ptr<Evaluator> ESTrainer::makeEvaluator(
@@ -413,9 +445,9 @@ std::shared_ptr<Evaluator> ESTrainer::makeEvaluator(
       model_,
       std::move(sampler),
       n,
-      [this](ag::Variant inp, GameUID const& id, EpisodeKey const& key) {
+      [this](ag::Variant inp, EpisodeHandle const& handle) {
         torch::NoGradGuard g;
-        return this->model_->forward(inp);
+        return this->forwardUnbatched(inp);
       });
 }
 
@@ -455,13 +487,15 @@ void ESTrainer::populateSeedQueue() {
 }
 
 void ESTrainer::reset() {
-  Trainer::reset();
   if (onPolicy_) {
     std::unique_lock<std::mutex> updateLock(updateMutex_);
+    Trainer::reset();
     gamesStarted_ = 0;
     newGames_.clear();
     batchBarrier_.notify_all();
+    return;
   }
+  Trainer::reset();
 }
 
 std::shared_ptr<ReplayBufferFrame> ESTrainer::makeFrame(

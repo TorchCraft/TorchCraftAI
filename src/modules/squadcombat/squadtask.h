@@ -77,14 +77,24 @@ class SquadTask : public Task {
   /// Stateful information about our units
   std::unordered_map<Unit const*, Agent>* agents_;
 
+  /// Models to solicit for UPCs
+  std::vector<std::shared_ptr<MicroModel>>* models;
+
   /// Enemies this Squad should target
   std::vector<Unit*> targets_;
 
   /// Threatening enemies this Squad should be aware of
   std::vector<Unit*> threats_;
 
+  /// All units relevant to this squad.
+  std::unordered_set<Unit*> relevantUnits_;
+
   const std::unordered_set<Unit*>& squadUnits() const {
     return units();
+  }
+
+  const std::unordered_set<Unit*>& relevantUnits() const {
+    return relevantUnits_;
   }
 
   SquadTask(
@@ -93,7 +103,8 @@ class SquadTask : public Task {
       std::unordered_set<Unit*> units,
       std::vector<Unit*> targets,
       std::unordered_map<Unit const*, EnemyState>* enemyStates,
-      std::unordered_map<Unit const*, Agent>* agents)
+      std::unordered_map<Unit const*, Agent>* agents,
+      std::vector<std::shared_ptr<MicroModel>>* models)
       : Task(upcId, units),
         targets(std::move(targets)),
         targetingLocation(false),
@@ -101,7 +112,8 @@ class SquadTask : public Task {
         fleeProb(upc->commandProb(Command::Flee)),
         sourceUpc(upc),
         enemyStates_(enemyStates),
-        agents_(agents) {}
+        agents_(agents),
+        models(models) {}
 
   SquadTask(
       int upcId,
@@ -110,7 +122,8 @@ class SquadTask : public Task {
       int x,
       int y,
       std::unordered_map<Unit const*, EnemyState>* enemyStates,
-      std::unordered_map<Unit const*, Agent>* agents)
+      std::unordered_map<Unit const*, Agent>* agents,
+      std::vector<std::shared_ptr<MicroModel>>* models)
       : Task(upcId, units),
         targetX(x),
         targetY(y),
@@ -119,7 +132,8 @@ class SquadTask : public Task {
         fleeProb(upc->commandProb(Command::Flee)),
         sourceUpc(upc),
         enemyStates_(enemyStates),
-        agents_(agents) {}
+        agents_(agents),
+        models(models) {}
 
   void update(State* state) override;
 

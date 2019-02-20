@@ -11,6 +11,7 @@
 #include <glog/logging.h>
 #include <memory>
 #include <mutex>
+#include <shared_mutex>
 #include <thread>
 
 #include <autogradpp/autograd.h>
@@ -55,8 +56,7 @@ class AsyncBatcher {
 
   /** Get a lock on the model. That allows updating the model ensuring that no
    * forward is being executed */
-  void lockModel();
-  void unlockModel();
+  std::unique_lock<std::shared_mutex> lockModel();
 
   /** Given an output of the model, retrieve the replies for all the
    * element of the batch.
@@ -74,6 +74,9 @@ class AsyncBatcher {
    * with -1
    */
   virtual ag::Variant makeBatch(const std::vector<ag::Variant>& queries);
+  virtual ag::Variant makeBatch(
+      const std::vector<ag::Variant>& queries,
+      double padValue);
 
   /**
    * This function should return true when the batch is ready to be consumed
@@ -82,6 +85,7 @@ class AsyncBatcher {
 
  protected:
   void startBatching(int batchSize);
+  void stopBatching();
 
   void consumeThread();
 
@@ -96,13 +100,67 @@ class AsyncBatcher {
   std::condition_variable_any batchReadyCV_;
   std::mutex batchReadyMutex_;
 
+  // Mutexes have to be acquires in this order:
   priority_mutex accessMutex_;
+  std::shared_mutex modelMutex_;
 
   std::vector<ag::Variant> queries_;
   std::vector<std::shared_ptr<std::promise<ag::Variant>>> replies_;
 
   std::thread consumeThread_;
-  bool shouldStop_;
+  std::atomic<bool> shouldStop_{false};
+};
+
+/** A batcher that can operate on (already) batched data
+ * Should be used when features have a variable batch dimension, for
+ * instance the number of units controlled.
+ * More specifically, tensors with sizes [b1, ft], [b2, ft] ..., are
+ * batched into a Tensor of size [b1 + b2 + ..., ft].
+ *
+ * On the contrary to AsyncBatcher, SubBatchAsyncBatcher expects
+ * input tensors shape to differ on the first dimension only, and will
+ * not pad input tensors, unless explicitely autorized with 'allowPadding'.
+ */
+class SubBatchAsyncBatcher : public AsyncBatcher {
+ public:
+  static constexpr const char* kBatchInfoKey = "batch_info";
+
+  SubBatchAsyncBatcher(int batchSize, ag::Container model = nullptr);
+  ~SubBatchAsyncBatcher();
+
+  std::vector<ag::Variant>
+  unBatch(const ag::Variant& out, bool stripOutput, double stripValue) override;
+
+  ag::Variant makeBatch(const std::vector<ag::Variant>& queries, double)
+      override;
+
+  void allowPadding(bool allowPadding) {
+    allowPadding_ = allowPadding;
+  }
+
+  torch::Tensor makeBatchTensors(
+      std::vector<torch::Tensor> const& tensors,
+      double padValue);
+
+ protected:
+  bool allowPadding_ = false;
+
+ public:
+  static std::vector<torch::Tensor> unBatchTensor(
+      const torch::Tensor& out,
+      std::vector<int64_t> const& batchSizes);
+
+  static std::vector<long> findBatchInfo(
+      ag::Variant const& batchInfoVar,
+      std::string const& variableName);
+
+  static std::vector<torch::Tensor> forEachSubbatch(
+      ag::Variant const& input,
+      std::string const& inputName,
+      torch::Tensor batchedInput,
+      std::function<torch::Tensor(torch::Tensor)> do_fn = [](torch::Tensor t) {
+        return t;
+      });
 };
 
 } // namespace cpid

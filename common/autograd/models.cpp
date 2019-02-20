@@ -45,8 +45,23 @@ void ConvBlock::reset() {
   }
 
   auto trunk = ag::Sequential();
+  auto padFunc = [&](auto s) {
+    switch (padType_) {
+      case PadType::Reflection:
+        return ag::Functional([v = std::vector<int64_t>({s, s, s, s})](auto x) {
+          return torch::reflection_pad2d(x, v);
+        });
+      case PadType::Replication:
+        return ag::Functional([v = std::vector<int64_t>({s, s, s, s})](auto x) {
+          return torch::replication_pad2d(x, v);
+        });
+      default:
+        throw std::runtime_error("No such padding");
+    }
+  };
 
   int intermSize = bottleNeck_ ? nOutFeats_ / 4 : nOutFeats_;
+  bool isZeroPad = padType_ == PadType::Zero;
 
   int currentSize = nInFeats_;
   for (int i = 0; i < nLayers_ - 1; ++i) {
@@ -54,11 +69,14 @@ void ConvBlock::reset() {
     int curStride = (i == 0) ? stride_ : 1;
     int curDilation = (i == 0) ? dilation_ : 1;
     int curPadding = (curDilation * (kernelSize_ - 1) / 2);
+    if (!isZeroPad) {
+      trunk.append(padFunc(curPadding).make());
+    }
     addLayer(
         trunk,
         ag::Conv2d(currentSize, intermSize, kernelSize_)
             .stride(curStride)
-            .padding(curPadding)
+            .padding(isZeroPad ? curPadding : 0)
             .dilation(curDilation)
             .transposed(deconv_)
             .with_bias(bias_)
@@ -71,9 +89,12 @@ void ConvBlock::reset() {
   int lastStride = (nLayers_ == 1) ? stride_ : 1;
   int lastDilation = (nLayers_ == 1) ? dilation_ : 1;
   int lastPadding = (lastDilation * (kernelSize_ - 1) / 2);
+  if (!isZeroPad) {
+    trunk.append(padFunc(lastPadding).make());
+  }
   ag::Conv2d curConv = ag::Conv2d(currentSize, nOutFeats_, kernelSize_)
                            .stride(lastStride)
-                           .padding(lastPadding)
+                           .padding(isZeroPad ? lastPadding : 0)
                            .dilation(lastDilation)
                            .transposed(deconv_)
                            .with_bias(bias_);
@@ -269,21 +290,20 @@ void EncoderDecoder::reset() {
     const bool transposed = (decodeType_ == DecodeType::Deconv);
     const int curStride = (transposed) ? stride_ : 1;
     auto block = ag::Sequential();
-    block.append(
-        ConvBlock()
-            .nInFeats(curIn)
-            .nOutFeats(outSize)
-            .nonlinearity(nonlinearity_)
-            .deconv(transposed)
-            .kernelSize(kernelSize_)
-            .stride(curStride)
-            .dilation(curDilation)
-            .residual(residual_)
-            .batchNorm(batchNorm_)
-            .bottleNeck(bottleNeck_)
-            .nLayers(nInnerLayers_)
-            .bias(bias_)
-            .make());
+    block.append(ConvBlock()
+                     .nInFeats(curIn)
+                     .nOutFeats(outSize)
+                     .nonlinearity(nonlinearity_)
+                     .deconv(transposed)
+                     .kernelSize(kernelSize_)
+                     .stride(curStride)
+                     .dilation(curDilation)
+                     .residual(residual_)
+                     .batchNorm(batchNorm_)
+                     .bottleNeck(bottleNeck_)
+                     .nLayers(nInnerLayers_)
+                     .bias(bias_)
+                     .make());
     if (transposed) {
       // in the case of deconvolution in decoding, we make sure that the size in
       // the output matches the size of the mirror layer
@@ -420,4 +440,58 @@ void EncoderDecoder::add_resample(
     add_padding_if_needed(module, curSize, inShape, targetShape);
   }
 }
+
+void MHAttention::reset() {
+  AUTOGRAD_REGISTER(vLinear_, ag::Linear(valueDim_, hidDim_ * nHeads_).make());
+  AUTOGRAD_REGISTER(kLinear_, ag::Linear(queryDim_, hidDim_ * nHeads_).make());
+  AUTOGRAD_REGISTER(qLinear_, ag::Linear(queryDim_, hidDim_ * nHeads_).make());
+  AUTOGRAD_REGISTER(
+      oLinear_, ag::Linear(hidDim_ * nHeads_, outDim_).with_bias(false).make());
+  for (auto& p : oLinear_->parameters()) {
+    p.detach().zero_();
+  }
+}
+
+ag::Variant MHAttention::forward(ag::Variant x) {
+  auto& Q = x[0];
+  auto& K = x[1];
+  auto& V = x[2];
+  auto bsz = Q.size(0);
+  auto ksz = K.size(1);
+  auto qsz = Q.size(1);
+  auto mask =
+      x.getTensorList().size() == 4 ? x[3].to(torch::kByte) : torch::Tensor();
+  ASSERT_SIZE(Q, {bsz, qsz, queryDim_});
+  ASSERT_SIZE(K, {bsz, ksz, queryDim_});
+  ASSERT_SIZE(V, {bsz, ksz, valueDim_});
+  if (mask.defined()) {
+    ASSERT_SIZE(mask, {bsz, qsz, ksz});
+  }
+
+  Q = qLinear_->forward(Q)[0].reshape({bsz, qsz, nHeads_, hidDim_});
+  K = kLinear_->forward(K)[0].reshape({bsz, ksz, nHeads_, hidDim_});
+  V = vLinear_->forward(V)[0].reshape({bsz, ksz, nHeads_, hidDim_});
+
+  auto matmul = torch::matmul(K.transpose(1, 2).unsqueeze(1), Q.unsqueeze(-1))
+                    .squeeze(-1)
+                    .div_(std::sqrt(queryDim_));
+
+  ASSERT_SIZE(matmul, {bsz, qsz, nHeads_, ksz});
+  if (mask.defined()) {
+    matmul.masked_fill_(
+        (1 - mask).unsqueeze(2), std::numeric_limits<float>::lowest());
+    matmul = matmul.softmax(-1);
+  } else {
+    matmul = matmul.softmax(-1);
+  }
+
+  // (B Q H K), (B Q K H D), reshapes into =>
+  // (B Q H 1 K) @ (B Q H K D), matmul into=>
+  // (B Q H 1 D)
+  auto attended =
+      torch::matmul(matmul.unsqueeze(-2), V.unsqueeze(1).transpose(2, 3));
+  auto concatted = attended.reshape({bsz, qsz, hidDim_ * nHeads_});
+  return oLinear_->forward(concatted)[0];
+}
+
 } // namespace common

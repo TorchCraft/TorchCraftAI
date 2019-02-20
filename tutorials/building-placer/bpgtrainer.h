@@ -76,10 +76,7 @@ class BPGTrainer : public Trainer {
 
   void stepEpisode(GameUID const&, EpisodeKey const&, ReplayBuffer::Episode&)
       override;
-  ag::Variant forward(
-      ag::Variant inp,
-      GameUID const& gameUID,
-      EpisodeKey const& key = kDefaultEpisodeKey) override;
+  ag::Variant forward(ag::Variant inp, EpisodeHandle const&) override;
   bool update() override;
   virtual std::shared_ptr<ReplayBufferFrame> makeFrame(
       ag::Variant trainerOutput,

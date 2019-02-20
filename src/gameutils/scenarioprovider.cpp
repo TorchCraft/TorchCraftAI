@@ -12,11 +12,16 @@
 
 namespace cherrypi {
 
+namespace {
 // estimation of the number of played frames needed to propagate detection. This
 // is 36 frames, assuming a frame skip of 3.
-namespace {
 int constexpr kDetectionDelay = 12;
-}
+
+// We don't want to reuse the same bwapi instances too much, because the
+// internal structures might overflow (dead units are not freed, for example)
+int constexpr kMaxScenarioReuse = 100;
+} // namespace
+
 bool ScenarioProvider::isFinished(int currentStep, bool checkAttack) {
   if (player1_ == nullptr || player2_ == nullptr) {
     return true;
@@ -69,19 +74,21 @@ bool ScenarioProvider::isFinished(int currentStep, bool checkAttack) {
   return false;
 }
 
-BaseMicroScenario::BaseMicroScenario(int maxFrame, std::string map, bool gui)
-    : ScenarioProvider(maxFrame, gui), map_(std::move(map)) {}
+BaseMicroScenario::BaseMicroScenario(int maxFrame, bool gui)
+    : ScenarioProvider(maxFrame, gui) {}
 
 std::pair<std::shared_ptr<BasePlayer>, std::shared_ptr<BasePlayer>>
 BaseMicroScenario::spawnNextScenario(
     const std::function<void(BasePlayer*)>& setup1,
     const std::function<void(BasePlayer*)>& setup2) {
+  auto scenarioInfo = getScenarioInfo();
+
   launchedWithReplay_ = !replay_.empty();
   if (launchedWithReplay_ || !player1_) {
     // this is probably first run, we need to spawn the game
     // In micro, we don't care about races.
     scenario_ = std::make_shared<SelfPlayScenario>(
-        map_,
+        mapPathPrefix_ + scenarioInfo.map,
         tc::BW::Race::Terran,
         tc::BW::Race::Terran,
         GameType::UseMapSettings,
@@ -93,14 +100,14 @@ BaseMicroScenario::spawnNextScenario(
     player1_ = std::make_shared<MicroPlayer>(client1_);
     player2_ = std::make_shared<MicroPlayer>(client2_);
 
-    std::vector<tc::Client::Command> comms;
-    comms.emplace_back(tc::BW::Command::SetSpeed, 0);
-    comms.emplace_back(tc::BW::Command::SetGui, gui_);
-    comms.emplace_back(tc::BW::Command::SetCombineFrames, 1);
-    comms.emplace_back(tc::BW::Command::SetFrameskip, 1);
-    comms.emplace_back(tc::BW::Command::SetBlocking, true);
-    player1_->queueCmds(comms);
-    player2_->queueCmds(comms);
+    std::vector<tc::Client::Command> commands;
+    commands.emplace_back(tc::BW::Command::SetSpeed, 0);
+    commands.emplace_back(tc::BW::Command::SetGui, gui_);
+    commands.emplace_back(tc::BW::Command::SetCombineFrames, 1);
+    commands.emplace_back(tc::BW::Command::SetFrameskip, 1);
+    commands.emplace_back(tc::BW::Command::SetBlocking, true);
+    player1_->queueCmds(commands);
+    player2_->queueCmds(commands);
   } else {
     // Reset player states by instantiating new ones
     player1_ = std::make_shared<MicroPlayer>(client1_);
@@ -112,26 +119,55 @@ BaseMicroScenario::spawnNextScenario(
   setup2(player2_.get());
 
   // spawn units info
-  std::vector<OnceModule::SpawnInfo> ally_spawns, enemy_spawns;
+  auto queue = [&](const std::vector<torchcraft::Client::Command>& commands) {
+    player1_->queueCmds(std::move(commands));
+  };
 
-  std::tie(ally_spawns, enemy_spawns) = getSpawnInfo();
-  auto cmds =
-      OnceModule::makeSpawnCommands(ally_spawns, player1_->state()->playerId());
-
-  auto cmds2 = OnceModule::makeSpawnCommands(
-      enemy_spawns, player2_->state()->playerId());
-  cmds.reserve(cmds.size() + cmds2.size());
-  for (const auto& c : cmds2) {
-    cmds.push_back(c);
+  queue(OnceModule::makeSpawnCommands(
+      scenarioInfo.allyList, player1_->state(), player1_->state()->playerId()));
+  queue(OnceModule::makeSpawnCommands(
+      scenarioInfo.enemyList,
+      player2_->state(),
+      player2_->state()->playerId()));
+  for (int playerId = 0; playerId < int(scenarioInfo.players.size());
+       ++playerId) {
+    for (auto& tech : scenarioInfo.players[playerId].techs) {
+      queue({torchcraft::Client::Command(
+          torchcraft::BW::Command::CommandOpenbw,
+          torchcraft::BW::OpenBWCommandType::SetPlayerResearched,
+          playerId,
+          tech,
+          true)});
+    }
+    for (auto& upgrade : scenarioInfo.players[playerId].upgrades) {
+      // Note that this can only can set an upgrade to Level 1
+      queue({torchcraft::Client::Command(
+          torchcraft::BW::Command::CommandOpenbw,
+          torchcraft::BW::OpenBWCommandType::SetPlayerUpgradeLevel,
+          playerId,
+          upgrade,
+          1)});
+    }
   }
-  // make sure commands are sent to the server
-  player1_->queueCmds(cmds);
+  for (auto& stepFunction : scenarioInfo.stepFunctions) {
+    player1_->addModule(
+        std::make_shared<LambdaModule>(std::move(stepFunction)));
+  }
 
   // loop until all units are ready
   auto state1 = player1_->state();
   auto state2 = player2_->state();
-  while (state1->unitsInfo().myUnits().size() != ally_spawns.size() &&
-         state2->unitsInfo().myUnits().size() != enemy_spawns.size()) {
+  unsigned expectedAllies = 0u;
+  unsigned expectedEnemies = 0u;
+  for (auto& spawn : scenarioInfo.allyList) {
+    expectedAllies += spawn.count;
+  }
+  for (auto& spawn : scenarioInfo.enemyList) {
+    expectedEnemies += spawn.count;
+  }
+
+  while (state1->unitsInfo().myUnits().size() != expectedAllies ||
+         state2->unitsInfo().myUnits().size() != expectedEnemies) {
     player1_->step();
     player2_->step();
   }
@@ -139,6 +175,7 @@ BaseMicroScenario::spawnNextScenario(
   // notify players of game start
   std::static_pointer_cast<MicroPlayer>(player1_)->onGameStart();
   std::static_pointer_cast<MicroPlayer>(player2_)->onGameStart();
+  gameCount_++;
   return {player1_, player2_};
 }
 
@@ -147,34 +184,30 @@ void BaseMicroScenario::sendKillCmds() {
   auto state2 = player2_->state();
   std::vector<tc::Client::Command> cmds;
   for (const auto& u : state1->unitsInfo().myUnits()) {
-    cmds.push_back(
-        tc::Client::Command(
-            tc::BW::Command::CommandOpenbw,
-            tc::BW::OpenBWCommandType::KillUnit,
-            u->id));
+    cmds.push_back(tc::Client::Command(
+        tc::BW::Command::CommandOpenbw,
+        tc::BW::OpenBWCommandType::KillUnit,
+        u->id));
   }
   for (const auto& u : state1->unitsInfo().neutralUnits()) {
-    cmds.push_back(
-        tc::Client::Command(
-            tc::BW::Command::CommandOpenbw,
-            tc::BW::OpenBWCommandType::KillUnit,
-            u->id));
+    cmds.push_back(tc::Client::Command(
+        tc::BW::Command::CommandOpenbw,
+        tc::BW::OpenBWCommandType::KillUnit,
+        u->id));
   }
   player1_->queueCmds(std::move(cmds));
   cmds.clear();
   for (const auto& u : state2->unitsInfo().myUnits()) {
-    cmds.push_back(
-        tc::Client::Command(
-            tc::BW::Command::CommandOpenbw,
-            tc::BW::OpenBWCommandType::KillUnit,
-            u->id));
+    cmds.push_back(tc::Client::Command(
+        tc::BW::Command::CommandOpenbw,
+        tc::BW::OpenBWCommandType::KillUnit,
+        u->id));
   }
   for (const auto& u : state2->unitsInfo().neutralUnits()) {
-    cmds.push_back(
-        tc::Client::Command(
-            tc::BW::Command::CommandOpenbw,
-            tc::BW::OpenBWCommandType::KillUnit,
-            u->id));
+    cmds.push_back(tc::Client::Command(
+        tc::BW::Command::CommandOpenbw,
+        tc::BW::OpenBWCommandType::KillUnit,
+        u->id));
   }
   player2_->queueCmds(std::move(cmds));
 }
@@ -224,5 +257,12 @@ void BaseMicroScenario::cleanScenario() {
           << " state1 enemy" << state1->unitsInfo().enemyUnits().size()
           << " state2 my=" << state2->unitsInfo().myUnits().size()
           << "state2 enemy=" << state1->unitsInfo().enemyUnits().size();
+
+  if (gameCount_ > kMaxScenarioReuse) {
+    gameCount_ = 0;
+    player1_.reset();
+    player2_.reset();
+    scenario_.reset();
+  }
 }
 } // namespace cherrypi

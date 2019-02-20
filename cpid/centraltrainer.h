@@ -7,45 +7,21 @@
 
 #pragma once
 
-#include "distributed.h"
-#include "trainer.h"
+#include "episodeserver.h"
 
-#include <cereal/archives/binary.hpp>
-#include <cereal/types/polymorphic.hpp>
-
-#include <queue>
 #include <shared_mutex>
 
 namespace cpid {
-
-/**
- * The base class for replay buffer frames that can be used with CentralTrainer.
- *
- * Subclasses need to implement a serialization function an register their
- * replay buffer frame type in the global scope with:
- * CEREAL_REGISTER_TYPE(MyReplayBufferFrame)
- */
-struct CerealizableReplayBufferFrame : ReplayBufferFrame {
-  virtual ~CerealizableReplayBufferFrame() = default;
-
-  template <class Archive>
-  void serialize(Archive& ar) {}
-};
-
-namespace detail {
-struct CentralTrainerServer;
-struct CentralTrainerClient;
-} // namespace detail
 
 /**
  * A trainer that sends episodes to one or more central instances.
  *
  * In this trainer, several "server" instances will collect episode data from
  * "client" instances. Users are required to subclass this and override
- * `receivedEpisode()`, which will be called on server instances whenever a new
- * episode arrives. The trainer can be used like any other trainer, but ideally
- * there should be no calls to sleep() between `update()` calls to ensure fast
- * processing of collected episode data.
+ * `receivedFrames()`, which will be called on server instances whenever a new
+ * sequence of frames arrives. The trainer can be used like any other trainer,
+ * but ideally there should be no calls to sleep() between `update()` calls to
+ * ensure fast processing of collected episode data.
  *
  * Implementation details:
  * The trainer spawns dedicated threads for servers and clients.
@@ -72,14 +48,13 @@ class CentralTrainer : public Trainer {
     return server_ != nullptr;
   }
 
+  virtual void
+  stepFrame(GameUID const&, EpisodeKey const&, ReplayBuffer::Episode&) override;
   virtual void stepEpisode(
       GameUID const&,
       EpisodeKey const&,
       ReplayBuffer::Episode&) override;
-  ag::Variant forward(
-      ag::Variant inp,
-      GameUID const& gameUID,
-      EpisodeKey const& key = kDefaultEpisodeKey) override;
+  ag::Variant forward(ag::Variant inp, EpisodeHandle const&) override;
   virtual bool update() override;
   virtual std::shared_ptr<ReplayBufferFrame> makeFrame(
       ag::Variant trainerOutput,
@@ -92,19 +67,30 @@ class CentralTrainer : public Trainer {
  protected:
   /// Callback for new episodes.
   /// This will be called from update() for locally and remotely generated
-  /// episodes.
-  virtual void receivedEpisode(GameUID const&, EpisodeKey const&) = 0;
+  /// episodes. The second argument is a unique ID per sequence of frames,
+  /// and should be removed when we get episodes to send to the same
+  /// node. This _depends_ on the deprecation of EpisodeKey
+  virtual void receivedFrames(GameUID const&, std::string const&) = 0;
+
+  /// Allows implementing trainers to send partial episodes
+  /// TODO: set up synchronization so the partial episodes end up
+  /// on the same node.
+  virtual uint32_t getMaxBatchLength() const;
+  virtual uint32_t getSendInterval() const;
 
  private:
-  // Each instance either has a server or client
-  std::shared_ptr<detail::CentralTrainerServer> server_;
-  std::shared_ptr<detail::CentralTrainerClient> client_;
+  void dequeueEpisodes();
 
-  // For the moment, these are just for locally generated episodes
+  // Each instance either has a server or client
+  std::shared_ptr<EpisodeServer> server_;
+  std::shared_ptr<EpisodeClient> client_;
+
   std::mutex newGamesMutex_;
-  std::queue<EpisodeTuple> newGames_;
+  std::queue<EpisodeTuple> newBatches_;
 
   std::shared_timed_mutex modelMutex_;
+  std::thread dequeueEpisodes_;
+  std::atomic<bool> stop_{false};
 };
 
 } // namespace cpid

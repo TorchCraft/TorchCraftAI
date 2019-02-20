@@ -6,6 +6,7 @@
  */
 
 #include "cherrypi.h"
+#include "common/assert.h"
 #include "common/rand.h"
 #include "test.h"
 #include "utils.h"
@@ -217,9 +218,8 @@ struct prun : lest::action {
       is_parent = false;
       close(sp[0]);
       int fd = sp[1];
-      try {
-        testing.behaviour(output(testing.name));
-      } catch (lest::message const& e) {
+
+      auto reportTestFailureAndExit = [&](lest::message const& e) {
         // We can't communicate the exit code to the monitor thread since
         // CherryPi installs a global signal handler for reaping child
         // processes.
@@ -230,6 +230,19 @@ struct prun : lest::action {
         dprintf(fd, "%d%c", e.where.line, 0);
         dprintf(fd, "%s%c", e.note.info.c_str(), 0);
         std::_Exit(1);
+      };
+      try {
+        testing.behaviour(output(testing.name));
+      } catch (lest::message const& e) {
+        reportTestFailureAndExit(e);
+      } catch (std::exception const& e) {
+        reportTestFailureAndExit(lest::message(
+            "exception" /* kind */, lest::location("unknown", 0), e.what()));
+      } catch (...) {
+        reportTestFailureAndExit(lest::message(
+            "exception" /* kind */,
+            lest::location("unknown", 0),
+            "Unknown exception caught"));
       }
       dprintf(fd, "S%c", 0);
       std::_Exit(0);
@@ -345,14 +358,26 @@ struct seqrun : lest::confirm {
 
   seqrun& operator()(lest::test testing) {
     testresults.emplace_back(testing.name);
-    try {
-      ++selected;
-      testing.behaviour(output(testing.name));
-    } catch (lest::message const& e) {
+    auto reportTestFailure = [&](lest::message const& e) {
       testresults.back().fail_message = std::make_unique<lest::message>(
           e.kind, e.where, e.what(), e.note.info);
       ++failures;
       report(os, e, testing.name);
+    };
+
+    try {
+      ++selected;
+      testing.behaviour(output(testing.name));
+    } catch (lest::message const& e) {
+      reportTestFailure(e);
+    } catch (std::exception const& e) {
+      reportTestFailure(lest::message(
+          "exception" /* kind */, lest::location("unknown", 0), e.what()));
+    } catch (...) {
+      reportTestFailure(lest::message(
+          "exception" /* kind */,
+          lest::location("unknown", 0),
+          "Unknown exception caught"));
     }
     return *this;
   }
@@ -440,6 +465,7 @@ lest::tests& specification() {
 int main(int argc, char* argv[]) {
   cherrypi::init();
   FLAGS_minloglevel = google::ERROR;
+  FLAGS_continue_on_assert = true;
   google::InitGoogleLogging(argv[0]);
 
   gflags::SetUsageMessage(
@@ -454,7 +480,7 @@ int main(int argc, char* argv[]) {
       "    \"text\"   select tests that contain text (case insensitive)\n"
       "    \"!text\"  omit tests that contain text (case insensitive)"
 #endif
-      );
+  );
 
   // Limit help output to relevant flags only
   gflags::ParseCommandLineNonHelpFlags(&argc, &argv, true);

@@ -48,17 +48,11 @@ TrainingSetup::TrainingSetup() {
       true,
       cpid::ESTrainer::RewardTransform::kRankTransform,
       true);
-  trainer->setCheckpointFrequency(FLAGS_checkpoint_freq);
   trainer->setTrain(!FLAGS_evaluate);
 }
 
 void TrainingSetup::loadModel(const std::string& resultsCheckpoint) {
   ag::load(resultsCheckpoint, trainer);
-}
-
-void TrainingSetup::setCheckpointLocation(
-    const std::string& resultsCheckpoint) {
-  trainer->setCheckpointLocation(resultsCheckpoint);
 }
 
 } // namespace microbattles

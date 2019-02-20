@@ -11,8 +11,19 @@ ENABLE_TESTING()
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 INCLUDE(TargetLinkCherpi)
 
-SET(CMAKE_CXX_STANDARD 14)
+SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+IF(APPLE)
+  # Using C++17 on macOS requires a recent enough XCode version
+  IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    IF(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "10")
+      MESSAGE(FATAL_ERROR
+        "Minimum required XCode version is 10.0, ${CMAKE_CXX_COMPILER_VERSION} detected")
+    ENDIF()
+    ADD_DEFINITIONS(-D_LIBCPP_DISABLE_AVAILABILITY)
+  ENDIF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+ENDIF(APPLE)
+
 OPTION(ONLY_BENCH "Only build cpid and distributed_bench w/o SC environments (requires linux)" OFF)
 OPTION(ASAN "ASAN-enabled build" OFF)
 OPTION(TSAN "TSAN-enabled build" OFF)
@@ -47,13 +58,15 @@ IF(MSVC)
 ELSE(MSVC)
   ADD_COMPILE_OPTIONS("$<$<CONFIG:RELASE>:-O3 -march=native -DNDEBUG>")
   ADD_COMPILE_OPTIONS("-fdiagnostics-color")
+  FILE(RELATIVE_PATH build_to_source_rel ${CMAKE_BINARY_DIR} ${PROJECT_SOURCE_DIR})
+  ADD_COMPILE_OPTIONS("-fdebug-prefix-map=${build_to_source_rel}=${PROJECT_SOURCE_DIR}/")
   SET(CHERRYPI_WARNINGS
     -Wall
     -Wno-undefined-var-template
     -Wno-missing-braces
     -Wno-unknown-warning-option)
   OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON)
-  INCLUDE(UseGold)
+  INCLUDE(ChooseLinker)
 ENDIF(MSVC)
 
 # Static version required for advanced, experimental functionality

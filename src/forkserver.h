@@ -221,4 +221,4 @@ class ForkServer {
     std::_Exit(0);
   }
 };
-}
+} // namespace cherrypi

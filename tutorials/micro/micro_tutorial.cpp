@@ -14,12 +14,13 @@
 #include <sys/stat.h>
 
 #include "common/autograd.h"
+#include "common/fsutils.h"
 #include "cpid/batcher.h"
+#include "cpid/checkpointer.h"
 #include "cpid/distributed.h"
 #include "cpid/evaluator.h"
 #include "cpid/optimizers.h"
 #include "cpid/sampler.h"
-#include "fsutils.h"
 #include "microplayer.h"
 #include "modules.h"
 #include "player.h"
@@ -30,6 +31,8 @@
 #include "micromodule.h"
 #include "model.h"
 #include "rule_module.h"
+
+namespace fsutils = common::fsutils;
 
 namespace {
 
@@ -72,15 +75,15 @@ void runEnvironmentInThread(
           FLAGS_max_frames - 1,
           FLAGS_scenario,
           FLAGS_enable_gui && threadId == 0);
+      provider->setMapPathPrefix(FLAGS_map_path_prefix);
       std::string replayFile = "";
       auto respawn = [&]() {
-        provider->setSpawns(FLAGS_scenario);
+        provider->loadScenario(FLAGS_scenario);
         return provider->spawnNextScenario(
             [&](BasePlayer* bot) {
               bot->addModule(Module::make<TopModule>());
-              bot->addModule(
-                  Module::make<MicroModule>(
-                      threadId, state.training, trainer, provider->getReward()));
+              bot->addModule(Module::make<MicroModule>(
+                  threadId, state.training, trainer, provider->getReward()));
               bot->addModule(Module::make<UPCToCommandModule>());
               bot->setLogFailedCommands(false);
               bot->setRealtimeFactor(FLAGS_realtime);
@@ -97,28 +100,26 @@ void runEnvironmentInThread(
             });
       };
       int nsteps = 0;
+      uint64_t gamesPlayed = 0;
       auto computeReplayPath = [&]() -> std::string {
-        if ((rand() % std::min(FLAGS_dump_replays_rate, 1UL)) != 0) {
+        if ((rand() % std::max(FLAGS_dump_replays_rate, 1UL)) != 0) {
           return "";
         }
         if (FLAGS_dump_replays == "never") {
           return "";
-        }
-        else if (FLAGS_dump_replays == "eval" && !state.testing) {
+        } else if (FLAGS_dump_replays == "eval" && !state.testing) {
+          return "";
+        } else if (FLAGS_dump_replays == "train" && state.testing) {
           return "";
         }
-        else if (FLAGS_dump_replays == "train" && state.testing) {
-          return "";
-        }
-        std::string folder = FLAGS_results + "/replays-"
-            + (state.testing ? "eval" : "train")
-            + "/upd" + std::to_string(state.numUpdates.load());
+        std::string folder = FLAGS_results + "/replays-" +
+            (state.testing ? "eval" : "train") + "/upd" +
+            std::to_string(state.numUpdates.load());
         fsutils::mkdir(folder);
-        return folder
-            + "/rank" + std::to_string(cpid::distributed::globalContext()->rank)
-            + "_thread" + std::to_string(threadId)
-            + "_step" + std::to_string(nsteps)
-            + ".rep";
+        return folder + "/rank" +
+            std::to_string(cpid::distributed::globalContext()->rank) +
+            "_thread" + std::to_string(threadId) + "_game" +
+            std::to_string(gamesPlayed) + ".rep";
       };
       std::shared_ptr<BasePlayer> p1, p2;
       while (!state.finish) {
@@ -130,13 +131,15 @@ void runEnvironmentInThread(
         p2 = setup.second;
         microModule = p1->findModule<MicroModule>();
         nsteps = 0;
+        ++gamesPlayed;
 
         // Quit only if:
         //  - we're done
         //  - game isn't active anymore, trainer says we should stop
         while (!provider->isFinished(nsteps, false /*checkAttack*/)) {
-          if (state.finish || (microModule->started_ &&
-                               !trainer->isActive(microModule->gameUID_))) {
+          if (state.finish ||
+              (microModule->started_ &&
+               !trainer->isActive(microModule->handle_))) {
             break;
           }
           p1->step();
@@ -231,27 +234,24 @@ int run(int argc, char** argv) {
   VLOG(0) << fmt::format("Resume: {}", FLAGS_resume);
   VLOG(0) << fmt::format("Evaluate: {}", FLAGS_evaluate);
 
-  cherrypi::MicroFixedScenario::setMapPathPrefix(FLAGS_map_path_prefix);
   std::string resultsDir = FLAGS_results;
   std::string resultsJSON = fmt::format(
       "{}/metrics-rank-{}.json", resultsDir, dist::globalContext()->rank);
-  std::string resultsCheckpoint = resultsDir + "/train_micro.bin";
+  std::string resultsCheckpoint = resultsDir + "/trainer_latest.bin";
 
   VLOG(0) << "resultsJSON: " << resultsJSON;
   VLOG(0) << "resultsCheckpoint: " << resultsCheckpoint;
 
   if (dist::globalContext()->rank == 0) {
-    cherrypi::fsutils::mkdir(resultsDir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    fsutils::mkdir(resultsDir, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   }
 
   // Set up the trainer / model
   auto training = std::make_shared<TrainingSetup>();
-  training->setCheckpointLocation(resultsCheckpoint);
-
   if (FLAGS_resume) {
-    if (!cherrypi::fsutils::exists(resultsCheckpoint)) {
+    if (!fsutils::exists(resultsCheckpoint)) {
       VLOG(0) << "Failed to find existing model at " << resultsCheckpoint;
-    } else if (!cherrypi::fsutils::exists(resultsJSON)) {
+    } else if (!fsutils::exists(resultsJSON)) {
       VLOG(0) << "Failed to find metrics at " << resultsJSON;
     } else {
       VLOG(0) << "Found existing model! Loading it from " << resultsCheckpoint;
@@ -306,11 +306,14 @@ int run(int argc, char** argv) {
     state.testing = false;
   };
 
+  cpid::Checkpointer ckpt(training->trainer);
+  ckpt.epochLength(FLAGS_checkpoint_freq).checkpointPath(resultsDir);
   startWorkers(training->trainer);
   state.startTime = cherrypi::hires_clock::now();
   while (true) {
     if (training->trainer->update()) {
       state.numUpdates++;
+      ckpt.updateDone(state.numUpdates);
       auto nEpisodes = state.numTrainEpisodes.load();
       auto framesSoFar = state.throughputCounter.load();
       using ms = std::chrono::duration<double, std::milli>;
@@ -330,10 +333,6 @@ int run(int argc, char** argv) {
           state.avgSteps,
           state.avgReward,
           1000. * framesSoFar / duration.count() / FLAGS_frame_skip);
-
-      if (training->trainer->checkpoint()) {
-        state.metrics->dumpJson(resultsJSON);
-      }
 
       if ((state.numUpdates + 1) % FLAGS_test_freq == 0) {
         stopWorkers(training->trainer);

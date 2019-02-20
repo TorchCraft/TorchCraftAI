@@ -17,9 +17,8 @@ CASE("common/repeat2d") {
   torch::Tensor out = common::repeat2d(var, {7, 8});
   EXPECT(out.sizes().vec() == std::vector<int64_t>({16, 7, 8}));
   EXPECT(out.slice(1, 0, 1).eq(out.slice(1, 1, 2)).all().item<int32_t>());
-  EXPECT(
-      out.slice(1, 2, 3).slice(2, 3, 4).allclose(
-          out.slice(1, 3, 4).slice(2, 5, 6)));
+  EXPECT(out.slice(1, 2, 3).slice(2, 3, 4).allclose(
+      out.slice(1, 3, 4).slice(2, 5, 6)));
 
   EXPECT_THROWS(common::repeat2d(var.view({1, -1}), {7, 8}));
 }
@@ -32,23 +31,22 @@ CASE("common/scatterSum2d/simple") {
     positionsO[0][i][1] = int(i * 2);
   }
 
-  auto run = [&] {
-    auto data = dataO.to(torch::TensorOptions().device());
-    auto positions = positionsO.to(torch::TensorOptions().device());
+  auto run = [&](auto const& device) {
+    auto data = dataO.to(device);
+    auto positions = positionsO.to(device);
 
     torch::Tensor res;
     EXPECT((res = common::scatterSum2d(positions, data, {20, 20}), true));
     EXPECT(res.sizes().vec() == std::vector<int64_t>({1, 4, 20, 20}));
     res = res[0].permute({1, 2, 0}); // use (Y,X,C) for easier testing
-    EXPECT(res.sum().item<float>() == data.sum().item<float>());
+    EXPECT(res.sum().allclose(data.sum()));
     EXPECT(res[1][6].sum().item<float>() == 0.0f);
     EXPECT(res[2][4].sum().item<float>() == 4.0f); // 4-dim data
   };
 
-  run();
+  run(torch::kCPU);
   if (common::gpuAvailable()) {
-    torch::OptionsGuard guard(torch::kCUDA);
-    run();
+    run(torch::kCUDA);
   }
 }
 
@@ -70,9 +68,9 @@ CASE("common/scatterSum2d/pooling") {
     nel += 1;
   }
 
-  auto run = [&] {
-    auto data = dataO.to(torch::TensorOptions().device());
-    auto positions = positionsO.to(torch::TensorOptions().device());
+  auto run = [&](auto const& device) {
+    auto data = dataO.to(device);
+    auto positions = positionsO.to(device);
 
     torch::Tensor res;
     torch::Tensor res2;
@@ -89,10 +87,9 @@ CASE("common/scatterSum2d/pooling") {
     EXPECT(res[2][3][4].sum().item<float>() == 16.0f); // 4 pooled elements
   };
 
-  run();
+  run(torch::kCPU);
   if (common::gpuAvailable()) {
-    torch::OptionsGuard guard(torch::kCUDA);
-    run();
+    run(torch::kCUDA);
   }
 }
 
@@ -124,39 +121,40 @@ CASE("common/scatterSum2d/batched") {
 
 CASE("common/scatterSum2d/timed[.hidden]") {
   // This test case simply measures the perf of scatterSum on a few cases
-  auto compareBatched = [](
-      torch::Tensor indices, torch::Tensor values, int H, int W) {
-    auto const constexpr reps = 1000;
-    using hires_clock = std::chrono::steady_clock;
-    auto start = hires_clock::now();
-    for (auto i = 0U; i < reps; i++) {
-      common::scatterSum2d(indices, values, {H, W});
-    }
-    cudaDeviceSynchronize();
-    auto end = hires_clock::now();
-    std::chrono::duration<double, std::milli> duration = end - start;
-    VLOG(0) << "ScatterSum: " << duration.count() / 1000. / reps;
+  auto compareBatched =
+      [](torch::Tensor indices, torch::Tensor values, int H, int W) {
+        auto const constexpr reps = 1000;
+        using hires_clock = std::chrono::steady_clock;
+        auto start = hires_clock::now();
+        for (auto i = 0U; i < reps; i++) {
+          common::scatterSum2d(indices, values, {H, W});
+        }
+        cudaDeviceSynchronize();
+        auto end = hires_clock::now();
+        std::chrono::duration<double, std::milli> duration = end - start;
+        VLOG(0) << "ScatterSum: " << duration.count() / 1000. / reps;
+      };
 
-  };
+  auto compare =
+      [&compareBatched](
+          torch::Tensor indices, torch::Tensor values, int H, int W) {
+        VLOG(0) << "Batch Size 1";
+        auto singleBatchIndices = indices.unsqueeze(0);
+        auto singleBatchValues = values.unsqueeze(0);
+        compareBatched(singleBatchIndices, singleBatchValues, H, W);
 
-  auto compare = [&compareBatched](
-      torch::Tensor indices, torch::Tensor values, int H, int W) {
-    VLOG(0) << "Batch Size 1";
-    auto singleBatchIndices = indices.unsqueeze(0);
-    auto singleBatchValues = values.unsqueeze(0);
-    compareBatched(singleBatchIndices, singleBatchValues, H, W);
+        VLOG(0) << "Batch Size 3";
+        auto multiBatchIndices = singleBatchIndices.expand({3, -1, -1});
+        auto multiBatchValues = singleBatchValues.expand({3, -1, -1});
+        compareBatched(multiBatchIndices, multiBatchValues, H, W);
+      };
 
-    VLOG(0) << "Batch Size 3";
-    auto multiBatchIndices = singleBatchIndices.expand({3, -1, -1});
-    auto multiBatchValues = singleBatchValues.expand({3, -1, -1});
-    compareBatched(multiBatchIndices, multiBatchValues, H, W);
-  };
-
-  auto run = [&](int n) {
+  auto run = [&](int n, auto const& device) {
+    auto opts = torch::TensorOptions(device);
     VLOG(0) << "Running with 512 positions of " << n << " elems each\n";
     {
-      auto indices = torch::zeros({256, 2}, torch::kLong);
-      auto values = torch::randn({256, n});
+      auto indices = torch::zeros({256, 2}, opts.dtype(torch::kLong));
+      auto values = torch::randn({256, n}, opts);
       VLOG(0) << "All collisions on 16x16x" << n;
       compare(indices, values, 16, 16);
       VLOG(0) << "All collisions on 128x128x" << n;
@@ -164,14 +162,15 @@ CASE("common/scatterSum2d/timed[.hidden]") {
     }
 
     {
-      auto indices = at::stack(
-                         {torch::arange(0, 16, at::kLong).repeat({16, 1}),
-                          torch::arange(0, 16, at::kLong).repeat({16, 1}).t()},
-                         2)
-                         .contiguous()
-                         .view({-1, 2});
+      auto indices =
+          at::stack(
+              {torch::arange(0, 16, opts.dtype(at::kLong)).repeat({16, 1}),
+               torch::arange(0, 16, opts.dtype(at::kLong)).repeat({16, 1}).t()},
+              2)
+              .contiguous()
+              .view({-1, 2});
       indices = indices.repeat({2, 1});
-      auto values = torch::randn({512, n});
+      auto values = torch::randn({512, n}, opts);
       VLOG(0) << "Few (2) collisions on 16x16x" << n;
       compare(indices, values, 16, 16);
       VLOG(0) << "Few (2) collisions on 128x128x" << n;
@@ -179,14 +178,15 @@ CASE("common/scatterSum2d/timed[.hidden]") {
     }
 
     {
-      auto indices = at::stack(
-                         {torch::arange(0, 4, at::kLong).repeat({8, 1}),
-                          torch::arange(0, 8, at::kLong).repeat({4, 1}).t()},
-                         2)
-                         .contiguous()
-                         .view({-1, 2});
+      auto indices =
+          at::stack(
+              {torch::arange(0, 4, opts.dtype(at::kLong)).repeat({8, 1}),
+               torch::arange(0, 8, opts.dtype(at::kLong)).repeat({4, 1}).t()},
+              2)
+              .contiguous()
+              .view({-1, 2});
       indices = indices.repeat({16, 1});
-      auto values = torch::randn({512, n});
+      auto values = torch::randn({512, n}, opts);
       VLOG(0) << "Some (16) collisions on 16x16x" << n;
       compare(indices, values, 16, 16);
       VLOG(0) << "Some (16) collisions on 128x128x" << n;
@@ -194,14 +194,15 @@ CASE("common/scatterSum2d/timed[.hidden]") {
     }
 
     {
-      auto indices = at::stack(
-                         {torch::arange(0, 4, at::kLong).repeat({2, 1}),
-                          torch::arange(0, 2, at::kLong).repeat({4, 1}).t()},
-                         2)
-                         .contiguous()
-                         .view({-1, 2});
+      auto indices =
+          at::stack(
+              {torch::arange(0, 4, opts.dtype(at::kLong)).repeat({2, 1}),
+               torch::arange(0, 2, opts.dtype(at::kLong)).repeat({4, 1}).t()},
+              2)
+              .contiguous()
+              .view({-1, 2});
       indices = indices.repeat({4, 1});
-      auto values = torch::randn({32, n});
+      auto values = torch::randn({32, n}, opts);
       VLOG(0) << "Some (4) collisions with 32 positions on 16x16x" << n;
       compare(indices, values, 16, 16);
       VLOG(0) << "Some (4) collisions with 32 positions on 128x128x" << n;
@@ -209,13 +210,12 @@ CASE("common/scatterSum2d/timed[.hidden]") {
     }
   };
 
-  run(16);
-  run(128);
+  run(16, torch::kCPU);
+  run(128, torch::kCPU);
   if (common::gpuAvailable()) {
-    torch::OptionsGuard guard(torch::kCUDA);
     VLOG(0) << "Running on GPU\n";
-    run(16);
-    run(128);
+    run(16, torch::kCUDA);
+    run(128, torch::kCUDA);
   }
 }
 
@@ -341,11 +341,10 @@ CASE("common/crossEntropyLoss") {
   };
 
   using Reduction = Reduction::Reduction;
-  auto themCE = [&](
-      torch::Tensor predict,
-      torch::Tensor target,
-      torch::Tensor mask,
-      Reduction reduction) {
+  auto themCE = [&](torch::Tensor predict,
+                    torch::Tensor target,
+                    torch::Tensor mask,
+                    Reduction reduction) {
     auto reduce = reduction != Reduction::None;
     if (mask.defined() && reduce) {
       throw std::runtime_error("ATen doesn't support masked NLL loss");
@@ -377,11 +376,10 @@ CASE("common/crossEntropyLoss") {
     }
     return loss;
   };
-  auto usCE = [&](
-      torch::Tensor predict,
-      torch::Tensor target,
-      torch::Tensor mask,
-      Reduction reduction) {
+  auto usCE = [&](torch::Tensor predict,
+                  torch::Tensor target,
+                  torch::Tensor mask,
+                  Reduction reduction) {
     if (target.ndimension() == 3) {
       // Convert deterministic target to probability distributions.
       auto targetExtensive = torch::zeros({n, c, h, w});
@@ -640,10 +638,10 @@ CASE("common/ConvBlock[hide]") {
                   for (bool g : gated) {
                     if (l == 1 && bot)
                       continue;
-                    VLOG(4) << " deconv " << dec << " residual " << res
-                            << " batchnorm " << bn << " kernel " << k
-                            << " stride " << s << " dilation " << d
-                            << " layers " << l;
+                    VLOG(4)
+                        << " deconv " << dec << " residual " << res
+                        << " batchnorm " << bn << " kernel " << k << " stride "
+                        << s << " dilation " << d << " layers " << l;
                     auto block = common::ConvBlock()
                                      .nInFeats(32)
                                      .nOutFeats(64)

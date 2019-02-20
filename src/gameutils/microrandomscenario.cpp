@@ -9,6 +9,7 @@
 #include "common/rand.h"
 
 namespace cherrypi {
+
 namespace {
 const std::map<tc::BW::Race, std::vector<tc::BW::UnitType>> allowedTypes{
     {tc::BW::Race::Zerg,
@@ -76,9 +77,7 @@ static const std::set<tc::BW::UnitType> cloaked{
     tc::BW::UnitType::Protoss_Dark_Templar,
     tc::BW::UnitType::Protoss_Observer};
 
-std::pair<std::vector<OnceModule::SpawnInfo>,
-          std::vector<OnceModule::SpawnInfo>>
-sampleArmies(
+ScenarioInfo sampleArmies(
     const std::vector<tc::BW::Race>& allowedRaces,
     std::map<tc::BW::Race, int> maxSupplyMap,
     bool randomSize,
@@ -113,15 +112,14 @@ sampleArmies(
   // example, if a unit costs 2 supplies, and the max supply for this army is
   // 50, then we add 25 of this unit in the vector
   auto prepareUnits = [&computeSupply, &maxSupplyMap](
-      decltype(allowedRaces.front()) race,
-      std::vector<tc::BW::UnitType>& allUnits) {
+                          decltype(allowedRaces.front()) race,
+                          std::vector<tc::BW::UnitType>& allUnits) {
     for (const auto& u : allowedTypes.at(race)) {
       const int supply = computeSupply(u);
       for (int i = 0; i < maxSupplyMap.at(race) / supply; i++) {
         allUnits.push_back(u);
       }
     }
-
   };
   std::vector<tc::BW::UnitType> allUnits1, allUnits2;
   prepareUnits(race1, allUnits1);
@@ -146,11 +144,11 @@ sampleArmies(
   const int iters = allUnits1.size() * allUnits2.size() * allUnits1.size();
   // this simulates a step on the MC
   auto transition = [&computeSupply](
-      std::vector<bool>& chosen,
-      int& currentSupply,
-      std::vector<tc::BW::UnitType>& allUnits,
-      std::uniform_int_distribution<int>& unit_dist,
-      int maxSupply) {
+                        std::vector<bool>& chosen,
+                        int& currentSupply,
+                        std::vector<tc::BW::UnitType>& allUnits,
+                        std::uniform_int_distribution<int>& unit_dist,
+                        int maxSupply) {
     int index = common::Rand::sample(unit_dist);
     const int supply = computeSupply(allUnits[index]);
     if (!chosen[index] && currentSupply + supply > maxSupply)
@@ -224,13 +222,12 @@ sampleArmies(
       }
     }
   }
-  std::vector<OnceModule::SpawnInfo> list1, list2;
-  auto addUnit = [](
-      std::vector<OnceModule::SpawnInfo>& list,
-      size_t i,
-      const std::vector<bool>& chosen,
-      const std::vector<tc::BW::UnitType>& allUnits,
-      bool ally) {
+
+  auto addUnit = [](SpawnList& list,
+                    size_t i,
+                    const std::vector<bool>& chosen,
+                    const std::vector<tc::BW::UnitType>& allUnits,
+                    bool ally) {
     if (i < chosen.size() && chosen[i]) {
       bool isDetector = (detectors.count(allUnits[i]) > 0);
       // we spawn stuff in concavish-looking shapes, so that the initial
@@ -240,14 +237,16 @@ sampleArmies(
       if (!ally) {
         x = isDetector ? 130 : 140;
       }
-      list.emplace_back(allUnits[i], x, 132, 0.5, spread);
+      list.emplace_back(1, allUnits[i], x, 132, 0.5, spread);
     }
   };
+
+  ScenarioInfo output;
   for (size_t i = 0; i < std::max(chosen1.size(), chosen2.size()); i++) {
-    addUnit(list1, i, chosen1, allUnits1, true);
-    addUnit(list2, i, chosen2, allUnits2, false);
+    addUnit(output.allyList, i, chosen1, allUnits1, true);
+    addUnit(output.enemyList, i, chosen2, allUnits2, false);
   }
-  return {list1, list2};
+  return output;
 }
 
 } // namespace
@@ -258,9 +257,8 @@ MicroRandomScenario::MicroRandomScenario(
     bool randomSize,
     std::map<tc::BW::Race, int> maxSupplyMap,
     bool checkCompatibility,
-    std::string map,
     bool gui)
-    : BaseMicroScenario(maxFrame, map, gui),
+    : BaseMicroScenario(maxFrame, gui),
       allowedRaces_(std::move(allowedRaces)),
       randomSize_(std::move(randomSize)),
       maxSupplyMap_(std::move(maxSupplyMap)),
@@ -277,9 +275,7 @@ void MicroRandomScenario::setParams(
   checkCompatibility_ = std::move(checkCompatibility);
 }
 
-std::pair<std::vector<OnceModule::SpawnInfo>,
-          std::vector<OnceModule::SpawnInfo>>
-MicroRandomScenario::getSpawnInfo() {
+ScenarioInfo MicroRandomScenario::getScenarioInfo() {
   return sampleArmies(
       allowedRaces_, maxSupplyMap_, randomSize_, checkCompatibility_);
 }

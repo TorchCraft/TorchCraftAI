@@ -26,7 +26,6 @@ In this case, replace `libcurl-dev` with one of the suggested alternatives.
 For training on GPUs, NVIDIA's CUDA Toolkit is required. We strongly recommend [CUDA 9.2](https://developer.nvidia.com/cuda-92-download-archive) as older and newer versions suffer from incompabilities with newer compilers and the PyTorch stack, respectively.
 For optimal performance, be sure to install [cuDNN](https://developer.nvidia.com/cudnn) as well.
 
-
 ### Clone the TorchCraftAI Repository
 ```bash
 git clone https://github.com/TorchCraft/TorchCraftAI --recursive
@@ -59,6 +58,8 @@ popd
 
 We recommend the [github instructions](https://github.com/ebetica/pytorch/tree/agppv0.4-1#from-source) if you run into issues with these steps.
 Alternatively, instead of using Anaconda, you may install everything yourself, or choose not to install every optimization, such as mkl-dnn, if you prefer for a simpler installation process.
+
+PyTorch will run most performantly using the environment variable `OMP_NUM_THREADS=1`. If you have no specific need for this value to differ, we recommend setting this in your dotfiles.
 
 ### Build and install Zstandard
 

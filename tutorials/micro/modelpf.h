@@ -19,6 +19,7 @@ namespace microbattles {
 
 struct PotentialKernel {
   static std::vector<torch::Tensor> mesh_; // H x W x [y, x]
+  virtual ~PotentialKernel() = default;
   virtual int numParams() = 0;
   // locs: U x (y, x); params: U x numParams()
   // output: H x W x U

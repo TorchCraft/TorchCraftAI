@@ -41,6 +41,12 @@ bool startsWith(std::string const& str, std::string const& prefix);
 
 bool endsWith(std::string const& str, std::string const& suffix);
 
+/// Glob-style pattern matching
+bool gmatch(std::string_view str, std::string_view pattern);
+
+/// Glob-style pattern matching (case-insensitive)
+bool gmatchi(std::string_view str, std::string_view pattern);
+
 /**************** IMPLEMENTATIONS ********************/
 
 template <typename T>

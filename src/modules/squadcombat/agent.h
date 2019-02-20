@@ -9,6 +9,7 @@
 
 #include "basetypes.h"
 #include "behavior.h"
+#include "buildtype.h"
 #include "movefilters.h"
 #include "state.h"
 
@@ -37,6 +38,12 @@ class Agent {
 
   /// The current game state
   State* state;
+
+  /// Behaviors to perform when receiving a Delete UPC
+  std::shared_ptr<Behavior> behaviorDelete;
+
+  /// Behaviors to perform when receiving a Flee UPC
+  std::shared_ptr<Behavior> behaviorFlee;
 
   /// What action has been selected for this unit by a Behavior?
   MicroAction currentAction;
@@ -115,10 +122,26 @@ class Agent {
   std::shared_ptr<UPCTuple> smartMove(const Position& tgt);
   std::shared_ptr<UPCTuple> smartMove(Unit* tgt);
 
- protected:
-  BehaviorDelete behaviorDelete;
-  BehaviorFlee behaviorFlee;
+  /// Attempt to cast a spell targeting a unit.
+  /// Returns a UPC if an acceptable target was found; null otherwise.
+  std::shared_ptr<UPCTuple> tryCastSpellOnUnit(
+      const BuildType* spell,
+      std::function<double(Unit* const)> scoring,
+      double minimumScore);
 
+  /// Attempt to cast a spell targeting an area.
+  /// Returns a UPC if an acceptable target was found; null otherwise.
+  std::shared_ptr<UPCTuple> tryCastSpellOnArea(
+      const BuildType* spell,
+      double areaWidth,
+      double areaHeight,
+      std::function<double(Unit* const)> scoring,
+      double minimumScore,
+      std::function<Position(Position input)> positionTransform = [](auto p) {
+        return p;
+      });
+
+ protected:
   /// Prepare the unit for micro
   void preMicro();
 };

@@ -37,6 +37,7 @@ class Variant {
   Variant(const Variant&) = default;
   Variant(Variant&&) = default;
   Variant& operator=(Variant&&) = default;
+  Variant& operator=(const Variant&) = default;
   Variant(torch::Tensor);
   Variant(const std::vector<torch::Tensor>&);
   Variant(const std::string&);
@@ -88,6 +89,9 @@ class Variant {
   auto m(F func, Args&&... params) const {
     return func(get(), std::forward<Args>(params)...);
   }
+
+  VariantType& value() { return value_; }
+  VariantType const& value() const { return value_; }
 
  private:
   VariantType value_;
@@ -209,12 +213,7 @@ inline torch::Tensor& Variant::operator[](const std::string& key) {
   if (!isDict()) {
     throw std::runtime_error("Not a dict");
   }
-  auto& d = getDict();
-  auto it = d.find(key);
-  if (it == d.end()) {
-    it = d.insert({key, torch::Tensor()}).first;
-  }
-  auto& tensorVar = it->second;
+  auto& tensorVar = getDict()[key];
   if (tensorVar.isTensor()) {
     return tensorVar.get();
   } else if (
@@ -227,7 +226,19 @@ inline torch::Tensor& Variant::operator[](const std::string& key) {
 }
 
 inline torch::Tensor const& Variant::operator[](const std::string& key) const {
-  return (*const_cast<Variant*>(this))[key];
+  if (!isDict()) {
+    throw std::runtime_error("Not a dict");
+  }
+  auto& tensorVar = getDict().at(key);
+  if (tensorVar.isTensor()) {
+    return tensorVar.get();
+  } else if (
+      tensorVar.isTensorList() && tensorVar.getTensorList().size() == 1) {
+    return tensorVar[0];
+  } else {
+    throw std::runtime_error(
+        "No canonical way to convert the variant to a tensor");
+  }
 }
 
 } // namespace ag

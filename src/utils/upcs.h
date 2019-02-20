@@ -42,7 +42,6 @@ inline auto makeSharpUPC(Unit* u, Position p, Command c, BuildType const* ct) {
   upc->state = UPCTuple::BuildTypeMap{{ct, 1}};
   return upc;
 }
-
 inline auto makeSharpUPC(Unit* u, Unit* p, Command c, BuildType const* ct) {
   auto upc = std::make_shared<UPCTuple>();
   upc->unit[u] = 1;
@@ -51,7 +50,6 @@ inline auto makeSharpUPC(Unit* u, Unit* p, Command c, BuildType const* ct) {
   upc->state = UPCTuple::BuildTypeMap{{ct, 1}};
   return upc;
 }
-
 inline auto makeSharpUPC(UPCTuple& other_upc, Unit* u, Command c) {
   auto upc = std::make_shared<UPCTuple>(other_upc);
   upc->unit[u] = 1;

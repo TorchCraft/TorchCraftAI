@@ -170,6 +170,14 @@ drawBox(State* state, Position const& a, Position const& b, int color = 255) {
   drawLine(state, {b.x, a.y}, {b.x, b.y}, color);
 }
 
+inline void drawBox(State* state, Rect const& r, int color = 255) {
+  drawBox(
+      state,
+      Position(r.left(), r.top()),
+      Position(r.right(), r.bottom()),
+      color);
+}
+
 inline void
 drawCircle(State* state, Position const& a, int radius, int color = 255) {
   state->board()->postCommand(

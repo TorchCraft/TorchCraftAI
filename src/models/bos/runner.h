@@ -26,9 +26,9 @@ namespace bos {
  */
 struct ModelRunner {
 #ifdef HAVE_CPID
-  using GameUID = cpid::GameUID;
+  using EpisodeHandle = cpid::EpisodeHandle;
 #else // HAVE_CPID
-  using GameUID = std::string;
+  using EpisodeHandle = std::string;
 #endif // HAVE_CPID
 
   std::shared_ptr<StaticData> staticData = nullptr;
@@ -48,18 +48,20 @@ struct ModelRunner {
 
   Sample takeSample(State* state) const;
   virtual ag::Variant makeInput(Sample const& sample) const;
-  ag::Variant forward(Sample const& sample, GameUID const& gameId = GameUID());
+  ag::Variant forward(
+      Sample const& sample,
+      EpisodeHandle const& handle = EpisodeHandle());
   ag::Variant forward(
       ag::Variant input,
       Sample const& sample,
-      GameUID const& gameId = GameUID());
+      EpisodeHandle const& = EpisodeHandle());
 
   void blacklistBuildOrder(std::string buildOrder);
 
  protected:
   virtual ag::Variant modelForward(ag::Variant input);
 #ifdef HAVE_CPID
-  virtual ag::Variant trainerForward(ag::Variant input, GameUID const& gameId);
+  virtual ag::Variant trainerForward(ag::Variant input, EpisodeHandle const&);
 #endif // HAVE_CPID
 };
 

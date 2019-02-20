@@ -279,4 +279,4 @@ void FogOfWar::generateSightValues() {
     }
   }
 }
-}
+} // namespace cherrypi

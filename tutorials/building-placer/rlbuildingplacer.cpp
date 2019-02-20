@@ -264,13 +264,13 @@ void RLBuildingPlacerModule::step(State* state) {
 
   // Game still active?
   if (trainer_ != nullptr) {
-    if (!trainer_->isActive(episode_.gameID)) {
+    if (!trainer_->isActive(handle_)) {
       throw std::runtime_error(
-          fmt::format("{} no longer active", episode_.gameID));
+          fmt::format("{} no longer active", handle_.gameID()));
     }
     if (trainer_->isDone()) {
       throw std::runtime_error(
-          fmt::format("{} stop requested", episode_.gameID));
+          fmt::format("{} stop requested", handle_.gameID()));
     }
   }
 
@@ -419,22 +419,16 @@ void RLBuildingPlacerModule::onGameStart(State* state) {
 
   // If a trainer is set, start a new episode
   if (trainer_ != nullptr) {
-    auto gameId = genGameUID(dist::globalContext()->rank);
-    while (!trainer_->startEpisode(gameId)) {
+    while (!(handle_ = trainer_->startEpisode())) {
       if (trainer_->isDone()) {
         // An exception is an easy way out in case we're signalled to stop
-        throw std::runtime_error(fmt::format("{} trainer is done", gameId));
+        throw std::runtime_error(
+            fmt::format("{} trainer is done", handle_.gameID()));
       }
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
-    VLOG(0) << fmt::format("{} started on {}", gameId, state->mapName());
-
-    // Publish game UID to Blackboard for easy access from outside logic
-    state->board()->post(Blackboard::kGameUidKey, gameId);
-
-    // Keep episode handle around so we'll properly clean up the episode we
-    // started in case things go awry.
-    episode_ = EpisodeHandle(trainer_, gameId);
+    VLOG(0) << fmt::format(
+        "{} started on {}", handle_.gameID(), state->mapName());
   }
 }
 
@@ -481,7 +475,7 @@ void RLBuildingPlacerModule::onGameEnd(State* state) {
 
     auto state = model_->makeInputBatch({data->sample}, at::kCPU);
     auto frame = trainer_->makeFrame(data->output, state, reward);
-    trainer_->step(episode_.gameID, std::move(frame));
+    trainer_->step(handle_, std::move(frame));
 
     totalReward += reward;
     reward = nextReward;
@@ -490,7 +484,7 @@ void RLBuildingPlacerModule::onGameEnd(State* state) {
   // Final end-of-game frame
   if (numValid > 0) {
     trainer_->step(
-        episode_.gameID,
+        handle_,
         trainer_->makeFrame(ag::VariantDict(), ag::VariantDict(), reward),
         true);
   }
@@ -498,7 +492,7 @@ void RLBuildingPlacerModule::onGameEnd(State* state) {
 
   VLOG(0) << fmt::format(
       "{} collected {} samples: {} valid, {} started, {} finished",
-      episode_.gameID,
+      handle_.gameID(),
       storage->upcPostsFrom(this).size(),
       numValid,
       numStarted,
@@ -512,8 +506,6 @@ RLBuildingPlacerModule::upcWithPositionForBuilding(
     State* state,
     UPCTuple const& sourceUpc,
     BuildType const* type) {
-  auto* board = state->board();
-
   // First, get candidate area by simply running the rule-based version.
   std::shared_ptr<UPCTuple> seedUpc =
       builderhelpers::upcWithPositionForBuilding(state, sourceUpc, type);
@@ -565,7 +557,6 @@ RLBuildingPlacerModule::upcWithPositionForBuilding(
   }
 
   auto batch = model_->makeInputBatch({sample});
-  auto gameId = board->get(Blackboard::kGameUidKey, std::string());
 
   // The model outputs a probability distribution across every position and also
   // always operates on batches -- get rid of that dimensions by [0].
@@ -575,7 +566,7 @@ RLBuildingPlacerModule::upcWithPositionForBuilding(
   torch::Tensor pOut;
   int action;
   if (trainer_) {
-    output = trainer_->sample(trainer_->forward(batch, gameId));
+    output = trainer_->sample(trainer_->forward(batch, handle_));
     pOut = output["output"][0];
     action = output["action"].item<int32_t>();
   } else {

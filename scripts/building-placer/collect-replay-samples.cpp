@@ -23,11 +23,12 @@
 #include "common.h"
 
 #include "cherrypi.h"
-#include "fsutils.h"
 #include "replayer.h"
 #include "state.h"
 #include "utils.h"
 #include "zstdstream.h"
+
+#include <common/fsutils.h>
 
 #include <bwreplib/bwrepapi.h>
 #include <gflags/gflags.h>
@@ -36,6 +37,7 @@
 
 using namespace cherrypi;
 auto const vopts = &visdom::makeOpts;
+namespace fsutils = common::fsutils;
 
 // CLI options
 DEFINE_string(output_path, ".", "Save samples here");

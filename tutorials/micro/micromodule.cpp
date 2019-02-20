@@ -29,7 +29,7 @@ MicroModule::MicroModule(
     unsigned int threadId,
     std::shared_ptr<TrainingSetup> training,
     std::shared_ptr<cpid::Trainer> trainer,
-    std::unique_ptr<MicroFixedScenario::Reward>&& reward)
+    std::unique_ptr<Reward>&& reward)
     : Module(),
       threadId_(threadId),
       training_(training),
@@ -53,13 +53,13 @@ void MicroModule::act(State* state) {
   auto stateTensor = featurizer_->featurize(state);
   std::vector<torch::Tensor> stateVarList;
   for (auto& t : stateTensor) {
-    stateVarList.push_back(t.to(defaultDevice()));
+    stateVarList.push_back(t.to(trainer_->model()->options().device()));
   }
 
   // Perform batch forward pass and assign all actions
   torch::NoGradGuard guard; // Disable grads during eval
   auto modelOut =
-      trainer_->forward(ag::Variant(stateVarList), gameUID_).getTensorList();
+      trainer_->forward(ag::Variant(stateVarList), handle_).getTensorList();
 
   auto actions = [&]() {
     if (training_->trainer->is<cpid::ESTrainer>()) {
@@ -98,9 +98,8 @@ void MicroModule::act(State* state) {
           return cp::utils::makeSharpUPC(
               action.unit, action.unit, cp::Command::Move);
         default:
-          throw std::runtime_error(
-              fmt::format(
-                  "Didn't have a handler for MicroAction {}", action.action));
+          throw std::runtime_error(fmt::format(
+              "Didn't have a handler for MicroAction {}", action.action));
       }
     }();
 
@@ -113,7 +112,7 @@ void MicroModule::act(State* state) {
   frameReward_ = reward_->reward;
   std::shared_ptr<cpid::ReplayBufferFrame> frame;
   if (frame != nullptr) {
-    trainer_->step(gameUID_, frame, false);
+    trainer_->step(handle_, frame, false);
   }
 }
 
@@ -160,20 +159,16 @@ void MicroModule::step(State* state) {
 }
 
 void MicroModule::onGameStart(State* state) {
-  gameUID_ = cpid::genGameUID(cpid::distributed::globalContext()->rank);
   // Register this game as a new episode in the trainer.
   // startEpisode() will return true if we're good to go.
-  while (!trainer_->startEpisode(gameUID_)) {
+  while (!(handle_ = trainer_->startEpisode())) {
     if (trainer_->isDone()) {
-      throw std::runtime_error(fmt::format("{} trainer is done", gameUID_));
+      throw std::runtime_error(
+          fmt::format("{} trainer is done", handle_.gameID()));
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
     continue;
   }
-  // Store the current episode information in an EpisodeHandle. If the handle
-  // goes out of scope and the episode is not finished yet, the destructor
-  // will call `trainer->forceStopEpisode()`.
-  episode_ = std::make_unique<cpid::EpisodeHandle>(trainer_, gameUID_);
 
   reward_->begin(state);
   currentFrame_ = 0;
@@ -193,12 +188,11 @@ void MicroModule::doLastFrame(State* state) {
     frameReward_ = reward_->reward;
     if (!FLAGS_evaluate) {
       trainer_->step(
-          gameUID_,
+          handle_,
           std::make_shared<cpid::RewardBufferFrame>(frameReward_),
           true);
     }
   }
-  episode_ = nullptr;
   started_ = false;
   aborted_ = false;
 }

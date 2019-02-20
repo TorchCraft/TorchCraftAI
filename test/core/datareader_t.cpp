@@ -7,9 +7,9 @@
 
 #include "test.h"
 
-#include "common/datareader.h"
-#include "fsutils.h"
 #include "utils.h"
+#include <common/datareader.h>
+#include <common/fsutils.h>
 
 #include <atomic>
 
@@ -47,20 +47,19 @@ std::pair<std::string, std::vector<std::string>> createTestDataNoPrefix(
 } // namespace
 
 CASE("datareader/simple") {
-  auto paths = createTestDataNoPrefix<int>(
-      {
-          {"f0", 0},
-          {"f1", 1},
-          {"f2", 2},
-          {"f3", 3},
-          {"f4", 4},
-          {"f5", 5},
-          {"f6", 6},
-          {"f7", 7},
-          {"f8", 8},
-          {"f9", 9},
-          {"f10", 10},
-      });
+  auto paths = createTestDataNoPrefix<int>({
+      {"f0", 0},
+      {"f1", 1},
+      {"f2", 2},
+      {"f3", 3},
+      {"f4", 4},
+      {"f5", 5},
+      {"f6", 6},
+      {"f7", 7},
+      {"f8", 8},
+      {"f9", 9},
+      {"f10", 10},
+  });
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(paths.first); });
 
   auto reader = DataReader<int>(paths.second, 2, 4);
@@ -97,10 +96,13 @@ CASE("datareader/simple") {
 }
 
 CASE("datareader/prefix") {
-  auto paths = createTestData<int>(
-      {
-          {"f0", 0}, {"f1", 1}, {"f2", 2}, {"f3", 3}, {"f4", 4},
-      });
+  auto paths = createTestData<int>({
+      {"f0", 0},
+      {"f1", 1},
+      {"f2", 2},
+      {"f3", 3},
+      {"f4", 4},
+  });
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(paths.first); });
 
   auto reader = DataReader<int>(paths.second, 2, 4, paths.first);
@@ -120,20 +122,19 @@ CASE("datareader/prefix") {
 }
 
 CASE("datareader/single_thread") {
-  auto paths = createTestDataNoPrefix<int>(
-      {
-          {"f0", 0},
-          {"f1", 1},
-          {"f2", 2},
-          {"f3", 3},
-          {"f4", 4},
-          {"f5", 5},
-          {"f6", 6},
-          {"f7", 7},
-          {"f8", 8},
-          {"f9", 9},
-          {"f10", 10},
-      });
+  auto paths = createTestDataNoPrefix<int>({
+      {"f0", 0},
+      {"f1", 1},
+      {"f2", 2},
+      {"f3", 3},
+      {"f4", 4},
+      {"f5", 5},
+      {"f6", 6},
+      {"f7", 7},
+      {"f8", 8},
+      {"f9", 9},
+      {"f10", 10},
+  });
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(paths.first); });
 
   auto it = std::make_unique<DataReaderIterator<int>>(
@@ -161,20 +162,19 @@ CASE("datareader/single_thread") {
 }
 
 CASE("datareader/overthreaded") {
-  auto paths = createTestDataNoPrefix<int>(
-      {
-          {"f0", 0},
-          {"f1", 1},
-          {"f2", 2},
-          {"f3", 3},
-          {"f4", 4},
-          {"f5", 5},
-          {"f6", 6},
-          {"f7", 7},
-          {"f8", 8},
-          {"f9", 9},
-          {"f10", 10},
-      });
+  auto paths = createTestDataNoPrefix<int>({
+      {"f0", 0},
+      {"f1", 1},
+      {"f2", 2},
+      {"f3", 3},
+      {"f4", 4},
+      {"f5", 5},
+      {"f6", 6},
+      {"f7", 7},
+      {"f8", 8},
+      {"f9", 9},
+      {"f10", 10},
+  });
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(paths.first); });
 
   auto it = std::make_unique<DataReaderIterator<int>>(
@@ -202,10 +202,11 @@ CASE("datareader/overthreaded") {
 }
 
 CASE("datareader/overbatched") {
-  auto paths = createTestDataNoPrefix<int>(
-      {
-          {"f0", 0}, {"f1", 1}, {"f2", 2},
-      });
+  auto paths = createTestDataNoPrefix<int>({
+      {"f0", 0},
+      {"f1", 1},
+      {"f2", 2},
+  });
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(paths.first); });
 
   auto it = std::make_unique<DataReaderIterator<int>>(
@@ -221,16 +222,15 @@ CASE("datareader/overbatched") {
 }
 
 CASE("datareader/early_destruction") {
-  auto paths = createTestDataNoPrefix<int>(
-      {
-          {"f0", 0},
-          {"f1", 1},
-          {"f2", 2},
-          {"f3", 3},
-          {"f4", 4},
-          {"f5", 4},
-          {"f6", 4},
-      });
+  auto paths = createTestDataNoPrefix<int>({
+      {"f0", 0},
+      {"f1", 1},
+      {"f2", 2},
+      {"f3", 3},
+      {"f4", 4},
+      {"f5", 4},
+      {"f6", 4},
+  });
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(paths.first); });
 
   auto it = std::make_unique<DataReaderIterator<int>>(
@@ -264,10 +264,12 @@ CASE("datareader/early_destruction") {
 }
 
 CASE("datareader/zstd") {
-  auto paths = createTestDataNoPrefix<int, zstd::ofstream>(
-      {
-          {"f0", 0}, {"f1", 1}, {"f2", 2}, {"f3", 3},
-      });
+  auto paths = createTestDataNoPrefix<int, zstd::ofstream>({
+      {"f0", 0},
+      {"f1", 1},
+      {"f2", 2},
+      {"f3", 3},
+  });
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(paths.first); });
 
   auto it = std::make_unique<DataReaderIterator<int>>(
@@ -284,10 +286,10 @@ CASE("datareader/zstd") {
 }
 
 CASE("datareader/non_existent_data") {
-  auto paths = createTestData<int>(
-      {
-          {"f0", 0}, {"f1", 1},
-      });
+  auto paths = createTestData<int>({
+      {"f0", 0},
+      {"f1", 1},
+  });
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(paths.first); });
 
   paths.second.insert(paths.second.begin(), "idontexist");
@@ -308,14 +310,14 @@ CASE("datareader/non_existent_data") {
 }
 
 CASE("datareader/corrupt_wrong_data") {
-  auto paths = createTestDataNoPrefix<int64_t>(
-      {
-          {"f0", 100}, {"f1", 200},
-      });
-  auto pathsStr = createTestDataNoPrefix<std::string>(
-      {
-          {"f0", "foo"}, {"f1", "bar"},
-      });
+  auto paths = createTestDataNoPrefix<int64_t>({
+      {"f0", 100},
+      {"f1", 200},
+  });
+  auto pathsStr = createTestDataNoPrefix<std::string>({
+      {"f0", "foo"},
+      {"f1", "bar"},
+  });
 
   auto cleanup = utils::makeGuard([&]() {
     fsutils::rmrf(paths.first);
@@ -347,10 +349,12 @@ CASE("datareader/corrupt_wrong_data") {
 }
 
 CASE("datareader/transform") {
-  auto paths = createTestDataNoPrefix<int>(
-      {
-          {"f0", 0}, {"f1", 1}, {"f2", 2}, {"f3", 3},
-      });
+  auto paths = createTestDataNoPrefix<int>({
+      {"f0", 0},
+      {"f1", 1},
+      {"f2", 2},
+      {"f3", 3},
+  });
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(paths.first); });
 
   auto reader = makeDataReader<int>(
@@ -373,10 +377,12 @@ CASE("datareader/transform") {
 }
 
 CASE("datareader/transform/manual") {
-  auto paths = createTestDataNoPrefix<int>(
-      {
-          {"f0", 0}, {"f1", 1}, {"f2", 2}, {"f3", 3},
-      });
+  auto paths = createTestDataNoPrefix<int>({
+      {"f0", 0},
+      {"f1", 1},
+      {"f2", 2},
+      {"f3", 3},
+  });
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(paths.first); });
 
   auto it = std::make_unique<DataReaderIterator<int>>(
@@ -400,36 +406,40 @@ CASE("datareader/transform/manual") {
 }
 
 CASE("datareader/init_fn") {
-  auto paths = createTestDataNoPrefix<int>(
-      {
-          {"f0", 0}, {"f1", 1}, {"f2", 2}, {"f3", 3},
-      });
+  auto paths = createTestDataNoPrefix<int>({
+      {"f0", 0},
+      {"f1", 1},
+      {"f2", 2},
+      {"f3", 3},
+  });
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(paths.first); });
 
   std::atomic<int> numThreadsSpawned(0);
 
-  auto reader = makeDataReader<int>(
-      paths.second,
-      2,
-      3,
-      [](std::vector<int> const& x) -> std::string {
-        std::string res;
-        for (auto& i : x) {
-          res += std::to_string(i);
-        }
-        return res;
-      },
-      std::string(), // pathPrefix
-      [&] { numThreadsSpawned++; });
-  auto it = reader.iterator();
+  {
+    auto reader = makeDataReader<int>(
+        paths.second,
+        2,
+        3,
+        [](std::vector<int> const& x) -> std::string {
+          std::string res;
+          for (auto& i : x) {
+            res += std::to_string(i);
+          }
+          return res;
+        },
+        std::string(), // pathPrefix
+        [&] { numThreadsSpawned++; });
+    auto it = reader.iterator();
 
-  EXPECT(it->hasNext() == true);
-  auto d = it->next();
-  EXPECT(d == "012");
-  EXPECT((d = it->next(), true));
-  EXPECT(d == "3");
-  EXPECT(it->hasNext() == false);
-  EXPECT_THROWS(it->next());
+    EXPECT(it->hasNext() == true);
+    auto d = it->next();
+    EXPECT(d == "012");
+    EXPECT((d = it->next(), true));
+    EXPECT(d == "3");
+    EXPECT(it->hasNext() == false);
+    EXPECT_THROWS(it->next());
+  }
 
   // 3 threads expected: 2 reader threads, one transform
   EXPECT(numThreadsSpawned == 3);

@@ -274,4 +274,4 @@ class ABBO12PoolMuta : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBO12PoolMuta, UpcId, State*, Module*);
-}
+} // namespace cherrypi

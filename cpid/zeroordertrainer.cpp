@@ -21,11 +21,13 @@ OnlineZORBTrainer::OnlineZORBTrainer(ag::Container model, ag::Optimizer optim)
     : Trainer(model, optim, std::make_unique<BaseSampler>(), nullptr),
       nEpisodes_(0) {}
 
-bool OnlineZORBTrainer::startEpisode(GameUID const& uid, EpisodeKey const& k) {
+Trainer::EpisodeHandle OnlineZORBTrainer::startEpisode() {
   // Don't start any episodes while we're updating
   std::lock_guard<std::mutex> lock(updateLock_);
   std::lock_guard<std::mutex> lock2(noiseLock_);
-  Trainer::startEpisode(uid, k);
+  auto handle = Trainer::startEpisode();
+  auto uid = handle.gameID();
+  auto k = handle.episodeKey();
   if (antithetic_ && lastNoise_.size() > 0) {
     for (size_t i = 0; i < lastNoise_.size(); i++) {
       lastNoise_[i] = -lastNoise_[i].clone();
@@ -37,19 +39,21 @@ bool OnlineZORBTrainer::startEpisode(GameUID const& uid, EpisodeKey const& k) {
         std::dynamic_pointer_cast<ZOBackpropModel>(model_)->generateNoise();
     lastNoise_ = noiseStash_[uid][k];
   }
-  return true;
+  return handle;
 }
 
 ag::Variant OnlineZORBTrainer::forward(
     ag::Variant inp,
-    GameUID const& gameUID,
-    EpisodeKey const& key) {
+    EpisodeHandle const& handle) {
   auto forward = model_->forward(inp).getTensorList();
   if (forward.size() % 4 != 0) {
     throw std::runtime_error(
         "Output of a model for OnlineZORBTrainer must have a multiple of 4 "
         "elements!");
   }
+
+  auto gameUID = handle.gameID();
+  auto key = handle.episodeKey();
 
   torch::NoGradGuard guard;
   ag::tensor_list ret;
@@ -61,7 +65,7 @@ ag::Variant OnlineZORBTrainer::forward(
     auto noiseIndex = forward[i + 2].item<int64_t>();
 
     std::lock_guard<std::mutex> lock(noiseLock_);
-    auto perturbed = isActive(gameUID, key)
+    auto perturbed = isActive(handle)
         ? w + delta_ * noiseStash_[gameUID][key][noiseIndex]
         : w;
     auto scores = psi.mv(perturbed);
@@ -138,10 +142,10 @@ bool OnlineZORBTrainer::update() {
         auto value = valueLambda_ == 0 // float
             ? torch::tensor(0, psi.options())
             : out[i + 3];
-        auto uVar = torch::Tensor(
-                        noiseStash_[uid][k][uIndex.item<int64_t>()].toBackend(
-                            w.type().backend()))
-                        .set_requires_grad(true); // E
+        auto uVar =
+            torch::Tensor(noiseStash_[uid][k][uIndex.item<int64_t>()].toBackend(
+                              w.type().backend()))
+                .set_requires_grad(true); // E
         auto action = actions[i / 4];
         torch::Tensor psiActed = psi[action]; // E
 
@@ -153,9 +157,7 @@ bool OnlineZORBTrainer::update() {
         loss += (w * wGrad).sum() + (psiActed * psiGrad).sum();
         if (valueLambda_ != 0) {
           loss += valueLambda_ *
-              at::mse_loss(
-                      value,
-                      torch::Tensor(psi.type().scalarTensor(at::Scalar(rtrn))));
+              at::mse_loss(value, torch::tensor(rtrn, psi.options()));
         }
       }
       (loss / batchSize_).backward();
@@ -173,10 +175,6 @@ bool OnlineZORBTrainer::update() {
 
   dist::allreduceGradients(model_);
   optim_->step();
-
-  if (dist::globalContext()->rank == 0) {
-    checkpoint();
-  }
 
   replayBuffer().clear();
   std::lock_guard<std::mutex> lock(noiseLock_);

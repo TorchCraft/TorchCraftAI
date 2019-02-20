@@ -66,7 +66,8 @@ ELSE(MSVC)
     "${PROJECT_SOURCE_DIR}"
     "${PROJECT_SOURCE_DIR}/3rdparty/bwapilib"
     "${PROJECT_SOURCE_DIR}/3rdparty/bwreplib"
-    "${PROJECT_SOURCE_DIR}/3rdparty/include"
+    "${PROJECT_SOURCE_DIR}/3rdparty/include")
+  TARGET_INCLUDE_DIRECTORIES(cherpi SYSTEM PUBLIC
     "${BACKWARD_INCLUDE_DIRS}")
   # Use cotire to automatically generated a precompiled header. We don't want to
   # use the unity build support, though

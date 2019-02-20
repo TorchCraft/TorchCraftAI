@@ -162,4 +162,4 @@ class ABBOzvpmutas : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzvpmutas, UpcId, State*, Module*);
-}
+} // namespace cherrypi

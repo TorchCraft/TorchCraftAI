@@ -66,6 +66,17 @@ void SquadTask::update(State* state) {
   targets_ = getGroupTargets(state);
   threats_ = getGroupThreats(state);
 
+  relevantUnits_.clear();
+  for (auto* unit : targets_) {
+    relevantUnits_.insert(unit);
+  }
+  for (auto* unit : threats_) {
+    relevantUnits_.insert(unit);
+  }
+  for (auto* unit : units()) {
+    relevantUnits_.insert(unit);
+  }
+
   // If no more targets and we're not targeting a location, declare victory
   if (!targetingLocation && targets_.empty()) {
     VLOG(4) << "Squad for " << utils::upcString(upcId())
@@ -83,6 +94,7 @@ void SquadTask::update(State* state) {
 
 // Gets the targets the group should attack
 std::vector<Unit*> SquadTask::getGroupTargets(State* state) const {
+  // TODO: This used to be filtered by isIrrelevantTarget() and still should be
   return targets;
 }
 
@@ -225,6 +237,9 @@ void SquadTask::pickTargets(State* state) {
       r += 1000.0f / utils::distance(unit, target);
     }
     if (!unit->canAttack(target)) {
+      r /= 1000.0f;
+    }
+    if (unit->type->restrictedByDarkSwarm && target->underDarkSwarm()) {
       r /= 1000.0f;
     }
     return r;
@@ -520,7 +535,7 @@ const Tile* findNearbyTile(
   }
   return (const Tile*)nullptr;
 };
-}
+} // namespace
 
 /// Calculate a combat formation position for all Agents
 void SquadTask::formation(State* state) {
@@ -730,25 +745,23 @@ bool SquadTask::isRelevantDetector(Unit const* u) const {
 /// Can this unit hurt us?
 bool SquadTask::isThreat(Unit const* u) const {
   return (
-      isRelevantDetector(u) || (hasGroundUnits && u->type->hasGroundWeapon)
+      isRelevantDetector(u) ||
+      (hasGroundUnits && u->type->hasGroundWeapon)
       // It could hold a Reaver!
-      ||
-      (hasGroundUnits && u->type == buildtypes::Protoss_Shuttle) ||
+      || (hasGroundUnits && u->type == buildtypes::Protoss_Shuttle) ||
       (hasGroundUnits && u->type == buildtypes::Protoss_Reaver) ||
       (hasAirUnits && u->type->hasAirWeapon) ||
       (u->type == buildtypes::Terran_Bunker)
       // TODO: if we have biological units
-      ||
-      (u->type == buildtypes::Terran_Science_Vessel) ||
+      || (u->type == buildtypes::Terran_Science_Vessel) ||
       (u->type == buildtypes::Protoss_High_Templar)
       // TODO: If we have biological
       // and/or expensive units
       // and/or casters with energy
-      ||
-      (u->type == buildtypes::Protoss_Dark_Archon) ||
+      || (u->type == buildtypes::Protoss_Dark_Archon) ||
       (u->type == buildtypes::Zerg_Defiler)
       // Consider Carriers
-      );
+  );
 }
 
 /// Should we prioritze this target?

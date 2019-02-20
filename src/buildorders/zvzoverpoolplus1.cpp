@@ -83,4 +83,4 @@ class ABBOzvzoverpoolplus1 : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzvzoverpoolplus1, UpcId, State*, Module*);
-}
+} // namespace cherrypi

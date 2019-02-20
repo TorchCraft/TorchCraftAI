@@ -67,6 +67,10 @@ class Rand {
   static thread_local std::unique_ptr<at::Generator> localTorchEngine_;
 };
 
+// Generates a random alphanumerica string, not bound to the Rand class
+// because we do not want these IDs to be reproduced across multiple processes
+std::string randId(size_t length);
+
 // This method was originally written by Christopher Smith at
 // https://stackoverflow.com/questions/6942273/get-random-element-from-container
 // and is used under CC BY-SA: https://creativecommons.org/licenses/by-sa/2.0/

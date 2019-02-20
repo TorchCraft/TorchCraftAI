@@ -10,11 +10,11 @@
 #include "cherrypi.h"
 #include "common/autograd.h"
 #include "common/rand.h"
-#include "fsutils.h"
 #include "utils.h"
 #include "zstdstream.h"
 
 #include <cpid/distributed.h>
+#include <cpid/checkpointer.h>
 
 #include <fmt/format.h>
 #include <glog/logging.h>
@@ -82,7 +82,7 @@ void UpdateLoop::wait() {
 void UpdateLoop::operator()(EpisodeSamples episode) {
   if (preprocC_ == nullptr) {
     preprocC_ = std::make_unique<decltype(preprocC_)::element_type>(
-        8, [&](std::vector<EpisodeSamples>&& samples) {
+        4, 8, [&](std::vector<EpisodeSamples>&& samples) {
           dist::setGPUToLocalRank();
           auto start = hires_clock::now();
           auto result = preproc(samples);
@@ -97,17 +97,15 @@ void UpdateLoop::operator()(EpisodeSamples episode) {
 
   if (updateC_ == nullptr) {
     updateC_ = std::make_unique<decltype(updateC_)::element_type>(
-        2, [&](std::pair<ag::tensor_list, ag::tensor_list>&& d) {
+        1, 2, [&](std::pair<ag::tensor_list, ag::tensor_list>&& d) {
           dist::setGPUToLocalRank();
           ag::tensor_list inputs = d.first;
           ag::tensor_list targets = d.second;
           auto start = hires_clock::now();
           if (train_) {
             update(inputs, targets);
-            if (dist::globalContext()->rank == 0) {
-              trainer->checkpoint();
-            }
             numBatches++;
+            checkpointer->updateDone(numBatches);
             if (numBatches % 10 == 0) {
               trainer->metricsContext()->dumpJson(
                   std::to_string(dist::globalContext()->rank) +

@@ -50,4 +50,4 @@ class FogOfWar {
       bool in_air,
       int currentFrame) const;
 };
-}
+} // namespace cherrypi

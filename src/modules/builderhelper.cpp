@@ -323,13 +323,13 @@ bool canBuildAt(
       if (!tile.buildable || (tile.reservedAsUnbuildable && !ignoreReserved)) {
         if (!tile.buildable) {
           illustrate(tile, tc::BW::Color::Grey);
-          VLOG_IF(0, logFailure) << "Cannot build at " << pos
-                                 << ": tile not buildable";
+          VLOG_IF(0, logFailure)
+              << "Cannot build at " << pos << ": tile not buildable";
         }
         if (tile.reservedAsUnbuildable && !ignoreReserved) {
           illustrate(tile, tc::BW::Color::Yellow);
-          VLOG_IF(0, logFailure) << "Cannot build at " << pos
-                                 << ": tile reserved";
+          VLOG_IF(0, logFailure)
+              << "Cannot build at " << pos << ": tile reserved";
         }
         return false;
       }
@@ -337,8 +337,8 @@ bool canBuildAt(
         if (tile.building == nullptr ||
             tile.building->type != buildtypes::Resource_Vespene_Geyser) {
           illustrate(tile, tc::BW::Color::Green);
-          VLOG_IF(0, logFailure) << "Cannot build at " << pos
-                                 << ": requires vespene geyser";
+          VLOG_IF(0, logFailure)
+              << "Cannot build at " << pos << ": requires vespene geyser";
           return false;
         }
       }
@@ -346,8 +346,8 @@ bool canBuildAt(
         if (tile.building->type != buildtypes::Resource_Vespene_Geyser ||
             !isRefinery) {
           illustrate(tile, tc::BW::Color::Blue);
-          VLOG_IF(0, logFailure) << "Cannot build at " << pos
-                                 << ": contains building";
+          VLOG_IF(0, logFailure)
+              << "Cannot build at " << pos << ": contains building";
           return false;
         }
       }
@@ -369,15 +369,15 @@ bool canBuildAt(
       }
       if (requiresPsi && !checkPsi(tile.x, tile.y)) {
         illustrate(tile, tc::BW::Color::Cyan);
-        VLOG_IF(0, logFailure) << "Cannot build at " << pos
-                               << ": requires psi but not present";
+        VLOG_IF(0, logFailure)
+            << "Cannot build at " << pos << ": requires psi but not present";
         return false;
       }
       if (!isResourceDepot && !isRefinery && !isDefence &&
           tile.reservedForGathering) {
         illustrate(tile, tc::BW::Color::Teal);
-        VLOG_IF(0, logFailure) << "Cannot build at " << pos
-                               << ": reserved for gathering";
+        VLOG_IF(0, logFailure)
+            << "Cannot build at " << pos << ": reserved for gathering";
         return false;
       }
       if (isResourceDepot) {
@@ -390,16 +390,16 @@ bool canBuildAt(
       } else {
         if (tile.reservedForResourceDepot) {
           illustrate(tile, tc::BW::Color::Brown);
-          VLOG_IF(0, logFailure) << "Cannot build at " << pos
-                                 << ": reserved for resource depot";
+          VLOG_IF(0, logFailure)
+              << "Cannot build at " << pos << ": reserved for resource depot";
           return false;
         }
       }
       if (tile.blockedUntil > frame) {
         illustrate(tile, tc::BW::Color::Red);
-        VLOG_IF(0, logFailure) << "Cannot build at " << pos
-                               << ": is blocked until frame "
-                               << tile.blockedUntil;
+        VLOG_IF(0, logFailure)
+            << "Cannot build at " << pos << ": is blocked until frame "
+            << tile.blockedUntil;
         return false;
       }
     }

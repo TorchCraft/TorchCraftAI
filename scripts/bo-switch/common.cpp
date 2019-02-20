@@ -9,12 +9,13 @@
 
 #include "models/bos/sample.h"
 
-#include "fsutils.h"
 #include "utils.h"
 
+#include <common/fsutils.h>
 #include <common/rand.h>
 
 using namespace cpid;
+namespace fsutils = common::fsutils;
 
 namespace cherrypi {
 

@@ -97,11 +97,12 @@ class SquadTask : public MultiProxyTask {
           return !u->type->isFlyer;
         }) != squadUnits.end();
 
-    moving = moveTracker && (moveTracker->status() == TrackerStatus::Pending ||
-                             moveTracker->status() == TrackerStatus::Ongoing);
-    fighting =
-        attackTracker && (attackTracker->status() == TrackerStatus::Pending ||
-                          attackTracker->status() == TrackerStatus::Ongoing);
+    moving = moveTracker &&
+        (moveTracker->status() == TrackerStatus::Pending ||
+         moveTracker->status() == TrackerStatus::Ongoing);
+    fighting = attackTracker &&
+        (attackTracker->status() == TrackerStatus::Pending ||
+         attackTracker->status() == TrackerStatus::Ongoing);
     VLOG(2) << "squad update: moving = " << moving
             << ", fighting = " << fighting;
   }

@@ -14,7 +14,6 @@
 #include "models/bos/sample.h"
 
 #include "forkserver.h"
-#include "fsutils.h"
 #include "models/bandit.h"
 #include "gameutils/openbwprocess.h"
 #include "player.h"
@@ -23,13 +22,16 @@
 #include "zstdstream.h"
 
 #include <common/datareader.h>
+#include <common/fsutils.h>
 #include <common/rand.h>
 #include <common/serialization.h>
 #include <cpid/batcher.h>
 #include <cpid/optimizers.h>
 #include <cpid/sampler.h>
+#include <cpid/checkpointer.h>
 
 #include <fmt/format.h>
+#include <fmt/ostream.h>
 #include <gflags/gflags.h>
 #include <glog/logging.h>
 #include <prettyprint/prettyprint.hpp>
@@ -192,6 +194,7 @@ using namespace cherrypi;
 using namespace cpid;
 namespace dist = cpid::distributed;
 auto const vsopts = &visdom::makeOpts;
+namespace fsutils = common::fsutils;
 
 namespace {
 
@@ -373,7 +376,7 @@ class BosTrainer : public CentralTrainer {
   }
 
  protected:
-  virtual void receivedEpisode(
+  virtual void receivedFrames(
       GameUID const& gameId,
       EpisodeKey const& episodeKey) override {
     if (saveSamples) {
@@ -392,8 +395,7 @@ class BosTrainer : public CentralTrainer {
       data.gameId = gameId;
       data.episodeKey = episodeKey;
       for (auto const& frame : replayer_.get(gameId, episodeKey)) {
-        data.frames.push_back(
-            std::static_pointer_cast<CerealizableReplayBufferFrame>(frame));
+        data.frames.push_back(frame);
       }
       ar(data);
     }
@@ -440,7 +442,7 @@ bool randomBuildOrderSwitch(
 }
 
 void runGame(
-    GameUID const& gameId,
+    EpisodeHandle const& handle,
     std::shared_ptr<BasePlayer> player,
     int maxFrames,
     std::shared_ptr<Trainer> trainer) {
@@ -472,18 +474,18 @@ void runGame(
     default:
       break;
   }
-  VLOG(0) << gameId << " Random switch frequency: " << switchFrequency
+  VLOG(0) << handle << " Random switch frequency: " << switchFrequency
           << " minutes";
   auto avgSamples = (24.0f * 60 * switchFrequency) / FLAGS_skip_frames;
   auto const switchProba = float(FLAGS_num_bo_switches) / avgSamples;
 
   bool timeout = false;
   while (true) {
-    if (!trainer->isActive(gameId)) {
-      throw std::runtime_error(fmt::format("{} no longer active", gameId));
+    if (!trainer->isActive(handle)) {
+      throw std::runtime_error(fmt::format("{} no longer active", handle));
     }
     if (gStopGameThreads.load()) {
-      throw std::runtime_error(fmt::format("{} stop requested", gameId));
+      throw std::runtime_error(fmt::format("{} stop requested", handle));
     }
     if (state->gameEnded()) {
       int allEnemyUnitsCount = 0;
@@ -493,13 +495,11 @@ void runGame(
         }
       }
       if (allEnemyUnitsCount <= 9) {
-        trainer->forceStopEpisode(gameId);
-        VLOG(0) << gameId << " opponent doesn't start.";
+        VLOG(0) << handle << " opponent doesn't start.";
         return;
       }
       if (state->currentFrame() <= 24 * 180) {
-        trainer->forceStopEpisode(gameId);
-        VLOG(0) << gameId << " is too short, sth might be wrong.";
+        VLOG(0) << handle << " is too short, sth might be wrong.";
         return;
       }
       break;
@@ -540,7 +540,7 @@ void runGame(
             float myBaseDistance = state->areaInfo().walkPathLength(
                 u->pos(), state->areaInfo().myStartLocation());
             if (myBaseDistance < baseDistance * 2.0f) {
-              VLOG(0) << gameId
+              VLOG(0) << handle
                       << " proxy/rush dectected; starting BOS at frame "
                       << state->currentFrame();
               canUseModelPrediction = true;
@@ -557,21 +557,21 @@ void runGame(
       auto sample = BosSample(state, 32, 32, staticData);
       staticData = sample.staticData;
       staticData->switchProba = switchProba;
-      VLOG(2) << gameId << " extract sample at frame " << state->currentFrame();
+      VLOG(2) << handle << " extract sample at frame " << state->currentFrame();
 
       ag::Variant modelOutput;
       if (modelRunner) {
-        modelOutput = modelRunner->forward(sample, gameId);
+        modelOutput = modelRunner->forward(sample, handle);
       }
 
       nextSampleFrame += FLAGS_skip_frames;
       if (state->currentFrame() >= nextSwitchableFrame) {
         auto switched =
-            randomBuildOrderSwitch(gameId, trainer, state, switchProba);
+            randomBuildOrderSwitch(handle.gameID(), trainer, state, switchProba);
         if (FLAGS_mode == "polit") {
           if (switched) {
             nextSwitchableFrame += common::Rand::sample(committmentDist);
-            VLOG(1) << gameId << " sticking to random switch for "
+            VLOG(1) << handle << " sticking to random switch for "
                     << (nextSwitchableFrame - state->currentFrame()) / 24
                     << "s";
           } else {
@@ -580,7 +580,7 @@ void runGame(
                 modelOutput["advantage"].item<float>() >
                     FLAGS_bos_min_advantage) {
               auto buildFromModel = modelOutput.getDict()["build"].getString();
-              VLOG(1) << gameId << " switching to " << buildFromModel
+              VLOG(1) << handle << " switching to " << buildFromModel
                       << " according to model with advantage "
                       << modelOutput["advantage"].item<float>();
               state->board()->post(Blackboard::kBuildOrderKey, buildFromModel);
@@ -601,7 +601,7 @@ void runGame(
           {5 * 24, 15 * 24, 30 * 24});
 
       trainer->step(
-          gameId, std::make_shared<BosReplayBufferFrame>(std::move(sample)));
+          handle, std::make_shared<BosReplayBufferFrame>(std::move(sample)));
     }
   }
 
@@ -609,11 +609,10 @@ void runGame(
   if (timeout) {
     // Ignore this game
     trainer->metricsContext()->incCounter("timeouts");
-    trainer->forceStopEpisode(gameId);
-    VLOG(0) << gameId << " timeout";
+    VLOG(0) << handle << " timeout";
     return;
   }
-  VLOG(0) << gameId << (state->won() ? " won" : " lost") << " against "
+  VLOG(0) << handle << (state->won() ? " won" : " lost") << " against "
           << player->state()->board()->get<std::string>(
                  Blackboard::kEnemyNameKey)
           << " after " << state->currentFrame() << " frames";
@@ -622,22 +621,19 @@ void runGame(
   }
 
   // The final frame is just a dummy one
-  trainer->step(gameId, std::make_shared<BosReplayBufferFrame>(), true);
+  trainer->step(handle, std::make_shared<BosReplayBufferFrame>(), true);
 }
 
 void runGameThread(std::shared_ptr<Trainer> trainer, int num) {
   dist::setGPUToLocalRank();
-  auto id = std::getenv("SLURM_ARRAY_TASK_ID") == NULL
-      ? dist::globalContext()->rank
-      : std::stoi(std::getenv("SLURM_ARRAY_TASK_ID"));
-  auto gameId = genGameUID(id);
   auto constexpr kMaxGamesPerScenario = 25;
 
   uint32_t numGames = 0;
   int gamesWithCurrentScenario = -1;
   std::unique_ptr<PlayScriptScenario> scenario;
   while (!gStopGameThreads.load()) {
-    if (!trainer->startEpisode(gameId)) {
+    auto handle = trainer->startEpisode();
+    if (!handle) {
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
       continue;
     }
@@ -694,18 +690,16 @@ void runGameThread(std::shared_ptr<Trainer> trainer, int num) {
       if (gStopGameThreads.load()) {
         break;
       }
-      VLOG(0) << gameId << " starting against "
+      VLOG(0) << handle << " starting against "
               << state->board()->get<std::string>(Blackboard::kEnemyNameKey)
               << " on " << state->tcstate()->map_name << ", #"
               << scenario->numGamesStarted() << " in series";
 
       player->init();
-      runGame(gameId, player, 86400, trainer);
+      runGame(handle, player, 86400, trainer);
     } catch (std::exception const& e) {
-      LOG(WARNING) << gameId << " exception: " << e.what();
-      trainer->forceStopEpisode(gameId);
+      LOG(WARNING) << handle << " exception: " << e.what();
     }
-    gameId = genGameUID(id);
     numGames++;
   }
 }
@@ -767,7 +761,7 @@ void trainLoop(
 
   // Write out final checkpoint
   if (dist::globalContext()->rank == 0 && FLAGS_bos_model_type != "idle") {
-    trainer->checkpoint(true);
+    trainer->loop().checkpointer->checkpointTrainer();
   }
   stopGameThreads();
 }
@@ -898,12 +892,13 @@ int main(int argc, char** argv) {
   auto trainer = std::make_shared<BosTrainer>(isServer, model, optim, loop);
 
   trainer->setMetricsContext(metrics);
-  trainer->setCheckpointFrequency(5);
+  trainer->loop().checkpointer = std::make_unique<cpid::Checkpointer>(trainer);
+  trainer->loop().checkpointer->epochLength(5);
   std::string checkpointPath = std::getenv("SLURM_ARRAY_TASK_ID") == NULL
       ? FLAGS_checkpoint
       : fmt::format(
             "{}-{}", FLAGS_checkpoint, std::getenv("SLURM_ARRAY_TASK_ID"));
-  trainer->setCheckpointLocation(checkpointPath);
+  trainer->loop().checkpointer->checkpointPath(checkpointPath);
   trainer->saveSamples = FLAGS_save_samples;
 
   if (!FLAGS_initial_model.empty()) {

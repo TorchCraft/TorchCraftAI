@@ -70,6 +70,7 @@ DEFINE_string(
     "Path to a replay file (.rep) along which we will trace the bot internal "
     "state. Disabled if empty");
 DECLARE_string(umm_path);
+DEFINE_bool(map_hack, false, "Enable map hack");
 
 namespace cherrypi {
 
@@ -83,6 +84,7 @@ void setupPlayerFromCli(Player* player) {
   player->setCollectTimers(FLAGS_timers);
   player->setLogFailedCommands(FLAGS_log_failed_commands);
   player->setDraw(FLAGS_draw);
+  player->setMapHack(FLAGS_map_hack);
 
   // Add modules
   player->addModule(Module::make(kAutoTopModule));

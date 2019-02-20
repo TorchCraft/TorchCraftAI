@@ -57,6 +57,7 @@ float MetricsContext::getLastEventValue(std::string const& key) const {
 }
 
 bool MetricsContext::hasEvent(std::string const& key) const {
+  std::lock_guard<std::mutex> lock(mutex_);
   return timeSeries_.count(key) > 0;
 }
 
@@ -98,6 +99,11 @@ std::unordered_map<std::string, float> MetricsContext::reduceEventValues(
 void MetricsContext::incCounter(std::string const& key, float amount) {
   std::lock_guard<std::mutex> lock(mutex_);
   counters_[key] += amount;
+}
+
+bool MetricsContext::hasCounter(std::string const& key) const {
+  std::lock_guard<std::mutex> lock(mutex_);
+  return counters_.count(key) > 0;
 }
 
 float MetricsContext::getCounter(std::string const& key) const {

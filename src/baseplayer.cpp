@@ -6,6 +6,7 @@
  */
 
 #include "baseplayer.h"
+#include <string_view>
 
 #include "utils.h"
 
@@ -358,5 +359,6 @@ void BasePlayer::dumpTraceAlongReplay(std::string const& replayFile) {
     addModule(Module::make("CherryVisDumper"));
   }
   findModule<CherryVisDumperModule>()->setReplayFile(replayFile);
+  state_->board()->setTraceDumper(findModule<CherryVisDumperModule>());
 }
 } // namespace cherrypi

@@ -33,11 +33,11 @@ class ABBO9PoolSpeedLingMuta : public ABBOBase {
     if (armySupply >= enemyArmySupply) {
       if (!state_->unitsInfo().myUnitsOfType(Zerg_Spire).empty() &&
           state_->unitsInfo().myCompletedUnitsOfType(Zerg_Spire).empty()) {
-        int larvaTime =
-            342 * ((state_->unitsInfo().myUnitsOfType(Zerg_Hatchery).size() +
-                    state_->unitsInfo().myUnitsOfType(Zerg_Lair).size()) *
-                       3 -
-                   state_->unitsInfo().myUnitsOfType(Zerg_Larva).size() + 1);
+        int larvaTime = 342 *
+            ((state_->unitsInfo().myUnitsOfType(Zerg_Hatchery).size() +
+              state_->unitsInfo().myUnitsOfType(Zerg_Lair).size()) *
+                 3 -
+             state_->unitsInfo().myUnitsOfType(Zerg_Larva).size() + 1);
         for (Unit* u : state_->unitsInfo().myUnitsOfType(Zerg_Spire)) {
           if (u->remainingBuildTrainTime <= larvaTime) {
             waitForSpire = true;

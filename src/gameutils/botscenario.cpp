@@ -8,29 +8,20 @@
 #include "botscenario.h"
 
 #include "cherrypi.h"
-#include "fsutils.h"
 #include "openbwprocess.h"
 #include "playscript.h"
 
-#include "common/rand.h"
-#include "common/str.h"
+#include <common/fsutils.h>
+#include <common/rand.h>
+#include <common/str.h>
 
 #include <fmt/format.h>
 #include <glog/logging.h>
 
+namespace fsutils = common::fsutils;
+
 namespace {
 int constexpr kBotPlayTimeoutMs = 120000;
-
-std::string makePlayId(size_t len = 32) {
-  static std::mt19937 rng = std::mt19937(std::random_device()());
-  static const char alphanum[] = "0123456789abcdef";
-  std::uniform_int_distribution<int> dis(0, sizeof(alphanum) - 2);
-  std::string s(len, 0);
-  for (size_t i = 0; i < len; i++) {
-    s[i] = alphanum[dis(rng)];
-  }
-  return s;
-}
 } // namespace
 
 namespace cherrypi {
@@ -45,20 +36,19 @@ BotScenario::BotScenario(
 #ifdef WITHOUT_POSIX
   throw std::runtime_error("Not available for windows");
 #else
-  proc1_ = std::make_shared<OpenBwProcess>(
-      std::vector<OpenBwProcess::EnvVar>{
-          {"OPENBW_ENABLE_UI", forceGui ? "1" : "0", forceGui},
-          {"OPENBW_LAN_MODE", "FILE", true},
-          {"OPENBW_FILE_READ", pipes_.pipe1, true},
-          {"OPENBW_FILE_WRITE", pipes_.pipe2, true},
-          {"BWAPI_CONFIG_AUTO_MENU__AUTO_MENU", "LAN", true},
-          {"BWAPI_CONFIG_AUTO_MENU__GAME_TYPE",
-           detail::gameTypeName(gameType),
-           true},
-          {"BWAPI_CONFIG_AUTO_MENU__MAP", map, true},
-          {"BWAPI_CONFIG_AUTO_MENU__RACE", myRace._to_string(), true},
-          {"BWAPI_CONFIG_AUTO_MENU__SAVE_REPLAY", replayPath, true},
-      });
+  proc1_ = std::make_shared<OpenBwProcess>(std::vector<OpenBwProcess::EnvVar>{
+      {"OPENBW_ENABLE_UI", forceGui ? "1" : "0", forceGui},
+      {"OPENBW_LAN_MODE", "FILE", true},
+      {"OPENBW_FILE_READ", pipes_.pipe1, true},
+      {"OPENBW_FILE_WRITE", pipes_.pipe2, true},
+      {"BWAPI_CONFIG_AUTO_MENU__AUTO_MENU", "LAN", true},
+      {"BWAPI_CONFIG_AUTO_MENU__GAME_TYPE",
+       detail::gameTypeName(gameType),
+       true},
+      {"BWAPI_CONFIG_AUTO_MENU__MAP", map, true},
+      {"BWAPI_CONFIG_AUTO_MENU__RACE", myRace._to_string(), true},
+      {"BWAPI_CONFIG_AUTO_MENU__SAVE_REPLAY", replayPath, true},
+  });
   proc2_ = std::make_shared<OpenBwProcess>(
       enemyBot,
       std::vector<OpenBwProcess::EnvVar>{
@@ -87,7 +77,7 @@ PlayScriptScenario::PlayScriptScenario(
     : enemyBot_(enemyBot) {
   vars.insert(vars.begin(), {"OPPONENT", enemyBot, true});
 
-  auto playId = makePlayId();
+  auto playId = common::randId(32);
   path_ = outputPath + "/" + playId;
   vars.insert(vars.begin(), {"OUTPUT", outputPath, true});
   vars.insert(vars.begin(), {"PLAYID", playId, true});

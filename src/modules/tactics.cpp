@@ -195,10 +195,9 @@ double convertSimToScore(
     return painScore;
   };
 
-  auto calcTeamScore = [&](
-      std::vector<Unit*>& startUnits,
-      std::vector<CombatSim::SimUnit>& endUnits,
-      double q) {
+  auto calcTeamScore = [&](std::vector<Unit*>& startUnits,
+                           std::vector<CombatSim::SimUnit>& endUnits,
+                           double q) {
     double teamScore = 0;
     for (auto i = 0u; i < startUnits.size(); i++) {
       teamScore += calcUnitScore(startUnits[i], endUnits[i], q);
@@ -605,8 +604,9 @@ void TacticsState::assignUnitsBasedOnPreviousAssignments(
           continue;
         }
         for (auto& g : groups_) {
-          if (i == 0 && (g.isIdleGroup || g.enemyUnits.empty() ||
-                         task->averagePos == Position())) {
+          if (i == 0 &&
+              (g.isIdleGroup || g.enemyUnits.empty() ||
+               task->averagePos == Position())) {
             continue;
           }
           if (groupTaken.find(&g) != groupTaken.end()) {
@@ -738,9 +738,9 @@ void TacticsState::assignScoutingUnits(
         // Find acceptable scouts
         // TODO: This should consider scout units for other races
         if (u->type == buildtypes::Zerg_Zergling && !u->burrowed() &&
-            !nodeInsideGroupTracker_[&state->tilesInfo().getTile(u->x, u->y) -
-                                     tilesData]
-                 .group) {
+            !nodeInsideGroupTracker_
+                 [&state->tilesInfo().getTile(u->x, u->y) - tilesData]
+                     .group) {
           i = availableUnits.erase(i);
           g.myUnits.push_back(u);
           if (g.myUnits.size() >= nScouts) {
@@ -760,7 +760,8 @@ bool TacticsState::aggressiveUnit(State* state, Unit* unit) {
 
 // Heuristic of how helpful this unit is to the group fight
 double TacticsState::scoreUnitForGroup(State* state, Unit* u, TacticsGroup& g) {
-  if ((!g.hasEnemyAirUnits || !u->type->hasAirWeapon) &&
+  if (u->unit.energy == 0 && // Include spellcasters
+      (!g.hasEnemyAirUnits || !u->type->hasAirWeapon) &&
       (!g.hasEnemyGroundUnits || !u->type->hasGroundWeapon)) {
     return kdInfty;
   }
@@ -1717,6 +1718,7 @@ std::pair<double, double> TacticsModule::distributeFightFlee(
   // Use Combat Simulation to predict the outcome of a fight
   std::unordered_map<Unit*, int> enemiesInRangeOfOurStaticDefence;
   std::unordered_map<Unit*, int> enemiesAlmostInRangeOfOurStaticDefence;
+
   auto fightScores = tstate.combatSimFightPrediction(
       state,
       g,
@@ -1771,7 +1773,8 @@ std::pair<double, double> TacticsModule::distributeFightFlee(
       moveTo = tstate.idleGroupTargetPos(state, u, inBaseArea_);
     }
 
-    bool fight = u->flying() ? fightScores.airFight : fightScores.groundFight;
+    bool fight = alwaysFight() ||
+        (u->flying() ? fightScores.airFight : fightScores.groundFight);
     auto* tilesData = state->tilesInfo().tiles.data();
 
     // Determine whether should run based on other considerations
@@ -1848,9 +1851,8 @@ std::pair<double, double> TacticsModule::distributeFightFlee(
           runPos = tstate.findRunPos(state, u, fleeScore_);
         }
         if (runPos != Position()) {
-          ++tstate.tileSpotTakenTracker_[&state->tilesInfo().getTile(
-                                             runPos.x, runPos.y) -
-                                         tilesData];
+          ++tstate.tileSpotTakenTracker_
+                [&state->tilesInfo().getTile(runPos.x, runPos.y) - tilesData];
           target = nullptr;
           moveTo = runPos;
         }

@@ -48,4 +48,4 @@ struct ResourceWorkers {
   std::unordered_map<Unit*, Unit*> resourceByWorker;
   std::unordered_map<Unit*, std::unordered_set<Unit*>> workersByResource;
 };
-} // namespace
+} // namespace cherrypi

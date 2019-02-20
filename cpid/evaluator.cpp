@@ -33,7 +33,6 @@ void Evaluator::stepEpisode(
 
 bool Evaluator::update() {
   std::lock_guard<std::mutex> updateLock(updateMutex_);
-  namespace dist = distributed;
   {
     std::shared_lock<std::shared_timed_mutex> lock(insertionMutex_);
     if (newGames_.size() < batchSize_) {
@@ -45,7 +44,7 @@ bool Evaluator::update() {
       LOG(FATAL) << "We have too many games playing/played"
                  << " gamesStarted_ = " << gamesStarted_;
     }
-  } // namespace dist=distributed;
+  }
 
   float meanBatchReward = 0.0;
   for (size_t b = 0; b < batchSize_; ++b) {
@@ -80,7 +79,7 @@ bool Evaluator::update() {
   return true;
 }
 
-bool Evaluator::startEpisode(GameUID const& uid, EpisodeKey const& k) {
+Trainer::EpisodeHandle Evaluator::startEpisode() {
   using namespace std::chrono_literals;
   std::unique_lock<std::mutex> updateLock(updateMutex_);
   while (true) {
@@ -90,33 +89,28 @@ bool Evaluator::startEpisode(GameUID const& uid, EpisodeKey const& k) {
     }
     auto wakeReason = batchBarrier_.wait_for(updateLock, 100ms);
     if (wakeReason == std::cv_status::timeout) {
-      return false;
+      return EpisodeHandle();
     }
   }
-  if (!Trainer::startEpisode(uid, k)) {
-    return false;
+  auto handle = Trainer::startEpisode();
+  if (handle) {
+    gamesStarted_++;
   }
-  gamesStarted_++;
-  return true;
+  return handle;
 }
 
-void Evaluator::forceStopEpisode(GameUID const& uid, EpisodeKey const& k) {
+void Evaluator::forceStopEpisode(EpisodeHandle const& handle) {
   std::unique_lock<std::mutex> updateLock(updateMutex_);
-  if (isActive(uid, k)) {
-    if (gamesStarted_ > 0) {
-      gamesStarted_--;
-    }
+  if (isActive(handle) && gamesStarted_ > 0) {
+    gamesStarted_--;
   }
-  Trainer::forceStopEpisode(uid, k);
+  Trainer::forceStopEpisode(handle);
 }
 
-ag::Variant Evaluator::forward(
-    ag::Variant inp,
-    GameUID const& gameUID,
-    EpisodeKey const& key) {
+ag::Variant Evaluator::forward(ag::Variant inp, EpisodeHandle const& handle) {
   MetricsContext::Timer forwardTimer(
       metricsContext_, "evaluator:forward", kFwdMetricsSubsampling);
-  return ag::Variant(forwardFunction_(inp, gameUID, key));
+  return ag::Variant(forwardFunction_(inp, handle));
 }
 
 void Evaluator::reset() {

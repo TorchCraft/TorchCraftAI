@@ -50,6 +50,11 @@ AUTOGRAD_CONTAINER_CLASS(GatedConv) {
   }
 };
 
+enum class PadType {
+  Zero,
+  Reflection,
+  Replication,
+};
 /**
  * Simple convolutional block, with optional residual connection
  * From a user perspective, the convolution parameters behave the same as if the
@@ -91,6 +96,8 @@ AUTOGRAD_CONTAINER_CLASS(ConvBlock) {
   TORCH_ARG(bool, bias) = false;
   /// Whether to use gated convolutions
   TORCH_ARG(bool, gated) = false;
+  /// How to pad
+  TORCH_ARG(PadType, padType) = PadType::Zero;
 
   void reset() override;
 
@@ -182,6 +189,26 @@ AUTOGRAD_CONTAINER_CLASS(EncoderDecoder) {
       int size,
       std::pair<int, int> inShape,
       std::pair<int, int> targetShape) const;
+};
+
+// Input is (Q, K, V, mask), where mask contains the valid indices
+// Q is (bsz, numQueries, queryDim)
+// K is (bsz, numKeys, queryDim)
+// V is (bsz, numKeys, valueDim)
+// mask is (bsz, numQueries, numKeys)
+// output is (bsz, numQueries, outDim)
+//
+// Check the paper for details:
+//   https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf
+AUTOGRAD_CONTAINER_CLASS(MHAttention) {
+  ag::Container vLinear_, kLinear_, qLinear_, oLinear_;
+  TORCH_ARG(int, queryDim) = 0;
+  TORCH_ARG(int, valueDim) = 0;
+  TORCH_ARG(int, hidDim) = 0;
+  TORCH_ARG(int, nHeads) = 0;
+  TORCH_ARG(int, outDim) = 0;
+  virtual void reset() override;
+  virtual ag::Variant forward(ag::Variant x) override;
 };
 
 } // namespace common

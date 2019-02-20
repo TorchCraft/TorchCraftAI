@@ -8,17 +8,19 @@
 #include "scenarios.h"
 #include "rlbuildingplacer.h"
 
-#include "fsutils.h"
 #include "modules.h"
 #include "player.h"
 #include "utils.h"
 
+#include <common/fsutils.h>
 #include <common/rand.h>
 
 #include <gflags/gflags.h>
 #include <glog/logging.h>
 
 DECLARE_string(build);
+
+namespace fsutils = common::fsutils;
 
 namespace cherrypi {
 

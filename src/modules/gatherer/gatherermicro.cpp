@@ -202,8 +202,8 @@ void GathererController::step(State* state) {
   VLOG_IF(2, basePositions.size() > 5) << "Bases: " << basePositions.size();
   VLOG_IF(1, !invaders.empty()) << "Invaders: " << invaders.size();
   VLOG_IF(1, !proxies.empty()) << "Proxies: " << proxies.size();
-  VLOG_IF(1, !proxyBuilders.empty()) << "Proxy builders: "
-                                     << proxyBuilders.size();
+  VLOG_IF(1, !proxyBuilders.empty())
+      << "Proxy builders: " << proxyBuilders.size();
 
   // Track workers who aren't yet assigned to defense or gathering
   std::unordered_set<Unit*> freeWorkers;
@@ -220,7 +220,6 @@ void GathererController::step(State* state) {
     // Don't enter proxy attacker range if we're not already in it
     return proxies.end() ==
         std::find_if(proxies.begin(), proxies.end(), [&](Unit* proxy) {
-
              if (enemyHasCombatUnits &&
                  proxy->type != buildtypes::Zerg_Creep_Colony &&
                  proxy->type != buildtypes::Zerg_Sunken_Colony) {
@@ -334,12 +333,13 @@ void GathererController::micro(State* state, Unit* worker, Unit* resource) {
   if (state->hasResearched(buildtypes::Burrowing) &&
       worker->unit.health < FLAGS_gatherer_burrow_hp) {
     bool hideUnderBed = state->areaInfo().myBases().size() > 1 &&
-        invaders.end() != std::find_if(
-                              invaders.begin(),
-                              invaders.end(),
-                              [&](Unit* invader) {
-                                return worker->inRangeOf(invader, 24);
-                              }) &&
+        invaders.end() !=
+            std::find_if(
+                invaders.begin(),
+                invaders.end(),
+                [&](Unit* invader) {
+                  return worker->inRangeOf(invader, 24);
+                }) &&
         invaders.end() ==
             std::find_if(invaders.begin(), invaders.end(), [](Unit* invader) {
               return invader->type->isDetector;
@@ -502,12 +502,11 @@ void GathererController::gather(
 
 /// Issue a UPC to command a worker to flee.
 void GathererController::flee(State* state, Unit* worker, Unit* resource) {
-  auto filter = movefilters::PositionFilters(
-      {movefilters::makePositionFilter(
-          movefilters::getCloserTo(resource),
-          {movefilters::avoidAttackers(),
-           movefilters::avoidThreatening(),
-           movefilters::avoidEnemyUnitsInRange(FLAGS_gatherer_avoid_range)})});
+  auto filter = movefilters::PositionFilters({movefilters::makePositionFilter(
+      movefilters::getCloserTo(resource),
+      {movefilters::avoidAttackers(),
+       movefilters::avoidThreatening(),
+       movefilters::avoidEnemyUnitsInRange(FLAGS_gatherer_avoid_range)})});
   addUpc(worker, movefilters::smartMove(state, worker, filter), Command::Move);
 }
 

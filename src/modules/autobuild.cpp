@@ -542,8 +542,9 @@ const BuildType* advance(BuildState& st, BuildEntry thing, int endFrame) {
           for (int i = 0; i != 4 && !builder; ++i) {
             for (auto& u : i == 3
                      ? st.morphingHatcheries
-                     : st.units[i == 0 ? Zerg_Hive : i == 1 ? Zerg_Lair
-                                                            : Zerg_Hatchery]) {
+                     : st.units
+                           [i == 0 ? Zerg_Hive
+                                   : i == 1 ? Zerg_Lair : Zerg_Hatchery]) {
               if (!builderExists) {
                 builderExists = true;
               }
@@ -734,8 +735,9 @@ bool depbuild(BuildState& st, const BuildState& prevSt, BuildEntry thing) {
       }
       return false;
     }
-    if (type == builtType || (type->builder && type->builder->builder == type &&
-                              !hasOrInProduction(st, type->builder))) {
+    if (type == builtType ||
+        (type->builder && type->builder->builder == type &&
+         !hasOrInProduction(st, type->builder))) {
       if (FLAGS_autobuild_verbose) {
         VLOG(0) << buildLogIndent() << "depbuild " << initialType->name
                 << ": failing because of unsatisfiable cyclic dependency";
@@ -870,12 +872,11 @@ void AutoBuildTask::build(
       autobuild::hasOrInProduction(currentBuildState, type)) {
     return;
   }
-  queue = [
-    queue = std::move(queue),
-    type,
-    pos,
-    builtCallback = std::move(builtCallback)
-  ](autobuild::BuildState & st) {
+  queue = [queue = std::move(queue),
+           type,
+           pos,
+           builtCallback =
+               std::move(builtCallback)](autobuild::BuildState& st) {
     return autobuild::nodelay(st, {type, pos, builtCallback}, queue);
   };
 }
@@ -887,11 +888,10 @@ void AutoBuildTask::build(
       autobuild::hasOrInProduction(currentBuildState, type)) {
     return;
   }
-  queue = [
-    queue = std::move(queue),
-    type,
-    builtCallback = std::move(builtCallback)
-  ](autobuild::BuildState & st) {
+  queue = [queue = std::move(queue),
+           type,
+           builtCallback =
+               std::move(builtCallback)](autobuild::BuildState& st) {
     return autobuild::nodelay(st, {type, Position(), builtCallback}, queue);
   };
 }
@@ -901,7 +901,7 @@ void AutoBuildTask::build(const BuildType* type, Position pos) {
       autobuild::hasOrInProduction(currentBuildState, type)) {
     return;
   }
-  queue = [ queue = std::move(queue), type, pos ](autobuild::BuildState & st) {
+  queue = [queue = std::move(queue), type, pos](autobuild::BuildState& st) {
     return autobuild::nodelay(st, {type, pos}, queue);
   };
 }
@@ -915,7 +915,7 @@ void AutoBuildTask::build(const BuildType* type) {
       autobuild::has(currentBuildState, buildtypes::Lurker_Aspect)) {
     build(buildtypes::Zerg_Hydralisk);
   }
-  queue = [ queue = std::move(queue), type ](autobuild::BuildState & st) {
+  queue = [queue = std::move(queue), type](autobuild::BuildState& st) {
     return autobuild::nodelay(st, {type}, queue);
   };
 }
@@ -1386,7 +1386,7 @@ class IncomeTrackerTask : public Task {
         Blackboard::kGasPerFramePerGatherer, gasPerFramePerGatherer);
   }
 };
-}
+} // namespace
 
 void AutoBuildModule::step(State* state) {
   checkForNewUPCs(state);
@@ -1507,9 +1507,8 @@ std::vector<std::vector<std::string>> AutoBuildTask::unitsToString(
 
   std::vector<std::vector<std::string>> output;
   for (auto& typeAndUnits : units) {
-    output.push_back(
-        std::vector<std::string>{std::to_string(typeAndUnits.second.size()),
-                                 typeAndUnits.first->name});
+    output.push_back(std::vector<std::string>{
+        std::to_string(typeAndUnits.second.size()), typeAndUnits.first->name});
   }
   return output;
 }

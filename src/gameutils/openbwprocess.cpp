@@ -6,8 +6,9 @@
  */
 
 #include "openbwprocess.h"
-#include "fsutils.h"
 #include "utils.h"
+
+#include <common/fsutils.h>
 
 #include <torchcraft/client.h>
 
@@ -26,6 +27,8 @@
 #include <fmt/format.h>
 #include <glog/logging.h>
 #include <prettyprint/prettyprint.hpp>
+
+namespace fsutils = common::fsutils;
 
 DEFINE_string(
     bwapilauncher_directory,
@@ -437,13 +440,15 @@ std::tuple<int, int, int, std::string> forkOpenBw(
   env.insert(env.end(), postEnv.begin(), postEnv.end());
 
   // Launch OpenBW via BWAPILauncher
-  auto bwapicmd =
-      FLAGS_bwapilauncher_directory + "/BWAPILauncher" + bwapisuffix;
-  if (!fsutils::exists(bwapicmd)) {
-    auto fallback = fsutils::which("BWAPILauncher" + bwapisuffix);
-    LOG(WARNING) << "No such file " << bwapicmd << ". Falling back to "
-                 << fallback;
-    bwapicmd = std::move(fallback);
+  auto bwapicmd = "BWAPILauncher" + bwapisuffix;
+  if (!FLAGS_bwapilauncher_directory.empty()) {
+    bwapicmd = FLAGS_bwapilauncher_directory + "/" + bwapicmd;
+    if (!fsutils::exists(bwapicmd)) {
+      auto fallback = fsutils::which("BWAPILauncher" + bwapisuffix);
+      LOG(WARNING) << "No such file " << bwapicmd << ". Falling back to "
+                   << fallback;
+      bwapicmd = std::move(fallback);
+    }
   }
   pid = popen2({bwapicmd}, env, nullptr, &fd, &wfd);
   return std::make_tuple(fd, wfd, pid, socketPath);
@@ -613,11 +618,8 @@ void OpenBwProcess::redirectOutput() {
     if (kill(pid_, 0) != 0 && errno == ESRCH) {
       VLOG(1) << "BWAPILauncher(" << pid_ << ") is gone";
       if (!readSocket) {
-        goodp_.set_exception(
-            std::make_exception_ptr(
-                std::runtime_error(
-                    "BWAPILauncher(" + std::to_string(pid_) +
-                    ") died prematurely")));
+        goodp_.set_exception(std::make_exception_ptr(std::runtime_error(
+            "BWAPILauncher(" + std::to_string(pid_) + ") died prematurely")));
       }
       break;
     }
@@ -632,17 +634,15 @@ void OpenBwProcess::redirectOutput() {
       LOG(ERROR) << "Error polling BWAPILauncher pipe: "
                  << google::StrError(errno);
       if (!readSocket) {
-        goodp_.set_exception(
-            std::make_exception_ptr(
-                std::runtime_error("Error reading BWAPILauncher output")));
+        goodp_.set_exception(std::make_exception_ptr(
+            std::runtime_error("Error reading BWAPILauncher output")));
       }
       break;
     } else if (pret == 0) {
       VLOG(4) << "Poll timeout";
       if (++numTimedoutPolls >= kMaxTimedoutPolls && !readSocket) {
-        goodp_.set_exception(
-            std::make_exception_ptr(
-                std::runtime_error("Timeout parsing BWAPILauncher output")));
+        goodp_.set_exception(std::make_exception_ptr(
+            std::runtime_error("Timeout parsing BWAPILauncher output")));
         break;
       }
       continue;
@@ -694,12 +694,10 @@ void OpenBwProcess::redirectOutput() {
     if (nread < 0 && errno != EAGAIN) {
       LOG(ERROR) << "Error reading from BWAPILauncher pipe: " << errno;
       if (!readSocket) {
-        goodp_.set_exception(
-            std::make_exception_ptr(
-                std::system_error(
-                    errno,
-                    std::system_category(),
-                    "Error reading BWAPILauncher output")));
+        goodp_.set_exception(std::make_exception_ptr(std::system_error(
+            errno,
+            std::system_category(),
+            "Error reading BWAPILauncher output")));
       }
       break;
     } else if (nread == 0) {
@@ -707,12 +705,8 @@ void OpenBwProcess::redirectOutput() {
       break;
     } else if (readSocket && std::string(sockPath) != socketPath_) {
       goodp_.set_exception(
-          std::make_exception_ptr(
-              std::runtime_error(
-                  fmt::format(
-                      "Expected socket path {}, got {}",
-                      socketPath_,
-                      sockPath))));
+          std::make_exception_ptr(std::runtime_error(fmt::format(
+              "Expected socket path {}, got {}", socketPath_, sockPath))));
       break;
     }
   }

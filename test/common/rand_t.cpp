@@ -67,7 +67,6 @@ CASE("common/rand/local_seed") {
       // the other used the global seed, hence they will have different results
       EXPECT(!compare(local_sample));
     }
-
   };
 
   std::vector<std::thread> threads;
@@ -122,7 +121,6 @@ CASE("common/rand/torch") {
       // the other used the global seed, hence they will have different results
       EXPECT(!at::allclose(ref, local_sample));
     }
-
   };
 
   std::vector<std::thread> threads;

@@ -30,6 +30,7 @@ namespace cherrypi {
 class UpcStorage;
 struct UpcPostData;
 class SharedController;
+class CherryVisDumperModule;
 
 /// UPCTuple and associated origin
 struct UPCData {
@@ -49,10 +50,18 @@ struct TaskData {
   std::shared_ptr<Task> task = nullptr;
   Module* owner = nullptr;
   bool autoRemove = true;
+  FrameNum creationFrame = -1;
 
   TaskData() {}
-  TaskData(std::shared_ptr<Task> task, Module* owner, bool autoRemove)
-      : task(std::move(task)), owner(owner), autoRemove(autoRemove) {}
+  TaskData(
+      std::shared_ptr<Task> task,
+      Module* owner,
+      bool autoRemove,
+      FrameNum creationFrame)
+      : task(std::move(task)),
+        owner(owner),
+        autoRemove(autoRemove),
+        creationFrame(creationFrame) {}
 };
 
 /**
@@ -79,14 +88,15 @@ struct CommandPost {
 class Blackboard {
  public:
   /// A variant of types that are allowed in the Blackboard's key-value storage.
-  using Data = mapbox::util::variant<bool,
-                                     int,
-                                     float,
-                                     double,
-                                     std::string,
-                                     Position,
-                                     std::shared_ptr<SharedController>,
-                                     std::unordered_map<int, int>>;
+  using Data = mapbox::util::variant<
+      bool,
+      int,
+      float,
+      double,
+      std::string,
+      Position,
+      std::shared_ptr<SharedController>,
+      std::unordered_map<int, int>>;
   using UPCMap = std::map<UpcId, std::shared_ptr<UPCTuple>>;
 
   using TaskTimeStats =
@@ -239,6 +249,14 @@ class Blackboard {
 
   void setCollectTimers(bool collect);
 
+  void setTraceDumper(std::shared_ptr<CherryVisDumperModule> tracer) {
+    traceDumper_ = tracer;
+  }
+
+  std::shared_ptr<CherryVisDumperModule> getTraceDumper() {
+    return traceDumper_;
+  }
+
  private:
   State* state_;
   std::unordered_map<std::string, Data> map_;
@@ -260,6 +278,7 @@ class Blackboard {
   std::map<UnitId, size_t> unitAccessCounts_;
   std::vector<TaskTimeStats> taskTimeStats_;
   std::unordered_map<UpcId, TaskStatus> lastTaskStatus_;
+  std::shared_ptr<CherryVisDumperModule> traceDumper_;
 
   bool collectTimers_ = false;
 };

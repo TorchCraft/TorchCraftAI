@@ -16,7 +16,7 @@ namespace BWAPI {
 class UnitType;
 class TechType;
 class UpgradeType;
-}
+} // namespace BWAPI
 
 namespace cherrypi {
 
@@ -108,6 +108,7 @@ struct BuildType {
   bool isBiological = false;
   bool producesCreep = false;
   bool producesLarva = false;
+  bool restrictedByDarkSwarm = false;
 
   bool isUnit() const {
     return unit != -1;
@@ -421,5 +422,5 @@ inline const BuildType* getRaceCommandCenter(int race) {
 }
 
 void initialize();
-}
-}
+} // namespace buildtypes
+} // namespace cherrypi

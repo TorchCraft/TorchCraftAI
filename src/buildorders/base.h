@@ -92,6 +92,7 @@ class ABBOBase : public AutoBuildTask {
   int myLurkerCount = 0;
   int myGuardianCount = 0;
   int myUltraliskCount = 0;
+  int myDefilerCount = 0;
 
   int mineralFields = 0;
   int geysers = 0;
@@ -201,4 +202,4 @@ class ABBOBase : public AutoBuildTask {
   virtual void buildStep2(autobuild::BuildState&) {}
   virtual void buildStep(autobuild::BuildState&) override final;
 };
-}
+} // namespace cherrypi

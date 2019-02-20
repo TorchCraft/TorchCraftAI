@@ -6,6 +6,7 @@
  */
 
 #pragma once
+#include "trainer.h"
 #include <autogradpp/autograd.h>
 
 namespace cpid {
@@ -43,9 +44,9 @@ class BaseSampler {
 class MultinomialSampler : public BaseSampler {
  public:
   MultinomialSampler(
-      const std::string& policyKey = "Pi",
-      const std::string& actionKey = "action",
-      const std::string& pActionKey = "pAction");
+      const std::string& policyKey = kPiKey,
+      const std::string& actionKey = kActionKey,
+      const std::string& pActionKey = kPActionKey);
   ag::Variant sample(ag::Variant in) override;
   ag::Variant computeProba(const ag::Variant& in, const ag::Variant& action)
       override;
@@ -57,7 +58,8 @@ class MultinomialSampler : public BaseSampler {
 /**
  *  This sampler expects as input an unordered_map<string, Variant>,  containing
  * an entry QKey, which is a tensor of size [b, n]. It outputs the same map,
- * with a new key "action", a tensor of size [b] where each entry is in [0,n-1],
+ * with a new key kActionKey, a tensor of size [b] where each entry is in
+ [0,n-1],
  * and correspond to the action with the highest score. It also adds a key
  * pActionKey which corresponds to the probability of the sampled action (always
  * 1 in this case)
@@ -66,9 +68,9 @@ class MultinomialSampler : public BaseSampler {
 class DiscreteMaxSampler : public BaseSampler {
  public:
   DiscreteMaxSampler(
-      const std::string& policyKey = "Pi",
-      const std::string& actionKey = "action",
-      const std::string& pActionKey = "pAction");
+      const std::string& policyKey = kPiKey,
+      const std::string& actionKey = kActionKey,
+      const std::string& pActionKey = kPActionKey);
   ag::Variant sample(ag::Variant in) override;
 
  protected:
@@ -78,7 +80,8 @@ class DiscreteMaxSampler : public BaseSampler {
 /**
  *  This sampler expects as input an unordered_map<string, Variant>, containing
  * an entry policyKey, which is a tensor of size [b, n]. It outputs the same
- * map, with a new key "action", a tensor of size [b] where each entry action[i]
+ * map, with a new key kActionKey, a tensor of size [b] where each entry
+ * action[i]
  * is sampled from a normal distribution centered in policy[i]. It also expects
  * the stdKey to be set, it will be used as the standard deviation of the
  * normal. It can be either a float/double, in which case the deviation will be
@@ -89,10 +92,10 @@ class DiscreteMaxSampler : public BaseSampler {
 class ContinuousGaussianSampler : public BaseSampler {
  public:
   ContinuousGaussianSampler(
-      const std::string& policyKey = "Pi",
-      const std::string& stdKey = "std",
-      const std::string& actionKey = "action",
-      const std::string& pActionKey = "pAction");
+      const std::string& policyKey = kPiKey,
+      const std::string& stdKey = kSigmaKey,
+      const std::string& actionKey = kActionKey,
+      const std::string& pActionKey = kPActionKey);
   ag::Variant sample(ag::Variant in) override;
   ag::Variant computeProba(const ag::Variant& in, const ag::Variant& action)
       override;
@@ -105,16 +108,16 @@ class ContinuousGaussianSampler : public BaseSampler {
 /**
  *  This sampler expects as input an unordered_map<string, Variant> containing
  * an entry policyKey, which is a tensor of size [b, n]. It outputs the same
- * map, with a new key "action", a clone of the policy. It also adds a key
+ * map, with a new key kActionKey, a clone of the policy. It also adds a key
  * pActionKey which corresponds to the probability of the sampled action (always
  * 1 in this case)
  */
 class ContinuousDeterministicSampler : public BaseSampler {
  public:
   ContinuousDeterministicSampler(
-      const std::string& policyKey = "Pi",
-      const std::string& actionKey = "action",
-      const std::string& pActionKey = "pAction");
+      const std::string& policyKey = kPiKey,
+      const std::string& actionKey = kActionKey,
+      const std::string& pActionKey = kPActionKey);
   ag::Variant sample(ag::Variant in) override;
 
  protected:
@@ -132,8 +135,8 @@ class EpsGreedySampler : public BaseSampler {
  public:
   EpsGreedySampler(
       double eps = 0.07,
-      const std::string& QKey = "Q",
-      const std::string& actionKey = "action");
+      const std::string& QKey = kQKey,
+      const std::string& actionKey = kActionKey);
 
   ag::Variant sample(ag::Variant in) override;
 

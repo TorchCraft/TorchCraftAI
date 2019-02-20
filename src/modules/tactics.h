@@ -294,6 +294,16 @@ class TacticsModule : public Module {
 
   std::unordered_map<Unit*, int> lastTargetInRange_;
   std::unordered_map<Unit*, int> lastMove_;
+
+  virtual bool alwaysFight() {
+    return false;
+  }
+};
+
+class TacticsAlwaysFightModule : public TacticsModule {
+  virtual bool alwaysFight() override {
+    return true;
+  }
 };
 
 } // namespace cherrypi

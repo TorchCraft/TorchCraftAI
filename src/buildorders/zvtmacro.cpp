@@ -468,4 +468,4 @@ class ABBOzvtMacro : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzvtMacro, UpcId, State*, Module*);
-}
+} // namespace cherrypi

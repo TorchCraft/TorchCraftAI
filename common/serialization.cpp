@@ -14,6 +14,11 @@ IMembuf::IMembuf(std::vector<char> const& data) {
   setg(p, p, p + data.size());
 }
 
+IMembuf::IMembuf(std::string_view sv) {
+  char* p(const_cast<char*>(sv.data()));
+  setg(p, p, p + sv.size());
+}
+
 std::vector<char>& OMembuf::data() {
   return buffer_;
 }

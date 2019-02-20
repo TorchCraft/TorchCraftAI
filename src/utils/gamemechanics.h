@@ -132,22 +132,16 @@ inline float distanceBB(
     Vec2T<T> const& pa,
     Unit const* b,
     Vec2T<T> const& pb) {
-  return float(
-             pxDistanceBB(
-                 int(pa.x * tc::BW::XYPixelsPerWalktile -
-                     a->type->dimensionLeft),
-                 int(pa.y * tc::BW::XYPixelsPerWalktile - a->type->dimensionUp),
-                 int(pa.x * tc::BW::XYPixelsPerWalktile +
-                     a->type->dimensionRight),
-                 int(pa.y * tc::BW::XYPixelsPerWalktile +
-                     a->type->dimensionDown),
-                 int(pb.x * tc::BW::XYPixelsPerWalktile -
-                     b->type->dimensionLeft),
-                 int(pb.y * tc::BW::XYPixelsPerWalktile - b->type->dimensionUp),
-                 int(pb.x * tc::BW::XYPixelsPerWalktile +
-                     b->type->dimensionRight),
-                 int(pb.y * tc::BW::XYPixelsPerWalktile +
-                     b->type->dimensionDown))) /
+  return float(pxDistanceBB(
+             int(pa.x * tc::BW::XYPixelsPerWalktile - a->type->dimensionLeft),
+             int(pa.y * tc::BW::XYPixelsPerWalktile - a->type->dimensionUp),
+             int(pa.x * tc::BW::XYPixelsPerWalktile + a->type->dimensionRight),
+             int(pa.y * tc::BW::XYPixelsPerWalktile + a->type->dimensionDown),
+             int(pb.x * tc::BW::XYPixelsPerWalktile - b->type->dimensionLeft),
+             int(pb.y * tc::BW::XYPixelsPerWalktile - b->type->dimensionUp),
+             int(pb.x * tc::BW::XYPixelsPerWalktile + b->type->dimensionRight),
+             int(pb.y * tc::BW::XYPixelsPerWalktile +
+                 b->type->dimensionDown))) /
       tc::BW::XYPixelsPerWalktile;
 }
 

@@ -213,7 +213,7 @@ struct Sample {
 };
 
 #ifdef HAVE_CPID
-struct ReplayBufferFrame : cpid::CerealizableReplayBufferFrame {
+struct ReplayBufferFrame : cpid::ReplayBufferFrame {
   Sample sample;
 
   ReplayBufferFrame() = default;
@@ -222,14 +222,14 @@ struct ReplayBufferFrame : cpid::CerealizableReplayBufferFrame {
 
   template <class Archive>
   void serialize(Archive& ar, uint32_t const version) {
-    ar(cereal::base_class<cpid::CerealizableReplayBufferFrame>(this), sample);
+    ar(cereal::base_class<cpid::ReplayBufferFrame>(this), sample);
   }
 };
 
 struct EpisodeData {
   cpid::GameUID gameId;
   cpid::EpisodeKey episodeKey;
-  std::vector<std::shared_ptr<cpid::CerealizableReplayBufferFrame>> frames;
+  std::vector<std::shared_ptr<cpid::ReplayBufferFrame>> frames;
 
   template <class Archive>
   void serialize(Archive& ar) {

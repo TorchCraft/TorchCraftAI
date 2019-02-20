@@ -18,6 +18,11 @@
 
 #include "models/bos/runner.h"
 
+#include <common/flags.h>
+
+// When turned off, no game history will be read or written
+DECLARE_bool(game_history);
+
 namespace cherrypi {
 
 class StrategyModule : public Module {

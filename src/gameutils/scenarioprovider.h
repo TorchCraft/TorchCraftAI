@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "initialconditions.h"
 #include "modules/once.h"
 #include "selfplayscenario.h"
 #include "state.h"
@@ -72,19 +73,9 @@ class ScenarioProvider {
   int lastPossibleAttack_ = -1;
 };
 
-struct SpawnPosition {
-  int count;
-  int x, y;
-  float spreadX = 0.0, spreadY = 0.0;
-};
-using SpawnList = std::multimap<tc::BW::UnitType, SpawnPosition>;
-
 class BaseMicroScenario : public ScenarioProvider {
  public:
-  BaseMicroScenario(
-      int maxFrame,
-      std::string map = "test/maps/micro-empty2.scm",
-      bool gui = false);
+  BaseMicroScenario(int maxFrame, bool gui = false);
 
   void setReplay(std::string const& path) {
     replay_ = path;
@@ -98,16 +89,17 @@ class BaseMicroScenario : public ScenarioProvider {
   void cleanScenario() override;
 
  protected:
-  virtual std::pair<std::vector<OnceModule::SpawnInfo>,
-                    std::vector<OnceModule::SpawnInfo>>
-  getSpawnInfo() = 0;
+  virtual ScenarioInfo getScenarioInfo() = 0;
 
   void sendKillCmds();
 
-  std::string map_;
   std::shared_ptr<tc::Client> client1_;
   std::shared_ptr<tc::Client> client2_;
   std::string replay_;
   bool launchedWithReplay_{false};
+
+  int gameCount_ = 0;
+
+  std::string mapPathPrefix_;
 };
 } // namespace cherrypi

@@ -88,7 +88,7 @@ class RLBuildingPlacerModule : public Module {
   std::shared_ptr<cpid::Trainer> trainer_ = nullptr;
   bool firstStep_ = true;
   std::unordered_set<Position> baseLocations_;
-  cpid::EpisodeHandle episode_;
+  cpid::EpisodeHandle handle_;
 };
 
 } // namespace cherrypi

@@ -59,4 +59,4 @@ class ABBO12HatchHydras : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBO12HatchHydras, UpcId, State*, Module*);
-}
+} // namespace cherrypi

@@ -16,22 +16,17 @@
 
 using std::chrono::system_clock;
 
-std::string getUID(std::time_t when, int rank = 0) {
-  while (system_clock::to_time_t(system_clock::now()) < when) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-  }
-  return cpid::genGameUID(rank);
+std::string getUID() {
+  return cpid::genGameUID();
 }
 
 CASE("trainer/genuid") {
-  std::time_t st =
-      system_clock::to_time_t(system_clock::now() + std::chrono::seconds(1));
   auto futures = std::vector<std::future<std::string>>();
   std::unordered_set<std::string> uids;
-  size_t ntries = 10000;
+  size_t ntries = 100;
 
   for (size_t i = 0; i < ntries; i++) {
-    futures.push_back(std::move(std::async(std::launch::async, getUID, st, 0)));
+    futures.push_back(std::async(std::launch::async, getUID));
   }
   for (auto& f : futures) {
     uids.insert(f.get());
@@ -41,10 +36,8 @@ CASE("trainer/genuid") {
   futures.clear();
   uids.clear();
 
-  st = system_clock::to_time_t(system_clock::now() + std::chrono::seconds(1));
   for (size_t i = 0; i < ntries; i++) {
-    futures.push_back(
-        std::move(std::async(std::launch::async, getUID, st, i % 10)));
+    futures.push_back(std::async(std::launch::async, getUID));
   }
   for (auto& f : futures) {
     uids.insert(f.get());

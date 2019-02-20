@@ -39,10 +39,10 @@ class ABBOzvp3hatchhydra : public ABBOBase {
 
     // Attack with initial Zerglings to get an update on their Cannon count.
     // Time the bust to land when we have enough Hydralisks to break them.
-    readyToAttack =
-        readyToAttack || (hasOrInProduction(bst, Grooved_Spines) &&
-                          myHydraliskCount > 4 + 3 * enemyStaticDefenceCount +
-                                  1 * enemyZealotCount + 2 * enemyDragoonCount);
+    readyToAttack = readyToAttack ||
+        (hasOrInProduction(bst, Grooved_Spines) &&
+         myHydraliskCount > 4 + 3 * enemyStaticDefenceCount +
+                 1 * enemyZealotCount + 2 * enemyDragoonCount);
 
     if (progress == Progress::Opening) {
       // If they have Dark Templar, Reavers, or too many cannons, we can't bust
@@ -196,4 +196,4 @@ class ABBOzvp3hatchhydra : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzvp3hatchhydra, UpcId, State*, Module*);
-}
+} // namespace cherrypi

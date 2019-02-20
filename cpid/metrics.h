@@ -40,6 +40,8 @@ class MetricsContext {
       float initValue) const;
   void incCounter(std::string const& key, float amount = 1.0);
   void setCounter(std::string const& key, float amount);
+
+  bool hasCounter(std::string const& key) const;
   float getCounter(std::string const& key) const;
   float getCounter(std::string const& key, float defaultValue) const;
   void snapshotCounter(

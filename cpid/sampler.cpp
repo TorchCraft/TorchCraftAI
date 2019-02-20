@@ -34,6 +34,10 @@ ag::Variant MultinomialSampler::sample(ag::Variant in) {
                << " in " << common::tensorInfo(pi);
     throw std::runtime_error("Policy doesn't have expected shape");
   }
+  bool hasBatch = pi.dim() >= 2;
+  auto squeezeResult = [hasBatch](at::Tensor t) {
+    return hasBatch ? t.squeeze(1) : t.squeeze();
+  };
   if (pi.dim() == 1) {
     pi = pi.unsqueeze(0);
   }
@@ -41,9 +45,10 @@ ag::Variant MultinomialSampler::sample(ag::Variant in) {
   auto device = pi.options().device();
   // we do sampling on cpu for now
   dict[actionKey_] = ag::Variant(
-      pi.to(at::kCPU).multinomial(1, false, Rand::gen()).squeeze().to(device));
-  dict[pActionKey_] =
-      ag::Variant(pi.gather(1, dict[actionKey_].get().view({-1, 1})).squeeze());
+      squeezeResult(pi.to(at::kCPU).multinomial(1, false, Rand::gen()))
+          .to(device));
+  dict[pActionKey_] = ag::Variant(
+      squeezeResult(pi.gather(1, dict[actionKey_].get().view({-1, 1}))));
   return in;
 }
 
@@ -60,10 +65,14 @@ ag::Variant MultinomialSampler::computeProba(
                << " in " << common::tensorInfo(pi);
     throw std::runtime_error("Policy doesn't have expected shape");
   }
+  bool hasBatch = pi.dim() >= 2;
+  auto squeezeResult = [hasBatch](at::Tensor t) {
+    return hasBatch ? t.squeeze(1) : t.squeeze();
+  };
   if (pi.dim() == 1) {
     pi = pi.unsqueeze(0);
   }
-  return ag::Variant(pi.gather(1, action.get().view({-1, 1})).squeeze());
+  return ag::Variant(squeezeResult(pi.gather(1, action.get().view({-1, 1}))));
 }
 
 DiscreteMaxSampler::DiscreteMaxSampler(
@@ -214,7 +223,7 @@ ag::Variant EpsGreedySampler::sample(ag::Variant in) {
   if (dict.count(QKey_) == 0) {
     throw std::runtime_error("Q key not found while sampling action");
   }
-  auto Q = in[QKey_];
+  auto Q = dict.at(QKey_).get();
   if (Q.dim() > 2) {
     LOG(FATAL) << "Expected at most 2 dimensions, but found " << Q.dim()
                << " in " << common::tensorInfo(Q);
@@ -225,7 +234,6 @@ ag::Variant EpsGreedySampler::sample(ag::Variant in) {
   }
   const auto batchSize = Q.size(0);
   const auto numAction = Q.size(1);
-
   // randomly break ties
   Q = at::normal(Q.to(torch::kCPU), 1e-5, common::Rand::gen());
 
@@ -236,8 +244,8 @@ ag::Variant EpsGreedySampler::sample(ag::Variant in) {
   torch::Tensor actions = std::get<1>(Q.max(1));
 
   // sample random actions
-  torch::Tensor randAction =
-      at::randint(0, numAction, actions.sizes(), common::Rand::gen());
+  torch::Tensor randAction = torch::randint(
+      0, numAction, actions.sizes(), common::Rand::gen(), torch::kLong);
 
   // proba of being random
   torch::Tensor rejectProba = torch::zeros(2);

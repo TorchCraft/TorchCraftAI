@@ -7,10 +7,11 @@
  * Print game information for a corpus in line-delimited JOSN format
  */
 
-#include "fsutils.h"
 #include "models/bos/sample.h"
-#include "utils/parallel.h"
 #include "zstdstream.h"
+
+#include <common/fsutils.h>
+#include <common/parallel.h>
 
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>
@@ -19,6 +20,7 @@ DEFINE_string(sample_list, "train.list", "Path to samples.list file");
 
 using namespace cherrypi;
 using namespace cpid;
+namespace fsutils = common::fsutils;
 
 int main(int argc, char** argv) {
   google::InitGoogleLogging(argv[0]);
@@ -29,8 +31,8 @@ int main(int argc, char** argv) {
   auto dir = fsutils::dirname(FLAGS_sample_list);
   auto files = fsutils::readLines(FLAGS_sample_list);
 
-  BufferedConsumer<std::pair<std::string, BosEpisodeData>, 1> print(
-      10, [&](std::pair<std::string, BosEpisodeData> data) {
+  common::BufferedConsumer<std::pair<std::string, BosEpisodeData>> print(
+      1, 10, [&](std::pair<std::string, BosEpisodeData> data) {
         std::string file = data.first;
         BosEpisodeData epd = data.second;
         std::shared_ptr<BosStaticData> sdata;
@@ -64,7 +66,7 @@ int main(int argc, char** argv) {
         };
         std::cout << jd << std::endl;
       });
-  BufferedConsumer<std::string, 32> deser(128, [&](std::string f) {
+  common::BufferedConsumer<std::string> deser(32, 128, [&](std::string f) {
     BosEpisodeData epd;
     try {
       zstd::ifstream is(fmt::format("{}/{}", dir, f));

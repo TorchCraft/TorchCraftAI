@@ -419,10 +419,9 @@ bool HarassModule::flee(State* state, HarassTask* task) {
   auto tgtPos = Position(-1, -1);
   if (geyser && !enemyRefinery(task->location()) &&
       fleePolicy_.turnAroundGeyser) {
-    posFilters = movefilters::PositionFilters(
-        {movefilters::makePositionFilter(
-            movefilters::getCloserTo(geyser),
-            {movefilters::avoidAttackers(), movefilters::avoidThreatening()})});
+    posFilters = movefilters::PositionFilters({movefilters::makePositionFilter(
+        movefilters::getCloserTo(geyser),
+        {movefilters::avoidAttackers(), movefilters::avoidThreatening()})});
     tgtPos = movefilters::smartMove(state, unit, posFilters);
     if (tgtPos.x > 0 && tgtPos.y > 0) {
       task->flee(state, tgtPos);

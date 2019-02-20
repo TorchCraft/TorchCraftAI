@@ -75,8 +75,9 @@ class OnlineZORBTrainer : public Trainer {
   int64_t episodes_ = 0;
   std::mutex updateLock_;
   std::mutex noiseLock_;
-  std::unordered_map<GameUID,
-                     std::unordered_map<EpisodeKey, std::vector<torch::Tensor>>>
+  std::unordered_map<
+      GameUID,
+      std::unordered_map<EpisodeKey, std::vector<torch::Tensor>>>
       noiseStash_;
   std::vector<torch::Tensor> lastNoise_;
 
@@ -86,12 +87,8 @@ class OnlineZORBTrainer : public Trainer {
   void stepEpisode(GameUID const&, EpisodeKey const&, ReplayBuffer::Episode&)
       override;
   bool update() override;
-  bool startEpisode(GameUID const&, EpisodeKey const& = kDefaultEpisodeKey)
-      override;
-  ag::Variant forward(
-      ag::Variant inp,
-      GameUID const& gameUID,
-      EpisodeKey const& key = kDefaultEpisodeKey) override;
+  EpisodeHandle startEpisode() override;
+  ag::Variant forward(ag::Variant inp, EpisodeHandle const&) override;
 
   OnlineZORBTrainer(ag::Container model, ag::Optimizer optim);
   // Contract: TrainerOutput is a map with a key "action" containing the taken

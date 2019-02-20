@@ -71,4 +71,4 @@ class ABBOhydracheese : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOhydracheese, UpcId, State*, Module*);
-}
+} // namespace cherrypi

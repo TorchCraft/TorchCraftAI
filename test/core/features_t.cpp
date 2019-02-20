@@ -437,10 +437,10 @@ CASE("features/subsample") {
       auto factor = tc::BW::XYWalktilesPerBuildtile;
       auto sub = subsampleFeature(f, SubsampleMethod::Sum, factor);
       EXPECT(
-          sub.tensor.sizes().vec() == std::vector<int64_t>(
-                                          {f.tensor.size(0),
-                                           f.tensor.size(1) / factor,
-                                           f.tensor.size(2) / factor}));
+          sub.tensor.sizes().vec() ==
+          std::vector<int64_t>({f.tensor.size(0),
+                                f.tensor.size(1) / factor,
+                                f.tensor.size(2) / factor}));
       EXPECT(sub.tensor.sum().item<float>() == f.tensor.sum().item<float>());
       EXPECT(sub.desc == f.desc);
     }
@@ -449,10 +449,10 @@ CASE("features/subsample") {
       auto factor = tc::BW::XYWalktilesPerBuildtile;
       auto sub = subsampleFeature(f, SubsampleMethod::Average, factor);
       EXPECT(
-          sub.tensor.sizes().vec() == std::vector<int64_t>(
-                                          {f.tensor.size(0),
-                                           f.tensor.size(1) / factor,
-                                           f.tensor.size(2) / factor}));
+          sub.tensor.sizes().vec() ==
+          std::vector<int64_t>({f.tensor.size(0),
+                                f.tensor.size(1) / factor,
+                                f.tensor.size(2) / factor}));
       EXPECT(
           sub.tensor.sum().item<float>() ==
           f.tensor.sum().item<float>() / (factor * factor));
@@ -463,10 +463,10 @@ CASE("features/subsample") {
       auto factor = tc::BW::XYWalktilesPerBuildtile;
       auto sub = subsampleFeature(f, SubsampleMethod::Max, factor);
       EXPECT(
-          sub.tensor.sizes().vec() == std::vector<int64_t>(
-                                          {f.tensor.size(0),
-                                           f.tensor.size(1) / factor,
-                                           f.tensor.size(2) / factor}));
+          sub.tensor.sizes().vec() ==
+          std::vector<int64_t>({f.tensor.size(0),
+                                f.tensor.size(1) / factor,
+                                f.tensor.size(2) / factor}));
       // The original FoW data is at build tile resolution, so max-pooling will
       // be identical to average-pooling here
       EXPECT(
@@ -648,10 +648,9 @@ CASE("features/unit_type_defogger") {
 
   auto offsetY = (f2.tensor.size(1) - f1.tensor.size(1)) / 2;
   auto offsetX = (f2.tensor.size(2) - f1.tensor.size(2)) / 2;
-  EXPECT(
-      f2.tensor.slice(1, offsetY, offsetY + f1.tensor.size(1))
-          .slice(2, offsetX, offsetX + f1.tensor.size(2))
-          .equal(f1.tensor));
+  EXPECT(f2.tensor.slice(1, offsetY, offsetY + f1.tensor.size(1))
+             .slice(2, offsetX, offsetX + f1.tensor.size(2))
+             .equal(f1.tensor));
   EXPECT(f2.tensor.slice(1, 0, offsetY).sum().item<float>() == 0);
   EXPECT(
       f2.tensor.slice(1, f1.tensor.size(1) + offsetY, f2.tensor.size(1))

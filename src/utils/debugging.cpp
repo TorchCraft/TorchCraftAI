@@ -7,13 +7,15 @@
 
 #include "utils.h"
 
-#include "fsutils.h"
+#include <common/fsutils.h>
 
-#include "autogradpp/autograd.h"
+#include <autogradpp/autograd.h>
+#include <fmt/format.h>
 
-#include "fmt/format.h"
 #include <ctime>
 #include <iomanip>
+
+namespace fsutils = common::fsutils;
 
 namespace cherrypi {
 namespace utils {

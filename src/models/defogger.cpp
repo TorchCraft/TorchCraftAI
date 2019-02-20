@@ -125,15 +125,9 @@ void Convnet::reset() {
             "conv0");
   }
   for (auto i = 1; i < depth_; i++) { // depth_-1 layers here
-    convS_.push_back(
-        add(conv_(
-                interm_size_,
-                interm_size_,
-                convsize_,
-                stride_,
-                padding_,
-                false),
-            "conv" + std::to_string(i)));
+    convS_.push_back(add(
+        conv_(interm_size_, interm_size_, convsize_, stride_, padding_, false),
+        "conv" + std::to_string(i)));
   }
   conv_output_ =
       add(conv_(interm_size_, output_size_, 1, 1, 0, false), "conv_output");
@@ -288,17 +282,16 @@ void DefoggerModel::reset() {
 
     midnets_.push_back(
         add(ag::Sequential()
-                .append(
-                    SimpleConvnet(
-                        convmod,
-                        nonlin_,
-                        midconv_kw_,
-                        midconv_padding,
-                        isize,
-                        osize,
-                        midconv_depth_ - 1,
-                        1)
-                        .make())
+                .append(SimpleConvnet(
+                            convmod,
+                            nonlin_,
+                            midconv_kw_,
+                            midconv_padding,
+                            isize,
+                            osize,
+                            midconv_depth_ - 1,
+                            1)
+                            .make())
                 .append(convmod(isize, osize, 3, 2, 1, false))
                 .make(),
             "midnet" + std::to_string(i)));
@@ -544,12 +537,11 @@ void DefoggerModel::load_parameters(std::string const& path_to_npz) {
       }
     }
 
-    throw std::runtime_error(
-        fmt::format(
-            "Different number of parameters: {} != {}\n{}",
-            params.size(),
-            npz.size(),
-            ss.str()));
+    throw std::runtime_error(fmt::format(
+        "Different number of parameters: {} != {}\n{}",
+        params.size(),
+        npz.size(),
+        ss.str()));
   }
 
   auto params_it = orderedParams.begin();

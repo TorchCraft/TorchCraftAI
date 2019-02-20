@@ -355,5 +355,5 @@ Position smartMove(
 
 Position smartMove(State* state, Unit* unit, Position tgt);
 
-} // namespace filters
+} // namespace movefilters
 } // namespace cherrypi

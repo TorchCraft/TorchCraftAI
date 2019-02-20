@@ -304,18 +304,16 @@ void CombatMicroModule::updateTarget(
   for (auto target : sortedTargets) {
     // TODO 2: take in-air bullets into account
     if (targetHealth->find(target) == targetHealth->end()) {
-      targetHealth->emplace(
-          std::make_pair(
-              target, HealthInfo{target->unit.health, target->unit.shield}));
+      targetHealth->emplace(std::make_pair(
+          target, HealthInfo{target->unit.health, target->unit.shield}));
     }
   }
   if (mtask->currentTarget &&
       targetHealth->find(mtask->currentTarget) == targetHealth->end()) {
-    targetHealth->emplace(
-        std::make_pair(
-            mtask->currentTarget,
-            HealthInfo{mtask->currentTarget->unit.health,
-                       mtask->currentTarget->unit.shield}));
+    targetHealth->emplace(std::make_pair(
+        mtask->currentTarget,
+        HealthInfo{mtask->currentTarget->unit.health,
+                   mtask->currentTarget->unit.shield}));
   }
 
   mtask->newTargetCandidate = nullptr; // the one we'll attack

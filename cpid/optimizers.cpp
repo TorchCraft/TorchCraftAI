@@ -85,4 +85,4 @@ std::map<std::string, std::string> optimizerFlags() {
   return flags;
 }
 
-} // namespace cherrypi
+} // namespace cpid

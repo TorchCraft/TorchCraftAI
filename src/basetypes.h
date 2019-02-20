@@ -8,6 +8,7 @@
 #pragma once
 
 #include <cereal/cereal.hpp>
+#include <fmt/format.h>
 
 #include <cmath>
 #include <functional>
@@ -35,18 +36,6 @@ double constexpr kdMax = std::numeric_limits<double>::max();
 double constexpr kdEpsilon = std::numeric_limits<double>::epsilon();
 int constexpr kForever = 24 * 60 * 60 * 24 * 7;
 constexpr int kLarvaFrames = 342;
-
-#define DEFINE_FLAG_OPERATORS(Type)                    \
-  inline Type operator|(Type a, Type b) {              \
-    return static_cast<Type>(                          \
-        static_cast<std::underlying_type_t<Type>>(a) | \
-        static_cast<std::underlying_type_t<Type>>(b)); \
-  }                                                    \
-  inline Type operator&(Type a, Type b) {              \
-    return static_cast<Type>(                          \
-        static_cast<std::underlying_type_t<Type>>(a) & \
-        static_cast<std::underlying_type_t<Type>>(b)); \
-  }
 
 template <typename T>
 class Vec2T {
@@ -155,6 +144,14 @@ class Vec2T {
     x = xNew;
     y = yNew;
     return *this;
+  }
+  Vec2T project(Vec2T towards, T distance) {
+    if (distance == 0)
+      return Vec2T(this);
+    auto separation = distanceTo(towards);
+    if (separation == 0)
+      return Vec2T(this);
+    return (towards - *this) * (distance / separation) + (*this);
   }
 
   static double cos(Vec2T const& a, Vec2T const& b) {
@@ -348,6 +345,21 @@ int constexpr numUpcCommands() {
 #endif
 }
 } // namespace cherrypi
+
+namespace fmt {
+template <typename T>
+struct formatter<cherrypi::Vec2T<T>> {
+  template <typename ParseContext>
+  constexpr auto parse(ParseContext& ctx) {
+    return ctx.begin();
+  }
+
+  template <typename FormatContext>
+  auto format(const cherrypi::Vec2T<T>& p, FormatContext& ctx) {
+    return format_to(ctx.begin(), "({},{})", p.x, p.y);
+  }
+};
+} // namespace fmt
 
 namespace std {
 template <typename T>

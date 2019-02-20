@@ -289,9 +289,8 @@ Position safeDirectionTo(State* state, Unit* unit, T tgt) {
                movefilters::getCloserTo(tgt),
                {movefilters::avoidAttackers(),
                 movefilters::avoidThreatening()}),
-           movefilters::makePositionFilter(
-               {movefilters::avoidAttackers(),
-                movefilters::avoidThreatening()}),
+           movefilters::makePositionFilter({movefilters::avoidAttackers(),
+                                            movefilters::avoidThreatening()}),
            movefilters::makePositionFilter(
                {movefilters::fleeAttackers(), movefilters::fleeThreatening()}),
            movefilters::fleeAttackers()}));

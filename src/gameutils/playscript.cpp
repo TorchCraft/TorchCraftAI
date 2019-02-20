@@ -42,7 +42,7 @@ void checkedPipe(int* p) {
     throw std::system_error(errno, std::system_category());
   }
 }
-}
+} // namespace
 #endif // WITHOUT_POSIX
 
 PlayScript::PlayScript(std::vector<EnvVar> const& vars, std::string script) {
@@ -285,4 +285,4 @@ bool PlayScript::connect(torchcraft::Client* client, int timeoutMs) {
   return client->connect("127.0.0.1", port, getTimeout());
 #endif // WITHOUT_POSIX
 }
-}
+} // namespace cherrypi

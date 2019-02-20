@@ -5,13 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "fsutils.h"
-#include "modules.h"
-#include "gameutils/selfplayscenario.h"
 #include "test.h"
+
+#include "gameutils/selfplayscenario.h"
+#include "modules.h"
+#include <common/fsutils.h>
 
 using namespace cherrypi;
 using namespace autobuild;
+using namespace common;
 
 namespace {
 auto constexpr kTerran = +tc::BW::Race::Terran;

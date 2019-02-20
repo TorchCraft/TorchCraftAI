@@ -17,6 +17,7 @@
 #include <cpid/optimizers.h>
 
 #include <common/autograd/utils.h>
+#include <common/fsutils.h>
 #include <common/datareader.h>
 #include <common/rand.h>
 
@@ -25,6 +26,7 @@
 
 using namespace cherrypi;
 namespace dist = cpid::distributed;
+namespace fsutils = common::fsutils;
 auto const vopts = &visdom::makeOpts;
 
 // Model options

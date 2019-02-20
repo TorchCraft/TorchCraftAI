@@ -332,6 +332,13 @@ int AreaInfo::numEnemyBases() const {
   return enemyBases_.size();
 }
 
+const AreaInfo::BaseInfo* AreaInfo::enemyBase(int n) const {
+  if (n < 0 || (size_t)n >= enemyBases_.size()) {
+    return nullptr;
+  }
+  return &enemyBases_[n];
+}
+
 bool AreaInfo::foundEnemyStartLocation() const {
   return candidateEnemyStartLoc_.size() == 1;
 }

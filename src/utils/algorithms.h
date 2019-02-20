@@ -51,10 +51,11 @@ constexpr bool isEqualButNotNoValue(NoValue, B&& b) {
 /// without iterating to the end.
 /// If the range is empty or no value can be returned (due to invalidScore),
 /// then the end iterator is returned.
-template <typename Iterator,
-          typename Score,
-          typename InvalidScore = NoValue,
-          typename BestPossibleScore = NoValue>
+template <
+    typename Iterator,
+    typename Score,
+    typename InvalidScore = NoValue,
+    typename BestPossibleScore = NoValue>
 auto getBestScore(
     Iterator begin,
     Iterator end,
@@ -102,10 +103,11 @@ auto getBestScore(
 /// This function is equivalent to getBestScore, but it can be passed a range
 /// or container instead of two iterators.
 /// The return value is still an iterator.
-template <typename Range,
-          typename Score,
-          typename InvalidScore = NoValue,
-          typename BestPossibleScore = NoValue>
+template <
+    typename Range,
+    typename Score,
+    typename InvalidScore = NoValue,
+    typename BestPossibleScore = NoValue>
 auto getBestScore(
     Range&& range,
     Score&& score,
@@ -124,10 +126,11 @@ auto getBestScore(
 /// semantics; it's a copy, not a reference).
 /// If the end iterator would be returned, a value initialized object is
 /// returned as if by T{}.
-template <typename Range,
-          typename Score,
-          typename InvalidScore = NoValue,
-          typename BestPossibleScore = NoValue>
+template <
+    typename Range,
+    typename Score,
+    typename InvalidScore = NoValue,
+    typename BestPossibleScore = NoValue>
 auto getBestScoreCopy(
     Range&& range,
     Score&& score,
@@ -148,10 +151,11 @@ auto getBestScoreCopy(
 /// This function is the same as getBestScore, but it returns a pointer
 /// to the value of the dereferenced result iterator, or nullptr if the
 /// end iterator would be returned.
-template <typename Range,
-          typename Score,
-          typename InvalidScore = NoValue,
-          typename BestPossibleScore = NoValue>
+template <
+    typename Range,
+    typename Score,
+    typename InvalidScore = NoValue,
+    typename BestPossibleScore = NoValue>
 auto getBestScorePointer(
     Range&& range,
     Score&& score,

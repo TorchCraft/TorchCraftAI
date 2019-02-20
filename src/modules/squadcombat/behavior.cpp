@@ -14,11 +14,6 @@ namespace cherrypi {
 
 DEFINE_bool(behavior_chase, false, "Toggles chasing behaviors");
 DEFINE_bool(behavior_kite, false, "Toggles kiting behaviors");
-
-std::shared_ptr<UPCTuple> MicroAction::getFinalUPC() const {
-  return isFinal ? upc : nullptr;
-}
-
 void Behavior::perform(Agent& agent) {
   if (!agent.currentAction.isFinal) {
     agent.currentAction = onPerform(agent);
@@ -26,10 +21,20 @@ void Behavior::perform(Agent& agent) {
 }
 
 MicroAction BehaviorSeries::onPerform(Agent& agent) {
-  for (auto& behavior : behaviors()) {
+  for (auto& behavior : behaviors_) {
     behavior->perform(agent);
   }
   return agent.currentAction;
+}
+
+MicroAction BehaviorML::onPerform(Agent& agent) {
+  for (auto& model : *(agent.task->models)) {
+    auto action = model->decode(agent.unit);
+    if (action.isFinal) {
+      return action;
+    }
+  }
+  return pass;
 }
 
 MicroAction BehaviorUnstick::onPerform(Agent& agent) {
@@ -380,8 +385,8 @@ MicroAction BehaviorEngageCooperatively::onPerform(Agent& agent) {
     Vec2 myPos = unit->posf() + unit->velocity() * latency;
     Vec2 targetPos = target->posf() + target->velocity() * latency;
 
-    auto canMoveInDirection = [&](
-        Vec2 dir, float distance = DFOASG(4.0f * 2, 4.0f)) {
+    auto canMoveInDirection = [&](Vec2 dir,
+                                  float distance = DFOASG(4.0f * 2, 4.0f)) {
       dir = dir.normalize();
       for (float d = 4.0f; d <= distance; d += 4.0f) {
         Position pos{myPos + dir * d};

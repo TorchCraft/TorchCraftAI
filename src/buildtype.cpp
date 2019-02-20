@@ -32,7 +32,7 @@ std::array<BuildType, BWAPI::UpgradeTypes::Enum::MAX * 3> BuildTypeUpgradeArray;
 std::vector<const BuildType*> allUnitTypes;
 std::vector<const BuildType*> allUpgradeTypes;
 std::vector<const BuildType*> allTechTypes;
-}
+} // namespace buildtypes
 using namespace buildtypes;
 
 static int sumBuildTime(const BuildType* type) {
@@ -137,6 +137,17 @@ const BuildType* getBuildType(BWAPI::UnitType type) {
   r->isBiological = type.isOrganic();
   r->producesCreep = type.producesCreep();
   r->producesLarva = type.producesLarva();
+  r->restrictedByDarkSwarm = r->hasGroundWeapon &&
+      type != BWAPI::UnitTypes::Terran_Firebat &&
+      type != BWAPI::UnitTypes::Protoss_Dark_Templar &&
+      type != BWAPI::UnitTypes::Protoss_Reaver &&
+      type != BWAPI::UnitTypes::Protoss_Scarab &&
+      type != BWAPI::UnitTypes::Protoss_Zealot &&
+      type != BWAPI::UnitTypes::Zerg_Broodling &&
+      type != BWAPI::UnitTypes::Zerg_Infested_Terran &&
+      type != BWAPI::UnitTypes::Zerg_Ultralisk &&
+      type != BWAPI::UnitTypes::Zerg_Zergling &&
+      type != BWAPI::UnitTypes::Zerg_Lurker;
 
   switch (id) {
     case BWAPI::UnitTypes::Enum::Protoss_Zealot:
@@ -767,5 +778,5 @@ void initialize() {
   const_cast<BuildType*>(Zerg_Devourer)->subjectiveValue +=
       Zerg_Mutalisk->subjectiveValue;
 }
-}
-}
+} // namespace buildtypes
+} // namespace cherrypi

@@ -39,14 +39,15 @@ Position findJitteredPosition(
       Position P3 = bottomRight + (v3 * i);
       Position P4 = bottomRight + (v4 * i);
       for (const auto& p : {P1, P2, P3, P4}) {
-        if (crop.contains(p) && (jitteredUnits.count(p) == 0 ||
-                                 std::accumulate(
-                                     jitteredUnits.at(p).begin(),
-                                     jitteredUnits.at(p).end(),
-                                     true,
-                                     [&compatible, &u](bool b, Unit* v) {
-                                       return b && compatible(u, v);
-                                     }))) {
+        if (crop.contains(p) &&
+            (jitteredUnits.count(p) == 0 ||
+             std::accumulate(
+                 jitteredUnits.at(p).begin(),
+                 jitteredUnits.at(p).end(),
+                 true,
+                 [&compatible, &u](bool b, Unit* v) {
+                   return b && compatible(u, v);
+                 }))) {
           return p;
         }
       }

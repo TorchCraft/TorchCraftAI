@@ -21,4 +21,4 @@ std::tuple<float, float, float, float> getUnitCountsHealth(
     cherrypi::State* state);
 double getMovementRadius(cherrypi::Unit* u);
 at::Device defaultDevice();
-}
+} // namespace microbattles

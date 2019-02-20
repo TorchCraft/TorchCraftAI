@@ -33,8 +33,8 @@ torch::Tensor scatterSum2d_single(
   auto sizeN = data.size(1);
   auto sizeC = data.size(2);
 
-  auto ys = positions.select(2, 0).squeeze();
-  auto xs = positions.select(2, 1).squeeze();
+  auto ys = positions.select(2, 0);
+  auto xs = positions.select(2, 1);
 
   // Filter out data with at least one negative coordinate
   auto xMask = xs.ge(0);

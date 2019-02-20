@@ -150,8 +150,8 @@ auto BuilderControllerBase::larvaBuilderScore(
     }
   }
 
-  return [ this, state, preferSaturation, larvaCount = std::move(larvaCount) ](
-      Unit * u) {
+  return [this, state, preferSaturation, larvaCount = std::move(larvaCount)](
+             Unit* u) {
     if (u->type != type_->builder) {
       return kdInfty;
     }
@@ -444,8 +444,9 @@ void WorkerBuilderController::step(State* state) {
       case TrackerStatus::Pending:
       case TrackerStatus::Ongoing:
         VLOG_IF(2, (tracker_->status() != trackerStatus_))
-            << logPrefix() << " movement tracker reported pending/ongoing, "
-                              "status->ongoing";
+            << logPrefix()
+            << " movement tracker reported pending/ongoing, "
+               "status->ongoing";
         break;
       default:
         break;

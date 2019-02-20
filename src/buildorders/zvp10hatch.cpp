@@ -260,4 +260,4 @@ class ABBOzvp10hatch : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOzvp10hatch, UpcId, State*, Module*);
-}
+} // namespace cherrypi

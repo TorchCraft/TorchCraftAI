@@ -41,4 +41,4 @@ class ABBOdelayed4Pool : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBOdelayed4Pool, UpcId, State*, Module*);
-}
+} // namespace cherrypi

@@ -9,6 +9,7 @@
 #include "utils/debugging.h"
 #include "utils/upcs.h"
 
+#include <c10/cuda/CUDAFunctions.h>
 #include <cuda_runtime.h>
 #include <fmt/ostream.h>
 #include <prettyprint/prettyprint.hpp>
@@ -25,20 +26,19 @@ std::vector<torch::Tensor> initializeMesh() {
   auto lst = std::vector<torch::Tensor>();
   for (auto i = 0U; i < torch::cuda::device_count(); i++) {
     cudaSetDevice(i);
-    lst.push_back(
-        at::stack(
-            {torch::arange(0, bounds.kHeight, defaultDevice())
-                 .repeat({bounds.kWidth, 1}),
-             torch::arange(0, bounds.kWidth, defaultDevice())
-                 .repeat({bounds.kHeight, 1})
-                 .t()},
-            2)
-            .toType(at::kFloat));
+    lst.push_back(at::stack(
+                      {torch::arange(0, bounds.kHeight, defaultDevice())
+                           .repeat({bounds.kWidth, 1}),
+                       torch::arange(0, bounds.kWidth, defaultDevice())
+                           .repeat({bounds.kHeight, 1})
+                           .t()},
+                      2)
+                      .toType(at::kFloat));
   }
   cudaSetDevice(0);
   return lst;
 }
-}
+} // namespace
 
 std::vector<torch::Tensor> PotentialKernel::mesh_ = initializeMesh();
 
@@ -46,7 +46,7 @@ torch::Tensor PiecewiseLinearPotential::forward(
     torch::Tensor locs,
     torch::Tensor params) {
   // locs: U x (y, x); params: U x 2
-  auto eMesh = mesh_[at::globalContext().current_device()].unsqueeze(2).expand(
+  auto eMesh = mesh_[c10::cuda::current_device()].unsqueeze(2).expand(
       {-1, -1, locs.size(0), -1});
   auto pLocs = locs.toType(at::kFloat).unsqueeze_(0).unsqueeze_(0);
   // H x W x U
@@ -94,13 +94,12 @@ std::vector<MicroModel::MicroAction> PFModel::decodeOutput(
   auto checkLocs = [&](auto units, auto locs) {
     for (auto i = 0U; i < units.size(); i++) {
       if (units[i]->y != locs[i][0] || units[i]->x != locs[i][1]) {
-        throw std::runtime_error(
-            fmt::format(
-                "Units are ordered incorrectly?? ({}, {}) vs ({} {})",
-                units[i]->x,
-                units[i]->y,
-                locs[i][1],
-                locs[i][0]));
+        throw std::runtime_error(fmt::format(
+            "Units are ordered incorrectly?? ({}, {}) vs ({} {})",
+            units[i]->x,
+            units[i]->y,
+            locs[i][1],
+            locs[i][0]));
       }
     }
   };
@@ -159,17 +158,15 @@ std::vector<MicroModel::MicroAction> PFModel::decodeOutput(
       }
       if (bestAtkInd < 0) {
         fmt::print("Why am I here: {} {}\n", nmyUnits.size(), bestAtkInd);
-        actions.push_back(
-            {MicroAction::None,
-             ourUnits[i],
-             nullptr,
-             cherrypi::kInvalidPosition});
+        actions.push_back({MicroAction::None,
+                           ourUnits[i],
+                           nullptr,
+                           cherrypi::kInvalidPosition});
       } else {
-        actions.push_back(
-            {MicroAction::Attack,
-             ourUnits[i],
-             nmyUnits[bestAtkInd],
-             cherrypi::kInvalidPosition});
+        actions.push_back({MicroAction::Attack,
+                           ourUnits[i],
+                           nmyUnits[bestAtkInd],
+                           cherrypi::kInvalidPosition});
       }
     } else {
       auto tgt = [&]() -> cherrypi::Unit* {
@@ -180,17 +177,15 @@ std::vector<MicroModel::MicroAction> PFModel::decodeOutput(
         return nullptr;
       }();
       if (tgt == nullptr) {
-        actions.push_back(
-            {MicroAction::None,
-             ourUnits[i],
-             nullptr,
-             cherrypi::kInvalidPosition});
+        actions.push_back({MicroAction::None,
+                           ourUnits[i],
+                           nullptr,
+                           cherrypi::kInvalidPosition});
       } else {
-        actions.push_back(
-            {MicroAction::Attack,
-             ourUnits[i],
-             tgt,
-             cherrypi::kInvalidPosition});
+        actions.push_back({MicroAction::Attack,
+                           ourUnits[i],
+                           tgt,
+                           cherrypi::kInvalidPosition});
       }
     }
   }

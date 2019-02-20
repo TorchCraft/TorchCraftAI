@@ -180,7 +180,8 @@ void Blackboard::postTask(
     throw std::runtime_error(
         "Existing task found for " + utils::upcString(task->upcId()));
   }
-  auto it = tasks_.emplace(tasks_.end(), task, owner, autoRemove);
+  auto it = tasks_.emplace(
+      tasks_.end(), task, owner, autoRemove, state_->currentFrame());
   tasksById_.emplace(task->upcId(), it);
   tasksByModule_.emplace(owner, it);
   for (Unit* u : const_cast<const Task*>(task.get())->units()) {

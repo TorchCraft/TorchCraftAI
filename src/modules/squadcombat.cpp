@@ -29,6 +29,10 @@ void SquadCombatModule::step(State* s) {
   state = s;
   auto board = state->board();
 
+  for (auto& model : models_) {
+    model->forward(state);
+  }
+
   // Form new squads based on new UPCs
   auto myUpcs = board->upcsFrom(this);
 
@@ -36,10 +40,8 @@ void SquadCombatModule::step(State* s) {
   // Delete commands issued by Tactics. We should make this explicit.
   constexpr double kProbabilityThreshold = 0.1;
   auto considerMakingSquadFromUpc =
-      [&](decltype(
-          board->upcsWithCommand(
-              Command::Delete, kProbabilityThreshold)) upcsWithCommand) {
-
+      [&](decltype(board->upcsWithCommand(
+          Command::Delete, kProbabilityThreshold)) upcsWithCommand) {
         for (auto& upcs : upcsWithCommand) {
           auto id = upcs.first;
           auto upc = upcs.second;
@@ -81,9 +83,18 @@ void SquadCombatModule::step(State* s) {
       board->upcsWithCommand(Command::Flee, kProbabilityThreshold));
 
   // Update my units
-  for (auto* u : state->unitsInfo().myUnits()) {
-    if (agents_.find(u) == agents_.end()) {
-      agents_.emplace(u, Agent());
+  for (auto* unit : state->unitsInfo().myUnits()) {
+    if (agents_.find(unit) == agents_.end()) {
+      auto behaviorsDelete =
+          std::make_shared<BehaviorSeries>(makeDeleteBehaviors());
+      auto behaviorsFlee =
+          std::make_shared<BehaviorSeries>(makeFleeBehaviors());
+      agents_.emplace(unit, [&]() {
+        Agent agent;
+        agent.behaviorDelete = behaviorsDelete;
+        agent.behaviorFlee = behaviorsFlee;
+        return agent;
+      }());
     }
   }
 
@@ -160,11 +171,19 @@ bool SquadCombatModule::formNewSquad(
         units,
         std::move(targets),
         &enemyStates_,
-        &agents_);
+        &agents_,
+        &models_);
   } else if (sourceUpc->position.is<Position>()) {
     auto pos = sourceUpc->position.get_unchecked<Position>();
     task = std::make_shared<SquadTask>(
-        sourceUpcId, sourceUpc, units, pos.x, pos.y, &enemyStates_, &agents_);
+        sourceUpcId,
+        sourceUpc,
+        units,
+        pos.x,
+        pos.y,
+        &enemyStates_,
+        &agents_,
+        &models_);
     VLOG(2) << "Targeting single position at " << pos.x << "," << pos.y;
   } else if (sourceUpc->position.is<torch::Tensor>()) {
     auto argmax = utils::argmax(
@@ -172,7 +191,7 @@ bool SquadCombatModule::formNewSquad(
     int x, y;
     std::tie(x, y, std::ignore) = argmax;
     task = std::make_shared<SquadTask>(
-        sourceUpcId, sourceUpc, units, x, y, &enemyStates_, &agents_);
+        sourceUpcId, sourceUpc, units, x, y, &enemyStates_, &agents_, &models_);
     VLOG(2) << "Targeting position argmax at " << x << "," << y;
   } else {
     VLOG(0) << "No targets to attack in " << upcString;
@@ -222,4 +241,40 @@ void SquadCombatModule::updateTask(std::shared_ptr<Task> task) {
     }
   }
 }
+
+void SquadCombatModule::enqueueModel(std::shared_ptr<MicroModel> model) {
+  models_.push_back(model);
+}
+
+BehaviorList SquadCombatModule::makeDeleteBehaviors() {
+  return BehaviorList{std::make_shared<BehaviorUnstick>(),
+                      std::make_shared<BehaviorIfIrradiated>(),
+                      std::make_shared<BehaviorIfStormed>(),
+                      std::make_shared<BehaviorVsScarab>(),
+                      std::make_shared<BehaviorFormation>(),
+                      std::make_shared<BehaviorAsZergling>(),
+                      std::make_shared<BehaviorAsMutaliskVsScourge>(),
+                      std::make_shared<BehaviorAsMutaliskMicro>(),
+                      std::make_shared<BehaviorAsScourge>(),
+                      std::make_shared<BehaviorAsLurker>(),
+                      std::make_shared<BehaviorAsHydralisk>(),
+                      std::make_shared<BehaviorAsOverlord>(),
+                      std::make_shared<BehaviorChase>(),
+                      std::make_shared<BehaviorKite>(),
+                      std::make_shared<BehaviorEngageCooperatively>(),
+                      std::make_shared<BehaviorEngage>(),
+                      std::make_shared<BehaviorLeave>(),
+                      std::make_shared<BehaviorTravel>()};
+}
+
+BehaviorList SquadCombatModule::makeFleeBehaviors() {
+  return BehaviorList{std::make_shared<BehaviorUnstick>(),
+                      std::make_shared<BehaviorIfIrradiated>(),
+                      std::make_shared<BehaviorIfStormed>(),
+                      std::make_shared<BehaviorAsZergling>(),
+                      std::make_shared<BehaviorAsLurker>(),
+                      std::make_shared<BehaviorKite>(),
+                      std::make_shared<BehaviorTravel>()};
+}
+
 } // namespace cherrypi

@@ -7,16 +7,16 @@
 
 #include "test.h"
 
-#include "common/rand.h"
-#include "common/serialization.h"
-#include "common/zstdstream.h"
-#include "fsutils.h"
 #include "utils.h"
+#include <common/fsutils.h>
+#include <common/rand.h>
+#include <common/serialization.h>
+#include <common/zstdstream.h>
 
 #include <algorithm>
 
 using namespace cherrypi;
-namespace zstd = common::zstd;
+using namespace common;
 
 std::initializer_list<uint64_t> constexpr kSizes =
     {0U, 1U, 2U, 7U, 128U, 1000U, 10000U, 100000U};

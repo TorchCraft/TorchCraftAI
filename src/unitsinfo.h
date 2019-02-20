@@ -188,6 +188,12 @@ struct Unit {
   bool irradiated() const {
     return flag(tc::Unit::Flags::Irradiated);
   }
+  bool plagued() const {
+    return flag(tc::Unit::Flags::Plagued);
+  }
+  bool underDarkSwarm() const {
+    return flag(tc::Unit::Flags::UnderDarkSwarm);
+  }
   bool gatheringGas() const {
     return flag(tc::Unit::Flags::GatheringGas);
   }

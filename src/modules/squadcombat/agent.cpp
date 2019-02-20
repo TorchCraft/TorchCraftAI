@@ -45,14 +45,14 @@ void Agent::preMicro() {
 std::shared_ptr<UPCTuple> Agent::microDelete() {
   wantsToFight = true;
   preMicro();
-  behaviorDelete.perform(*this);
+  behaviorDelete->perform(*this);
   return currentAction.getFinalUPC();
 }
 
 std::shared_ptr<UPCTuple> Agent::microFlee() {
   wantsToFight = false;
   preMicro();
-  behaviorFlee.perform(*this);
+  behaviorFlee->perform(*this);
   return currentAction.getFinalUPC();
 }
 
@@ -139,6 +139,144 @@ std::shared_ptr<UPCTuple> Agent::smartMove(const Position& tgt) {
 /// Convenience method for issuing a threat-aware move UPC.
 std::shared_ptr<UPCTuple> Agent::smartMove(Unit* tgt) {
   return smartMove(tgt->pos());
+}
+
+std::shared_ptr<UPCTuple> Agent::tryCastSpellOnUnit(
+    const BuildType* spell,
+    std::function<double(Unit* const)> scoring,
+    double minimumScore) {
+  if (!state->hasResearched(spell)) {
+    return nullptr;
+  }
+
+  Unit* bestTarget = nullptr;
+  double bestScore = std::numeric_limits<double>::min();
+  auto consider = [&](Unit* candidate) {
+    auto candidateScore = scoring(candidate);
+    if (candidateScore > std::max(minimumScore, bestScore)) {
+      bestTarget = candidate;
+      bestScore = candidateScore;
+    }
+  };
+  for (auto* target : task->targets_) {
+    consider(target);
+  }
+  for (auto* ally : task->squadUnits()) {
+    consider(ally);
+  }
+
+  if (bestTarget) {
+    lastMove = -1;
+    lastMoveTo = Position();
+    attacking = nullptr;
+    lastAttack = -1;
+    VLOG(1) << utils::unitString(unit) << " with " << unit->unit.energy
+            << " energy casting " << spell->name << " on "
+            << utils::unitString(bestTarget);
+    return utils::makeSharpUPC(unit, bestTarget, Command::Cast, spell);
+  }
+  VLOG(1) << utils::unitString(unit) << " not casting " << spell->name
+          << ": best score was " << bestScore << " / " << minimumScore;
+  return nullptr;
+}
+
+namespace {
+struct SpellArea {
+  Position start;
+  Position end;
+  double score = 0;
+
+  SpellArea(
+      State* const state,
+      Position const origin,
+      int width,
+      int height,
+      int dx,
+      int dy) {
+    int x0 = origin.x + dx * width / 2;
+    int x1 = origin.x - dx * width / 2;
+    int y0 = origin.y + dy * height / 2;
+    int y1 = origin.y - dy * height / 2;
+
+    start = Position(std::min(x0, x1), std::min(y0, y1));
+    end = Position(std::max(x0, x1), std::max(y0, y1));
+
+    start = utils::clampPositionToMap(state, start);
+    end = utils::clampPositionToMap(state, end);
+  }
+  bool contains(Position position) {
+    return position.x >= start.x && position.x < end.x &&
+        position.y >= start.y && position.y < end.y;
+  }
+};
+} // namespace
+std::shared_ptr<UPCTuple> Agent::tryCastSpellOnArea(
+    const BuildType* spell,
+    double width,
+    double height,
+    std::function<double(Unit* const)> scoring,
+    double minimumScore,
+    std::function<Position(Position input)> positionTransform) {
+  if (!state->hasResearched(spell)) {
+    return nullptr;
+  }
+
+  auto& relevantUnits = task->relevantUnits();
+
+  // Calculate unit scores
+  std::unordered_map<Unit*, double> scores;
+  for (auto* unit : relevantUnits) {
+    scores[unit] = scoring(unit);
+  }
+
+  // Consider all viable target areas
+  std::vector<SpellArea> spellAreas;
+  for (auto* unit : relevantUnits) {
+    auto position = unit->pos();
+    spellAreas.push_back(SpellArea(state, position, width, height, 1, 1));
+    spellAreas.push_back(SpellArea(state, position, width, height, -1, 1));
+    spellAreas.push_back(SpellArea(state, position, width, height, 1, -1));
+    spellAreas.push_back(SpellArea(state, position, width, height, -1, -1));
+  }
+
+  // Score each area
+  for (auto& area : spellAreas) {
+    for (auto* unit : relevantUnits) {
+      if (area.contains(unit->pos())) {
+        area.score += scores[unit];
+      }
+    }
+  }
+
+  // Pick the best area
+  SpellArea* bestArea = nullptr;
+  double bestScore = std::numeric_limits<double>::min();
+  for (auto& area : spellAreas) {
+    if (area.score > std::max(minimumScore, bestScore)) {
+      bestArea = &area;
+      bestScore = area.score;
+    }
+  }
+
+  // Found a good area? Cast the spell there.
+  if (bestArea) {
+    auto target = positionTransform(Position(
+        (bestArea->start.x + bestArea->end.x) / 2,
+        (bestArea->start.y + bestArea->end.y) / 2));
+
+    lastMove = -1;
+    lastMoveTo = Position();
+    attacking = nullptr;
+    lastAttack = -1;
+    VLOG(1) << utils::unitString(unit) << " with " << unit->unit.energy
+            << " energy casting " << spell->name << " on " << target;
+    return utils::makeSharpUPC(unit, target, Command::Cast, spell);
+  }
+
+  VLOG(1) << utils::unitString(unit) << " not casting " << spell->name
+          << ": best score was " << bestScore << " / " << minimumScore;
+
+  return nullptr;
 }
 
 } // namespace cherrypi

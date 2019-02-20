@@ -18,7 +18,7 @@ const tc::BW::Race protoss = tc::BW::Race::Protoss;
 const tc::BW::Race zerg = tc::BW::Race::Zerg;
 const tc::BW::Race unknown = tc::BW::Race::Unknown;
 const std::vector<tc::BW::Race> allRaces{terran, protoss, zerg, unknown};
-}
+} // namespace
 
 // Update the tournament configuration by modifying this function
 BuildOrderConfigurations buildOrdersForTournament(
@@ -33,8 +33,8 @@ BuildOrderConfigurations buildOrdersForTournament(
   }
 
   auto opponentName = utils::stringToLower(rawOpponentName);
-  auto enable = [&](
-      std::vector<tc::BW::Race> addedRaces, const char* buildName) {
+  auto enable = [&](std::vector<tc::BW::Race> addedRaces,
+                    const char* buildName) {
     if (!utils::contains(builds, buildName)) {
       VLOG(0) << "WARNING: Trying to enable build not found in training "
                  "configuration: "
@@ -294,6 +294,11 @@ BuildOrderConfigurations buildOrdersForTraining() {
       .validSwitch(true)
       .enemyRaces({protoss});
 
+  builds["zvt2basedefiler"]
+      .validOpening(true)
+      .validSwitch(true)
+      .enemyRaces({terran});
+  
   builds["zvt2baseultra"]
       .validOpening(true)
       .validSwitch(true)
@@ -349,13 +354,39 @@ BuildOrderConfigurations buildOrdersForTraining() {
       .validSwitch(true)
       .enemyRaces({zerg});
 
-  builds["p4gate"]
+  builds["pve2gate1012"]
       .validOpening(true)
       .ourRaces({protoss});
+      
+  builds["pvp2gatedt"]
+      .validOpening(true)
+      .ourRaces({protoss})
+      .enemyRaces({protoss});
+      
+  builds["pve4gate"]
+      .validOpening(true)
+      .ourRaces({protoss});
+  
+  // Can't function without Protoss-aware building placement
+  builds["pvzffe5gategoon"]
+      .validOpening(false)
+      .ourRaces({protoss})
+      .enemyRaces({zerg});
 
   builds["t5rax"]
       .validOpening(true)
       .ourRaces({terran});
+
+  builds["tvtz2portwraith"]
+      .validOpening(true)
+      .ourRaces({terran})
+      .enemyRaces({terran, zerg});      
+  
+  builds["tvpjoyorush"]
+      .validOpening(true)
+      .ourRaces({terran})
+      .enemyRaces({protoss});
+
   // clang-format on
   return builds;
 }

@@ -497,16 +497,15 @@ void ConvEncLstmModel::reset() {
     mapOut = 8;
     mapConv_ =
         add(ag::Sequential()
-                .append(
-                    common::ConvBlock()
-                        .kernelSize(16)
-                        .stride(16)
-                        .nInFeats(4)
-                        .nOutFeats(mapOut)
-                        .nLayers(1)
-                        .nonlinearity(cnn_nonlinearity_)
-                        .residual(false)
-                        .make())
+                .append(common::ConvBlock()
+                            .kernelSize(16)
+                            .stride(16)
+                            .nInFeats(4)
+                            .nOutFeats(mapOut)
+                            .nLayers(1)
+                            .nonlinearity(cnn_nonlinearity_)
+                            .residual(false)
+                            .make())
                 .make(),
             "map_cnn");
   }

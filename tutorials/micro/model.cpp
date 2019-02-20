@@ -24,7 +24,7 @@ std::vector<torch::Tensor> MicroFeaturizer::featurize(cherrypi::State* state) {
   auto mapFeatures = featurizePlain(
       state,
       {cherrypi::PlainFeatureType::Walkability, // THIS SHOULD ALWAYS BE FIRST,
-       // we rely on it in modelpf.cpp
+                                                // we rely on it in modelpf.cpp
        cherrypi::PlainFeatureType::Buildability,
        cherrypi::PlainFeatureType::OneHotGroundHeight,
        cherrypi::PlainFeatureType::FogOfWar},

@@ -10,83 +10,76 @@
 #include "blackboard.h"
 #include "buildtype.h"
 #include "cherrypi.h"
+#include "gameutils/selfplayscenario.h"
 #include "modules.h"
 #include "player.h"
-#include "gameutils/selfplayscenario.h"
 
 #include <torchcraft/constants.h>
 
 using namespace cherrypi;
 
 void upgrade(BasePlayer& bot, int pid, tc::BW::UpgradeType tech, int lvl) {
-  bot.queueCmds(
-      {tc::Client::Command(
-          tc::BW::Command::CommandOpenbw,
-          tc::BW::OpenBWCommandType::SetPlayerUpgradeLevel,
-          pid,
-          tech,
-          lvl)});
+  bot.queueCmds({tc::Client::Command(
+      tc::BW::Command::CommandOpenbw,
+      tc::BW::OpenBWCommandType::SetPlayerUpgradeLevel,
+      pid,
+      tech,
+      lvl)});
 }
 
 void research(BasePlayer& bot, int pid, tc::BW::TechType tech, bool r = true) {
-  bot.queueCmds(
-      {tc::Client::Command(
-          tc::BW::Command::CommandOpenbw,
-          tc::BW::OpenBWCommandType::SetPlayerResearched,
-          pid,
-          tech,
-          r)});
+  bot.queueCmds({tc::Client::Command(
+      tc::BW::Command::CommandOpenbw,
+      tc::BW::OpenBWCommandType::SetPlayerResearched,
+      pid,
+      tech,
+      r)});
 }
 
 void setMinerals(BasePlayer& bot, int amount, int pid = -1) {
   if (pid < 0) {
     pid = bot.state()->playerId();
   }
-  bot.queueCmds(
-      {tc::Client::Command(
-          tc::BW::Command::CommandOpenbw,
-          tc::BW::OpenBWCommandType::SetPlayerMinerals,
-          pid,
-          amount)});
+  bot.queueCmds({tc::Client::Command(
+      tc::BW::Command::CommandOpenbw,
+      tc::BW::OpenBWCommandType::SetPlayerMinerals,
+      pid,
+      amount)});
 }
 
 void setGas(BasePlayer& bot, int amount, int pid = -1) {
   if (pid < 0) {
     pid = bot.state()->playerId();
   }
-  bot.queueCmds(
-      {tc::Client::Command(
-          tc::BW::Command::CommandOpenbw,
-          tc::BW::OpenBWCommandType::SetPlayerGas,
-          pid,
-          amount)});
+  bot.queueCmds({tc::Client::Command(
+      tc::BW::Command::CommandOpenbw,
+      tc::BW::OpenBWCommandType::SetPlayerGas,
+      pid,
+      amount)});
 }
 
 void setHealth(BasePlayer& bot, Unit* u, int amount) {
-  bot.queueCmds(
-      {tc::Client::Command(
-          tc::BW::Command::CommandOpenbw,
-          tc::BW::OpenBWCommandType::SetUnitHealth,
-          u->id,
-          amount)});
+  bot.queueCmds({tc::Client::Command(
+      tc::BW::Command::CommandOpenbw,
+      tc::BW::OpenBWCommandType::SetUnitHealth,
+      u->id,
+      amount)});
 }
 
 void setShield(BasePlayer& bot, Unit* u, int amount) {
-  bot.queueCmds(
-      {tc::Client::Command(
-          tc::BW::Command::CommandOpenbw,
-          tc::BW::OpenBWCommandType::SetUnitShield,
-          u->id,
-          amount)});
+  bot.queueCmds({tc::Client::Command(
+      tc::BW::Command::CommandOpenbw,
+      tc::BW::OpenBWCommandType::SetUnitShield,
+      u->id,
+      amount)});
 }
 
 void setEnergy(BasePlayer& bot, Unit* u, int amount) {
-  bot.queueCmds(
-      {tc::Client::Command(
-          tc::BW::Command::CommandOpenbw,
-          tc::BW::OpenBWCommandType::SetUnitEnergy,
-          u->id,
-          amount)});
+  bot.queueCmds({tc::Client::Command(
+      tc::BW::Command::CommandOpenbw,
+      tc::BW::OpenBWCommandType::SetUnitEnergy,
+      u->id,
+      amount)});
 }
 
 CASE("openbw/cheats/upgrade") {
@@ -98,16 +91,14 @@ CASE("openbw/cheats/upgrade") {
   Player enemy(scenario.makeClient2());
 
   bot.addModule(Module::make<TopModule>());
-  bot.addModule(
-      OnceModule::makeWithSpawns(
-          {
-              {UnitType::Protoss_Dragoon, 104, 132},
-              {UnitType::Protoss_High_Templar, 104, 132},
-          },
-          "MySpawns"));
-  bot.addModule(
-      OnceModule::makeWithEnemySpawns(
-          {{UnitType::Protoss_Dragoon, 90, 100}}, "TheirSpawns"));
+  bot.addModule(OnceModule::makeWithSpawns(
+      {
+          {1, UnitType::Protoss_Dragoon, 104, 132},
+          {1, UnitType::Protoss_High_Templar, 104, 132},
+      },
+      "MySpawns"));
+  bot.addModule(OnceModule::makeWithEnemySpawns(
+      {{1, UnitType::Protoss_Dragoon, 90, 100}}, "TheirSpawns"));
   bot.addModule(Module::make<UPCToCommandModule>());
 
   enemy.addModule(Module::make<TopModule>());
@@ -192,14 +183,13 @@ CASE("openbw/cheats/upgrade") {
   EXPECT(!state->hasResearched(buildtypes::Hallucination));
   research(bot, state->playerId(), tc::BW::TechType::Hallucination);
   check([&]() { return state->hasResearched(buildtypes::Hallucination); });
-  bot.queueCmds(
-      {tc::Client::Command(
-          tc::BW::Command::CommandUnit,
-          ht->id,
-          tc::BW::UnitCommandType::Use_Tech_Unit,
-          dragoon->id,
-          0,
-          0,
-          tc::BW::TechType::Hallucination)});
+  bot.queueCmds({tc::Client::Command(
+      tc::BW::Command::CommandUnit,
+      ht->id,
+      tc::BW::UnitCommandType::Use_Tech_Unit,
+      dragoon->id,
+      0,
+      0,
+      tc::BW::TechType::Hallucination)});
   check([&]() { return state->unitsInfo().myUnits().size() == 4; });
 }

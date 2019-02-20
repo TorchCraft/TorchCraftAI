@@ -38,6 +38,18 @@ std::string tensorStats(torch::Tensor x);
  */
 void checkTensor(torch::Tensor x, bool logOnError = true);
 
+using VarList = torch::autograd::variable_list;
+using HookFunction = std::function<VarList(const VarList&, const VarList&)>;
+/**
+ * Adds a hook to the backwards of the variable.
+ * The hook function takes gradInput and gradOutput, and should by default
+ * return gradInput, that is, the identity function looks like:
+ *    [](VarList const& gradInp, Varlist const& gradOutp) { return gradInp; }
+ *
+ * https://pytorch.org/docs/stable/nn.html?highlight=hook#torch.nn.Module.register_backward_hook
+ */
+torch::Tensor const& addHook(torch::Tensor const& tensor, HookFunction&& f);
+
 /**
  * Verifies that a tensor's dimension sizes match expectations.
  * If a dimension is negative (e.g. -1) it won't be checked.

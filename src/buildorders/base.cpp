@@ -467,6 +467,8 @@ void ABBOBase::preBuild(autobuild::BuildState& st) {
 
   // Count our bases and mineral patches
   mineralFields = 0;
+  // TODO: Need to reset geysers = 0 but maybe code DEPENDS on this being wrong
+  // now
   bases = 0;
   for (auto& area : state_->map()->Areas()) {
     for (auto& base : area.Bases()) {
@@ -595,7 +597,8 @@ void ABBOBase::preBuild(autobuild::BuildState& st) {
       for (int i = 0; i != 3; ++i) {
         bool found = false;
         for (Unit* u : state_->unitsInfo().enemyUnits()) {
-          if (i == 0 ? u->type->isBuilding : i == 1
+          if (i == 0 ? u->type->isBuilding
+                     : i == 1
                       ? (u->type->hasGroundWeapon || u->type->hasAirWeapon) &&
                           !u->type->isWorker
                       : true) {
@@ -945,6 +948,7 @@ void ABBOBase::preBuild(autobuild::BuildState& st) {
   myLurkerCount = state_->unitsInfo().myUnitsOfType(Zerg_Lurker).size();
   myUltraliskCount = state_->unitsInfo().myUnitsOfType(Zerg_Ultralisk).size();
   myGuardianCount = state_->unitsInfo().myUnitsOfType(Zerg_Guardian).size();
+  myDefilerCount = state_->unitsInfo().myUnitsOfType(Zerg_Defiler).size();
   myCompletedHatchCount =
       state_->unitsInfo().myCompletedUnitsOfType(Zerg_Hatchery).size() +
       state_->unitsInfo().myUnitsOfType(Zerg_Lair).size() +
@@ -1053,4 +1057,4 @@ void ABBOBase::buildStep(BuildState& st) {
     }
   }
 }
-}
+} // namespace cherrypi

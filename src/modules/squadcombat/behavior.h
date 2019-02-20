@@ -12,25 +12,6 @@
 
 namespace cherrypi {
 
-/**
- * Represents a Behavior's decision of how to control a unit.
- */
-struct MicroAction {
-  /// If true: this UPC is the final decision on what this unit should do.
-  /// Cease performing behaviors
-  bool isFinal = false;
-
-  /// Only used when isFinal is true.
-  ///
-  /// If defined: This UPC is the final decision on what this unit should do.
-  ///
-  /// If undefined: The final decision on what this unit should do is to
-  /// *do nothing* and issue no commands.
-  std::shared_ptr<UPCTuple> upc = nullptr;
-
-  std::shared_ptr<UPCTuple> getFinalUPC() const;
-};
-
 class Agent;
 
 /**
@@ -67,7 +48,8 @@ class Behavior {
   class Behavior##NAME : public Behavior {          \
     virtual MicroAction onPerform(Agent&) override; \
   };
-#define CPI_ADD_BEHAVIOR(NAME) std::make_shared<Behavior##NAME>()
+
+CPI_DEFINE_BEHAVIOR(ML)
 CPI_DEFINE_BEHAVIOR(Unstick)
 CPI_DEFINE_BEHAVIOR(IfIrradiated)
 CPI_DEFINE_BEHAVIOR(IfStormed)
@@ -80,6 +62,7 @@ CPI_DEFINE_BEHAVIOR(AsScourge)
 CPI_DEFINE_BEHAVIOR(AsLurker)
 CPI_DEFINE_BEHAVIOR(AsHydralisk)
 CPI_DEFINE_BEHAVIOR(AsOverlord)
+CPI_DEFINE_BEHAVIOR(AsDefiler)
 CPI_DEFINE_BEHAVIOR(Chase)
 CPI_DEFINE_BEHAVIOR(Kite)
 CPI_DEFINE_BEHAVIOR(EngageCooperatively)
@@ -93,61 +76,14 @@ CPI_DEFINE_BEHAVIOR(Travel)
  * * Issues a UPC, indicating a command for the unit
  * * Issues a null UPC, indicating that the unit should be left alone
  */
+typedef std::vector<std::shared_ptr<Behavior>> BehaviorList;
 class BehaviorSeries : public Behavior {
  protected:
-  typedef std::vector<std::shared_ptr<Behavior>> BehaviorList;
-  virtual const BehaviorList& behaviors() const = 0;
+  const BehaviorList behaviors_ = {};
   virtual MicroAction onPerform(Agent& agent) override;
-};
 
-/**
- * The default top-level Behavior for Delete UPCs.
- * Selects an appropriate Behavior.
- */
-class BehaviorDelete : public BehaviorSeries {
- private:
-  const BehaviorList behaviors_ = {CPI_ADD_BEHAVIOR(Unstick),
-                                   CPI_ADD_BEHAVIOR(IfIrradiated),
-                                   CPI_ADD_BEHAVIOR(IfStormed),
-                                   CPI_ADD_BEHAVIOR(VsScarab),
-                                   CPI_ADD_BEHAVIOR(Formation),
-                                   CPI_ADD_BEHAVIOR(AsZergling),
-                                   CPI_ADD_BEHAVIOR(AsMutaliskVsScourge),
-                                   CPI_ADD_BEHAVIOR(AsMutaliskMicro),
-                                   CPI_ADD_BEHAVIOR(AsScourge),
-                                   CPI_ADD_BEHAVIOR(AsLurker),
-                                   CPI_ADD_BEHAVIOR(AsHydralisk),
-                                   CPI_ADD_BEHAVIOR(AsOverlord),
-                                   CPI_ADD_BEHAVIOR(Chase),
-                                   CPI_ADD_BEHAVIOR(Kite),
-                                   CPI_ADD_BEHAVIOR(EngageCooperatively),
-                                   CPI_ADD_BEHAVIOR(Engage),
-                                   CPI_ADD_BEHAVIOR(Leave),
-                                   CPI_ADD_BEHAVIOR(Travel)};
-  virtual const BehaviorList& behaviors() const override {
-    return behaviors_;
-  }
+ public:
+  BehaviorSeries(BehaviorList behaviors) : behaviors_(behaviors){};
 };
-
-/**
- * The default top-level Behavior for Flee UPCs.
- * Selects an appropriate Behavior.
- */
-class BehaviorFlee : public BehaviorSeries {
- private:
-  const BehaviorList behaviors_ = {CPI_ADD_BEHAVIOR(Unstick),
-                                   CPI_ADD_BEHAVIOR(IfIrradiated),
-                                   CPI_ADD_BEHAVIOR(IfStormed),
-                                   CPI_ADD_BEHAVIOR(AsZergling),
-                                   CPI_ADD_BEHAVIOR(AsLurker),
-                                   CPI_ADD_BEHAVIOR(Kite),
-                                   CPI_ADD_BEHAVIOR(Travel)};
-  virtual const BehaviorList& behaviors() const override {
-    return behaviors_;
-  }
-};
-
-#undef CPI_DEFINE_BEHAVIOR
-#undef CPI_ADD_BEHAVIOR
 
 } // namespace cherrypi

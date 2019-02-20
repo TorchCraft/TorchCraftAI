@@ -160,4 +160,4 @@ class ABBO2HatchMuta : public ABBOBase {
 };
 
 REGISTER_SUBCLASS_3(ABBOBase, ABBO2HatchMuta, UpcId, State*, Module*);
-}
+} // namespace cherrypi

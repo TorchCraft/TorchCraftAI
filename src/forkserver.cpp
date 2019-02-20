@@ -6,8 +6,9 @@
  */
 
 #include "forkserver.h"
-#include "fsutils.h"
 #include "utils.h"
+
+#include <common/fsutils.h>
 
 #include <atomic>
 #include <csignal>
@@ -28,6 +29,8 @@
 #include <glog/logging.h>
 #include <prettyprint/prettyprint.hpp>
 
+namespace fsutils = common::fsutils;
+
 extern char** environ;
 
 namespace cherrypi {
@@ -40,7 +43,7 @@ char constexpr kQuitCommand = 'Q';
 char constexpr kForkCommand = 'F';
 char constexpr kExecuteCommand = 'X';
 char constexpr kWaitPidCommand = 'W';
-}
+} // namespace
 
 #ifndef WITHOUT_POSIX
 // readFull and writeFull are adapted from Folly to provide a more robust
@@ -483,7 +486,7 @@ void serverProcess(int sock, int rfd, int wfd) {
   }
 }
 #endif
-}
+} // namespace
 
 ForkServer::ForkServer() {
   (void)tlThreadCounter;
@@ -604,4 +607,4 @@ void EnvironmentBuilder::freeEnv() {
     delete[] env_;
   }
 }
-}
+} // namespace cherrypi

@@ -7,19 +7,19 @@
 
 #include "test.h"
 
+#include "gameutils/microfixedscenario.h"
 #include "microplayer.h"
 #include "modules.h"
-#include "gameutils/microfixedscenario.h"
 
 using namespace cherrypi;
 
 CASE("scenarioprovider/simple_fixed_micro") {
-  auto provider = std::make_shared<MicroFixedScenario>(
-      200000,
-      SpawnList({{tc::BW::UnitType::Zerg_Mutalisk, {1, 100, 140}}}),
-      SpawnList({{tc::BW::UnitType::Zerg_Hydralisk, {2, 115, 142}}}),
-      "test/maps/micro-empty2.scm",
-      false);
+  ScenarioInfo scenario;
+  scenario.allyList =
+      SpawnList({{1, tc::BW::UnitType::Zerg_Mutalisk, 100, 140}});
+  scenario.enemyList =
+      SpawnList({{2, tc::BW::UnitType::Zerg_Hydralisk, 115, 142}});
+  auto provider = std::make_shared<MicroFixedScenario>(200000, scenario, false);
 
   // not needed, but shouldn't crash
   provider->cleanScenario();
@@ -53,13 +53,13 @@ CASE("scenarioprovider/simple_fixed_micro") {
     EXPECT(ui2.myUnits().size() == 0u);
   }
   // ask for a different scenario
-  provider->setSpawns(
-      SpawnList(
-          {{tc::BW::UnitType::Protoss_Zealot, {3, 100, 140}},
-           {tc::BW::UnitType::Protoss_Dragoon, {1, 100, 140}}}),
-      SpawnList(
-          {{tc::BW::UnitType::Terran_Marine, {2, 120, 140}},
-           {tc::BW::UnitType::Terran_Medic, {3, 120, 140}}}));
+  ScenarioInfo scenarioInfo;
+  scenarioInfo.allyList = {{3, tc::BW::UnitType::Protoss_Zealot, 100, 140},
+                           {1, tc::BW::UnitType::Protoss_Dragoon, 100, 140}};
+  scenarioInfo.enemyList = {{2, tc::BW::UnitType::Terran_Marine, 120, 140},
+                            {3, tc::BW::UnitType::Terran_Medic, 120, 140}};
+
+  provider->loadScenario(scenarioInfo);
 
   for (int i = 0; i < 10; i++) {
     auto players = provider->spawnNextScenario(setup, setup);

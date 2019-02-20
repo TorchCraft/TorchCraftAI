@@ -33,4 +33,4 @@ double getMovementRadius(cherrypi::Unit* u) {
 at::Device defaultDevice() {
   return FLAGS_gpu ? torch::Device("cuda") : torch::Device("cpu");
 }
-}
+} // namespace microbattles

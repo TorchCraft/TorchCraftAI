@@ -9,7 +9,6 @@
 #include "rlbuildingplacer.h"
 #include "scenarios.h"
 
-#include "fsutils.h"
 #include "gameutils/openbwprocess.h"
 #include "player.h"
 #include "upcstorage.h"
@@ -19,7 +18,9 @@
 #include "models/buildingplacer.h"
 
 #include <common/autograd/utils.h>
+#include <common/fsutils.h>
 #include <common/rand.h>
+#include <cpid/checkpointer.h>
 #include <cpid/distributed.h>
 #include <cpid/evaluator.h>
 #include <cpid/optimizers.h>
@@ -30,6 +31,7 @@
 using namespace cherrypi;
 using namespace cpid;
 namespace dist = cpid::distributed;
+namespace fsutils = common::fsutils;
 auto const vopts = &visdom::makeOpts;
 
 // Training options
@@ -48,10 +50,7 @@ DEFINE_int32(
     "number of cores on system if < 0");
 DEFINE_int32(batch_size, 64, "Batch size per worker");
 DEFINE_double(eta, 2, "Entropy regularization factor");
-DEFINE_string(
-    maps,
-    "maps",
-    "Restrict to this map or maps in this directory");
+DEFINE_string(maps, "maps", "Restrict to this map or maps in this directory");
 DEFINE_bool(gpu, common::gpuAvailable(), "Train on GPU");
 DEFINE_int32(
     plot_every,
@@ -279,19 +278,17 @@ void trainLoop(
 
     auto evalMetrics = std::make_shared<MetricsContext>();
     runEvaluation(trainer, FLAGS_num_eval_games, evalMetrics);
-    evalMetrics->dumpJson(
-        fmt::format(
-            "{}/{}-metrics.json", gResultsDir, dist::globalContext()->rank));
+    evalMetrics->dumpJson(fmt::format(
+        "{}/{}-metrics.json", gResultsDir, dist::globalContext()->rank));
     auto total = evalMetrics->getCounter("total_games_played");
     auto winsP1 = evalMetrics->getCounter("total_wins_p1");
     return float(winsP1) / total;
   };
 
-  auto updatePlot = [&](
-      std::string const& window,
-      std::string const& title,
-      std::string const& ytitle,
-      float value) -> std::string {
+  auto updatePlot = [&](std::string const& window,
+                        std::string const& title,
+                        std::string const& ytitle,
+                        float value) -> std::string {
     return vs->line(
         torch::tensor(value),
         torch::tensor(float(numModelUpdates)),
@@ -303,6 +300,9 @@ void trainLoop(
 
   startGameThreads();
 
+  fsutils::mkdir("checkpoints");
+  auto checkpointer =
+      cpid::Checkpointer(trainer).epochLength(5).checkpointPath("checkpoints");
   auto metrics = trainer->metricsContext();
   std::map<std::string, std::string> visdomWindows;
   int updatesSinceLastVisualization = 0;
@@ -318,6 +318,7 @@ void trainLoop(
     }
 
     numModelUpdates++;
+    checkpointer.updateDone(numModelUpdates);
     totalGames = gNumGamesTotal.load();
     dist::allreduce(&totalGames, 1);
 
@@ -368,15 +369,12 @@ void trainLoop(
     // Save checkpoint if requested
     if (FLAGS_checkpoint_every > 0 && dist::globalContext()->rank == 0) {
       if (numModelUpdates % FLAGS_checkpoint_every == 0) {
-        fsutils::mkdir("checkpoints");
-        std::string checkpointTempPath = std::string("checkpoints/checkpoint");
-        trainer->setCheckpointLocation(
-            checkpointTempPath + "-" + std::to_string(numModelUpdates));
-        trainer->checkpoint(true);
-        trainer->setCheckpointLocation("checkpoint");
+        std::string checkpointTempPath =
+            std::string("checkpoints/checkpoint-") +
+            std::to_string(numModelUpdates) + ".bin";
+        cpid::Checkpointer::checkpointTrainer(trainer, checkpointTempPath);
       }
     }
-
     // Plot latest game if requested
     updatesSinceLastVisualization++;
     std::unique_lock<std::mutex> gameDataLock(gLatestGameMutex);
@@ -473,7 +471,7 @@ void trainLoop(
 
   // Write out final checkpoint
   if (dist::globalContext()->rank == 0) {
-    trainer->checkpoint(true);
+    cpid::Checkpointer::checkpointTrainer(trainer);
   }
   stopGameThreads();
 }
@@ -607,9 +605,6 @@ int main(int argc, char** argv) {
     metrics->dumpJson(
         std::to_string(dist::globalContext()->rank) + "-metrics.json");
   } else {
-    trainer->setCheckpointFrequency(5);
-    trainer->setCheckpointLocation("checkpoint");
-
     trainLoop(trainer, vs);
   }
 

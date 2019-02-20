@@ -8,7 +8,6 @@
 #include "selfplayscenario.h"
 
 #include "cherrypi.h"
-#include "fsutils.h"
 #include "openbwprocess.h"
 #include "utils.h"
 
@@ -17,8 +16,12 @@
 #include <unistd.h>
 #endif
 
+#include <common/fsutils.h>
+
 #include <fmt/format.h>
 #include <glog/logging.h>
+
+namespace fsutils = common::fsutils;
 
 namespace cherrypi {
 
@@ -66,39 +69,37 @@ SelfPlayScenario::SelfPlayScenario(
 #ifdef WITHOUT_POSIX
   throw std::runtime_error("Not available for windows");
 #else
-  proc1_ = std::make_shared<OpenBwProcess>(
-      std::vector<OpenBwProcess::EnvVar>{
-          {"OPENBW_ENABLE_UI", forceGui ? "1" : "0", forceGui},
-          {"OPENBW_LAN_MODE", "FILE", true},
-          {"OPENBW_FILE_READ", pipes_.pipe1, true},
-          {"OPENBW_FILE_WRITE", pipes_.pipe2, true},
-          {"BWAPI_CONFIG_AUTO_MENU__AUTO_MENU", "LAN", true},
-          {"BWAPI_CONFIG_AUTO_MENU__GAME_TYPE",
-           detail::gameTypeName(gameType),
-           true},
-          {"BWAPI_CONFIG_AUTO_MENU__MAP", map, true},
-          {"BWAPI_CONFIG_AUTO_MENU__RACE", race1._to_string(), true},
-          {"BWAPI_CONFIG_AUTO_MENU__CHARACTER_NAME",
-           fmt::format("BWEnv1_{}", race1._to_string()),
-           true},
-          {"BWAPI_CONFIG_AUTO_MENU__SAVE_REPLAY", replayPath, true},
-      });
-  proc2_ = std::make_shared<OpenBwProcess>(
-      std::vector<OpenBwProcess::EnvVar>{
-          {"OPENBW_ENABLE_UI", "0", true},
-          {"OPENBW_LAN_MODE", "FILE", true},
-          {"OPENBW_FILE_READ", pipes_.pipe2, true},
-          {"OPENBW_FILE_WRITE", pipes_.pipe1, true},
-          {"BWAPI_CONFIG_AUTO_MENU__AUTO_MENU", "LAN", true},
-          {"BWAPI_CONFIG_AUTO_MENU__GAME_TYPE",
-           detail::gameTypeName(gameType),
-           true},
-          {"BWAPI_CONFIG_AUTO_MENU__MAP", map, true},
-          {"BWAPI_CONFIG_AUTO_MENU__RACE", race2._to_string(), true},
-          {"BWAPI_CONFIG_AUTO_MENU__CHARACTER_NAME",
-           fmt::format("BWEnv2_{}", race2._to_string()),
-           true},
-      });
+  proc1_ = std::make_shared<OpenBwProcess>(std::vector<OpenBwProcess::EnvVar>{
+      {"OPENBW_ENABLE_UI", forceGui ? "1" : "0", forceGui},
+      {"OPENBW_LAN_MODE", "FILE", true},
+      {"OPENBW_FILE_READ", pipes_.pipe1, true},
+      {"OPENBW_FILE_WRITE", pipes_.pipe2, true},
+      {"BWAPI_CONFIG_AUTO_MENU__AUTO_MENU", "LAN", true},
+      {"BWAPI_CONFIG_AUTO_MENU__GAME_TYPE",
+       detail::gameTypeName(gameType),
+       true},
+      {"BWAPI_CONFIG_AUTO_MENU__MAP", map, true},
+      {"BWAPI_CONFIG_AUTO_MENU__RACE", race1._to_string(), true},
+      {"BWAPI_CONFIG_AUTO_MENU__CHARACTER_NAME",
+       fmt::format("BWEnv1_{}", race1._to_string()),
+       true},
+      {"BWAPI_CONFIG_AUTO_MENU__SAVE_REPLAY", replayPath, true},
+  });
+  proc2_ = std::make_shared<OpenBwProcess>(std::vector<OpenBwProcess::EnvVar>{
+      {"OPENBW_ENABLE_UI", "0", true},
+      {"OPENBW_LAN_MODE", "FILE", true},
+      {"OPENBW_FILE_READ", pipes_.pipe2, true},
+      {"OPENBW_FILE_WRITE", pipes_.pipe1, true},
+      {"BWAPI_CONFIG_AUTO_MENU__AUTO_MENU", "LAN", true},
+      {"BWAPI_CONFIG_AUTO_MENU__GAME_TYPE",
+       detail::gameTypeName(gameType),
+       true},
+      {"BWAPI_CONFIG_AUTO_MENU__MAP", map, true},
+      {"BWAPI_CONFIG_AUTO_MENU__RACE", race2._to_string(), true},
+      {"BWAPI_CONFIG_AUTO_MENU__CHARACTER_NAME",
+       fmt::format("BWEnv2_{}", race2._to_string()),
+       true},
+  });
 #endif // WITHOUT_POSIX
 }
 

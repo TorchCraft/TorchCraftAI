@@ -12,6 +12,7 @@
 #include <shared_mutex>
 
 #include "distributed.h"
+#include "sampler.h"
 
 namespace cpid {
 
@@ -40,15 +41,10 @@ class Evaluator : public Trainer {
       ForwardFunction func);
 
  public:
-  bool startEpisode(GameUID const&, EpisodeKey const& = kDefaultEpisodeKey)
-      override;
-  void forceStopEpisode(GameUID const&, EpisodeKey const& = kDefaultEpisodeKey)
-      override;
+  EpisodeHandle startEpisode() override;
+  void forceStopEpisode(EpisodeHandle const&) override;
   bool update() override;
-  virtual ag::Variant forward(
-      ag::Variant inp,
-      GameUID const& gameIUID,
-      EpisodeKey const& key = kDefaultEpisodeKey) override;
+  virtual ag::Variant forward(ag::Variant inp, EpisodeHandle const&) override;
   void reset() override;
   std::shared_ptr<ReplayBufferFrame> makeFrame(
       ag::Variant /*trainerOutput*/,

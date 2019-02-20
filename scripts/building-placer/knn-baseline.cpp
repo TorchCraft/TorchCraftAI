@@ -11,6 +11,7 @@
 
 #include <common/autograd/utils.h>
 #include <common/datareader.h>
+#include <common/fsutils.h>
 #include <common/rand.h>
 
 #include <gflags/gflags.h>
@@ -74,10 +75,10 @@ struct Building {
 };
 
 struct ReducedSample {
-  int areaId;
+  int areaId = 0;
   std::vector<Building> alliedBuildings;
   std::vector<Building> alliedBuildingsInArea;
-  UnitType type;
+  UnitType type = tc::BW::UnitType::Terran_Marine;
   Position action;
   torch::Tensor embedding;
 

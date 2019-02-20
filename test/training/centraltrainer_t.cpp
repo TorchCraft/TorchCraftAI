@@ -27,15 +27,16 @@ namespace {
 
 char constexpr kMarioString[] = "it's-a-me";
 
-struct MyReplayBufferFrame : CerealizableReplayBufferFrame {
+struct MyReplayBufferFrame : ReplayBufferFrame {
   // Note: this struct has to be registered (at global scope) with
   // CEREAL_REGISTER_TYPE(MyReplayBufferFrame)
   std::string s;
   torch::Tensor t;
   uint32_t i;
   std::vector<float> fs;
+  bool end;
 
-  MyReplayBufferFrame() {
+  MyReplayBufferFrame(bool end = false) : end(end) {
     s = kMarioString;
     t = torch::rand({10, 10, 10});
     i = common::Rand::rand() % std::numeric_limits<uint32_t>::max();
@@ -45,7 +46,7 @@ struct MyReplayBufferFrame : CerealizableReplayBufferFrame {
 
   template <class Archive>
   void serialize(Archive& ar) {
-    ar(cereal::base_class<CerealizableReplayBufferFrame>(this), s, t, i, fs);
+    ar(cereal::base_class<ReplayBufferFrame>(this), s, t, i, fs, end);
   }
 };
 
@@ -53,18 +54,21 @@ class MyCentralTrainer : public CentralTrainer {
  public:
   using CentralTrainer::CentralTrainer;
 
-  size_t numEpisodesReceived = 0;
+  size_t numBatchesReceived = 0;
   size_t numFramesReceived = 0;
   size_t numCorrectFramesReceived = 0;
   size_t numMariosReceived = 0;
+  size_t numFinalFramesReceived = 0;
+  std::vector<int> batchLengths;
 
  protected:
-  void receivedEpisode(GameUID const& gameId, EpisodeKey const& episodeKey)
+  void receivedFrames(GameUID const& gameId, EpisodeKey const& episodeKey)
       override {
-    numEpisodesReceived++;
+    numBatchesReceived++;
 
     // Verify episode type
     auto& episode = replayer_.get(gameId, episodeKey);
+    batchLengths.push_back(episode.size());
     for (auto const& frame : episode) {
       numFramesReceived++;
       auto f = std::dynamic_pointer_cast<MyReplayBufferFrame>(frame);
@@ -73,27 +77,48 @@ class MyCentralTrainer : public CentralTrainer {
         if (f->s == kMarioString) {
           numMariosReceived++;
         }
+        if (f->end) {
+          numFinalFramesReceived++;
+        }
       }
     }
   }
 };
 
-void worker(std::shared_ptr<Trainer> trainer, int numEpisodes) {
-  std::uniform_int_distribution<int> eplen(1, 100);
+static int constexpr partialLength = 20;
+static int constexpr sendInterval = 10;
+class PartialCentralTrainer : public MyCentralTrainer {
+ public:
+  using MyCentralTrainer::MyCentralTrainer;
+
+ protected:
+  uint32_t getMaxBatchLength() const override {
+    return partialLength;
+  }
+  uint32_t getSendInterval() const override {
+    return sendInterval;
+  }
+};
+
+void worker(
+    std::shared_ptr<Trainer> trainer,
+    int numEpisodes,
+    int minlen,
+    int maxlen) {
+  std::uniform_int_distribution<int> eplen(minlen, maxlen);
   for (auto i = 0; i < numEpisodes; i++) {
-    auto gameId = genGameUID(dist::globalContext()->rank);
-    while (!trainer->startEpisode(gameId)) {
+    EpisodeHandle handle;
+    while (!(handle = trainer->startEpisode())) {
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
-    auto episode = cpid::EpisodeHandle(trainer, gameId);
 
     auto len = common::Rand::sample(eplen);
     for (auto j = 0; j < len; j++) {
       auto frame = std::make_shared<MyReplayBufferFrame>();
-      trainer->step(episode.gameID, frame);
+      trainer->step(handle, frame);
     }
-    auto frame = std::make_shared<MyReplayBufferFrame>();
-    trainer->step(episode.gameID, frame, true);
+    auto frame = std::make_shared<MyReplayBufferFrame>(true);
+    trainer->step(handle, frame, true);
 
     std::this_thread::sleep_for(
         std::chrono::milliseconds(common::Rand::rand() % 50));
@@ -104,7 +129,7 @@ void worker(std::shared_ptr<Trainer> trainer, int numEpisodes) {
 
 CEREAL_REGISTER_TYPE(MyReplayBufferFrame)
 
-// Feel free to run this test with `mpirun -np 8` or sth for testing.
+// Feel free to run this test with `./distrun -n 2 --` or sth for testing.
 CASE("centraltrainer/basic[.hide]") {
   dist::init();
 
@@ -119,7 +144,7 @@ CASE("centraltrainer/basic[.hide]") {
   std::vector<std::thread> threads;
   int64_t numTotalEpisodes = 0;
   for (auto i = 0; i < 2; i++) {
-    threads.emplace_back(worker, trainer, 10);
+    threads.emplace_back(worker, trainer, 10, 1, 100);
     numTotalEpisodes += 10;
   }
   numTotalEpisodes *= dist::globalContext()->size;
@@ -127,7 +152,7 @@ CASE("centraltrainer/basic[.hide]") {
   static int64_t numReceived = 0;
   while (numReceived < numTotalEpisodes) {
     trainer->update();
-    numReceived = trainer->numEpisodesReceived;
+    numReceived = trainer->numBatchesReceived;
     dist::allreduce(&numReceived, 1);
   }
   for (auto& th : threads) {
@@ -138,6 +163,56 @@ CASE("centraltrainer/basic[.hide]") {
   if (trainer->isServer()) {
     EXPECT(trainer->numFramesReceived == trainer->numCorrectFramesReceived);
     EXPECT(trainer->numFramesReceived == trainer->numMariosReceived);
+    EXPECT(trainer->numFinalFramesReceived == numTotalEpisodes);
+  } else {
+    EXPECT(trainer->numFramesReceived == 0U);
+  }
+}
+
+CASE("centraltrainer/partial[.hide]") {
+  dist::init();
+
+  auto metrics = std::make_shared<MetricsContext>();
+  auto trainer = std::make_shared<PartialCentralTrainer>(
+      dist::globalContext()->rank % 4 == 0,
+      nullptr,
+      nullptr,
+      std::make_unique<BaseSampler>());
+  trainer->setMetricsContext(metrics);
+
+  std::vector<std::thread> threads;
+  int64_t numTotalEpisodes = 0;
+  // (total - partialLength) / interval + 1 + 1 from the hanging portion
+  int64_t multiplier = (partialLength * 4) / sendInterval + 2;
+  for (auto i = 0; i < 2; i++) {
+    threads.emplace_back(
+        worker,
+        trainer,
+        10,
+        partialLength * 5 + 1,
+        partialLength * 5 + sendInterval - 1);
+    numTotalEpisodes += 10;
+  }
+  numTotalEpisodes *= dist::globalContext()->size;
+
+  static int64_t numReceived = 0;
+  while (numReceived < numTotalEpisodes * multiplier) {
+    trainer->update();
+    numReceived = trainer->numBatchesReceived;
+    dist::allreduce(&numReceived, 1);
+  }
+  for (auto& th : threads) {
+    EXPECT((th.join(), true));
+  }
+
+  EXPECT(numReceived == numTotalEpisodes * multiplier);
+  if (trainer->isServer()) {
+    EXPECT(trainer->numFramesReceived == trainer->numCorrectFramesReceived);
+    EXPECT(trainer->numFramesReceived == trainer->numMariosReceived);
+    EXPECT(trainer->numFinalFramesReceived == numTotalEpisodes);
+    for (auto l : trainer->batchLengths) {
+      EXPECT(l == partialLength);
+    }
   } else {
     EXPECT(trainer->numFramesReceived == 0U);
   }
