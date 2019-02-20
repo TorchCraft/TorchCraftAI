@@ -8,5 +8,6 @@ var searchData=
   ['gravitic_5fdrive',['Gravitic_Drive',['../structtorchcraft_1_1replayer_1_1Resources.html#a7e1d378d66fd61a9120045dfbe4f7bfaa87ef20530e4213edb05fe600a37a10e6',1,'torchcraft::replayer::Resources']]],
   ['gravitic_5fthrusters',['Gravitic_Thrusters',['../structtorchcraft_1_1replayer_1_1Resources.html#a7e1d378d66fd61a9120045dfbe4f7bfaac2ee7477c5e0c90cc8ba1b7e2e03766b',1,'torchcraft::replayer::Resources']]],
   ['grooved_5fspines',['Grooved_Spines',['../structtorchcraft_1_1replayer_1_1Resources.html#a7e1d378d66fd61a9120045dfbe4f7bfaa410a5ee2b851b2f2cce7c3b44af237f6',1,'torchcraft::replayer::Resources']]],
-  ['groundheight',['GroundHeight',['../namespacecherrypi.html#ad5a3f15bd0c2b47a402c200ec0435276a984b82209299ba779715998314a9679d',1,'cherrypi']]]
+  ['groundheight',['GroundHeight',['../namespacecherrypi.html#ad5a3f15bd0c2b47a402c200ec0435276a984b82209299ba779715998314a9679d',1,'cherrypi']]],
+  ['guardians',['Guardians',['../classcherrypi_1_1ABBOzvt2basehivebase.html#aa6fa6931c32b3401864f3efe2e7d7ea0a683089f5672aadee4ed167bb7467bc53',1,'cherrypi::ABBOzvt2basehivebase']]]
 ];

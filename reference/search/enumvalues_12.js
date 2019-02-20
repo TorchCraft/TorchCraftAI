@@ -1,6 +1,7 @@
 var searchData=
 [
   ['u_5f238_5fshells',['U_238_Shells',['../structtorchcraft_1_1replayer_1_1Resources.html#a7e1d378d66fd61a9120045dfbe4f7bfaa0471f0c76ece6fe70d7958c077114aaa',1,'torchcraft::replayer::Resources']]],
+  ['ultralisks',['Ultralisks',['../classcherrypi_1_1ABBOzvt2basehivebase.html#aa6fa6931c32b3401864f3efe2e7d7ea0a31aae0be96d4a7afa3147facdbcf2384',1,'cherrypi::ABBOzvt2basehivebase']]],
   ['undef',['Undef',['../namespacecherrypi_1_1bos.html#a7e7a60f51b6712a6f1d24f9010516729a6bf5613f65a74a7f8388b26adefaef2b',1,'cherrypi::bos']]],
   ['underattack',['UnderAttack',['../structtorchcraft_1_1replayer_1_1Unit.html#a5f6cd6025bd54a25d93d8ce3afed1f49a7d72140d2ee555b8468e3e4dcf15feaa',1,'torchcraft::replayer::Unit']]],
   ['underdarkswarm',['UnderDarkSwarm',['../structtorchcraft_1_1replayer_1_1Unit.html#a5f6cd6025bd54a25d93d8ce3afed1f49a7d7d72583bb48739229dbef7c82203db',1,'torchcraft::replayer::Unit']]],

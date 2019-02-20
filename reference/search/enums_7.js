@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['scoutinggoal',['ScoutingGoal',['../namespacecherrypi.html#ae37e1b4b755d052c20326e05337db7ce',1,'cherrypi']]],
-  ['subsamplemethod',['SubsampleMethod',['../namespacecherrypi.html#a32ba27ff01921c2b9cfa083edeb1e5cd',1,'cherrypi']]]
+  ['rewardtransform',['RewardTransform',['../classcpid_1_1ESTrainer.html#a19c9ee604dbc2bf0291ec44f805f728a',1,'cpid::ESTrainer']]]
 ];

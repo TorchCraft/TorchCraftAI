@@ -105,8 +105,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5822f105d6321e260739377e09ae0241"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1TaskData.html#a5822f105d6321e260739377e09ae0241">TaskData</a> ()</td></tr>
 <tr class="separator:a5822f105d6321e260739377e09ae0241"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20ced844317244d1be96b3647ddeaf39"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1TaskData.html#a20ced844317244d1be96b3647ddeaf39">TaskData</a> (std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1Task.html">Task</a> &gt; <a class="el" href="structcherrypi_1_1TaskData.html#a2f44ac0a6e671d86c2a3056dcc75d243">task</a>, <a class="el" href="classcherrypi_1_1Module.html">Module</a> *<a class="el" href="structcherrypi_1_1TaskData.html#ac240ca8eea3a5684d42ca56a6c0bf22b">owner</a>, bool <a class="el" href="structcherrypi_1_1TaskData.html#aabe1214112709f00b96d4d2b5a0f6c51">autoRemove</a>)</td></tr>
-<tr class="separator:a20ced844317244d1be96b3647ddeaf39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91786524a9e455797a1d55999372d664"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1TaskData.html#a91786524a9e455797a1d55999372d664">TaskData</a> (std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1Task.html">Task</a> &gt; <a class="el" href="structcherrypi_1_1TaskData.html#a2f44ac0a6e671d86c2a3056dcc75d243">task</a>, <a class="el" href="classcherrypi_1_1Module.html">Module</a> *<a class="el" href="structcherrypi_1_1TaskData.html#ac240ca8eea3a5684d42ca56a6c0bf22b">owner</a>, bool <a class="el" href="structcherrypi_1_1TaskData.html#aabe1214112709f00b96d4d2b5a0f6c51">autoRemove</a>, <a class="el" href="namespacecherrypi.html#ab05e5ebd40b8067b1efffc1e08fbe299">FrameNum</a> <a class="el" href="structcherrypi_1_1TaskData.html#aeb1eb40a8c6f2c726c4f4262cbf1d8b9">creationFrame</a>)</td></tr>
+<tr class="separator:a91786524a9e455797a1d55999372d664"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -116,6 +116,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ac240ca8eea3a5684d42ca56a6c0bf22b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabe1214112709f00b96d4d2b5a0f6c51"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1TaskData.html#aabe1214112709f00b96d4d2b5a0f6c51">autoRemove</a> = true</td></tr>
 <tr class="separator:aabe1214112709f00b96d4d2b5a0f6c51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb1eb40a8c6f2c726c4f4262cbf1d8b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacecherrypi.html#ab05e5ebd40b8067b1efffc1e08fbe299">FrameNum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1TaskData.html#aeb1eb40a8c6f2c726c4f4262cbf1d8b9">creationFrame</a> = -1</td></tr>
+<tr class="separator:aeb1eb40a8c6f2c726c4f4262cbf1d8b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classcherrypi_1_1Task.html" title="The primary way for modules to publish their activity. ">Task</a> and associated owner. </p>
@@ -143,7 +145,7 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a20ced844317244d1be96b3647ddeaf39"></a>
+<a class="anchor" id="a91786524a9e455797a1d55999372d664"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -166,7 +168,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>autoRemove</em>&#160;</td>
+          <td class="paramname"><em>autoRemove</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacecherrypi.html#ab05e5ebd40b8067b1efffc1e08fbe299">FrameNum</a>&#160;</td>
+          <td class="paramname"><em>creationFrame</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -190,6 +198,18 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool cherrypi::TaskData::autoRemove = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aeb1eb40a8c6f2c726c4f4262cbf1d8b9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacecherrypi.html#ab05e5ebd40b8067b1efffc1e08fbe299">FrameNum</a> cherrypi::TaskData::creationFrame = -1</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -226,7 +246,7 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

@@ -22,6 +22,7 @@ var searchData=
   ['numgamesstarted',['numGamesStarted',['../classcherrypi_1_1PlayScriptScenario.html#a81e13dbb821a1d8b8aafe34264f5725c',1,'cherrypi::PlayScriptScenario']]],
   ['numlosses',['numLosses',['../classcherrypi_1_1model_1_1BuildOrderCount.html#a390f3ecd9eafd8302e14f297292d71d1',1,'cherrypi::model::BuildOrderCount']]],
   ['nummybases',['numMyBases',['../classcherrypi_1_1AreaInfo.html#a6d5cfa27e21e2f700167e4e7c008986c',1,'cherrypi::AreaInfo']]],
+  ['numscheduledforretry',['numScheduledForRetry',['../classcpid_1_1detail_1_1RRClientWrapper.html#a49353d086801125a56a35b3170e53717',1,'cpid::detail::RRClientWrapper']]],
   ['numupccommands',['numUpcCommands',['../namespacecherrypi.html#afffb62e32d862a8fc939c4d88cab3fea',1,'cherrypi']]],
   ['numwins',['numWins',['../classcherrypi_1_1model_1_1BuildOrderCount.html#a9a860ffa237c73bf902d4c3209081338',1,'cherrypi::model::BuildOrderCount']]]
 ];

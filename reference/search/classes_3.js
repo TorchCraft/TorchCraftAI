@@ -8,5 +8,6 @@ var searchData=
   ['defaultautobuildtask',['DefaultAutoBuildTask',['../classcherrypi_1_1DefaultAutoBuildTask.html',1,'cherrypi']]],
   ['defoggerfeaturizer',['DefoggerFeaturizer',['../classcherrypi_1_1DefoggerFeaturizer.html',1,'cherrypi']]],
   ['discretemaxsampler',['DiscreteMaxSampler',['../classcpid_1_1DiscreteMaxSampler.html',1,'cpid']]],
-  ['dstream',['dstream',['../classcommon_1_1zstd_1_1dstream.html',1,'common::zstd']]]
+  ['dstream',['dstream',['../classcommon_1_1zstd_1_1dstream.html',1,'common::zstd']]],
+  ['dummytacticsmodule',['DummyTacticsModule',['../classcherrypi_1_1DummyTacticsModule.html',1,'cherrypi']]]
 ];

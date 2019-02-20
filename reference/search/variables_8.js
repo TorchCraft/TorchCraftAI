@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['id',['id',['../structcherrypi_1_1Area.html#aef7aa4e8d9895a8c617ee8db5e9d8713',1,'cherrypi::Area::id()'],['../structcherrypi_1_1Unit.html#acf03d67ca94d4f884d471f48c12d0635',1,'cherrypi::Unit::id()'],['../structtorchcraft_1_1replayer_1_1Unit.html#ac1afbe43038d52e0f3dc13111d0f68bc',1,'torchcraft::replayer::Unit::id()'],['../classtorchcraft_1_1replayer_1_1detail_1_1UnitDiff.html#a9cf6f3432f59e14a065bafde5575a023',1,'torchcraft::replayer::detail::UnitDiff::id()'],['../structtorchcraft_1_1State_1_1PlayerInfo.html#a90f377669d80a600143df8c6ad0b9cfc',1,'torchcraft::State::PlayerInfo::id()']]],
+  ['id',['id',['../structcherrypi_1_1Area.html#aef7aa4e8d9895a8c617ee8db5e9d8713',1,'cherrypi::Area::id()'],['../structcherrypi_1_1Unit.html#acf03d67ca94d4f884d471f48c12d0635',1,'cherrypi::Unit::id()'],['../structcpid_1_1Cpid2kWorkerInfo.html#afb96de2ecba5501db8b83ee46e46f135',1,'cpid::Cpid2kWorkerInfo::id()'],['../structtorchcraft_1_1replayer_1_1Unit.html#ac1afbe43038d52e0f3dc13111d0f68bc',1,'torchcraft::replayer::Unit::id()'],['../classtorchcraft_1_1replayer_1_1detail_1_1UnitDiff.html#a9cf6f3432f59e14a065bafde5575a023',1,'torchcraft::replayer::detail::UnitDiff::id()'],['../structtorchcraft_1_1State_1_1PlayerInfo.html#a90f377669d80a600143df8c6ad0b9cfc',1,'torchcraft::State::PlayerInfo::id()']]],
   ['image',['image',['../classtorchcraft_1_1State.html#a910502deec089be4494faf7f7b30e1ef',1,'torchcraft::State']]],
   ['image_5fsize',['image_size',['../classtorchcraft_1_1State.html#a519f00fed30ccefa3df8bae3d5b424df',1,'torchcraft::State']]],
   ['img_5fmode',['img_mode',['../classtorchcraft_1_1State.html#a09f2e55e0e48c669052bf98d926a93cc',1,'torchcraft::State']]],
@@ -12,7 +12,11 @@ var searchData=
   ['infestation',['Infestation',['../namespacecherrypi_1_1buildtypes.html#acc4a5f334d5a0bb4d3c2df8c98e9f2fe',1,'cherrypi::buildtypes']]],
   ['init_5f',['init_',['../classcommon_1_1DataReader.html#a01df7632beae2f0132dcf9f84af61da5',1,'common::DataReader']]],
   ['initial_5fmap',['initial_map',['../structtorchcraft_1_1Client_1_1Options.html#a0416a37cf28092034da5e56bbdf82b45',1,'torchcraft::Client::Options']]],
+  ['initialallycount',['initialAllyCount',['../structcherrypi_1_1RewardCombat.html#a4d2d5eeb2c46f39df67181fc0f45d67b',1,'cherrypi::RewardCombat']]],
+  ['initialallyhp',['initialAllyHp',['../structcherrypi_1_1RewardCombat.html#af48dfbb9237a059817922b6ee66bfb68',1,'cherrypi::RewardCombat']]],
   ['initialbuildstate',['initialBuildState',['../classcherrypi_1_1AutoBuildTask.html#ace929b50525105b9abe183cced61a9fe',1,'cherrypi::AutoBuildTask']]],
+  ['initialenemycount',['initialEnemyCount',['../structcherrypi_1_1RewardCombat.html#adc12749121c8e2938b42327f80319c0d',1,'cherrypi::RewardCombat']]],
+  ['initialenemyhp',['initialEnemyHp',['../structcherrypi_1_1RewardCombat.html#a732b1e04c9bb64222c9ca5d16d970a5a',1,'cherrypi::RewardCombat']]],
   ['initialized_5f',['initialized_',['../classcherrypi_1_1BasePlayer.html#a28b6774bc172a6eebed5a9d6d1674605',1,'cherrypi::BasePlayer']]],
   ['inprodsupply',['inprodSupply',['../structcherrypi_1_1autobuild_1_1BuildState.html#aee6d249c05b32213eea47614abe67ca0',1,'cherrypi::autobuild::BuildState']]],
   ['insertionmutex_5f',['insertionMutex_',['../classcpid_1_1ESTrainer.html#aa225c92f797ec01903e0d742d0203d59',1,'cpid::ESTrainer::insertionMutex_()'],['../classcpid_1_1Evaluator.html#a93b4597db085ce68130659864c9a57da',1,'cpid::Evaluator::insertionMutex_()']]],

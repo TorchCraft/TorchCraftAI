@@ -103,6 +103,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p><code>#include &lt;<a class="el" href="tactics_8h_source.html">tactics.h</a>&gt;</code></p>
 
 <p>Inherits <a class="el" href="classcherrypi_1_1Module.html">cherrypi::Module</a>.</p>
+
+<p>Inherited by <a class="el" href="classcherrypi_1_1TacticsAlwaysFightModule.html">cherrypi::TacticsAlwaysFightModule</a>.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -146,6 +148,8 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:aa1cf47dc76f9620d2c9ae018f4643272"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TacticsModule.html#aa1cf47dc76f9620d2c9ae018f4643272">processOrders</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *state, <a class="el" href="structcherrypi_1_1TacticsGroup.html">TacticsGroup</a> &amp;g, int srcUpcId, double deleteScore, double moveScore, std::vector&lt; <a class="el" href="structcherrypi_1_1Unit.html">Unit</a> * &gt; &amp;fightUnits, std::vector&lt; <a class="el" href="structcherrypi_1_1Unit.html">Unit</a> * &gt; &amp;fleeUnits, std::vector&lt; <a class="el" href="structcherrypi_1_1Unit.html">Unit</a> * &gt; &amp;leftoverWorkers, std::unordered_set&lt; <a class="el" href="structcherrypi_1_1Unit.html">Unit</a> * &gt; &amp;wasInAGroup)</td></tr>
 <tr class="memdesc:aa1cf47dc76f9620d2c9ae018f4643272"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes a group and the fight/flee assignments and issues commands.  <a href="#aa1cf47dc76f9620d2c9ae018f4643272">More...</a><br /></td></tr>
 <tr class="separator:aa1cf47dc76f9620d2c9ae018f4643272"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac653c1917279c6d031d157fc8f8d63e9"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TacticsModule.html#ac653c1917279c6d031d157fc8f8d63e9">alwaysFight</a> ()</td></tr>
+<tr class="separator:ac653c1917279c6d031d157fc8f8d63e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classcherrypi_1_1Module"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classcherrypi_1_1Module')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classcherrypi_1_1Module.html">cherrypi::Module</a></td></tr>
 <tr class="memitem:a9de4e4f5d3c0006910e5fb132c4662e4 inherit pro_methods_classcherrypi_1_1Module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Module.html#a9de4e4f5d3c0006910e5fb132c4662e4">Module</a> ()</td></tr>
 <tr class="separator:a9de4e4f5d3c0006910e5fb132c4662e4 inherit pro_methods_classcherrypi_1_1Module"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,6 +202,29 @@ Additional Inherited Members</h2></td></tr>
 </ul>
 <p>Finally, outputs a UPC for each group of units indicating where they should go or what they should fight. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ac653c1917279c6d031d157fc8f8d63e9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool cherrypi::TacticsModule::alwaysFight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a95b154587a35a28c65778dc5df08201d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -840,7 +867,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

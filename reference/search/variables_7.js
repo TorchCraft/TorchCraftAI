@@ -38,6 +38,7 @@ var searchData=
   ['hassunken',['hasSunken',['../classcherrypi_1_1ABBO3BasePoolLings.html#a5cf17363c00777b8b67d8ea0e506b17b',1,'cherrypi::ABBO3BasePoolLings::hasSunken()'],['../classcherrypi_1_1ABBOzvp10hatch.html#a5b8756da85b08d69f5dba43e89708411',1,'cherrypi::ABBOzvp10hatch::hasSunken()'],['../classcherrypi_1_1ABBOzvpmutas.html#ae41777b3c3413b9fb0890aa8f5e1005b',1,'cherrypi::ABBOzvpmutas::hasSunken()'],['../classcherrypi_1_1ABBOzvtMacro.html#a94f89f6d4afdcf993dc87db985770069',1,'cherrypi::ABBOzvtMacro::hasSunken()']]],
   ['healing',['Healing',['../namespacecherrypi_1_1buildtypes.html#ae4c7a7543672bf332ef7ee7d56e49288',1,'cherrypi::buildtypes']]],
   ['health',['health',['../structtorchcraft_1_1replayer_1_1Unit.html#a968b2fd0b1fab31d3ad581f3a3f3eb55',1,'torchcraft::replayer::Unit']]],
+  ['heatmapsmetadata_5f',['heatmapsMetadata_',['../structcherrypi_1_1CherryVisDumperModule_1_1TraceData.html#aa083906c8a3781fc66fad34e7b2a3196',1,'cherrypi::CherryVisDumperModule::TraceData']]],
   ['height',['height',['../structcherrypi_1_1Tile.html#a0fba4fddc30dc3c484e62e88849d42ec',1,'cherrypi::Tile::height()'],['../classtorchcraft_1_1replayer_1_1Frame.html#ab19106ef6d61703593672f4e442662f9',1,'torchcraft::replayer::Frame::height()'],['../structtorchcraft_1_1replayer_1_1Map.html#a156a9aee0c8b97f4f9b29049080aaa30',1,'torchcraft::replayer::Map::height()'],['../namespacetorchcraft_1_1BW_1_1data.html#ab9ee80c8dd8a49d82af0bf192c83a45f',1,'torchcraft::BW::data::Height()']]],
   ['hiddenunits_5f',['hiddenUnits_',['../classcherrypi_1_1UnitsInfo.html#ad2313f51388535c6aca6003bf2747447',1,'cherrypi::UnitsInfo']]],
   ['hideunits_5f',['hideUnits_',['../classcherrypi_1_1UnitsInfo.html#a3c3214bb312e1b4b2e181d25c35d28d9',1,'cherrypi::UnitsInfo']]],
@@ -46,6 +47,7 @@ var searchData=
   ['hitprobranged',['HitProbRanged',['../namespacetorchcraft_1_1BW.html#a3a17eba17fd6625b708f3bd74bbda12c',1,'torchcraft::BW']]],
   ['hitprobrangeduphilldoodad',['HitProbRangedUphillDoodad',['../namespacetorchcraft_1_1BW.html#ac87a2a239247d6e8ff52aff953af3356',1,'torchcraft::BW']]],
   ['homeposition',['homePosition',['../classcherrypi_1_1ABBOBase.html#a36068f589067d012e50fc1e72b127316',1,'cherrypi::ABBOBase']]],
+  ['host',['host',['../structcpid_1_1Cpid2kWorkerInfo.html#a667e9f2ad86ada94772a44a6296341df',1,'cpid::Cpid2kWorkerInfo']]],
   ['hp',['hp',['../structcherrypi_1_1CombatSim_1_1SimUnit.html#aa21fd2cfe3f31e3caa1a23e0d01cf8f4',1,'cherrypi::CombatSim::SimUnit::hp()'],['../structcherrypi_1_1CombatMicroModule_1_1HealthInfo.html#a6a2690fbd088ded0e3281e468654ce97',1,'cherrypi::CombatMicroModule::HealthInfo::hp()']]],
   ['hurtsunkens',['hurtSunkens',['../classcherrypi_1_1ABBOzvp10hatch.html#a4ead3da7e4cdf6a7e13895c2726c3b52',1,'cherrypi::ABBOzvp10hatch::hurtSunkens()'],['../classcherrypi_1_1ABBOzvpmutas.html#a8b020e27368f245231b3be92d4f85e87',1,'cherrypi::ABBOzvpmutas::hurtSunkens()']]]
 ];

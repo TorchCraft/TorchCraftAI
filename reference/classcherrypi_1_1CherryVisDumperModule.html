@@ -89,6 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
@@ -108,8 +109,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule_1_1Logger.html">Logger</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1CherryVisDumperModule_1_1TraceData.html">TraceData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1CherryVisDumperModule_1_1TreeData.html">TreeData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule_1_1TreeNode.html">TreeNode</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1CherryVisDumperModule_1_1UnitData.html">UnitData</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a37c60fefda8540ada19fea2c0d3a1934"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a37c60fefda8540ada19fea2c0d3a1934">Dumpable</a> = std::variant&lt; <a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *, <a class="el" href="namespacecherrypi.html#a0f262d8316a4fb34411d8743238258cf">Position</a>, int, float, std::string &gt;</td></tr>
+<tr class="separator:a37c60fefda8540ada19fea2c0d3a1934"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -123,8 +137,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a24af1767050d1f9ab4bb9cd91b0d9d0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab99da1772de414fdfb05f5d9423688b5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#ab99da1772de414fdfb05f5d9423688b5">onGameEnd</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *s) override</td></tr>
 <tr class="separator:ab99da1772de414fdfb05f5d9423688b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb6b9335b75743e4472523d74b1c69ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#abb6b9335b75743e4472523d74b1c69ec">handleLog</a> (google::LogSeverity severity, const char *full_filename, std::string message)</td></tr>
-<tr class="separator:abb6b9335b75743e4472523d74b1c69ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c998f5e0b6cb72d395b7ada23ae10b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1CherryVisDumperModule_1_1Logger.html">Logger</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a2c998f5e0b6cb72d395b7ada23ae10b1">getGlobalLogger</a> ()</td></tr>
+<tr class="separator:a2c998f5e0b6cb72d395b7ada23ae10b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0ac1cbe4d52ad76a4cbfc3c173ab612"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1CherryVisDumperModule_1_1Logger.html">Logger</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#ab0ac1cbe4d52ad76a4cbfc3c173ab612">getUnitLogger</a> (<a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *u)</td></tr>
+<tr class="separator:ab0ac1cbe4d52ad76a4cbfc3c173ab612"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d24283fa83f8ba41a75d5320bfe418a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a9d24283fa83f8ba41a75d5320bfe418a">onDrawCommand</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *s, tc::Client::Command const &amp;command)</td></tr>
+<tr class="separator:a9d24283fa83f8ba41a75d5320bfe418a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e9bd865cdcfb4466e558ff2b4d06b79"><td class="memTemplParams" colspan="2">template&lt;typename T , typename V , typename W &gt; </td></tr>
+<tr class="memitem:a8e9bd865cdcfb4466e558ff2b4d06b79"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a8e9bd865cdcfb4466e558ff2b4d06b79">addTree</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *s, std::string const &amp;<a class="el" href="classcherrypi_1_1Module.html#ad7300b77897752ed01933510e3ce70aa">name</a>, T dump_node, V get_children, W root)</td></tr>
+<tr class="separator:a8e9bd865cdcfb4466e558ff2b4d06b79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaef546c69332b507729add7b78281f0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#aaef546c69332b507729add7b78281f0b">dumpTensorsSummary</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *s, std::unordered_map&lt; std::string, ag::Variant &gt; const &amp;tensors)</td></tr>
+<tr class="separator:aaef546c69332b507729add7b78281f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5aa63e9a5f2cb75c406f8b03a1042b7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a5aa63e9a5f2cb75c406f8b03a1042b7d">dumpTerrainHeatmaps</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *s, std::unordered_map&lt; std::string, ag::Variant &gt; const &amp;tensors, std::array&lt; int, 2 &gt; const &amp;topLeftPixel, std::array&lt; float, 2 &gt; const &amp;scalingToPixels)</td></tr>
+<tr class="memdesc:a5aa63e9a5f2cb75c406f8b03a1042b7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dumps a heatmap that can be displayed as overlay of the terrain.  <a href="#a5aa63e9a5f2cb75c406f8b03a1042b7d">More...</a><br /></td></tr>
+<tr class="separator:a5aa63e9a5f2cb75c406f8b03a1042b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacf43d13ce7ad7caac87c33ba2b50571"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#aacf43d13ce7ad7caac87c33ba2b50571">dumpGameValue</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *s, std::string const &amp;key, float value)</td></tr>
+<tr class="separator:aacf43d13ce7ad7caac87c33ba2b50571"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcherrypi_1_1Module"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcherrypi_1_1Module')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcherrypi_1_1Module.html">cherrypi::Module</a></td></tr>
 <tr class="memitem:a3f87ef741ff90f5ed09c3de245afb035 inherit pub_methods_classcherrypi_1_1Module"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Module.html#a3f87ef741ff90f5ed09c3de245afb035">~Module</a> ()=default</td></tr>
 <tr class="separator:a3f87ef741ff90f5ed09c3de245afb035 inherit pub_methods_classcherrypi_1_1Module"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,8 +180,18 @@ Static Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:acb76899190cc3a8720cc4b14c30ac658"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#acb76899190cc3a8720cc4b14c30ac658">getUnitTaskId</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *s, <a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *unit)</td></tr>
 <tr class="separator:acb76899190cc3a8720cc4b14c30ac658"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd11a7fe54d0d4956c0b6b5b28b07ac1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#acd11a7fe54d0d4956c0b6b5b28b07ac1">getBoardValueAsString</a> (<a class="el" href="classcherrypi_1_1Blackboard.html#a640ab5dfa09dcfadfcf994d6606ec37f">Blackboard::Data</a> const &amp;value)</td></tr>
+<tr class="memitem:acd11a7fe54d0d4956c0b6b5b28b07ac1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#acd11a7fe54d0d4956c0b6b5b28b07ac1">getBoardValueAsString</a> (<a class="el" href="classcherrypi_1_1Blackboard.html#a97361313d1b02701a70edf8db4595d67">Blackboard::Data</a> const &amp;value)</td></tr>
 <tr class="separator:acd11a7fe54d0d4956c0b6b5b28b07ac1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50d13d0d242b5a034562de7c224fac57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a50d13d0d242b5a034562de7c224fac57">dumpGameUpcs</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *s)</td></tr>
+<tr class="separator:a50d13d0d242b5a034562de7c224fac57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6026800684c31548032c9214a18b76e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#af6026800684c31548032c9214a18b76e">writeTrees</a> (std::string const &amp;dumpDirectory)</td></tr>
+<tr class="separator:af6026800684c31548032c9214a18b76e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fe899aa2488e89389dd70c4436a5f73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a7fe899aa2488e89389dd70c4436a5f73">writeTensors</a> (std::string const &amp;dumpDirectory)</td></tr>
+<tr class="separator:a7fe899aa2488e89389dd70c4436a5f73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a7220d1f64873389322260261fbe436"><td class="memItemLeft" align="right" valign="top">nlohmann::json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a2a7220d1f64873389322260261fbe436">getTensorSummary</a> (std::string const &amp;<a class="el" href="classcherrypi_1_1Module.html#ad7300b77897752ed01933510e3ce70aa">name</a>, at::Tensor const &amp;t)</td></tr>
+<tr class="separator:a2a7220d1f64873389322260261fbe436"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea4c85981497e22bfdbdefa2f3fc6e7f"><td class="memItemLeft" align="right" valign="top">nlohmann::json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#aea4c85981497e22bfdbdefa2f3fc6e7f">getTensor1d</a> (at::Tensor const &amp;t)</td></tr>
+<tr class="separator:aea4c85981497e22bfdbdefa2f3fc6e7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classcherrypi_1_1Module"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classcherrypi_1_1Module')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classcherrypi_1_1Module.html">cherrypi::Module</a></td></tr>
 <tr class="memitem:a9de4e4f5d3c0006910e5fb132c4662e4 inherit pro_methods_classcherrypi_1_1Module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Module.html#a9de4e4f5d3c0006910e5fb132c4662e4">Module</a> ()</td></tr>
 <tr class="separator:a9de4e4f5d3c0006910e5fb132c4662e4 inherit pro_methods_classcherrypi_1_1Module"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,22 +200,8 @@ Protected Member Functions</h2></td></tr>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a05d2e098d035061fc066a2faf87f9a56"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a05d2e098d035061fc066a2faf87f9a56">replayFileName_</a></td></tr>
 <tr class="separator:a05d2e098d035061fc066a2faf87f9a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6a138c6eccb220ab345295120eb3630"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1Task.html">Task</a> &gt;, int32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#ad6a138c6eccb220ab345295120eb3630">taskToId_</a></td></tr>
-<tr class="separator:ad6a138c6eccb220ab345295120eb3630"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0fb99a544fa5c5ba77aa14dc85e9ebb"><td class="memItemLeft" align="right" valign="top">std::vector&lt; nlohmann::json &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#ae0fb99a544fa5c5ba77aa14dc85e9ebb">tasks_</a></td></tr>
-<tr class="separator:ae0fb99a544fa5c5ba77aa14dc85e9ebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b37d8ce37f3cbea663f6dadb7838aa9"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a4b37d8ce37f3cbea663f6dadb7838aa9">boardKnownValues_</a></td></tr>
-<tr class="separator:a4b37d8ce37f3cbea663f6dadb7838aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaec560ebb407e813231cdfb0ddac146a"><td class="memItemLeft" align="right" valign="top">nlohmann::json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#aaec560ebb407e813231cdfb0ddac146a">boardUpdates_</a></td></tr>
-<tr class="separator:aaec560ebb407e813231cdfb0ddac146a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0271ea2d6b8e8c2339bd4f3f1b7e8de8"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="namespacecherrypi.html#ab2a03a82ec853df1994f92ca8b3b36b4">UnitId</a>, <a class="el" href="structcherrypi_1_1CherryVisDumperModule_1_1UnitData.html">UnitData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a0271ea2d6b8e8c2339bd4f3f1b7e8de8">unitsInfos_</a></td></tr>
-<tr class="separator:a0271ea2d6b8e8c2339bd4f3f1b7e8de8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08c8feeefd237ffa710f2fdcd3fb463e"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, nlohmann::json &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a08c8feeefd237ffa710f2fdcd3fb463e">unitsUpdates_</a></td></tr>
-<tr class="separator:a08c8feeefd237ffa710f2fdcd3fb463e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec1a68e9763456f677b247d71d25107d"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::vector&lt; nlohmann::json &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#aec1a68e9763456f677b247d71d25107d">unitsFirstSeen_</a></td></tr>
-<tr class="separator:aec1a68e9763456f677b247d71d25107d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2dedf2db303a23079ad8b601de4f8fc"><td class="memItemLeft" align="right" valign="top">std::vector&lt; nlohmann::json &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#ac2dedf2db303a23079ad8b601de4f8fc">logs_</a></td></tr>
-<tr class="separator:ac2dedf2db303a23079ad8b601de4f8fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a474b16ba2868acbca21c6da82bacf98b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structcherrypi_1_1CherryVisDumperModule_1_1TraceData.html">TraceData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a474b16ba2868acbca21c6da82bacf98b">trace_</a></td></tr>
+<tr class="separator:a474b16ba2868acbca21c6da82bacf98b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ae4f43c58eb54c21e6e4c39b21feefa"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classcherrypi_1_1CherryVisLogSink.html">CherryVisLogSink</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a0ae4f43c58eb54c21e6e4c39b21feefa">logSink_</a></td></tr>
 <tr class="separator:a0ae4f43c58eb54c21e6e4c39b21feefa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classcherrypi_1_1Module"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcherrypi_1_1Module')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcherrypi_1_1Module.html">cherrypi::Module</a></td></tr>
@@ -188,7 +212,20 @@ Protected Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Records bot internal state and dumps it to a file readable by CherryVis. </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a37c60fefda8540ada19fea2c0d3a1934"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classcherrypi_1_1CherryVisDumperModule.html#a37c60fefda8540ada19fea2c0d3a1934">cherrypi::CherryVisDumperModule::Dumpable</a> =  std::variant&lt;<a class="el" href="structcherrypi_1_1Unit.html">Unit</a>*, <a class="el" href="namespacecherrypi.html#a0f262d8316a4fb34411d8743238258cf">Position</a>, int, float, std::string&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ae8d6567980890d2781e135fe6c8de239"></a>
 <div class="memitem">
 <div class="memproto">
@@ -213,6 +250,188 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a8e9bd865cdcfb4466e558ff2b4d06b79"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename V , typename W &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::CherryVisDumperModule::addTree </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>dump_node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">V&#160;</td>
+          <td class="paramname"><em>get_children</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">W&#160;</td>
+          <td class="paramname"><em>root</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a50d13d0d242b5a034562de7c224fac57"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::CherryVisDumperModule::dumpGameUpcs </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aacf43d13ce7ad7caac87c33ba2b50571"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::CherryVisDumperModule::dumpGameValue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aaef546c69332b507729add7b78281f0b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::CherryVisDumperModule::dumpTensorsSummary </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unordered_map&lt; std::string, ag::Variant &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>tensors</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5aa63e9a5f2cb75c406f8b03a1042b7d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::CherryVisDumperModule::dumpTerrainHeatmaps </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unordered_map&lt; std::string, ag::Variant &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>tensors</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::array&lt; int, 2 &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>topLeftPixel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::array&lt; float, 2 &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>scalingToPixels</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dumps a heatmap that can be displayed as overlay of the terrain. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="acd11a7fe54d0d4956c0b6b5b28b07ac1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -223,7 +442,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">std::string cherrypi::CherryVisDumperModule::getBoardValueAsString </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcherrypi_1_1Blackboard.html#a640ab5dfa09dcfadfcf994d6606ec37f">Blackboard::Data</a> const &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1Blackboard.html#a97361313d1b02701a70edf8db4595d67">Blackboard::Data</a> const &amp;&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -231,6 +450,111 @@ Protected Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2c998f5e0b6cb72d395b7ada23ae10b1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcherrypi_1_1CherryVisDumperModule_1_1Logger.html">Logger</a>&amp; cherrypi::CherryVisDumperModule::getGlobalLogger </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aea4c85981497e22bfdbdefa2f3fc6e7f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">nlohmann::json cherrypi::CherryVisDumperModule::getTensor1d </td>
+          <td>(</td>
+          <td class="paramtype">at::Tensor const &amp;&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2a7220d1f64873389322260261fbe436"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">nlohmann::json cherrypi::CherryVisDumperModule::getTensorSummary </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">at::Tensor const &amp;&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab0ac1cbe4d52ad76a4cbfc3c173ab612"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcherrypi_1_1CherryVisDumperModule_1_1Logger.html">Logger</a>&amp; cherrypi::CherryVisDumperModule::getUnitLogger </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *&#160;</td>
+          <td class="paramname"><em>u</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -271,27 +595,21 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abb6b9335b75743e4472523d74b1c69ec"></a>
+<a class="anchor" id="a9d24283fa83f8ba41a75d5320bfe418a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cherrypi::CherryVisDumperModule::handleLog </td>
+          <td class="memname">void cherrypi::CherryVisDumperModule::onDrawCommand </td>
           <td>(</td>
-          <td class="paramtype">google::LogSeverity&#160;</td>
-          <td class="paramname"><em>severity</em>, </td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>full_filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>message</em>&#160;</td>
+          <td class="paramtype">tc::Client::Command const &amp;&#160;</td>
+          <td class="paramname"><em>command</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -439,67 +757,55 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a7fe899aa2488e89389dd70c4436a5f73"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::CherryVisDumperModule::writeTensors </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>dumpDirectory</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af6026800684c31548032c9214a18b76e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::CherryVisDumperModule::writeTrees </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>dumpDirectory</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a4b37d8ce37f3cbea663f6dadb7838aa9"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt;std::string, std::string&gt; cherrypi::CherryVisDumperModule::boardKnownValues_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aaec560ebb407e813231cdfb0ddac146a"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">nlohmann::json cherrypi::CherryVisDumperModule::boardUpdates_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac2dedf2db303a23079ad8b601de4f8fc"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;nlohmann::json&gt; cherrypi::CherryVisDumperModule::logs_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a0ae4f43c58eb54c21e6e4c39b21feefa"></a>
 <div class="memitem">
 <div class="memproto">
@@ -540,7 +846,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae0fb99a544fa5c5ba77aa14dc85e9ebb"></a>
+<a class="anchor" id="a474b16ba2868acbca21c6da82bacf98b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -548,87 +854,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;nlohmann::json&gt; cherrypi::CherryVisDumperModule::tasks_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ad6a138c6eccb220ab345295120eb3630"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt;std::shared_ptr&lt;<a class="el" href="classcherrypi_1_1Task.html">Task</a>&gt;, int32_t&gt; cherrypi::CherryVisDumperModule::taskToId_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aec1a68e9763456f677b247d71d25107d"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt;std::string , std::vector&lt;nlohmann::json&gt; &gt; cherrypi::CherryVisDumperModule::unitsFirstSeen_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a0271ea2d6b8e8c2339bd4f3f1b7e8de8"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt;<a class="el" href="namespacecherrypi.html#ab2a03a82ec853df1994f92ca8b3b36b4">UnitId</a>, <a class="el" href="structcherrypi_1_1CherryVisDumperModule_1_1UnitData.html">UnitData</a>&gt; cherrypi::CherryVisDumperModule::unitsInfos_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a08c8feeefd237ffa710f2fdcd3fb463e"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt;std::string , nlohmann::json&gt; cherrypi::CherryVisDumperModule::unitsUpdates_</td>
+          <td class="memname"><a class="el" href="structcherrypi_1_1CherryVisDumperModule_1_1TraceData.html">TraceData</a> cherrypi::CherryVisDumperModule::trace_</td>
         </tr>
       </table>
   </td>
@@ -647,7 +873,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

@@ -8,6 +8,7 @@ var searchData=
   ['only_5fconsider_5ftypes',['only_consider_types',['../structtorchcraft_1_1Client_1_1Options.html#a4a3aa99a4e20547ed50ad26a2f9144ec',1,'torchcraft::Client::Options']]],
   ['onpolicy_5f',['onPolicy_',['../classcpid_1_1ESTrainer.html#aade56a84e626535de48e07eb217d3b1b',1,'cpid::ESTrainer']]],
   ['openbw_5fcommand_5fend',['OPENBW_COMMAND_END',['../namespacetorchcraft_1_1BW.html#aa46c00cb232c298c2f768f097a40e3f4',1,'torchcraft::BW']]],
+  ['openingcomplete',['openingComplete',['../classcherrypi_1_1ABBOpvp2gatedt.html#a4b490666fe87c70e2b3a375b860eda2c',1,'cherrypi::ABBOpvp2gatedt']]],
   ['opponentname',['opponentName',['../structcherrypi_1_1bos_1_1StaticData.html#af610f2907acafa9bdadf527331b64645',1,'cherrypi::bos::StaticData']]],
   ['optical_5fflare',['Optical_Flare',['../namespacecherrypi_1_1buildtypes.html#a8b4ff7ccd45c59de16af60c37acbbe1a',1,'cherrypi::buildtypes']]],
   ['optim_5f',['optim_',['../classcpid_1_1Trainer.html#a48445f0e117aaba61c32e0cbf317d253',1,'cpid::Trainer']]],

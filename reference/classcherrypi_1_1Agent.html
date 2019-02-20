@@ -92,7 +92,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classcherrypi_1_1Agent-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">cherrypi::Agent Class Reference</div>  </div>
@@ -136,6 +135,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a74d1254a8beb4706f01271bc955ec4f8"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Agent.html#a74d1254a8beb4706f01271bc955ec4f8">smartMove</a> (<a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *tgt)</td></tr>
 <tr class="memdesc:a74d1254a8beb4706f01271bc955ec4f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience method for issuing a threat-aware move UPC.  <a href="#a74d1254a8beb4706f01271bc955ec4f8">More...</a><br /></td></tr>
 <tr class="separator:a74d1254a8beb4706f01271bc955ec4f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d82702c3e0cebb4f547b3185ac0295d"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Agent.html#a5d82702c3e0cebb4f547b3185ac0295d">tryCastSpellOnUnit</a> (const <a class="el" href="structcherrypi_1_1BuildType.html">BuildType</a> *spell, std::function&lt; double(<a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *const)&gt; scoring, double minimumScore)</td></tr>
+<tr class="memdesc:a5d82702c3e0cebb4f547b3185ac0295d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempt to cast a spell targeting a unit.  <a href="#a5d82702c3e0cebb4f547b3185ac0295d">More...</a><br /></td></tr>
+<tr class="separator:a5d82702c3e0cebb4f547b3185ac0295d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc1d7770882e8d614a70cbe716b746cc"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Agent.html#acc1d7770882e8d614a70cbe716b746cc">tryCastSpellOnArea</a> (const <a class="el" href="structcherrypi_1_1BuildType.html">BuildType</a> *spell, double areaWidth, double areaHeight, std::function&lt; double(<a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *const)&gt; scoring, double minimumScore, std::function&lt; <a class="el" href="namespacecherrypi.html#a0f262d8316a4fb34411d8743238258cf">Position</a>(<a class="el" href="namespacecherrypi.html#a0f262d8316a4fb34411d8743238258cf">Position</a> input)&gt; positionTransform=[](auto p){return p;})</td></tr>
+<tr class="memdesc:acc1d7770882e8d614a70cbe716b746cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempt to cast a spell targeting an area.  <a href="#acc1d7770882e8d614a70cbe716b746cc">More...</a><br /></td></tr>
+<tr class="separator:acc1d7770882e8d614a70cbe716b746cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -148,6 +153,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a4169d3754752efffe99829b475a19342"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Agent.html#a4169d3754752efffe99829b475a19342">state</a></td></tr>
 <tr class="memdesc:a4169d3754752efffe99829b475a19342"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current game state.  <a href="#a4169d3754752efffe99829b475a19342">More...</a><br /></td></tr>
 <tr class="separator:a4169d3754752efffe99829b475a19342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08f90b7aececc2638483c8f3b29785a1"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1Behavior.html">Behavior</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Agent.html#a08f90b7aececc2638483c8f3b29785a1">behaviorDelete</a></td></tr>
+<tr class="memdesc:a08f90b7aececc2638483c8f3b29785a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Behaviors to perform when receiving a Delete UPC.  <a href="#a08f90b7aececc2638483c8f3b29785a1">More...</a><br /></td></tr>
+<tr class="separator:a08f90b7aececc2638483c8f3b29785a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f7ab6aa14f613712e96b733b57d6acf"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1Behavior.html">Behavior</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Agent.html#a0f7ab6aa14f613712e96b733b57d6acf">behaviorFlee</a></td></tr>
+<tr class="memdesc:a0f7ab6aa14f613712e96b733b57d6acf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Behaviors to perform when receiving a Flee UPC.  <a href="#a0f7ab6aa14f613712e96b733b57d6acf">More...</a><br /></td></tr>
+<tr class="separator:a0f7ab6aa14f613712e96b733b57d6acf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acca923edda54db9a0c51a6a9e95a977f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structcherrypi_1_1MicroAction.html">MicroAction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Agent.html#acca923edda54db9a0c51a6a9e95a977f">currentAction</a></td></tr>
 <tr class="memdesc:acca923edda54db9a0c51a6a9e95a977f"><td class="mdescLeft">&#160;</td><td class="mdescRight">What action has been selected for this unit by a <a class="el" href="classcherrypi_1_1Behavior.html" title="A Behavior is a self-contained situational micro rule. ">Behavior</a>?  <a href="#acca923edda54db9a0c51a6a9e95a977f">More...</a><br /></td></tr>
 <tr class="separator:acca923edda54db9a0c51a6a9e95a977f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -210,13 +221,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:af5fc825c2080ca37479d8d42a2068b55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Agent.html#af5fc825c2080ca37479d8d42a2068b55">preMicro</a> ()</td></tr>
 <tr class="memdesc:af5fc825c2080ca37479d8d42a2068b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepare the unit for micro.  <a href="#af5fc825c2080ca37479d8d42a2068b55">More...</a><br /></td></tr>
 <tr class="separator:af5fc825c2080ca37479d8d42a2068b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:aa3319449aacaf4d64f79c83085d164da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1BehaviorDelete.html">BehaviorDelete</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Agent.html#aa3319449aacaf4d64f79c83085d164da">behaviorDelete</a></td></tr>
-<tr class="separator:aa3319449aacaf4d64f79c83085d164da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa59c7782daecad28ae99b28dc096e31"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1BehaviorFlee.html">BehaviorFlee</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Agent.html#aaa59c7782daecad28ae99b28dc096e31">behaviorFlee</a></td></tr>
-<tr class="separator:aaa59c7782daecad28ae99b28dc096e31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An <a class="el" href="classcherrypi_1_1Agent.html" title="An Agent represents the micromanagement state of one of our units. ">Agent</a> represents the micromanagement state of one of our units. </p>
@@ -450,6 +454,94 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="acc1d7770882e8d614a70cbe716b746cc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a> &gt; cherrypi::Agent::tryCastSpellOnArea </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcherrypi_1_1BuildType.html">BuildType</a> *&#160;</td>
+          <td class="paramname"><em>spell</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>areaWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>areaHeight</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; double(<a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *const)&gt;&#160;</td>
+          <td class="paramname"><em>scoring</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>minimumScore</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; <a class="el" href="namespacecherrypi.html#a0f262d8316a4fb34411d8743238258cf">Position</a>(<a class="el" href="namespacecherrypi.html#a0f262d8316a4fb34411d8743238258cf">Position</a> input)&gt;&#160;</td>
+          <td class="paramname"><em>positionTransform</em> = <code>[](auto&#160;p)&#160;{&#160;return&#160;p;&#160;}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attempt to cast a spell targeting an area. </p>
+<p>Returns a UPC if an acceptable target was found; null otherwise. </p>
+
+</div>
+</div>
+<a class="anchor" id="a5d82702c3e0cebb4f547b3185ac0295d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a> &gt; cherrypi::Agent::tryCastSpellOnUnit </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcherrypi_1_1BuildType.html">BuildType</a> *&#160;</td>
+          <td class="paramname"><em>spell</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; double(<a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *const)&gt;&#160;</td>
+          <td class="paramname"><em>scoring</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>minimumScore</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attempt to cast a spell targeting a unit. </p>
+<p>Returns a UPC if an acceptable target was found; null otherwise. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="a943c557b3cb6831a0f3f8b4b7df816ee"></a>
 <div class="memitem">
@@ -465,43 +557,31 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa3319449aacaf4d64f79c83085d164da"></a>
+<a class="anchor" id="a08f90b7aececc2638483c8f3b29785a1"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcherrypi_1_1BehaviorDelete.html">BehaviorDelete</a> cherrypi::Agent::behaviorDelete</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classcherrypi_1_1Behavior.html">Behavior</a>&gt; cherrypi::Agent::behaviorDelete</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p>Behaviors to perform when receiving a Delete UPC. </p>
 
 </div>
 </div>
-<a class="anchor" id="aaa59c7782daecad28ae99b28dc096e31"></a>
+<a class="anchor" id="a0f7ab6aa14f613712e96b733b57d6acf"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcherrypi_1_1BehaviorFlee.html">BehaviorFlee</a> cherrypi::Agent::behaviorFlee</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classcherrypi_1_1Behavior.html">Behavior</a>&gt; cherrypi::Agent::behaviorFlee</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p>Behaviors to perform when receiving a Flee UPC. </p>
 
 </div>
 </div>
@@ -799,7 +879,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['rect',['Rect',['../namespacecherrypi.html#a96c4323379420a40ddbcbe09e3de6f32',1,'cherrypi']]],
-  ['reducer',['Reducer',['../classcpid_1_1MetricsContext.html#adb2cc3e90c28f61c8d5b88f2dff39e7b',1,'cpid::MetricsContext']]],
-  ['resources',['Resources',['../namespacetorchcraft.html#a44bb399219e7b198764d25b595850a77',1,'torchcraft']]],
-  ['result',['Result',['../classcommon_1_1DataReaderTransform.html#aac9e488cba63fa079dc8225cdcca79f2',1,'common::DataReaderTransform']]],
-  ['result_5ftype',['result_type',['../structstd_1_1hash_3_01torchcraft_1_1BW_1_1UnitType_01_4.html#afe50317df85814015a8b58660b3b3a49',1,'std::hash&lt; torchcraft::BW::UnitType &gt;']]]
+  ['playerid',['PlayerId',['../namespacecherrypi.html#aa1303192d0851eeda87c4a45759c7327',1,'cherrypi']]],
+  ['position',['Position',['../namespacecherrypi.html#a0f262d8316a4fb34411d8743238258cf',1,'cherrypi']]],
+  ['positionfilters',['PositionFilters',['../namespacecherrypi_1_1movefilters.html#ac60d6cb09c8ab21d4767c1b614cb19bf',1,'cherrypi::movefilters']]],
+  ['positiont',['PositionT',['../structcherrypi_1_1UPCTuple.html#acd08572c236c6080d00b4ce7d0df1b3a',1,'cherrypi::UPCTuple']]],
+  ['ppositionfilter',['PPositionFilter',['../namespacecherrypi_1_1movefilters.html#aa4f27a0e258a5585af4557a63a6bd2cf',1,'cherrypi::movefilters']]],
+  ['productionpair',['ProductionPair',['../namespacecherrypi.html#aec2782e06a154438f2c986d600b315cb',1,'cherrypi']]]
 ];

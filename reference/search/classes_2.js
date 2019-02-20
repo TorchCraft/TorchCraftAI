@@ -1,9 +1,7 @@
 var searchData=
 [
   ['centraltrainer',['CentralTrainer',['../classcpid_1_1CentralTrainer.html',1,'cpid']]],
-  ['centraltrainerclient',['CentralTrainerClient',['../structcpid_1_1detail_1_1CentralTrainerClient.html',1,'cpid::detail']]],
-  ['centraltrainerserver',['CentralTrainerServer',['../structcpid_1_1detail_1_1CentralTrainerServer.html',1,'cpid::detail']]],
-  ['cerealizablereplaybufferframe',['CerealizableReplayBufferFrame',['../structcpid_1_1CerealizableReplayBufferFrame.html',1,'cpid']]],
+  ['checkpointer',['Checkpointer',['../classcpid_1_1Checkpointer.html',1,'cpid']]],
   ['cherryvisdumpermodule',['CherryVisDumperModule',['../classcherrypi_1_1CherryVisDumperModule.html',1,'cherrypi']]],
   ['cherryvislogsink',['CherryVisLogSink',['../classcherrypi_1_1CherryVisLogSink.html',1,'cherrypi']]],
   ['circularbuffer',['CircularBuffer',['../classcommon_1_1CircularBuffer.html',1,'common']]],
@@ -23,6 +21,9 @@ var searchData=
   ['controller',['Controller',['../classcherrypi_1_1Controller.html',1,'cherrypi']]],
   ['controllerbase',['ControllerBase',['../classcherrypi_1_1ControllerBase.html',1,'cherrypi']]],
   ['controllertask',['ControllerTask',['../classcherrypi_1_1ControllerTask.html',1,'cherrypi']]],
+  ['cpid2kheartbeater',['Cpid2kHeartBeater',['../classcpid_1_1Cpid2kHeartBeater.html',1,'cpid']]],
+  ['cpid2kworker',['Cpid2kWorker',['../classcpid_1_1Cpid2kWorker.html',1,'cpid']]],
+  ['cpid2kworkerinfo',['Cpid2kWorkerInfo',['../structcpid_1_1Cpid2kWorkerInfo.html',1,'cpid']]],
   ['creategatherattackmodule',['CreateGatherAttackModule',['../classcherrypi_1_1CreateGatherAttackModule.html',1,'cherrypi']]],
   ['cstream',['cstream',['../classcommon_1_1zstd_1_1cstream.html',1,'common::zstd']]]
 ];

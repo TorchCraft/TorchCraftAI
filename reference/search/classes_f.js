@@ -1,16 +1,29 @@
 var searchData=
 [
   ['rand',['Rand',['../classcommon_1_1Rand.html',1,'common']]],
-  ['randommicroscenario',['RandomMicroScenario',['../classcherrypi_1_1RandomMicroScenario.html',1,'cherrypi']]],
   ['rect2t',['Rect2T',['../classcherrypi_1_1Rect2T.html',1,'cherrypi']]],
   ['rect2t_3c_20int_20_3e',['Rect2T&lt; int &gt;',['../classcherrypi_1_1Rect2T.html',1,'cherrypi']]],
+  ['redisclient',['RedisClient',['../classcpid_1_1RedisClient.html',1,'cpid']]],
+  ['redisreply',['RedisReply',['../classcpid_1_1RedisReply.html',1,'cpid']]],
+  ['redisstore',['RedisStore',['../classcpid_1_1RedisStore.html',1,'cpid']]],
   ['refcounted',['RefCounted',['../classRefCounted.html',1,'']]],
   ['replaybuffer',['ReplayBuffer',['../classcpid_1_1ReplayBuffer.html',1,'cpid']]],
   ['replaybufferframe',['ReplayBufferFrame',['../structcpid_1_1ReplayBufferFrame.html',1,'cpid']]],
   ['replayer',['Replayer',['../classcherrypi_1_1Replayer.html',1,'cherrypi']]],
   ['replayer',['Replayer',['../classtorchcraft_1_1replayer_1_1Replayer.html',1,'torchcraft::replayer']]],
+  ['reqrepclient',['ReqRepClient',['../classcpid_1_1ReqRepClient.html',1,'cpid']]],
+  ['reqrepserver',['ReqRepServer',['../classcpid_1_1ReqRepServer.html',1,'cpid']]],
   ['researchtracker',['ResearchTracker',['../classcherrypi_1_1ResearchTracker.html',1,'cherrypi']]],
   ['resources',['Resources',['../structtorchcraft_1_1replayer_1_1Resources.html',1,'torchcraft::replayer']]],
   ['resourceworkers',['ResourceWorkers',['../structcherrypi_1_1ResourceWorkers.html',1,'cherrypi']]],
-  ['rewardbufferframe',['RewardBufferFrame',['../structcpid_1_1RewardBufferFrame.html',1,'cpid']]]
+  ['reward',['Reward',['../structcherrypi_1_1Reward.html',1,'cherrypi']]],
+  ['rewardbufferframe',['RewardBufferFrame',['../structcpid_1_1RewardBufferFrame.html',1,'cpid']]],
+  ['rewardcombat',['RewardCombat',['../structcherrypi_1_1RewardCombat.html',1,'cherrypi']]],
+  ['rewarddefilerprotectzerglings',['RewardDefilerProtectZerglings',['../structcherrypi_1_1RewardDefilerProtectZerglings.html',1,'cherrypi']]],
+  ['rewarddefilerwinloss',['RewardDefilerWinLoss',['../structcherrypi_1_1RewardDefilerWinLoss.html',1,'cherrypi']]],
+  ['rewardkillspeed',['RewardKillSpeed',['../structcherrypi_1_1RewardKillSpeed.html',1,'cherrypi']]],
+  ['rewardprotectcivilians',['RewardProtectCivilians',['../structcherrypi_1_1RewardProtectCivilians.html',1,'cherrypi']]],
+  ['rewardproximityto',['RewardProximityTo',['../structcherrypi_1_1RewardProximityTo.html',1,'cherrypi']]],
+  ['rewardproximitytoenemy',['RewardProximityToEnemy',['../structcherrypi_1_1RewardProximityToEnemy.html',1,'cherrypi']]],
+  ['rrclientwrapper',['RRClientWrapper',['../classcpid_1_1detail_1_1RRClientWrapper.html',1,'cpid::detail']]]
 ];

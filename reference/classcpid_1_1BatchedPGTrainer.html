@@ -105,8 +105,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab3aec55197854610b1decfa88dea4507"><td class="memItemLeft" align="right" valign="top">ag::Variant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1BatchedPGTrainer.html#ab3aec55197854610b1decfa88dea4507">forward</a> (ag::Variant inp, <a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> const &amp;gameUID, <a class="el" href="namespacecpid.html#a202d873acf77413b254487acf07bfe0b">EpisodeKey</a> const &amp;key=<a class="el" href="namespacecpid.html#adaae7def236d9f442ca7af2d8d8299f0">kDefaultEpisodeKey</a>) override</td></tr>
-<tr class="separator:ab3aec55197854610b1decfa88dea4507"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0692fe6b66674f34d41f60a316b44864"><td class="memItemLeft" align="right" valign="top">ag::Variant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1BatchedPGTrainer.html#a0692fe6b66674f34d41f60a316b44864">forward</a> (ag::Variant inp, <a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;) override</td></tr>
+<tr class="separator:a0692fe6b66674f34d41f60a316b44864"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22b2d79fb4f523e316843ba7a2e33cbf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1BatchedPGTrainer.html#a22b2d79fb4f523e316843ba7a2e33cbf">update</a> () override</td></tr>
 <tr class="separator:a22b2d79fb4f523e316843ba7a2e33cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29e7f0d5a80d59752393ae87bcbf2453"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1BatchedPGTrainer.html#a29e7f0d5a80d59752393ae87bcbf2453">doOnlineUpdatesInstead</a> ()</td></tr>
@@ -123,14 +123,11 @@ Public Member Functions</h2></td></tr>
 <tr class="inherit_header pub_methods_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
 <tr class="memitem:a37608aa8e5dd1efcbf367ab29a3b67c2 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a37608aa8e5dd1efcbf367ab29a3b67c2">Trainer</a> (ag::Container <a class="el" href="classcpid_1_1Trainer.html#a725e7be593702910a92eb8e27b100a73">model</a>, ag::Optimizer <a class="el" href="classcpid_1_1Trainer.html#ad0f87b4190a741893c7050af55ba17f5">optim</a>, std::unique_ptr&lt; <a class="el" href="classcpid_1_1BaseSampler.html">BaseSampler</a> &gt;, std::unique_ptr&lt; <a class="el" href="classcpid_1_1AsyncBatcher.html">AsyncBatcher</a> &gt; batcher=nullptr)</td></tr>
 <tr class="separator:a37608aa8e5dd1efcbf367ab29a3b67c2 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a904adcd51362a7596b58f686a789821a inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">ag::Variant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a904adcd51362a7596b58f686a789821a">forwardUnbatched</a> (ag::Variant in, ag::Container <a class="el" href="classcpid_1_1Trainer.html#a725e7be593702910a92eb8e27b100a73">model</a>=nullptr)</td></tr>
+<tr class="memdesc:a904adcd51362a7596b58f686a789821a inherit pub_methods_classcpid_1_1Trainer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience function when one need to forward a single input.  <a href="#a904adcd51362a7596b58f686a789821a">More...</a><br /></td></tr>
+<tr class="separator:a904adcd51362a7596b58f686a789821a inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bc4556a33e42daf08c8ccb4016606ff inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a6bc4556a33e42daf08c8ccb4016606ff">~Trainer</a> ()=default</td></tr>
 <tr class="separator:a6bc4556a33e42daf08c8ccb4016606ff inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abff600f024cc1b7093b3c7d27cd9008a inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#abff600f024cc1b7093b3c7d27cd9008a">setCheckpointFrequency</a> (int)</td></tr>
-<tr class="separator:abff600f024cc1b7093b3c7d27cd9008a inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7d803457b75d03d29c81e076b35f1da inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#ac7d803457b75d03d29c81e076b35f1da">setCheckpointLocation</a> (std::string const &amp;fn)</td></tr>
-<tr class="separator:ac7d803457b75d03d29c81e076b35f1da inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77429da1f7fea34f2fae16930caae957 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a77429da1f7fea34f2fae16930caae957">checkpoint</a> (bool force=false)</td></tr>
-<tr class="separator:a77429da1f7fea34f2fae16930caae957 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46411f6993a37805f4f5bfbbd06b0983 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a46411f6993a37805f4f5bfbbd06b0983">setTrain</a> (bool=true)</td></tr>
 <tr class="separator:a46411f6993a37805f4f5bfbbd06b0983 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfcece21d57d4713a5996e10e26abc4c inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#abfcece21d57d4713a5996e10e26abc4c">isTrain</a> () const </td></tr>
@@ -148,17 +145,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae8859cc72adf2c103aeafcdecbf89951 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8dfdbf82bb3d08a33cc5262a842d8ed2 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a8dfdbf82bb3d08a33cc5262a842d8ed2">isDone</a> () const </td></tr>
 <tr class="separator:a8dfdbf82bb3d08a33cc5262a842d8ed2 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bd7d4a8200b796c4f7cc4865240a38f inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a6bd7d4a8200b796c4f7cc4865240a38f">step</a> (<a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> const &amp;uid, <a class="el" href="namespacecpid.html#a202d873acf77413b254487acf07bfe0b">EpisodeKey</a> const &amp;k, std::shared_ptr&lt; <a class="el" href="structcpid_1_1ReplayBufferFrame.html">ReplayBufferFrame</a> &gt; v, bool <a class="el" href="classcpid_1_1Trainer.html#a8dfdbf82bb3d08a33cc5262a842d8ed2">isDone</a>=false)</td></tr>
-<tr class="separator:a6bd7d4a8200b796c4f7cc4865240a38f inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae31204f3ff0ff08ba17a3a12d9960fbe inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#ae31204f3ff0ff08ba17a3a12d9960fbe">step</a> (<a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> const &amp;key, std::shared_ptr&lt; <a class="el" href="structcpid_1_1ReplayBufferFrame.html">ReplayBufferFrame</a> &gt; value, bool <a class="el" href="classcpid_1_1Trainer.html#a8dfdbf82bb3d08a33cc5262a842d8ed2">isDone</a>=false)</td></tr>
-<tr class="separator:ae31204f3ff0ff08ba17a3a12d9960fbe inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adac03fed8acd205929c2240b5ac3bea4 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#adac03fed8acd205929c2240b5ac3bea4">startEpisode</a> (<a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> const &amp;, <a class="el" href="namespacecpid.html#a202d873acf77413b254487acf07bfe0b">EpisodeKey</a> const &amp;=<a class="el" href="namespacecpid.html#adaae7def236d9f442ca7af2d8d8299f0">kDefaultEpisodeKey</a>)</td></tr>
-<tr class="memdesc:adac03fed8acd205929c2240b5ac3bea4 inherit pub_methods_classcpid_1_1Trainer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if succeeded to register an episode, and false otherwise.  <a href="#adac03fed8acd205929c2240b5ac3bea4">More...</a><br /></td></tr>
-<tr class="separator:adac03fed8acd205929c2240b5ac3bea4 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6d3cf3339223c5d03887c230c412683 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#af6d3cf3339223c5d03887c230c412683">forceStopEpisode</a> (<a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> const &amp;, <a class="el" href="namespacecpid.html#a202d873acf77413b254487acf07bfe0b">EpisodeKey</a> const &amp;=<a class="el" href="namespacecpid.html#adaae7def236d9f442ca7af2d8d8299f0">kDefaultEpisodeKey</a>)</td></tr>
-<tr class="separator:af6d3cf3339223c5d03887c230c412683 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b26db631eb119c8b7282e3f841f01f1 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a4b26db631eb119c8b7282e3f841f01f1">isActive</a> (<a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> const &amp;, <a class="el" href="namespacecpid.html#a202d873acf77413b254487acf07bfe0b">EpisodeKey</a> const &amp;=<a class="el" href="namespacecpid.html#adaae7def236d9f442ca7af2d8d8299f0">kDefaultEpisodeKey</a>)</td></tr>
-<tr class="separator:a4b26db631eb119c8b7282e3f841f01f1 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad412968ea357bfe7db2f8b1829c91354 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#ad412968ea357bfe7db2f8b1829c91354">step</a> (<a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;, std::shared_ptr&lt; <a class="el" href="structcpid_1_1ReplayBufferFrame.html">ReplayBufferFrame</a> &gt; v, bool <a class="el" href="classcpid_1_1Trainer.html#a8dfdbf82bb3d08a33cc5262a842d8ed2">isDone</a>=false)</td></tr>
+<tr class="separator:ad412968ea357bfe7db2f8b1829c91354 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1df3cb2891fa6a56f0368b4871b58258 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a1df3cb2891fa6a56f0368b4871b58258">startEpisode</a> ()</td></tr>
+<tr class="memdesc:a1df3cb2891fa6a56f0368b4871b58258 inherit pub_methods_classcpid_1_1Trainer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if succeeded to register an episode, and false otherwise.  <a href="#a1df3cb2891fa6a56f0368b4871b58258">More...</a><br /></td></tr>
+<tr class="separator:a1df3cb2891fa6a56f0368b4871b58258 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afabe12b24393cb8b3d60bcf528f4285d inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#afabe12b24393cb8b3d60bcf528f4285d">forceStopEpisode</a> (<a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;)</td></tr>
+<tr class="separator:afabe12b24393cb8b3d60bcf528f4285d inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5d9c9f365face81e4d446be52b69a6d inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#ad5d9c9f365face81e4d446be52b69a6d">isActive</a> (<a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;)</td></tr>
+<tr class="separator:ad5d9c9f365face81e4d446be52b69a6d inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae83e7aa739689681176898611413f6f3 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#ae83e7aa739689681176898611413f6f3">reset</a> ()</td></tr>
 <tr class="memdesc:ae83e7aa739689681176898611413f6f3 inherit pub_methods_classcpid_1_1Trainer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases all the worker threads so that they can be joined.  <a href="#ae83e7aa739689681176898611413f6f3">More...</a><br /></td></tr>
 <tr class="separator:ae83e7aa739689681176898611413f6f3 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -179,6 +174,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a22719e06d1f96996a23d390e8a364d1a inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fe43560542a0f92bad515fef297f39b inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a1fe43560542a0f92bad515fef297f39b">TORCH_ARG</a> (bool, continuousActions)</td></tr>
 <tr class="separator:a1fe43560542a0f92bad515fef297f39b inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4abf195d7b982393dc6c5a06e634ef88 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a4abf195d7b982393dc6c5a06e634ef88">setBatcher</a> (std::unique_ptr&lt; <a class="el" href="classcpid_1_1AsyncBatcher.html">AsyncBatcher</a> &gt; batcher)</td></tr>
+<tr class="separator:a4abf195d7b982393dc6c5a06e634ef88 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -196,10 +193,10 @@ Protected Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_types_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
-<tr class="memitem:ad57c047c09f20a5e97afd254bba2f206 inherit pro_types_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#ad57c047c09f20a5e97afd254bba2f206">ForwardFunction</a> = std::function&lt; ag::Variant(ag::Variant, <a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> const &amp;, <a class="el" href="namespacecpid.html#a202d873acf77413b254487acf07bfe0b">EpisodeKey</a> const &amp;)&gt;</td></tr>
-<tr class="separator:ad57c047c09f20a5e97afd254bba2f206 inherit pro_types_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a775a2b5afa4cb841f48366602286544b inherit pro_types_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a775a2b5afa4cb841f48366602286544b">ForwardFunction</a> = std::function&lt; ag::Variant(ag::Variant, <a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;)&gt;</td></tr>
+<tr class="separator:a775a2b5afa4cb841f48366602286544b inherit pro_types_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_static_methods_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
-<tr class="memitem:a5a08fcc8beac1528491bca7706832f0c inherit pro_static_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classcpid_1_1Evaluator.html">Evaluator</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a5a08fcc8beac1528491bca7706832f0c">evaluatorFactory</a> (ag::Container <a class="el" href="classcpid_1_1Trainer.html#a725e7be593702910a92eb8e27b100a73">model</a>, std::unique_ptr&lt; <a class="el" href="classcpid_1_1BaseSampler.html">BaseSampler</a> &gt; s, size_t n, <a class="el" href="classcpid_1_1Trainer.html#ad57c047c09f20a5e97afd254bba2f206">ForwardFunction</a> func)</td></tr>
+<tr class="memitem:a5a08fcc8beac1528491bca7706832f0c inherit pro_static_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classcpid_1_1Evaluator.html">Evaluator</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a5a08fcc8beac1528491bca7706832f0c">evaluatorFactory</a> (ag::Container <a class="el" href="classcpid_1_1Trainer.html#a725e7be593702910a92eb8e27b100a73">model</a>, std::unique_ptr&lt; <a class="el" href="classcpid_1_1BaseSampler.html">BaseSampler</a> &gt; s, size_t n, <a class="el" href="classcpid_1_1Trainer.html#a775a2b5afa4cb841f48366602286544b">ForwardFunction</a> func)</td></tr>
 <tr class="separator:a5a08fcc8beac1528491bca7706832f0c inherit pro_static_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
 <tr class="memitem:a106ea9ef0d96566aa2908a17da10ea6e inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">ag::Container&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a106ea9ef0d96566aa2908a17da10ea6e">model_</a></td></tr>
@@ -210,12 +207,6 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a6f400292c7a5e91cb5bb52b62f0b4098 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b3802f43181cbde20fd53e85e8608d2 inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcpid_1_1ReplayBuffer.html">ReplayBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a9b3802f43181cbde20fd53e85e8608d2">replayer_</a></td></tr>
 <tr class="separator:a9b3802f43181cbde20fd53e85e8608d2 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac67a70cfbd837260b0f28cfea259e097 inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#ac67a70cfbd837260b0f28cfea259e097">checkpointFrequency_</a> = 0</td></tr>
-<tr class="separator:ac67a70cfbd837260b0f28cfea259e097 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd0baa1242c3ca1cd42a29a32d2af7f2 inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#acd0baa1242c3ca1cd42a29a32d2af7f2">checkpointLocation_</a> = &quot;&quot;</td></tr>
-<tr class="separator:acd0baa1242c3ca1cd42a29a32d2af7f2 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7404a4c5018b202a37c109b80e8af8d8 inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a7404a4c5018b202a37c109b80e8af8d8">nUpdates_</a> = 0</td></tr>
-<tr class="separator:a7404a4c5018b202a37c109b80e8af8d8 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b21618c4a1a9317170989568cf26094 inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a0b21618c4a1a9317170989568cf26094">train_</a> = true</td></tr>
 <tr class="separator:a0b21618c4a1a9317170989568cf26094 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42648cbdd28b5c06e586c3c1514a8d35 inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a42648cbdd28b5c06e586c3c1514a8d35">done_</a> {false}</td></tr>
@@ -228,11 +219,13 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a3ba084b7f468011c33f41799c505d572 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9944c18f683d20c58d2215dddcc02748 inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classcpid_1_1AsyncBatcher.html">AsyncBatcher</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a9944c18f683d20c58d2215dddcc02748">batcher_</a></td></tr>
 <tr class="separator:a9944c18f683d20c58d2215dddcc02748 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fb39ecbab796b12bddf4cc2fc20a454 inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structcpid_1_1HandleGuard.html">HandleGuard</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a3fb39ecbab796b12bddf4cc2fc20a454">epGuard_</a></td></tr>
+<tr class="separator:a3fb39ecbab796b12bddf4cc2fc20a454 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad8d5a01d29393aa8549c4dce022dff6 inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcpid_1_1ReplayBuffer.html#a284cfd916c6bc35daa833c665ee25ccb">ReplayBuffer::UIDKeyStore</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#aad8d5a01d29393aa8549c4dce022dff6">actives_</a></td></tr>
 <tr class="separator:aad8d5a01d29393aa8549c4dce022dff6 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_static_attribs_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pro_static_attribs_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Static Protected Attributes inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
 <tr class="memitem:aa05722c92b009206ce29999a4c687ab8 inherit pro_static_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#aa05722c92b009206ce29999a4c687ab8">kFwdMetricsSubsampling</a> = 0.1</td></tr>
-<tr class="memdesc:aa05722c92b009206ce29999a4c687ab8 inherit pro_static_attribs_classcpid_1_1Trainer"><td class="mdescLeft">&#160;</td><td class="mdescRight">We subsample kFwdMetricsSubsampling of the <a class="el" href="classcpid_1_1Trainer.html#ae37af42939e45699b393ddad6e63640e">forward()</a> events when measuring their duration.  <a href="#aa05722c92b009206ce29999a4c687ab8">More...</a><br /></td></tr>
+<tr class="memdesc:aa05722c92b009206ce29999a4c687ab8 inherit pro_static_attribs_classcpid_1_1Trainer"><td class="mdescLeft">&#160;</td><td class="mdescRight">We subsample kFwdMetricsSubsampling of the <a class="el" href="classcpid_1_1Trainer.html#ab88ff7def681074e1a2423fd46f94485">forward()</a> events when measuring their duration.  <a href="#aa05722c92b009206ce29999a4c687ab8">More...</a><br /></td></tr>
 <tr class="separator:aa05722c92b009206ce29999a4c687ab8 inherit pro_static_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -339,7 +332,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab3aec55197854610b1decfa88dea4507"></a>
+<a class="anchor" id="a0692fe6b66674f34d41f60a316b44864"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -355,14 +348,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> const &amp;&#160;</td>
-          <td class="paramname"><em>gameUID</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacecpid.html#a202d873acf77413b254487acf07bfe0b">EpisodeKey</a> const &amp;&#160;</td>
-          <td class="paramname"><em>key</em> = <code><a class="el" href="namespacecpid.html#adaae7def236d9f442ca7af2d8d8299f0">kDefaultEpisodeKey</a></code>&#160;</td>
+          <td class="paramtype"><a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;&#160;</td>
+          <td class="paramname"><em>handle</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -377,7 +364,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="classcpid_1_1Trainer.html#ae37af42939e45699b393ddad6e63640e">cpid::Trainer</a>.</p>
+<p>Reimplemented from <a class="el" href="classcpid_1_1Trainer.html#ab88ff7def681074e1a2423fd46f94485">cpid::Trainer</a>.</p>
 
 </div>
 </div>
@@ -535,7 +522,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

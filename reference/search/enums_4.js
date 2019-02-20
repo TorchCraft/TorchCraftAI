@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gametype',['GameType',['../namespacecherrypi.html#a6c72971bf84ad3c50618e5c5dd016b6d',1,'cherrypi']]]
+  ['flags',['Flags',['../structtorchcraft_1_1replayer_1_1Unit.html#a5f6cd6025bd54a25d93d8ce3afed1f49',1,'torchcraft::replayer::Unit']]]
 ];

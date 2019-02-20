@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['trainer',['Trainer',['../structcpid_1_1Evaluator_1_1make__shared__enabler.html#ad38c9566742be31ca860cf8b5d6ae11f',1,'cpid::Evaluator::make_shared_enabler']]]
+  ['redisclient',['RedisClient',['../classcpid_1_1RedisReply.html#af1d44f0d4258daeb1bda3615a2f4b03b',1,'cpid::RedisReply']]]
 ];

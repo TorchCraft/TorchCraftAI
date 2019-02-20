@@ -88,64 +88,54 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pro-types">Protected Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classcherrypi_1_1BehaviorSeries-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">cherrypi::BehaviorSeries Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">cherrypi::BehaviorSeries Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Gives a series of Behaviors the option of issuing a UPC for the unit.  
- <a href="classcherrypi_1_1BehaviorSeries.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="behavior_8h_source.html">behavior.h</a>&gt;</code></p>
 
 <p>Inherits <a class="el" href="classcherrypi_1_1Behavior.html">cherrypi::Behavior</a>.</p>
-
-<p>Inherited by <a class="el" href="classcherrypi_1_1BehaviorDelete.html">cherrypi::BehaviorDelete</a>, and <a class="el" href="classcherrypi_1_1BehaviorFlee.html">cherrypi::BehaviorFlee</a>.</p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
-Protected Types</h2></td></tr>
-<tr class="memitem:ad893a9df1ac400967ab394f6aa27b734"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1Behavior.html">Behavior</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BehaviorSeries.html#ad893a9df1ac400967ab394f6aa27b734">BehaviorList</a></td></tr>
-<tr class="separator:ad893a9df1ac400967ab394f6aa27b734"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a95ca0dc4fb087aa3e9ca4c0466eb558b"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classcherrypi_1_1BehaviorSeries.html#ad893a9df1ac400967ab394f6aa27b734">BehaviorList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BehaviorSeries.html#a95ca0dc4fb087aa3e9ca4c0466eb558b">behaviors</a> () const =0</td></tr>
-<tr class="separator:a95ca0dc4fb087aa3e9ca4c0466eb558b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a455980f21cca6ec2decb0463bed2c444"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structcherrypi_1_1MicroAction.html">MicroAction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BehaviorSeries.html#a455980f21cca6ec2decb0463bed2c444">onPerform</a> (<a class="el" href="classcherrypi_1_1Agent.html">Agent</a> &amp;agent) override</td></tr>
-<tr class="memdesc:a455980f21cca6ec2decb0463bed2c444"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decide what to do with a unit that has not yet been controlled by a <a class="el" href="classcherrypi_1_1Behavior.html" title="A Behavior is a self-contained situational micro rule. ">Behavior</a>.  <a href="#a455980f21cca6ec2decb0463bed2c444">More...</a><br /></td></tr>
-<tr class="separator:a455980f21cca6ec2decb0463bed2c444"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_classcherrypi_1_1Behavior"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classcherrypi_1_1Behavior')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classcherrypi_1_1Behavior.html">cherrypi::Behavior</a></td></tr>
-<tr class="memitem:a423a103f90dd3acd6813b757467454a4 inherit pro_methods_classcherrypi_1_1Behavior"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structcherrypi_1_1MicroAction.html">MicroAction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Behavior.html#a423a103f90dd3acd6813b757467454a4">doAction</a> (std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a> &gt; upc) const </td></tr>
-<tr class="memdesc:a423a103f90dd3acd6813b757467454a4 inherit pro_methods_classcherrypi_1_1Behavior"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience method: Form a <a class="el" href="structcherrypi_1_1MicroAction.html" title="Represents a Behavior&#39;s decision of how to control a unit. ">MicroAction</a> reflecting a decision to issue a UPC for this unit.  <a href="#a423a103f90dd3acd6813b757467454a4">More...</a><br /></td></tr>
-<tr class="separator:a423a103f90dd3acd6813b757467454a4 inherit pro_methods_classcherrypi_1_1Behavior"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a27600c519930fb1ba58ae41bbfab30a5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BehaviorSeries.html#a27600c519930fb1ba58ae41bbfab30a5">BehaviorSeries</a> (<a class="el" href="namespacecherrypi.html#a092e4272823fc20806bd840b9073a614">BehaviorList</a> behaviors)</td></tr>
+<tr class="separator:a27600c519930fb1ba58ae41bbfab30a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcherrypi_1_1Behavior"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcherrypi_1_1Behavior')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcherrypi_1_1Behavior.html">cherrypi::Behavior</a></td></tr>
 <tr class="memitem:afd639d4439a580fd0d872e0d63d742b4 inherit pub_methods_classcherrypi_1_1Behavior"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Behavior.html#afd639d4439a580fd0d872e0d63d742b4">perform</a> (<a class="el" href="classcherrypi_1_1Agent.html">Agent</a> &amp;agent)</td></tr>
 <tr class="memdesc:afd639d4439a580fd0d872e0d63d742b4 inherit pub_methods_classcherrypi_1_1Behavior"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a unit still needs a micro decision. If so, invokes <a class="el" href="classcherrypi_1_1Behavior.html#ada8be9f2abd2d716daf317a89940d1f4" title="Decide what to do with a unit that has not yet been controlled by a Behavior. ">onPerform()</a>  <a href="#afd639d4439a580fd0d872e0d63d742b4">More...</a><br /></td></tr>
 <tr class="separator:afd639d4439a580fd0d872e0d63d742b4 inherit pub_methods_classcherrypi_1_1Behavior"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54f1d046d1d1179dc5bbf22ecbf4f151 inherit pub_methods_classcherrypi_1_1Behavior"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Behavior.html#a54f1d046d1d1179dc5bbf22ecbf4f151">~Behavior</a> ()=default</td></tr>
 <tr class="separator:a54f1d046d1d1179dc5bbf22ecbf4f151 inherit pub_methods_classcherrypi_1_1Behavior"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a455980f21cca6ec2decb0463bed2c444"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structcherrypi_1_1MicroAction.html">MicroAction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BehaviorSeries.html#a455980f21cca6ec2decb0463bed2c444">onPerform</a> (<a class="el" href="classcherrypi_1_1Agent.html">Agent</a> &amp;agent) override</td></tr>
+<tr class="memdesc:a455980f21cca6ec2decb0463bed2c444"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decide what to do with a unit that has not yet been controlled by a <a class="el" href="classcherrypi_1_1Behavior.html" title="A Behavior is a self-contained situational micro rule. ">Behavior</a>.  <a href="#a455980f21cca6ec2decb0463bed2c444">More...</a><br /></td></tr>
+<tr class="separator:a455980f21cca6ec2decb0463bed2c444"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classcherrypi_1_1Behavior"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classcherrypi_1_1Behavior')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classcherrypi_1_1Behavior.html">cherrypi::Behavior</a></td></tr>
+<tr class="memitem:a423a103f90dd3acd6813b757467454a4 inherit pro_methods_classcherrypi_1_1Behavior"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structcherrypi_1_1MicroAction.html">MicroAction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Behavior.html#a423a103f90dd3acd6813b757467454a4">doAction</a> (std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a> &gt; upc) const </td></tr>
+<tr class="memdesc:a423a103f90dd3acd6813b757467454a4 inherit pro_methods_classcherrypi_1_1Behavior"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience method: Form a <a class="el" href="structcherrypi_1_1MicroAction.html" title="Represents a decision of how to control a unit. ">MicroAction</a> reflecting a decision to issue a UPC for this unit.  <a href="#a423a103f90dd3acd6813b757467454a4">More...</a><br /></td></tr>
+<tr class="separator:a423a103f90dd3acd6813b757467454a4 inherit pro_methods_classcherrypi_1_1Behavior"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:adcb78bd9b52e162edf4eaa20cebea9ba"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespacecherrypi.html#a092e4272823fc20806bd840b9073a614">BehaviorList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BehaviorSeries.html#adcb78bd9b52e162edf4eaa20cebea9ba">behaviors_</a> = {}</td></tr>
+<tr class="separator:adcb78bd9b52e162edf4eaa20cebea9ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classcherrypi_1_1Behavior"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcherrypi_1_1Behavior')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcherrypi_1_1Behavior.html">cherrypi::Behavior</a></td></tr>
 <tr class="memitem:a99a291e94b158d561f66208d0662b959 inherit pro_attribs_classcherrypi_1_1Behavior"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structcherrypi_1_1MicroAction.html">MicroAction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Behavior.html#a99a291e94b158d561f66208d0662b959">pass</a> = <a class="el" href="structcherrypi_1_1MicroAction.html">MicroAction</a>()</td></tr>
-<tr class="memdesc:a99a291e94b158d561f66208d0662b959 inherit pro_attribs_classcherrypi_1_1Behavior"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience: A <a class="el" href="structcherrypi_1_1MicroAction.html" title="Represents a Behavior&#39;s decision of how to control a unit. ">MicroAction</a> reflecting a decision to ignore this unit and let another <a class="el" href="classcherrypi_1_1Behavior.html" title="A Behavior is a self-contained situational micro rule. ">Behavior</a> control it.  <a href="#a99a291e94b158d561f66208d0662b959">More...</a><br /></td></tr>
+<tr class="memdesc:a99a291e94b158d561f66208d0662b959 inherit pro_attribs_classcherrypi_1_1Behavior"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience: A <a class="el" href="structcherrypi_1_1MicroAction.html" title="Represents a decision of how to control a unit. ">MicroAction</a> reflecting a decision to ignore this unit and let another <a class="el" href="classcherrypi_1_1Behavior.html" title="A Behavior is a self-contained situational micro rule. ">Behavior</a> control it.  <a href="#a99a291e94b158d561f66208d0662b959">More...</a><br /></td></tr>
 <tr class="separator:a99a291e94b158d561f66208d0662b959 inherit pro_attribs_classcherrypi_1_1Behavior"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8821ac36ffc931028b7b390dd5f00805 inherit pro_attribs_classcherrypi_1_1Behavior"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structcherrypi_1_1MicroAction.html">MicroAction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Behavior.html#a8821ac36ffc931028b7b390dd5f00805">doNothing</a> = <a class="el" href="classcherrypi_1_1Behavior.html#a423a103f90dd3acd6813b757467454a4">doAction</a>(nullptr)</td></tr>
-<tr class="memdesc:a8821ac36ffc931028b7b390dd5f00805 inherit pro_attribs_classcherrypi_1_1Behavior"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience: A <a class="el" href="structcherrypi_1_1MicroAction.html" title="Represents a Behavior&#39;s decision of how to control a unit. ">MicroAction</a> reflecting a decision to do nothing with this unit and let no other <a class="el" href="classcherrypi_1_1Behavior.html" title="A Behavior is a self-contained situational micro rule. ">Behavior</a> control it.  <a href="#a8821ac36ffc931028b7b390dd5f00805">More...</a><br /></td></tr>
+<tr class="memdesc:a8821ac36ffc931028b7b390dd5f00805 inherit pro_attribs_classcherrypi_1_1Behavior"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience: A <a class="el" href="structcherrypi_1_1MicroAction.html" title="Represents a decision of how to control a unit. ">MicroAction</a> reflecting a decision to do nothing with this unit and let no other <a class="el" href="classcherrypi_1_1Behavior.html" title="A Behavior is a self-contained situational micro rule. ">Behavior</a> control it.  <a href="#a8821ac36ffc931028b7b390dd5f00805">More...</a><br /></td></tr>
 <tr class="separator:a8821ac36ffc931028b7b390dd5f00805 inherit pro_attribs_classcherrypi_1_1Behavior"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Gives a series of Behaviors the option of issuing a UPC for the unit. </p>
-<p>Continues until a <a class="el" href="classcherrypi_1_1Behavior.html" title="A Behavior is a self-contained situational micro rule. ">Behavior</a> either:</p><ul>
-<li>Issues a UPC, indicating a command for the unit</li>
-<li>Issues a null UPC, indicating that the unit should be left alone </li>
-</ul>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a class="anchor" id="ad893a9df1ac400967ab394f6aa27b734"></a>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a27600c519930fb1ba58ae41bbfab30a5"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -153,12 +143,16 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">typedef std::vector&lt;std::shared_ptr&lt;<a class="el" href="classcherrypi_1_1Behavior.html">Behavior</a>&gt; &gt; <a class="el" href="classcherrypi_1_1BehaviorSeries.html#ad893a9df1ac400967ab394f6aa27b734">cherrypi::BehaviorSeries::BehaviorList</a></td>
+          <td class="memname">cherrypi::BehaviorSeries::BehaviorSeries </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacecherrypi.html#a092e4272823fc20806bd840b9073a614">BehaviorList</a>&#160;</td>
+          <td class="paramname"><em>behaviors</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -166,29 +160,6 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a95ca0dc4fb087aa3e9ca4c0466eb558b"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual const <a class="el" href="classcherrypi_1_1BehaviorSeries.html#ad893a9df1ac400967ab394f6aa27b734">BehaviorList</a>&amp; cherrypi::BehaviorSeries::behaviors </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a455980f21cca6ec2decb0463bed2c444"></a>
 <div class="memitem">
 <div class="memproto">
@@ -217,6 +188,27 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="adcb78bd9b52e162edf4eaa20cebea9ba"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespacecherrypi.html#a092e4272823fc20806bd840b9073a614">BehaviorList</a> cherrypi::BehaviorSeries::behaviors_ = {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/modules/squadcombat/<a class="el" href="behavior_8h_source.html">behavior.h</a></li>
 <li>src/modules/squadcombat/behavior.cpp</li>
@@ -224,7 +216,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

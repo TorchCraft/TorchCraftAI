@@ -116,11 +116,16 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1BatchedPGTrainer.html">BatchedPGTrainer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Off policy policy gradient with a critic.  <a href="classcpid_1_1BatchedPGTrainer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1BlobPublisher.html">BlobPublisher</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publisher for ZeroMQ PUB-SUB pattern.  <a href="classcpid_1_1BlobPublisher.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1BlobSubscriber.html">BlobSubscriber</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscriber for ZeroMQ PUB-SUB pattern.  <a href="classcpid_1_1BlobSubscriber.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html">CentralTrainer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A trainer that sends episodes to one or more central instances.  <a href="classcpid_1_1CentralTrainer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcpid_1_1CerealizableReplayBufferFrame.html">CerealizableReplayBufferFrame</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The base class for replay buffer frames that can be used with <a class="el" href="classcpid_1_1CentralTrainer.html" title="A trainer that sends episodes to one or more central instances. ">CentralTrainer</a>.  <a href="structcpid_1_1CerealizableReplayBufferFrame.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Checkpointer.html">Checkpointer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ContinuousDeterministicSampler.html">ContinuousDeterministicSampler</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This sampler expects as input an unordered_map&lt;string, Variant&gt; containing an entry policyKey, which is a tensor of size [b, n].  <a href="classcpid_1_1ContinuousDeterministicSampler.html#details">More...</a><br /></td></tr>
@@ -128,10 +133,18 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ContinuousGaussianSampler.html">ContinuousGaussianSampler</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This sampler expects as input an unordered_map&lt;string, Variant&gt;, containing an entry policyKey, which is a tensor of size [b, n].  <a href="classcpid_1_1ContinuousGaussianSampler.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Cpid2kHeartBeater.html">Cpid2kHeartBeater</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Periodically sends out heartbeats to a Redis instance.  <a href="classcpid_1_1Cpid2kHeartBeater.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Cpid2kWorker.html">Cpid2kWorker</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper class for job coordination via a central Redis instance.  <a href="classcpid_1_1Cpid2kWorker.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcpid_1_1Cpid2kWorkerInfo.html">Cpid2kWorkerInfo</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1DiscreteMaxSampler.html">DiscreteMaxSampler</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This sampler expects as input an unordered_map&lt;string, Variant&gt;, containing an entry QKey, which is a tensor of size [b, n].  <a href="classcpid_1_1DiscreteMaxSampler.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcpid_1_1EpisodeHandle.html">EpisodeHandle</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcpid_1_1EpisodeData.html">EpisodeData</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcpid_1_1EpisodeTuple.html">EpisodeTuple</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,6 +154,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ESTrainer.html">ESTrainer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Evaluator.html">Evaluator</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcpid_1_1HandleGuard.html">HandleGuard</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1MetricsContext.html">MetricsContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,15 +179,40 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1priority__mutex.html">priority_mutex</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class implements a mutex that offers some control over the priority of the waiting threads.  <a href="classcpid_1_1priority__mutex.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1RedisClient.html">RedisClient</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple, synchronous C++ wrapper for the Hiredis Redis client.  <a href="classcpid_1_1RedisClient.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1RedisReply.html">RedisReply</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper class for redisReply from Hiredis.  <a href="classcpid_1_1RedisReply.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1RedisStore.html">RedisStore</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">c10d::Store for rendez-vous backed by Redis.  <a href="classcpid_1_1RedisStore.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReplayBuffer.html">ReplayBuffer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores an unordered_map[GameUID] = unordered_map[int, Episode] All the public functions here should be autolocking and therefore relatively thread safe.  <a href="classcpid_1_1ReplayBuffer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcpid_1_1ReplayBufferFrame.html">ReplayBufferFrame</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stub base class for replay buffer frames.  <a href="structcpid_1_1ReplayBufferFrame.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html">ReqRepClient</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Client for ZeroMQ REQ-REP pattern.  <a href="classcpid_1_1ReqRepClient.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepServer.html">ReqRepServer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Server for ZeroMQ REQ-REP pattern.  <a href="classcpid_1_1ReqRepServer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcpid_1_1RewardBufferFrame.html">RewardBufferFrame</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1SubBatchAsyncBatcher.html">SubBatchAsyncBatcher</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A batcher that can operate on (already) batched data Should be used when features have a variable batch dimension, for instance the number of units controlled.  <a href="classcpid_1_1SubBatchAsyncBatcher.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html">Trainer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classcpid_1_1Trainer.html" title="The Trainer should be shared amongst multiple different nodes, and attached to a single Module...">Trainer</a> should be shared amongst multiple different nodes, and attached to a single Module.  <a href="classcpid_1_1Trainer.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html">ZeroMQBufferedConsumer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A buffered consumer that sends data via ZeroMQ.  <a href="classcpid_1_1ZeroMQBufferedConsumer.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html">ZeroMQBufferedProducer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A buffered producer that obtains data via ZeroMQ.  <a href="classcpid_1_1ZeroMQBufferedProducer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZOBackpropModel.html">ZOBackpropModel</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">See trainer for output format of these models.  <a href="classcpid_1_1ZOBackpropModel.html#details">More...</a><br /></td></tr>
@@ -180,38 +220,96 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:a07fe4b753be19c4dfbe070e70924930e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a07fe4b753be19c4dfbe070e70924930e">EpisodeServer</a> = <a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html">ZeroMQBufferedProducer</a>&lt; <a class="el" href="structcpid_1_1EpisodeData.html">EpisodeData</a> &gt;</td></tr>
+<tr class="separator:a07fe4b753be19c4dfbe070e70924930e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5560f28719dfc769a6833e758bac323d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a5560f28719dfc769a6833e758bac323d">EpisodeClient</a> = <a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html">ZeroMQBufferedConsumer</a>&lt; <a class="el" href="structcpid_1_1EpisodeData.html">EpisodeData</a> &gt;</td></tr>
+<tr class="separator:a5560f28719dfc769a6833e758bac323d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8cf44de209adffc9e01a1d11376beae"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> = std::string</td></tr>
 <tr class="separator:aa8cf44de209adffc9e01a1d11376beae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a202d873acf77413b254487acf07bfe0b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a202d873acf77413b254487acf07bfe0b">EpisodeKey</a> = std::string</td></tr>
 <tr class="separator:a202d873acf77413b254487acf07bfe0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6edf79fcb11c1b5ef99e7f6d1a3d00fd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a6edf79fcb11c1b5ef99e7f6d1a3d00fd">EpisodeHandle</a> = <a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">Trainer::EpisodeHandle</a></td></tr>
+<tr class="separator:a6edf79fcb11c1b5ef99e7f6d1a3d00fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a19219358ccc86f609ad575dd2d84b646"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a19219358ccc86f609ad575dd2d84b646">DEFINE_FLAG_OPERATORS</a> (<a class="el" href="classcpid_1_1BlobPublisher.html#a57d6e633cf3f48c0de10dd41df6031c8">BlobPublisher::DataFlags</a>)</td></tr>
+<tr class="separator:a19219358ccc86f609ad575dd2d84b646"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70cb8b34bba11280a82f3440c49d4e60"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a70cb8b34bba11280a82f3440c49d4e60">kaiming_normal_</a> (torch::Tensor tensor, double gain)</td></tr>
+<tr class="separator:a70cb8b34bba11280a82f3440c49d4e60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bde2710b0b6b832126c2077a156a0e6"><td class="memItemLeft" align="right" valign="top">ag::Optimizer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a2bde2710b0b6b832126c2077a156a0e6">selectOptimizer</a> (std::shared_ptr&lt; torch::nn::Module &gt; module)</td></tr>
 <tr class="separator:a2bde2710b0b6b832126c2077a156a0e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6950493716ff702cc59961234fba0112"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a6950493716ff702cc59961234fba0112">optimizerFlags</a> ()</td></tr>
 <tr class="separator:a6950493716ff702cc59961234fba0112"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a570bbe83a58515473421c62b158f8da5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a570bbe83a58515473421c62b158f8da5">genGameUID</a> (int rank)</td></tr>
-<tr class="separator:a570bbe83a58515473421c62b158f8da5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec2972778acebc7e17fc5f6f9ff82ba2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#aec2972778acebc7e17fc5f6f9ff82ba2">genGameUID</a> ()</td></tr>
+<tr class="separator:aec2972778acebc7e17fc5f6f9ff82ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03dd07173ff324b072fdc4c78ce96f33"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a03dd07173ff324b072fdc4c78ce96f33">operator&lt;&lt;</a> (std::ostream &amp;os, <a class="el" href="namespacecpid.html#a6edf79fcb11c1b5ef99e7f6d1a3d00fd">EpisodeHandle</a> const &amp;handle)</td></tr>
+<tr class="separator:a03dd07173ff324b072fdc4c78ce96f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a13a6b45115afc38b3c124381d694f423"><td class="memItemLeft" align="right" valign="top">size_t constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a13a6b45115afc38b3c124381d694f423">kMaxEndpointLength</a> = 4096</td></tr>
-<tr class="separator:a13a6b45115afc38b3c124381d694f423"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf2953ecf53c10a7fba0cba45ba1c3ba"><td class="memItemLeft" align="right" valign="top">int constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#abf2953ecf53c10a7fba0cba45ba1c3ba">kMaxRank</a> = 8192</td></tr>
-<tr class="separator:abf2953ecf53c10a7fba0cba45ba1c3ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaae7def236d9f442ca7af2d8d8299f0"><td class="memItemLeft" align="right" valign="top">const constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#adaae7def236d9f442ca7af2d8d8299f0">kDefaultEpisodeKey</a> = &quot;&quot;</td></tr>
 <tr class="separator:adaae7def236d9f442ca7af2d8d8299f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acba5499bcaa29aabffc3980e157e4bbc"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#acba5499bcaa29aabffc3980e157e4bbc">kValueKey</a> = &quot;V&quot;</td></tr>
+<tr class="separator:acba5499bcaa29aabffc3980e157e4bbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b52ffbc9285d397d9fd8daba48cc447"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a6b52ffbc9285d397d9fd8daba48cc447">kQKey</a> = &quot;Q&quot;</td></tr>
+<tr class="separator:a6b52ffbc9285d397d9fd8daba48cc447"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e012a3c47f8a7f24c96e60fe8b12836"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a5e012a3c47f8a7f24c96e60fe8b12836">kPiKey</a> = &quot;Pi&quot;</td></tr>
+<tr class="separator:a5e012a3c47f8a7f24c96e60fe8b12836"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a45f2b139a1e24793beaf79d100784a"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a2a45f2b139a1e24793beaf79d100784a">kSigmaKey</a> = &quot;std&quot;</td></tr>
+<tr class="separator:a2a45f2b139a1e24793beaf79d100784a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2d5dc91589db12dfec3719cd75f9985"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#ab2d5dc91589db12dfec3719cd75f9985">kActionQKey</a> = &quot;actionQ&quot;</td></tr>
+<tr class="separator:ab2d5dc91589db12dfec3719cd75f9985"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02d0c11bc655972a72aa213f138a8118"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a02d0c11bc655972a72aa213f138a8118">kActionKey</a> = &quot;action&quot;</td></tr>
+<tr class="separator:a02d0c11bc655972a72aa213f138a8118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66fbdc827ecce8857ed3a2149614c5b4"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid.html#a66fbdc827ecce8857ed3a2149614c5b4">kPActionKey</a> = &quot;pAction&quot;</td></tr>
+<tr class="separator:a66fbdc827ecce8857ed3a2149614c5b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The TorchCraftAI training library. </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="a5560f28719dfc769a6833e758bac323d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacecpid.html#a5560f28719dfc769a6833e758bac323d">cpid::EpisodeClient</a> = typedef <a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html">ZeroMQBufferedConsumer</a>&lt;<a class="el" href="structcpid_1_1EpisodeData.html">EpisodeData</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6edf79fcb11c1b5ef99e7f6d1a3d00fd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacecpid.html#a6edf79fcb11c1b5ef99e7f6d1a3d00fd">cpid::EpisodeHandle</a> = typedef <a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">Trainer::EpisodeHandle</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a202d873acf77413b254487acf07bfe0b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="namespacecpid.html#a202d873acf77413b254487acf07bfe0b">cpid::EpisodeKey</a> = typedef std::string</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a07fe4b753be19c4dfbe070e70924930e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacecpid.html#a07fe4b753be19c4dfbe070e70924930e">cpid::EpisodeServer</a> = typedef <a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html">ZeroMQBufferedProducer</a>&lt;<a class="el" href="structcpid_1_1EpisodeData.html">EpisodeData</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -231,16 +329,83 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a570bbe83a58515473421c62b158f8da5"></a>
+<a class="anchor" id="a19219358ccc86f609ad575dd2d84b646"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cpid::DEFINE_FLAG_OPERATORS </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcpid_1_1BlobPublisher.html#a57d6e633cf3f48c0de10dd41df6031c8">BlobPublisher::DataFlags</a>&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aec2972778acebc7e17fc5f6f9ff82ba2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> cpid::genGameUID </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>rank</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a70cb8b34bba11280a82f3440c49d4e60"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float cpid::kaiming_normal_ </td>
+          <td>(</td>
+          <td class="paramtype">torch::Tensor&#160;</td>
+          <td class="paramname"><em>tensor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>gain</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a03dd07173ff324b072fdc4c78ce96f33"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream&amp; cpid::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacecpid.html#a6edf79fcb11c1b5ef99e7f6d1a3d00fd">EpisodeHandle</a> const &amp;&#160;</td>
+          <td class="paramname"><em>handle</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -279,6 +444,46 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a class="anchor" id="a02d0c11bc655972a72aa213f138a8118"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string cpid::kActionKey = &quot;action&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab2d5dc91589db12dfec3719cd75f9985"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string cpid::kActionQKey = &quot;actionQ&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="adaae7def236d9f442ca7af2d8d8299f0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -291,26 +496,102 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a13a6b45115afc38b3c124381d694f423"></a>
+<a class="anchor" id="a66fbdc827ecce8857ed3a2149614c5b4"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">size_t constexpr cpid::kMaxEndpointLength = 4096</td>
+          <td class="memname">const std::string cpid::kPActionKey = &quot;pAction&quot;</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="abf2953ecf53c10a7fba0cba45ba1c3ba"></a>
+<a class="anchor" id="a5e012a3c47f8a7f24c96e60fe8b12836"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int constexpr cpid::kMaxRank = 8192</td>
+          <td class="memname">const std::string cpid::kPiKey = &quot;Pi&quot;</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6b52ffbc9285d397d9fd8daba48cc447"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string cpid::kQKey = &quot;Q&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2a45f2b139a1e24793beaf79d100784a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string cpid::kSigmaKey = &quot;std&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="acba5499bcaa29aabffc3980e157e4bbc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string cpid::kValueKey = &quot;V&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -318,7 +599,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

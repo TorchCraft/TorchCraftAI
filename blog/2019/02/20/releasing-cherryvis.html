@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Releasing CherryVis: a replay viewer for TorchCraftAI · TorchCraftAI</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;!-- Carousel code 1/2 --&gt;"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Releasing CherryVis: a replay viewer for TorchCraftAI · TorchCraftAI"/><meta property="og:type" content="website"/><meta property="og:url" content="https://torchcraft.github.io/TorchCraftAI/blog/2019/02/20/releasing-cherryvis.html"/><meta property="og:description" content="&lt;!-- Carousel code 1/2 --&gt;"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://torchcraft.github.io/TorchCraftAI/img/tclogolinesmall.png"/><link rel="shortcut icon" href="/TorchCraftAI/img/favicon/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/atom.xml" title="TorchCraftAI Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://torchcraft.github.io/TorchCraftAI/blog/feed.xml" title="TorchCraftAI Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="/js/code-blocks-buttons.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script><link rel="stylesheet" href="/TorchCraftAI/css/main.css"/><script src="/TorchCraftAI/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/TorchCraftAI/"><img class="logo" src="/TorchCraftAI/img/tclogosqlightgrey.png" alt="TorchCraftAI"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/TorchCraftAI/docs/bptut-intro.html" target="_self">Tutorials</a></li><li class=""><a href="/TorchCraftAI/reference/index.html" target="_self">API</a></li><li class="siteNavGroupActive"><a href="/TorchCraftAI/blog/" target="_self">Blog</a></li><li class=""><a href="https://github.com/TorchCraft/TorchCraftAI" target="_blank">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/TorchCraftAI/blog/2019/02/20/releasing-cherryvis.html">Releasing CherryVis: a replay viewer for TorchCraftAI</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/blog/2018/11/28/build-order-switch-retraining-has-arrived.html">Build Order Switch Retraining Has Arrived</a></li><li class="navListItem"><a class="navItem" href="/TorchCraftAI/blog/2018/11/20/hello-github.html">Hello, Github!</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/TorchCraftAI/blog/2019/02/20/releasing-cherryvis.html">Releasing CherryVis: a replay viewer for TorchCraftAI</a></h1><p class="post-meta">February 20, 2019</p><div class="authorBlock"><p class="post-authorName"><a href="https://github.com/danthe3rd" target="_blank" rel="noreferrer noopener">Dan</a></p></div></header><div><span><!-- Carousel code 1/2 -->
+<style>
+.slide {display:none; width:100%; text-align:center;}
+.slide img { height: 450px;}
+.w3-center{text-align:center!important}
+.w3-section,.w3-code{margin-top:16px!important;margin-bottom:16px!important}
+.w3-btn,.w3-button{border:none;display:inline-block;padding:8px 16px;vertical-align:middle;overflow:hidden;text-decoration:none;color:inherit;background-color:inherit;text-align:center;cursor:pointer;white-space:nowrap;}
+.w3-button{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}   
+.w3-button:hover{color:#000!important;background-color:#ccc!important}
+.w3-red,.w3-hover-red:hover{color:#fff!important;background-color:#f44336!important}
+.w3-light-grey,.w3-hover-light-grey:hover,.w3-light-gray,.w3-hover-light-gray:hover{color:#000!important;background-color:#f1f1f1!important}
+</style>
+<p>We're glad to announce today that we are open sourcing CherryVis.
+Based on OpenBW's <a href="http://www.openbw.com/replay-viewer/">replay viewer</a>, CherryVis allows you to to view StarCraft replays alongside information about the bot's state.
+It's a powerful tool to both understand, develop and debug agents built with TorchCraftAI, as it gives access to:</p>
+<ul>
+<li>The blackboard: a place where we store information shared between modules, such as the current build order</li>
+<li>The logs</li>
+<li>For any unit: its ID, HP, task - or even unit-specific log messages</li>
+<li>The tree of <a href="https://torchcraft.github.io/TorchCraftAI/docs/core-abstractions.html">UPC tuples</a> issued</li>
+</ul>
+<div class="w3-content" style="max-width:800px">
+  <a class="vis1-slide slide" href="/TorchCraftAI/blog/assets/cvis-interface.png"><img src="/TorchCraftAI/blog/assets/cvis-interface.png"/></a>
+  <a class="vis1-slide slide" href="/TorchCraftAI/blog/assets/cvis-tasks.png"><img src="/TorchCraftAI/blog/assets/cvis-tasks.png"/></a>
+  <a class="vis1-slide slide" href="/TorchCraftAI/blog/assets/cvis-upc-tree.png"><img src="/TorchCraftAI/blog/assets/cvis-upc-tree.png"/></a>
+</div>
+<div class="w3-center">
+  <div class="w3-section">
+    <button class="w3-button w3-light-grey" onclick="plusDivs(-1, 'vis1')">❮ Prev</button>
+    <button class="w3-button w3-light-grey" onclick="plusDivs(1, 'vis1')">Next ❯</button>
+  </div>
+  <button class="w3-button vis1-dot" onclick="showDiv(1, 'vis1')">1</button>
+  <button class="w3-button vis1-dot" onclick="showDiv(2, 'vis1')">2</button>
+  <button class="w3-button vis1-dot" onclick="showDiv(3, 'vis1')">3</button>
+</div>
+<h4><a class="anchor" aria-hidden="true" id="machine-learning-visualization"></a><a href="#machine-learning-visualization" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Machine learning visualization</h4>
+<p>In a machine learning context, it is often difficult to interpret a model's outputs, or understand if intermediate results are reasonable. That's why CherryVis includes
+features useful to researchers:</p>
+<ul>
+<li>Arbitrary trees visualization. For example for <a href="https://en.wikipedia.org/wiki/Monte_Carlo_tree_search">Monte Carlo trees</a></li>
+<li>Tensor summaries. Tensor values are displayed in a histogram, dynamically updated as the game progresses</li>
+<li>Heatmaps game overlay</li>
+<li>.. and many more</li>
+</ul>
+<div class="w3-content" style="max-width:800px">
+  <a class="vis2-slide slide" href="/TorchCraftAI/blog/assets/cvis-buildability.png"><img src="/TorchCraftAI/blog/assets/cvis-buildability.png"/></a>
+  <a class="vis2-slide slide" href="/TorchCraftAI/blog/assets/cvis-values-distr.png"><img src="/TorchCraftAI/blog/assets/cvis-values-distr.png"/></a>
+  <a class="vis2-slide slide" href="/TorchCraftAI/blog/assets/cvis-ground-height.png"><img src="/TorchCraftAI/blog/assets/cvis-ground-height.png"/></a>
+</div>
+<div class="w3-center">
+  <div class="w3-section">
+    <button class="w3-button w3-light-grey" onclick="plusDivs(-1, 'vis2')">❮ Prev</button>
+    <button class="w3-button w3-light-grey" onclick="plusDivs(1, 'vis2')">Next ❯</button>
+  </div>
+  <button class="w3-button vis2-dot" onclick="showDiv(1, 'vis2')">1</button>
+  <button class="w3-button vis2-dot" onclick="showDiv(2, 'vis2')">2</button>
+  <button class="w3-button vis2-dot" onclick="showDiv(3, 'vis2')">3</button>
+</div>
+<h4><a class="anchor" aria-hidden="true" id="getting-started"></a><a href="#getting-started" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Getting started</h4>
+<p>If you are curious about this tool, you can try it for yourself after setting up the <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/scripts/cherryvis/README.md">python dependencies and building OpenBW to Javascript</a>.
+We also provide a few example replays with data for CherryVis, so you don't need to setup Starcraft or TorchCraftAI to understand how the bot works.</p>
+<p>For advanced users who are already using TorchCraftAI, we provide an <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/test/modules/cherryvisdumper_t.cpp">example script</a> dumping various data to CherryVis.</p>
+<p>Note that CherryVis can be used outside of TorchCraftAI as well. A <a href="https://github.com/facebook/zstd">zstd</a> compressed JSON trace file can be provided to benefit from its features and dump logs, tensors trees, ... see <a href="https://github.com/TorchCraft/TorchCraftAI/blob/master/src/modules/cherryvisdumper.cpp">CherryVisDumperModule::writeGameSummary</a> for the format. Feel free to file a new <a href="https://github.com/TorchCraft/TorchCraftAI/issues">GitHub issue</a> if you need help adapting CherryVis to your workflow.</p>
+<!-- Carousel code 2/2 -->
+<script>
+var slideIndex = {};
+showDiv(1, 'vis1');
+showDiv(1, 'vis2');
+function plusDivs(n, name) {
+  showDiv(slideIndex[name] + n, name);
+}
+function showDiv(n, name) {
+  slideIndex[name] = n;
+  var i;
+  var x = document.getElementsByClassName(name + "-slide");
+  var dots = document.getElementsByClassName(name + "-dot");
+  if (n > x.length) {slideIndex[name] = 1}
+  if (n < 1) {slideIndex[name] = x.length}
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" w3-red", "");
+  }
+  x[slideIndex[name]-1].style.display = "block";
+  dots[slideIndex[name]-1].className += " w3-red";
+}
+</script>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/TorchCraftAI/blog">Recent Posts</a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/TorchCraftAI/" class="nav-home"><img src="/TorchCraftAI/img/tclogosqsmall.png" alt="TorchCraftAI" width="66" height="58"/></a><div><h5>Docs</h5><a href="/TorchCraftAI/docs/en/install-linux.html">Getting Started (Linux)</a><a href="/TorchCraftAI/docs/en/install-windows.html">Getting Started (Windows)</a><a href="/TorchCraftAI/docs/en/install-macos.html">Getting Started (Mac)</a><a href="reference/index.html">API Reference</a></div><div><h5>Community</h5><a href="https://discordapp.com/invite/w9wRRrF">Starcraft AI Discord</a><a href="https://www.facebook.com/groups/bwapi/">Starcraft AI Facebook group</a><a href="https://github.com/TorchCraft/TorchCraftAI">TorchCraftAI on GitHub</a></div><div><h5>More</h5><a href="https://github.com/TorchCraft/TorchCraft">TorchCraft on GitHub</a><a href="https://github.com/TorchCraft/StarData">StarData on GitHub</a><a href="/TorchCraftAI/blog">Blog</a></div></section><a href="https://code.facebook.com/projects/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/TorchCraftAI/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Facebook</section></footer></div></body></html>

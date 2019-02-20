@@ -25,5 +25,6 @@ var searchData=
   ['done_5f',['done_',['../classcpid_1_1Trainer.html#a42648cbdd28b5c06e586c3c1514a8d35',1,'cpid::Trainer']]],
   ['dones_5f',['dones_',['../classcpid_1_1ReplayBuffer.html#ae82e3a9ba1b04b1cfd000b08c976d2a8',1,'cpid::ReplayBuffer']]],
   ['donothing',['doNothing',['../classcherrypi_1_1Behavior.html#a8821ac36ffc931028b7b390dd5f00805',1,'cherrypi::Behavior']]],
-  ['draw_5f',['draw_',['../classcherrypi_1_1BasePlayer.html#a7eb9e68a3870f203d4f281dfc2a88d31',1,'cherrypi::BasePlayer']]]
+  ['draw_5f',['draw_',['../classcherrypi_1_1BasePlayer.html#a7eb9e68a3870f203d4f281dfc2a88d31',1,'cherrypi::BasePlayer']]],
+  ['drawcommands_5f',['drawCommands_',['../structcherrypi_1_1CherryVisDumperModule_1_1TraceData.html#ad88aa8dec1d87844c13de364dd127c6c',1,'cherrypi::CherryVisDumperModule::TraceData']]]
 ];

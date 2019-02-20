@@ -120,6 +120,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a1745528289c6741e8a8d9f6ff743444c"><td class="memTemplItemLeft" align="right" valign="top">static auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcommon_1_1Rand.html#a1745528289c6741e8a8d9f6ff743444c">sample</a> (T &amp;&amp;distrib) -&gt; decltype(distrib.min())</td></tr>
 <tr class="memdesc:a1745528289c6741e8a8d9f6ff743444c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample from a given distribution.  <a href="#a1745528289c6741e8a8d9f6ff743444c">More...</a><br /></td></tr>
 <tr class="separator:a1745528289c6741e8a8d9f6ff743444c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d0b73b4f38e044f6592d472ff716cff"><td class="memItemLeft" align="right" valign="top">static at::Generator *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommon_1_1Rand.html#a2d0b73b4f38e044f6592d472ff716cff">gen</a> ()</td></tr>
+<tr class="memdesc:a2d0b73b4f38e044f6592d472ff716cff"><td class="mdescLeft">&#160;</td><td class="mdescRight">This allows to use a custom seed in torch.  <a href="#a2d0b73b4f38e044f6592d472ff716cff">More...</a><br /></td></tr>
+<tr class="separator:a2d0b73b4f38e044f6592d472ff716cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
 Static Protected Attributes</h2></td></tr>
@@ -131,6 +134,10 @@ Static Protected Attributes</h2></td></tr>
 <tr class="separator:abefd547accc369c67ef4a5a7b45251cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab51284f1141db325151aa7f4e884f48c"><td class="memItemLeft" align="right" valign="top">static thread_local std::mt19937&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommon_1_1Rand.html#ab51284f1141db325151aa7f4e884f48c">localRandEngine_</a></td></tr>
 <tr class="separator:ab51284f1141db325151aa7f4e884f48c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03e2a541b3021d61875a8fde1b9b44d4"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; at::Generator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommon_1_1Rand.html#a03e2a541b3021d61875a8fde1b9b44d4">torchEngine_</a></td></tr>
+<tr class="separator:a03e2a541b3021d61875a8fde1b9b44d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6997c89697995b05a18e19416348ada"><td class="memItemLeft" align="right" valign="top">static thread_local std::unique_ptr&lt; at::Generator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcommon_1_1Rand.html#aa6997c89697995b05a18e19416348ada">localTorchEngine_</a></td></tr>
+<tr class="separator:aa6997c89697995b05a18e19416348ada"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="afed768a7ec36a19f4a873b26a87a5a3f"></a>
@@ -155,6 +162,32 @@ Static Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Default random seed used by init() </p>
+
+</div>
+</div>
+<a class="anchor" id="a2d0b73b4f38e044f6592d472ff716cff"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">at::Generator * common::Rand::gen </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This allows to use a custom seed in torch. </p>
+<p>For example: at::normal(mean, dev, Rand::gen()); Similarly to <a class="el" href="classcommon_1_1Rand.html#a7725329c31614bf922cb14dea59268ef" title="Sample random value. ">rand()</a>, this will use a thread_local generator if a local seed is set </p>
 
 </div>
 </div>
@@ -331,6 +364,26 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="aa6997c89697995b05a18e19416348ada"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">thread_local std::unique_ptr&lt; at::Generator &gt; common::Rand::localTorchEngine_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a5eaf52c864c7e9930326136a6ad27aa9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -371,6 +424,26 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a03e2a541b3021d61875a8fde1b9b44d4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; at::Generator &gt; common::Rand::torchEngine_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>common/<a class="el" href="rand_8h_source.html">rand.h</a></li>
 <li>common/rand.cpp</li>
@@ -378,7 +451,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

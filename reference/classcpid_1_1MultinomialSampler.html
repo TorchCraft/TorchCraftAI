@@ -105,8 +105,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae018cc50fbfddfc1b2bf00ae212275c7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1MultinomialSampler.html#ae018cc50fbfddfc1b2bf00ae212275c7">MultinomialSampler</a> (const std::string &amp;policyKey=&quot;Pi&quot;, const std::string &amp;actionKey=&quot;action&quot;, const std::string &amp;pActionKey=&quot;pAction&quot;)</td></tr>
-<tr class="separator:ae018cc50fbfddfc1b2bf00ae212275c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c434bf5f79beed50f9cd41ffa467f02"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1MultinomialSampler.html#a2c434bf5f79beed50f9cd41ffa467f02">MultinomialSampler</a> (const std::string &amp;policyKey=<a class="el" href="namespacecpid.html#a5e012a3c47f8a7f24c96e60fe8b12836">kPiKey</a>, const std::string &amp;actionKey=<a class="el" href="namespacecpid.html#a02d0c11bc655972a72aa213f138a8118">kActionKey</a>, const std::string &amp;pActionKey=<a class="el" href="namespacecpid.html#a66fbdc827ecce8857ed3a2149614c5b4">kPActionKey</a>)</td></tr>
+<tr class="separator:a2c434bf5f79beed50f9cd41ffa467f02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a977b6001d236df31b3fa769f87e139b8"><td class="memItemLeft" align="right" valign="top">ag::Variant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1MultinomialSampler.html#a977b6001d236df31b3fa769f87e139b8">sample</a> (ag::Variant in) override</td></tr>
 <tr class="separator:a977b6001d236df31b3fa769f87e139b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70711a7c619519337d7edacb3a1edaf3"><td class="memItemLeft" align="right" valign="top">ag::Variant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1MultinomialSampler.html#a70711a7c619519337d7edacb3a1edaf3">computeProba</a> (const ag::Variant &amp;in, const ag::Variant &amp;action) override</td></tr>
@@ -130,7 +130,7 @@ Protected Attributes</h2></td></tr>
 <div class="textblock"><p>This sampler expects as input an unordered_map&lt;string, Variant&gt;, which contains an entry policyKey, which is a tensor of size [b, n]. </p>
 <p>It outputs the same map, with a new key actionKey, a tensor of size [b] where each entry is in [0,n-1], and is the result of multinomial sampling over pi. It also adds a key pActionKey which corresponds to the probability of the sampled action. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ae018cc50fbfddfc1b2bf00ae212275c7"></a>
+<a class="anchor" id="a2c434bf5f79beed50f9cd41ffa467f02"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -138,19 +138,19 @@ Protected Attributes</h2></td></tr>
           <td class="memname">cpid::MultinomialSampler::MultinomialSampler </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>policyKey</em> = <code>&quot;Pi&quot;</code>, </td>
+          <td class="paramname"><em>policyKey</em> = <code><a class="el" href="namespacecpid.html#a5e012a3c47f8a7f24c96e60fe8b12836">kPiKey</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>actionKey</em> = <code>&quot;action&quot;</code>, </td>
+          <td class="paramname"><em>actionKey</em> = <code><a class="el" href="namespacecpid.html#a02d0c11bc655972a72aa213f138a8118">kActionKey</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pActionKey</em> = <code>&quot;pAction&quot;</code>&#160;</td>
+          <td class="paramname"><em>pActionKey</em> = <code><a class="el" href="namespacecpid.html#a66fbdc827ecce8857ed3a2149614c5b4">kPActionKey</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -293,7 +293,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

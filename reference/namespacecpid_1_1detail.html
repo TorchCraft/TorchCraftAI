@@ -87,7 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">cpid::detail Namespace Reference</div>  </div>
 </div><!--header-->
@@ -95,55 +95,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcpid_1_1detail_1_1CentralTrainerClient.html">CentralTrainerClient</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcpid_1_1detail_1_1CentralTrainerServer.html">CentralTrainerServer</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1detail_1_1RRClientWrapper.html">RRClientWrapper</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps <a class="el" href="classcpid_1_1ReqRepClient.html" title="Client for ZeroMQ REQ-REP pattern. ">ReqRepClient</a> assuming <a class="el" href="classcpid_1_1detail_1_1RRClientWrapper.html#a343f00b4bf586e5aef84df78726f24d0">perform()</a> is called from a dedicated thread.  <a href="classcpid_1_1detail_1_1RRClientWrapper.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:ab87c63b437a4b140bcd14b67f3b6a0b4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid_1_1detail.html#ab87c63b437a4b140bcd14b67f3b6a0b4">serializeEpisode</a> (<a class="el" href="structcpid_1_1EpisodeTuple.html">EpisodeTuple</a> key, <a class="el" href="classcpid_1_1ReplayBuffer.html#a42603e043c83dd89036b8230d1adca74">ReplayBuffer::Episode</a> const &amp;episode)</td></tr>
-<tr class="separator:ab87c63b437a4b140bcd14b67f3b6a0b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ca7b97b5d2fd265005ebec499a91558"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="structcpid_1_1EpisodeTuple.html">EpisodeTuple</a>, <a class="el" href="classcpid_1_1ReplayBuffer.html#a42603e043c83dd89036b8230d1adca74">ReplayBuffer::Episode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid_1_1detail.html#a1ca7b97b5d2fd265005ebec499a91558">deserializeEpisode</a> (std::vector&lt; char &gt; const &amp;data)</td></tr>
-<tr class="separator:a1ca7b97b5d2fd265005ebec499a91558"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:aca65556f4d778022f9a7cc74dcf41e23"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid_1_1detail.html#aca65556f4d778022f9a7cc74dcf41e23">kConfirm</a> = &quot;ACK&quot;</td></tr>
+<tr class="separator:aca65556f4d778022f9a7cc74dcf41e23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03ffbecae2c036fbb568a7fc228ffbf1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid_1_1detail.html#a03ffbecae2c036fbb568a7fc228ffbf1">kDeny</a> = &quot;DENY&quot;</td></tr>
+<tr class="separator:a03ffbecae2c036fbb568a7fc228ffbf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a1ca7b97b5d2fd265005ebec499a91558"></a>
+<h2 class="groupheader">Variable Documentation</h2>
+<a class="anchor" id="aca65556f4d778022f9a7cc74dcf41e23"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt;<a class="el" href="structcpid_1_1EpisodeTuple.html">EpisodeTuple</a>, <a class="el" href="classcpid_1_1ReplayBuffer.html#a42603e043c83dd89036b8230d1adca74">ReplayBuffer::Episode</a>&gt; cpid::detail::deserializeEpisode </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; char &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>data</em></td><td>)</td>
-          <td></td>
+          <td class="memname">std::string cpid::detail::kConfirm = &quot;ACK&quot;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="ab87c63b437a4b140bcd14b67f3b6a0b4"></a>
+<a class="anchor" id="a03ffbecae2c036fbb568a7fc228ffbf1"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;char&gt; cpid::detail::serializeEpisode </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structcpid_1_1EpisodeTuple.html">EpisodeTuple</a>&#160;</td>
-          <td class="paramname"><em>key</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcpid_1_1ReplayBuffer.html#a42603e043c83dd89036b8230d1adca74">ReplayBuffer::Episode</a> const &amp;&#160;</td>
-          <td class="paramname"><em>episode</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">std::string cpid::detail::kDeny = &quot;DENY&quot;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -153,7 +134,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

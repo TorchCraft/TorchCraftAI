@@ -95,16 +95,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
+<p>Stub base class for replay buffer frames.  
+ <a href="structcpid_1_1ReplayBufferFrame.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="trainer_8h_source.html">trainer.h</a>&gt;</code></p>
 
-<p>Inherited by <a class="el" href="structcpid_1_1BatchedPGReplayBufferFrame.html">cpid::BatchedPGReplayBufferFrame</a>, <a class="el" href="structcpid_1_1CerealizableReplayBufferFrame.html">cpid::CerealizableReplayBufferFrame</a>, <a class="el" href="structcpid_1_1OnlineZORBReplayBufferFrame.html">cpid::OnlineZORBReplayBufferFrame</a>, and <a class="el" href="structcpid_1_1RewardBufferFrame.html">cpid::RewardBufferFrame</a>.</p>
+<p>Inherited by <a class="el" href="structcpid_1_1BatchedPGReplayBufferFrame.html">cpid::BatchedPGReplayBufferFrame</a>, <a class="el" href="structcpid_1_1OnlineZORBReplayBufferFrame.html">cpid::OnlineZORBReplayBufferFrame</a>, and <a class="el" href="structcpid_1_1RewardBufferFrame.html">cpid::RewardBufferFrame</a>.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:adeeab6c4f7f3ade4e12b67e1509627e5"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcpid_1_1ReplayBufferFrame.html#adeeab6c4f7f3ade4e12b67e1509627e5">~ReplayBufferFrame</a> ()=default</td></tr>
 <tr class="separator:adeeab6c4f7f3ade4e12b67e1509627e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ae821423bb7542c49b660b8df9fcefe"><td class="memTemplParams" colspan="2">template&lt;class Archive &gt; </td></tr>
+<tr class="memitem:a4ae821423bb7542c49b660b8df9fcefe"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structcpid_1_1ReplayBufferFrame.html#a4ae821423bb7542c49b660b8df9fcefe">serialize</a> (Archive &amp;ar)</td></tr>
+<tr class="separator:a4ae821423bb7542c49b660b8df9fcefe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Stub base class for replay buffer frames. </p>
+<p>Frames that are serializable need to implement <a class="el" href="structcpid_1_1ReplayBufferFrame.html#a4ae821423bb7542c49b660b8df9fcefe">serialize()</a> or load()/save() and register themselves in global scope with <code>CEREAL_REGISTER_TYPE(MyReplayBufferFrame)</code> and (depending on how you serialize) <code>CEREAL_REGISTER_POLYMORPHIC_RELATION(<a class="el" href="structcpid_1_1ReplayBufferFrame.html" title="Stub base class for replay buffer frames. ">ReplayBufferFrame</a>, MyReplayBufferFrame)</code> </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="adeeab6c4f7f3ade4e12b67e1509627e5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -128,13 +137,40 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a4ae821423bb7542c49b660b8df9fcefe"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Archive &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cpid::ReplayBufferFrame::serialize </td>
+          <td>(</td>
+          <td class="paramtype">Archive &amp;&#160;</td>
+          <td class="paramname"><em>ar</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>cpid/<a class="el" href="trainer_8h_source.html">trainer.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

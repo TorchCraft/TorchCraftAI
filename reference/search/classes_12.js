@@ -5,6 +5,7 @@ var searchData=
   ['unit',['Unit',['../structtorchcraft_1_1replayer_1_1Unit.html',1,'torchcraft::replayer']]],
   ['unitattributefeaturizer',['UnitAttributeFeaturizer',['../structcherrypi_1_1UnitAttributeFeaturizer.html',1,'cherrypi']]],
   ['unitcommand',['UnitCommand',['../structtorchcraft_1_1replayer_1_1UnitCommand.html',1,'torchcraft::replayer']]],
+  ['unitcount',['UnitCount',['../structcherrypi_1_1UnitCount.html',1,'cherrypi']]],
   ['unitdata',['UnitData',['../structcherrypi_1_1CherryVisDumperModule_1_1UnitData.html',1,'cherrypi::CherryVisDumperModule']]],
   ['unitdiff',['UnitDiff',['../classtorchcraft_1_1replayer_1_1detail_1_1UnitDiff.html',1,'torchcraft::replayer::detail']]],
   ['unitflagsfeaturizer',['UnitFlagsFeaturizer',['../structcherrypi_1_1UnitFlagsFeaturizer.html',1,'cherrypi']]],

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['n',['n',['../structcherrypi_1_1DefaultAutoBuildTask_1_1Target.html#a3a4609561223921a63e90a85b486ea9a',1,'cherrypi::DefaultAutoBuildTask::Target']]],
-  ['name',['name',['../structcherrypi_1_1BuildType.html#a397a9b21943580a58d521a4c4e9d2dce',1,'cherrypi::BuildType::name()'],['../structcherrypi_1_1FeatureDescriptor.html#a76108d5c09add57b3682a39a55819b41',1,'cherrypi::FeatureDescriptor::name()'],['../structcherrypi_1_1UnitAttributeFeaturizer.html#a73248cf03d5337f29ff5c919c31a25e6',1,'cherrypi::UnitAttributeFeaturizer::name()'],['../structcherrypi_1_1SubclassRegistry_1_1SubclassInfo.html#af17c20ba8a03920774fd0dff87b4201c',1,'cherrypi::SubclassRegistry::SubclassInfo::name()'],['../structtorchcraft_1_1State_1_1PlayerInfo.html#a669e9fbcbbbe3096c5a8a66ba9ae4df6',1,'torchcraft::State::PlayerInfo::name()']]],
+  ['name',['name',['../structcherrypi_1_1BuildType.html#a397a9b21943580a58d521a4c4e9d2dce',1,'cherrypi::BuildType::name()'],['../structcherrypi_1_1FeatureDescriptor.html#a76108d5c09add57b3682a39a55819b41',1,'cherrypi::FeatureDescriptor::name()'],['../structcherrypi_1_1UnitAttributeFeaturizer.html#a73248cf03d5337f29ff5c919c31a25e6',1,'cherrypi::UnitAttributeFeaturizer::name()'],['../structcherrypi_1_1ScenarioInfo.html#a6ce37d97138b328d1201ff2239ba44d1',1,'cherrypi::ScenarioInfo::name()'],['../structcherrypi_1_1FixedScenarioGroup.html#a9426b3f58256135afbaba217916cf7ea',1,'cherrypi::FixedScenarioGroup::name()'],['../structcherrypi_1_1SubclassRegistry_1_1SubclassInfo.html#af17c20ba8a03920774fd0dff87b4201c',1,'cherrypi::SubclassRegistry::SubclassInfo::name()'],['../structtorchcraft_1_1State_1_1PlayerInfo.html#a669e9fbcbbbe3096c5a8a66ba9ae4df6',1,'torchcraft::State::PlayerInfo::name()']]],
   ['name_5f',['name_',['../classcherrypi_1_1Module.html#a27e4006072d4079997ab14c636b1f4d7',1,'cherrypi::Module']]],
   ['nans',['nans',['../structcommon_1_1WeightSummary.html#a08536f913831dcf93844814c2dea4696',1,'common::WeightSummary']]],
   ['naturaldefencepos',['naturalDefencePos',['../classcherrypi_1_1ABBOBase.html#ad6c2e5b4b19171712ee833e7244968c9',1,'cherrypi::ABBOBase']]],
@@ -28,16 +28,15 @@ var searchData=
   ['nextsporepos',['nextSporePos',['../classcherrypi_1_1ABBO10HatchLing.html#a8792508a2acf423f81146e70cd65e1f5',1,'cherrypi::ABBO10HatchLing::nextSporePos()'],['../classcherrypi_1_1ABBOmidmassling.html#a581fb3bd16aa4f386f91e940ebc0ebfb',1,'cherrypi::ABBOmidmassling::nextSporePos()']]],
   ['nextstaticdefencepos',['nextStaticDefencePos',['../classcherrypi_1_1ABBOBase.html#a1306427bbe034963b81e4d14d1963fae',1,'cherrypi::ABBOBase']]],
   ['nextsunkenpos',['nextSunkenPos',['../classcherrypi_1_1ABBO2HatchMuta.html#a2e61200cdaf2f54a6dcefb9efaa628dc',1,'cherrypi::ABBO2HatchMuta::nextSunkenPos()'],['../classcherrypi_1_1ABBO9PoolSpeedLingMuta.html#ae40bf1149dc62a736aa1526419500e4d',1,'cherrypi::ABBO9PoolSpeedLingMuta::nextSunkenPos()']]],
+  ['node',['node',['../classcherrypi_1_1CherryVisDumperModule_1_1TreeNode.html#a6193b22129e3697e4dcf88096f6abece',1,'cherrypi::CherryVisDumperModule::TreeNode']]],
   ['nodegroupedgetracker_5f',['nodeGroupEdgeTracker_',['../structcherrypi_1_1TacticsState.html#a356060452990721c4bd2cfb5c46c166d',1,'cherrypi::TacticsState']]],
   ['nodeinsidegrouptracker_5f',['nodeInsideGroupTracker_',['../structcherrypi_1_1TacticsState.html#a1ebb4f00ae81dea06771853fdb7af991',1,'cherrypi::TacticsState']]],
   ['nonblocking_5f',['nonBlocking_',['../classcherrypi_1_1BasePlayer.html#aabc0457576b3ead972aca0a456b57a47',1,'cherrypi::BasePlayer']]],
   ['norm1',['norm1',['../structcommon_1_1WeightSummary.html#afdea9ef3a0e27642ef5853a5607324ae',1,'common::WeightSummary']]],
   ['norm2',['norm2',['../structcommon_1_1WeightSummary.html#acc154373be28a7c7a998bcc48c29a56e',1,'common::WeightSummary']]],
-  ['nthreads',['nthreads',['../classcherrypi_1_1BufferedConsumer.html#a2efb19cff6971f044ccf07d2ba7316a7',1,'cherrypi::BufferedConsumer']]],
   ['numairattacks',['numAirAttacks',['../structcherrypi_1_1BuildType.html#a153d66610e84f3b0ae09794fae8063d0',1,'cherrypi::BuildType']]],
   ['numchannels',['numChannels',['../structcherrypi_1_1FeatureDescriptor.html#afe9565fdf476492d6732b315e58f552b',1,'cherrypi::FeatureDescriptor::numChannels()'],['../structcherrypi_1_1UnitAttributeFeaturizer.html#a71ea32882a2310cc94b5e1af08803ad5',1,'cherrypi::UnitAttributeFeaturizer::numChannels()']]],
   ['numgroundattacks',['numGroundAttacks',['../structcherrypi_1_1BuildType.html#ae3be766e7e497665a12210f0f446c209',1,'cherrypi::BuildType']]],
   ['numthreads_5f',['numThreads_',['../classcommon_1_1DataReader.html#a6ef0b350f908dc6d21bf77aca92b221f',1,'common::DataReader']]],
-  ['numupdates',['numUpdates',['../classtorchcraft_1_1State.html#ad2819c62095a0be8383cd84f4c52ca92',1,'torchcraft::State']]],
-  ['nupdates_5f',['nUpdates_',['../classcpid_1_1Trainer.html#a7404a4c5018b202a37c109b80e8af8d8',1,'cpid::Trainer']]]
+  ['numupdates',['numUpdates',['../classtorchcraft_1_1State.html#ad2819c62095a0be8383cd84f4c52ca92',1,'torchcraft::State']]]
 ];

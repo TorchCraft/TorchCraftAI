@@ -1,15 +1,10 @@
 var searchData=
 [
-  ['uidkeystore',['UIDKeyStore',['../classcpid_1_1ReplayBuffer.html#a284cfd916c6bc35daa833c665ee25ccb',1,'cpid::ReplayBuffer']]],
-  ['unit',['Unit',['../namespacetorchcraft.html#a0311f2e412bed192278b70dec39c5f39',1,'torchcraft']]],
-  ['unitfilter',['UnitFilter',['../structcherrypi_1_1UnitAttributeFeaturizer.html#af5c98397c1f1308dd54068fd3f16ed9d',1,'cherrypi::UnitAttributeFeaturizer']]],
-  ['unitid',['UnitId',['../namespacecherrypi.html#ab2a03a82ec853df1994f92ca8b3b36b4',1,'cherrypi']]],
-  ['unitmap',['UnitMap',['../structcherrypi_1_1UPCTuple.html#a1fe7e8d57084f243b2f53b8ce09e581b',1,'cherrypi::UPCTuple']]],
-  ['units',['Units',['../classcherrypi_1_1UnitsInfo.html#a316f776e3cb54b955287361480932555',1,'cherrypi::UnitsInfo']]],
-  ['unitt',['UnitT',['../structcherrypi_1_1UPCTuple.html#a99f985184c26bdf0aeca0aad25bc6a6b',1,'cherrypi::UPCTuple']]],
-  ['unittype',['UnitType',['../structcherrypi_1_1BuildingPlacerSample.html#a1028d643a4eea9201ed9da12316dd0cc',1,'cherrypi::BuildingPlacerSample']]],
-  ['upcid',['UpcId',['../namespacecherrypi.html#a34db95b9a8d8628cf869657ee945b01c',1,'cherrypi']]],
-  ['upcmap',['UPCMap',['../classcherrypi_1_1Blackboard.html#a0f57a84df07602f6f8105cd02b4214b9',1,'cherrypi::Blackboard']]],
-  ['upgradelevel',['UpgradeLevel',['../namespacecherrypi.html#a5ffeafcf3e0dd788cab37415cd196fba',1,'cherrypi']]],
-  ['utype',['utype',['../structstd_1_1hash_3_01cherrypi_1_1Command_01_4.html#aa14c0dbc87ced213a085dc272d0a69f3',1,'std::hash&lt; cherrypi::Command &gt;']]]
+  ['tasktimestats',['TaskTimeStats',['../classcherrypi_1_1Blackboard.html#a3b5dbcb04973f1565b89b8a970806149',1,'cherrypi::Blackboard']]],
+  ['tensordest',['TensorDest',['../structcherrypi_1_1UnitAttributeFeaturizer.html#a9b082304736bc7e9910665b27805f254',1,'cherrypi::UnitAttributeFeaturizer']]],
+  ['tensortransform',['TensorTransform',['../namespacecommon.html#a54cd622e23826275f4fc3b580c73dcf0',1,'common']]],
+  ['timeinterval',['TimeInterval',['../classcpid_1_1MetricsContext.html#ab04736c1bcf91e268faca6b694bb7d36',1,'cpid::MetricsContext']]],
+  ['timepoint',['TimePoint',['../classcpid_1_1ReqRepClient.html#ab698dd7ef830f1bb4de24ff778d4b15c',1,'cpid::ReqRepClient']]],
+  ['timestamp',['Timestamp',['../classcpid_1_1MetricsContext.html#a13f3cabc968a52b04bc9b41061f1ff52',1,'cpid::MetricsContext']]],
+  ['type',['type',['../classcommon_1_1BufferedConsumer.html#ac2af185562a2a841fe2674fed9406251',1,'common::BufferedConsumer::type()'],['../classcommon_1_1BufferedProducer.html#af5c170039ca032765ec8ce550c5ae7ff',1,'common::BufferedProducer::type()']]]
 ];

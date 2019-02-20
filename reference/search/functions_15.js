@@ -9,6 +9,7 @@ var searchData=
   ['visiblebuildings',['visibleBuildings',['../classcherrypi_1_1UnitsInfo.html#a30663103ef26768f250c0b294c8994d0',1,'cherrypi::UnitsInfo']]],
   ['visibleenemyunits',['visibleEnemyUnits',['../classcherrypi_1_1UnitsInfo.html#aa570e8a5d76c28be619f2f3aba8afbfa',1,'cherrypi::UnitsInfo']]],
   ['visibleunits',['visibleUnits',['../classcherrypi_1_1UnitsInfo.html#ae970c986a3a9270f9e02b9c76406992b',1,'cherrypi::UnitsInfo']]],
+  ['visualizeheatmap',['visualizeHeatmap',['../namespacecherrypi_1_1utils.html#a0c5477e731787cc5d11fa537f7137b82',1,'cherrypi::utils']]],
   ['vlog',['vlog',['../namespacecherrypi.html#a385da2f80d7fce410c8e1e8b7af55c3f',1,'cherrypi']]],
   ['vprintf',['vPrintf',['../classtcbwapi_1_1TCGame.html#a2f8b16e4a2130558a81e9e55ec7481f2',1,'tcbwapi::TCGame']]],
   ['vsendtextex',['vSendTextEx',['../classtcbwapi_1_1TCGame.html#a6a56bf9409e3c660b920ebff72c8fd17',1,'tcbwapi::TCGame']]]

@@ -96,40 +96,57 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Represents a <a class="el" href="classcherrypi_1_1Behavior.html" title="A Behavior is a self-contained situational micro rule. ">Behavior</a>'s decision of how to control a unit.  
+<p>Represents a decision of how to control a unit.  
  <a href="structcherrypi_1_1MicroAction.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="behavior_8h_source.html">behavior.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="upc_8h_source.html">upc.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3f44001b92b44c4d37403309ca577319"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1MicroAction.html#a3f44001b92b44c4d37403309ca577319">getFinalUPC</a> () const </td></tr>
-<tr class="separator:a3f44001b92b44c4d37403309ca577319"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbb5cb0711721682fc9c3d2bb580993a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1MicroAction.html#afbb5cb0711721682fc9c3d2bb580993a">getFinalUPC</a> () const </td></tr>
+<tr class="memdesc:afbb5cb0711721682fc9c3d2bb580993a"><td class="mdescLeft">&#160;</td><td class="mdescRight">if (isFinal):  <a href="#afbb5cb0711721682fc9c3d2bb580993a">More...</a><br /></td></tr>
+<tr class="separator:afbb5cb0711721682fc9c3d2bb580993a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a7f113ec738237776ae1822ab66185b5f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1MicroAction.html#a7f113ec738237776ae1822ab66185b5f">isFinal</a> = false</td></tr>
-<tr class="memdesc:a7f113ec738237776ae1822ab66185b5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true: this UPC is the final decision on what this unit should do.  <a href="#a7f113ec738237776ae1822ab66185b5f">More...</a><br /></td></tr>
+<tr class="memdesc:a7f113ec738237776ae1822ab66185b5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true:  <a href="#a7f113ec738237776ae1822ab66185b5f">More...</a><br /></td></tr>
 <tr class="separator:a7f113ec738237776ae1822ab66185b5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad344925e1a5aa188e1f73bcddb6a226f"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcherrypi_1_1MicroAction.html#ad344925e1a5aa188e1f73bcddb6a226f">upc</a> = nullptr</td></tr>
-<tr class="memdesc:ad344925e1a5aa188e1f73bcddb6a226f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Only used when isFinal is true.  <a href="#ad344925e1a5aa188e1f73bcddb6a226f">More...</a><br /></td></tr>
+<tr class="memdesc:ad344925e1a5aa188e1f73bcddb6a226f"><td class="mdescLeft">&#160;</td><td class="mdescRight">if (isFinal):  <a href="#ad344925e1a5aa188e1f73bcddb6a226f">More...</a><br /></td></tr>
 <tr class="separator:ad344925e1a5aa188e1f73bcddb6a226f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Represents a <a class="el" href="classcherrypi_1_1Behavior.html" title="A Behavior is a self-contained situational micro rule. ">Behavior</a>'s decision of how to control a unit. </p>
+<div class="textblock"><p>Represents a decision of how to control a unit. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a3f44001b92b44c4d37403309ca577319"></a>
+<a class="anchor" id="afbb5cb0711721682fc9c3d2bb580993a"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a> &gt; cherrypi::MicroAction::getFinalUPC </td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="structcherrypi_1_1UPCTuple.html">UPCTuple</a>&gt; cherrypi::MicroAction::getFinalUPC </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+
+<p>if (isFinal): </p>
+<ul>
+<li>Returns the UPC, which may be null.</li>
+</ul>
+<p>if (!isFinal):</p><ul>
+<li>The UPC doesn't matter; returns null. </li>
+</ul>
 
 </div>
 </div>
@@ -144,8 +161,13 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>If true: this UPC is the final decision on what this unit should do. </p>
-<p>Cease performing behaviors </p>
+<p>If true: </p>
+<ul>
+<li>This <a class="el" href="structcherrypi_1_1MicroAction.html" title="Represents a decision of how to control a unit. ">MicroAction</a>'s UPC is the final decision on what command to issue this unit. If the UPC is null, the decision is to issue no command.</li>
+</ul>
+<p>If false:</p><ul>
+<li>This <a class="el" href="structcherrypi_1_1MicroAction.html" title="Represents a decision of how to control a unit. ">MicroAction</a> represents the absence of a decision on what a unit should do. Allow downstream entities to make a decision of what to do. </li>
+</ul>
 
 </div>
 </div>
@@ -159,20 +181,23 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Only used when isFinal is true. </p>
-<p>If defined: This UPC is the final decision on what this unit should do.</p>
-<p>If undefined: The final decision on what this unit should do is to <em>do nothing</em> and issue no commands. </p>
+<p>if (isFinal): </p>
+<ul>
+<li>This UPC is the final decision on what this unit should do.</li>
+</ul>
+<p>if (!isFinal):</p><ul>
+<li>This UPC should be ignored. </li>
+</ul>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following files:<ul>
-<li>src/modules/squadcombat/<a class="el" href="behavior_8h_source.html">behavior.h</a></li>
-<li>src/modules/squadcombat/behavior.cpp</li>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>src/<a class="el" href="upc_8h_source.html">upc.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

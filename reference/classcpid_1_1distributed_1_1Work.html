@@ -106,18 +106,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8bd6f8d101376db2cfc6002ac63e5cc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd4bfd9a975132c69b7298e76fc0cc40"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Work.html#acd4bfd9a975132c69b7298e76fc0cc40">Work</a> (<a class="el" href="classcpid_1_1distributed_1_1Work.html">Work</a> &amp;&amp;)</td></tr>
 <tr class="separator:acd4bfd9a975132c69b7298e76fc0cc40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9b6a4003bd66de4a0557ed4a040ff95"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Work.html#ad9b6a4003bd66de4a0557ed4a040ff95">~Work</a> ()</td></tr>
-<tr class="separator:ad9b6a4003bd66de4a0557ed4a040ff95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a923e6d0b472f6ecf1de84eca168ebf8e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Work.html#a923e6d0b472f6ecf1de84eca168ebf8e">~Work</a> () noexcept(false)</td></tr>
+<tr class="separator:a923e6d0b472f6ecf1de84eca168ebf8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56362c397dfbcedc1b7733685b3e1d64"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Work.html#a56362c397dfbcedc1b7733685b3e1d64">isCompleted</a> ()</td></tr>
 <tr class="separator:a56362c397dfbcedc1b7733685b3e1d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a989c5c66348990e9540ab7f48a0e93a2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Work.html#a989c5c66348990e9540ab7f48a0e93a2">isSuccess</a> ()</td></tr>
 <tr class="separator:a989c5c66348990e9540ab7f48a0e93a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36a5d8cbab80de7653e381e29024841e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Work.html#a36a5d8cbab80de7653e381e29024841e">synchronize</a> ()</td></tr>
 <tr class="separator:a36a5d8cbab80de7653e381e29024841e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf55c3d0cabd555aa2c21eea5ff522f1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Work.html#abf55c3d0cabd555aa2c21eea5ff522f1">wait</a> ()</td></tr>
-<tr class="separator:abf55c3d0cabd555aa2c21eea5ff522f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad59485d2c7e95b60bfd110bed3e5bc60"><td class="memItemLeft" align="right" valign="top">const std::exception &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Work.html#ad59485d2c7e95b60bfd110bed3e5bc60">exception</a> () const </td></tr>
-<tr class="separator:ad59485d2c7e95b60bfd110bed3e5bc60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeecfc5cf2b4a53b20b4074b634242699"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Work.html#aeecfc5cf2b4a53b20b4074b634242699">wait</a> ()</td></tr>
+<tr class="separator:aeecfc5cf2b4a53b20b4074b634242699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c1080082ed0c8899f76163289a0f03c"><td class="memItemLeft" align="right" valign="top">const std::exception_ptr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Work.html#a3c1080082ed0c8899f76163289a0f03c">exception</a> () const </td></tr>
+<tr class="separator:a3c1080082ed0c8899f76163289a0f03c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -181,9 +181,12 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad9b6a4003bd66de4a0557ed4a040ff95"></a>
+<a class="anchor" id="a923e6d0b472f6ecf1de84eca168ebf8e"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cpid::distributed::Work::~Work </td>
@@ -192,17 +195,22 @@ Friends</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ad59485d2c7e95b60bfd110bed3e5bc60"></a>
+<a class="anchor" id="a3c1080082ed0c8899f76163289a0f03c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const std::exception &amp; cpid::distributed::Work::exception </td>
+          <td class="memname">const std::exception_ptr cpid::distributed::Work::exception </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -257,12 +265,12 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abf55c3d0cabd555aa2c21eea5ff522f1"></a>
+<a class="anchor" id="aeecfc5cf2b4a53b20b4074b634242699"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool cpid::distributed::Work::wait </td>
+          <td class="memname">void cpid::distributed::Work::wait </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -300,7 +308,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

@@ -105,8 +105,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a524cadc8cba3bacb9ee69d47eec68cff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ContinuousGaussianSampler.html#a524cadc8cba3bacb9ee69d47eec68cff">ContinuousGaussianSampler</a> (const std::string &amp;policyKey=&quot;Pi&quot;, const std::string &amp;stdKey=&quot;std&quot;, const std::string &amp;actionKey=&quot;action&quot;, const std::string &amp;pActionKey=&quot;pAction&quot;)</td></tr>
-<tr class="separator:a524cadc8cba3bacb9ee69d47eec68cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93540a8d17e2b15afa715689c586e2fa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ContinuousGaussianSampler.html#a93540a8d17e2b15afa715689c586e2fa">ContinuousGaussianSampler</a> (const std::string &amp;policyKey=<a class="el" href="namespacecpid.html#a5e012a3c47f8a7f24c96e60fe8b12836">kPiKey</a>, const std::string &amp;stdKey=<a class="el" href="namespacecpid.html#a2a45f2b139a1e24793beaf79d100784a">kSigmaKey</a>, const std::string &amp;actionKey=<a class="el" href="namespacecpid.html#a02d0c11bc655972a72aa213f138a8118">kActionKey</a>, const std::string &amp;pActionKey=<a class="el" href="namespacecpid.html#a66fbdc827ecce8857ed3a2149614c5b4">kPActionKey</a>)</td></tr>
+<tr class="separator:a93540a8d17e2b15afa715689c586e2fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9f4329c3e70d5c82c91beb9b224dacb"><td class="memItemLeft" align="right" valign="top">ag::Variant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ContinuousGaussianSampler.html#af9f4329c3e70d5c82c91beb9b224dacb">sample</a> (ag::Variant in) override</td></tr>
 <tr class="separator:af9f4329c3e70d5c82c91beb9b224dacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3756c32296304737da95c3e88c9d8a2b"><td class="memItemLeft" align="right" valign="top">ag::Variant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ContinuousGaussianSampler.html#a3756c32296304737da95c3e88c9d8a2b">computeProba</a> (const ag::Variant &amp;in, const ag::Variant &amp;action) override</td></tr>
@@ -130,9 +130,9 @@ Protected Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This sampler expects as input an unordered_map&lt;string, Variant&gt;, containing an entry policyKey, which is a tensor of size [b, n]. </p>
-<p>It outputs the same map, with a new key "action", a tensor of size [b] where each entry action[i] is sampled from a normal distribution centered in policy[i]. It also expects the stdKey to be set, it will be used as the standard deviation of the normal. It can be either a float/double, in which case the deviation will be the same for the batch, or it can be the same shape as the policy, for a finer control. It also adds a key pActionKey which corresponds to the probability of the sampled action </p>
+<p>It outputs the same map, with a new key kActionKey, a tensor of size [b] where each entry action[i] is sampled from a normal distribution centered in policy[i]. It also expects the stdKey to be set, it will be used as the standard deviation of the normal. It can be either a float/double, in which case the deviation will be the same for the batch, or it can be the same shape as the policy, for a finer control. It also adds a key pActionKey which corresponds to the probability of the sampled action </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a524cadc8cba3bacb9ee69d47eec68cff"></a>
+<a class="anchor" id="a93540a8d17e2b15afa715689c586e2fa"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -140,25 +140,25 @@ Protected Attributes</h2></td></tr>
           <td class="memname">cpid::ContinuousGaussianSampler::ContinuousGaussianSampler </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>policyKey</em> = <code>&quot;Pi&quot;</code>, </td>
+          <td class="paramname"><em>policyKey</em> = <code><a class="el" href="namespacecpid.html#a5e012a3c47f8a7f24c96e60fe8b12836">kPiKey</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>stdKey</em> = <code>&quot;std&quot;</code>, </td>
+          <td class="paramname"><em>stdKey</em> = <code><a class="el" href="namespacecpid.html#a2a45f2b139a1e24793beaf79d100784a">kSigmaKey</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>actionKey</em> = <code>&quot;action&quot;</code>, </td>
+          <td class="paramname"><em>actionKey</em> = <code><a class="el" href="namespacecpid.html#a02d0c11bc655972a72aa213f138a8118">kActionKey</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pActionKey</em> = <code>&quot;pAction&quot;</code>&#160;</td>
+          <td class="paramname"><em>pActionKey</em> = <code><a class="el" href="namespacecpid.html#a66fbdc827ecce8857ed3a2149614c5b4">kPActionKey</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -321,7 +321,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

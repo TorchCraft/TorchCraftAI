@@ -6,6 +6,8 @@ var searchData=
   ['feature_5fsize',['feature_size',['../classcherrypi_1_1DefoggerFeaturizer.html#a0e2a21364ab5313a3300bfd8586f6368',1,'cherrypi::DefoggerFeaturizer']]],
   ['features',['features',['../structcherrypi_1_1BuildingPlacerSample.html#acf932fc8043b1ec8dcce22c2c758939c',1,'cherrypi::BuildingPlacerSample']]],
   ['feedback',['Feedback',['../namespacecherrypi_1_1buildtypes.html#a872c05c5c0b3681bb82fbb4b4360f10c',1,'cherrypi::buildtypes']]],
+  ['file',['file',['../classcommon_1_1Exception.html#a12cd49ffc617b20110a501106aa8e354',1,'common::Exception']]],
+  ['filename_5f',['filename_',['../classcherrypi_1_1CherryVisDumperModule_1_1Logger_1_1LoggerStream.html#a209bd2a88f6d8cd48d45a860688b7283',1,'cherrypi::CherryVisDumperModule::Logger::LoggerStream']]],
   ['first',['first',['../structvisdom_1_1OptionPair.html#abf9b7f67554e476df48615f6a198faac',1,'visdom::OptionPair']]],
   ['first_5fframe',['first_frame',['../structtorchcraft_1_1replayer_1_1Order.html#af562ab7780df74166f44334741c8999c',1,'torchcraft::replayer::Order']]],
   ['firstseen',['firstSeen',['../structcherrypi_1_1Unit.html#a4899e8917500f64ca03cec272b35af32',1,'cherrypi::Unit']]],

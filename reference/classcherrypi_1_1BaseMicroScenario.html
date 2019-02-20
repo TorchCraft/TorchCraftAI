@@ -101,12 +101,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>Inherits <a class="el" href="classcherrypi_1_1ScenarioProvider.html">cherrypi::ScenarioProvider</a>.</p>
 
-<p>Inherited by <a class="el" href="classcherrypi_1_1MicroFixedScenario.html">cherrypi::MicroFixedScenario</a>, and <a class="el" href="classcherrypi_1_1RandomMicroScenario.html">cherrypi::RandomMicroScenario</a>.</p>
+<p>Inherited by <a class="el" href="classcherrypi_1_1MicroFixedScenario.html">cherrypi::MicroFixedScenario</a>, and <a class="el" href="classcherrypi_1_1MicroRandomScenario.html">cherrypi::MicroRandomScenario</a>.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9df4715e658b3ea10640cb726472d214"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#a9df4715e658b3ea10640cb726472d214">BaseMicroScenario</a> (int maxFrame, std::string map=&quot;test/maps/micro-empty2.scm&quot;, bool gui=false)</td></tr>
-<tr class="separator:a9df4715e658b3ea10640cb726472d214"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7529b6bf5b78b48179ea237a0794da8b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#a7529b6bf5b78b48179ea237a0794da8b">BaseMicroScenario</a> (int maxFrame, bool gui=false)</td></tr>
+<tr class="separator:a7529b6bf5b78b48179ea237a0794da8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a696bdd6b04c1132cb3dd49df18eb502f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#a696bdd6b04c1132cb3dd49df18eb502f">setReplay</a> (std::string const &amp;path)</td></tr>
+<tr class="separator:a696bdd6b04c1132cb3dd49df18eb502f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f159a8236925e5613efd7f6bc295499"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> &gt;, std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#a3f159a8236925e5613efd7f6bc295499">spawnNextScenario</a> (const std::function&lt; void(<a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> *)&gt; &amp;setup1, const std::function&lt; void(<a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> *)&gt; &amp;setup2) override</td></tr>
 <tr class="memdesc:a3f159a8236925e5613efd7f6bc295499"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spawns the scenario.  <a href="#a3f159a8236925e5613efd7f6bc295499">More...</a><br /></td></tr>
 <tr class="separator:a3f159a8236925e5613efd7f6bc295499"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,8 +126,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a458a7eba2b8a9c7fd5facbbddb8e9722"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; std::vector&lt; <a class="el" href="structcherrypi_1_1OnceModule_1_1SpawnInfo.html">OnceModule::SpawnInfo</a> &gt;, std::vector&lt; <a class="el" href="structcherrypi_1_1OnceModule_1_1SpawnInfo.html">OnceModule::SpawnInfo</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#a458a7eba2b8a9c7fd5facbbddb8e9722">getSpawnInfo</a> ()=0</td></tr>
-<tr class="separator:a458a7eba2b8a9c7fd5facbbddb8e9722"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab94edc482bdf3b79bdd02bde1d196b82"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structcherrypi_1_1ScenarioInfo.html">ScenarioInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#ab94edc482bdf3b79bdd02bde1d196b82">getScenarioInfo</a> ()=0</td></tr>
+<tr class="separator:ab94edc482bdf3b79bdd02bde1d196b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c183e919ad21556b3dc5504205c3019"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#a2c183e919ad21556b3dc5504205c3019">sendKillCmds</a> ()</td></tr>
 <tr class="separator:a2c183e919ad21556b3dc5504205c3019"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classcherrypi_1_1ScenarioProvider"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classcherrypi_1_1ScenarioProvider')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classcherrypi_1_1ScenarioProvider.html">cherrypi::ScenarioProvider</a></td></tr>
@@ -135,12 +137,18 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:aeb0367be02c4a8eb2d3e905dcc211457"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#aeb0367be02c4a8eb2d3e905dcc211457">map_</a></td></tr>
-<tr class="separator:aeb0367be02c4a8eb2d3e905dcc211457"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7b84b5a936a0663df9fea910712f396"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classtorchcraft_1_1Client.html">tc::Client</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#ae7b84b5a936a0663df9fea910712f396">client1_</a></td></tr>
 <tr class="separator:ae7b84b5a936a0663df9fea910712f396"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af804c8b82ce0b6ab81bd4340c0405649"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classtorchcraft_1_1Client.html">tc::Client</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#af804c8b82ce0b6ab81bd4340c0405649">client2_</a></td></tr>
 <tr class="separator:af804c8b82ce0b6ab81bd4340c0405649"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbc12107c08d7cedfc4faf4e765c9e02"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#adbc12107c08d7cedfc4faf4e765c9e02">replay_</a></td></tr>
+<tr class="separator:adbc12107c08d7cedfc4faf4e765c9e02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef5e5241b5a3b2395f8bb101c8f2a2a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#aef5e5241b5a3b2395f8bb101c8f2a2a4">launchedWithReplay_</a> {false}</td></tr>
+<tr class="separator:aef5e5241b5a3b2395f8bb101c8f2a2a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f98decada0c22ab2a8ac34a14dcc5dd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#a0f98decada0c22ab2a8ac34a14dcc5dd">gameCount_</a> = 0</td></tr>
+<tr class="separator:a0f98decada0c22ab2a8ac34a14dcc5dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a585a5a35360ead289c37652bd2e63a4a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1BaseMicroScenario.html#a585a5a35360ead289c37652bd2e63a4a">mapPathPrefix_</a></td></tr>
+<tr class="separator:a585a5a35360ead289c37652bd2e63a4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classcherrypi_1_1ScenarioProvider"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcherrypi_1_1ScenarioProvider')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcherrypi_1_1ScenarioProvider.html">cherrypi::ScenarioProvider</a></td></tr>
 <tr class="memitem:a38e60af4dea9ee885419cc500af3caad inherit pro_attribs_classcherrypi_1_1ScenarioProvider"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#a38e60af4dea9ee885419cc500af3caad">maxFrame_</a></td></tr>
 <tr class="separator:a38e60af4dea9ee885419cc500af3caad inherit pro_attribs_classcherrypi_1_1ScenarioProvider"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,7 +164,7 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:ada42fb5c36e15fe8df8544df8ee272bf inherit pro_attribs_classcherrypi_1_1ScenarioProvider"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a9df4715e658b3ea10640cb726472d214"></a>
+<a class="anchor" id="a7529b6bf5b78b48179ea237a0794da8b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -165,12 +173,6 @@ Protected Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>maxFrame</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>map</em> = <code>&quot;test/maps/micro-empty2.scm&quot;</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -217,7 +219,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a458a7eba2b8a9c7fd5facbbddb8e9722"></a>
+<a class="anchor" id="ab94edc482bdf3b79bdd02bde1d196b82"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -225,7 +227,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::pair&lt;std::vector&lt;<a class="el" href="structcherrypi_1_1OnceModule_1_1SpawnInfo.html">OnceModule::SpawnInfo</a>&gt;, std::vector&lt;<a class="el" href="structcherrypi_1_1OnceModule_1_1SpawnInfo.html">OnceModule::SpawnInfo</a>&gt; &gt; cherrypi::BaseMicroScenario::getSpawnInfo </td>
+          <td class="memname">virtual <a class="el" href="structcherrypi_1_1ScenarioInfo.html">ScenarioInfo</a> cherrypi::BaseMicroScenario::getScenarioInfo </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -238,7 +240,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classcherrypi_1_1RandomMicroScenario.html#a048c755725a04efc826aedb2e9aa3bcc">cherrypi::RandomMicroScenario</a>, and <a class="el" href="classcherrypi_1_1MicroFixedScenario.html#a40898680b74e9aa3c120f805264848bc">cherrypi::MicroFixedScenario</a>.</p>
+<p>Implemented in <a class="el" href="classcherrypi_1_1MicroRandomScenario.html#a844c24b49cf52e6153b73570801e7d1a">cherrypi::MicroRandomScenario</a>, and <a class="el" href="classcherrypi_1_1MicroFixedScenario.html#a9bd54ed2e1b57373915a14e53af01850">cherrypi::MicroFixedScenario</a>.</p>
 
 </div>
 </div>
@@ -259,6 +261,30 @@ Protected Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a696bdd6b04c1132cb3dd49df18eb502f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::BaseMicroScenario::setReplay </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -345,7 +371,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aeb0367be02c4a8eb2d3e905dcc211457"></a>
+<a class="anchor" id="a0f98decada0c22ab2a8ac34a14dcc5dd"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -353,7 +379,67 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string cherrypi::BaseMicroScenario::map_</td>
+          <td class="memname">int cherrypi::BaseMicroScenario::gameCount_ = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aef5e5241b5a3b2395f8bb101c8f2a2a4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cherrypi::BaseMicroScenario::launchedWithReplay_ {false}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a585a5a35360ead289c37652bd2e63a4a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string cherrypi::BaseMicroScenario::mapPathPrefix_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="adbc12107c08d7cedfc4faf4e765c9e02"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string cherrypi::BaseMicroScenario::replay_</td>
         </tr>
       </table>
   </td>
@@ -366,13 +452,13 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/<a class="el" href="scenarioprovider_8h_source.html">scenarioprovider.h</a></li>
-<li>src/scenarioprovider.cpp</li>
+<li>src/gameutils/<a class="el" href="scenarioprovider_8h_source.html">scenarioprovider.h</a></li>
+<li>src/gameutils/scenarioprovider.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

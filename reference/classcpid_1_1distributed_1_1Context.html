@@ -100,8 +100,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adf49e7906fa3b648c7c1c0d931b0295d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Context.html#adf49e7906fa3b648c7c1c0d931b0295d">Context</a> (std::shared_ptr&lt; Store &gt; store, int <a class="el" href="classcpid_1_1distributed_1_1Context.html#a3d26f5d0c662ba06b4e4afaeecab1c94">rank</a>, int <a class="el" href="classcpid_1_1distributed_1_1Context.html#a953c5976bab274aff12064992cb71b5c">size</a>)</td></tr>
-<tr class="separator:adf49e7906fa3b648c7c1c0d931b0295d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3287d104e9879137814ff22075dc53c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Context.html#ad3287d104e9879137814ff22075dc53c">Context</a> (std::shared_ptr&lt; Store &gt; store, int <a class="el" href="classcpid_1_1distributed_1_1Context.html#a3d26f5d0c662ba06b4e4afaeecab1c94">rank</a>, int <a class="el" href="classcpid_1_1distributed_1_1Context.html#a953c5976bab274aff12064992cb71b5c">size</a>, std::chrono::milliseconds timeout=std::chrono::seconds(1000))</td></tr>
+<tr class="separator:ad3287d104e9879137814ff22075dc53c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbb8f166f64e89eac15b4017aa2dc062"><td class="memTemplParams" colspan="2">template&lt;typename T , IsTorchDType&lt; T &gt; *  = nullptr&gt; </td></tr>
 <tr class="memitem:abbb8f166f64e89eac15b4017aa2dc062"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcpid_1_1distributed_1_1Work.html">Work</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Context.html#abbb8f166f64e89eac15b4017aa2dc062">allreduce</a> (T *ptr, int64_t s, ReduceOp=ReduceOp::SUM)</td></tr>
 <tr class="separator:abbb8f166f64e89eac15b4017aa2dc062"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,6 +130,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1b2e98a0317271cc87229d1e5e6c382d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f877c4f65bfdb9e15f480eded3a112b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcpid_1_1distributed_1_1Work.html">Work</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Context.html#a2f877c4f65bfdb9e15f480eded3a112b">allgather</a> (torch::Tensor, torch::Tensor)</td></tr>
 <tr class="separator:a2f877c4f65bfdb9e15f480eded3a112b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a744a0017d0d1c1e0b2ce5fec13461d51"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcpid_1_1distributed_1_1Work.html">Work</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1distributed_1_1Context.html#a744a0017d0d1c1e0b2ce5fec13461d51">barrier</a> ()</td></tr>
+<tr class="separator:a744a0017d0d1c1e0b2ce5fec13461d51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -139,7 +141,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a953c5976bab274aff12064992cb71b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="adf49e7906fa3b648c7c1c0d931b0295d"></a>
+<a class="anchor" id="ad3287d104e9879137814ff22075dc53c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -159,7 +161,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::chrono::milliseconds&#160;</td>
+          <td class="paramname"><em>timeout</em> = <code>std::chrono::seconds(1000)</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -374,6 +382,21 @@ template&lt;typename T , IsTorchDType&lt; T &gt; * &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a744a0017d0d1c1e0b2ce5fec13461d51"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcpid_1_1distributed_1_1Work.html">Work</a> cpid::distributed::Context::barrier </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ae1b7598372b1da332f5c5ed9693bfd1a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -520,7 +543,7 @@ template&lt;typename T , IsTorchDType&lt; T &gt; * &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

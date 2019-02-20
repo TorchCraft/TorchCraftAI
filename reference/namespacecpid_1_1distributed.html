@@ -103,9 +103,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a2583d65261f162e2d51e3b08c5ca4b6f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a2583d65261f162e2d51e3b08c5ca4b6f"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacecpid_1_1distributed.html#a2583d65261f162e2d51e3b08c5ca4b6f">IsTorchDType</a> = typename std::enable_if_t&lt; std::is_same&lt; T, uint8_t &gt;::value||std::is_same&lt; T, char &gt;::value||std::is_same&lt; T, int8_t &gt;::value||std::is_same&lt; T, int16_t &gt;::value||std::is_same&lt; T, int32_t &gt;::value||std::is_same&lt; T, int64_t &gt;::value||std::is_same&lt; T, float &gt;::value||std::is_same&lt; T, double &gt;::value &gt;</td></tr>
-<tr class="separator:a2583d65261f162e2d51e3b08c5ca4b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c566c7f3d886bf4a671139a660ddb87"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a7c566c7f3d886bf4a671139a660ddb87"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacecpid_1_1distributed.html#a7c566c7f3d886bf4a671139a660ddb87">IsTorchDType</a> = typename std::enable_if_t&lt; std::is_same&lt; T, uint8_t &gt;::value||std::is_same&lt; T, char &gt;::value||std::is_same&lt; T, int8_t &gt;::value||std::is_same&lt; T, int16_t &gt;::value||std::is_same&lt; T, int32_t &gt;::value||std::is_same&lt; T, int64_t &gt;::value||std::is_same&lt; T, float &gt;::value||std::is_same&lt; T, double &gt;::value &gt;</td></tr>
+<tr class="separator:a7c566c7f3d886bf4a671139a660ddb87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -146,18 +146,20 @@ Functions</h2></td></tr>
 <tr class="separator:aec19d7bf64520bea6e3d4efa11d463fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaa4aebe6af2b0d98ccd065a5d876355"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcpid_1_1distributed_1_1Work.html">Work</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid_1_1distributed.html#adaa4aebe6af2b0d98ccd065a5d876355">allgather</a> (torch::Tensor out, torch::Tensor in)</td></tr>
 <tr class="separator:adaa4aebe6af2b0d98ccd065a5d876355"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7e6e5ca4689e4737e96a8c7a4d74cf7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcpid_1_1distributed_1_1Work.html">Work</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid_1_1distributed.html#af7e6e5ca4689e4737e96a8c7a4d74cf7">barrier</a> ()</td></tr>
+<tr class="separator:af7e6e5ca4689e4737e96a8c7a4d74cf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f202c097c06484c32e0f21b5af43783"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecpid_1_1distributed.html#a4f202c097c06484c32e0f21b5af43783">FOR_ALL_TYPES</a> (FORCE_INSTANTIATION)</td></tr>
 <tr class="separator:a4f202c097c06484c32e0f21b5af43783"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a class="anchor" id="a2583d65261f162e2d51e3b08c5ca4b6f"></a>
+<a class="anchor" id="a7c566c7f3d886bf4a671139a660ddb87"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacecpid_1_1distributed.html#a2583d65261f162e2d51e3b08c5ca4b6f">cpid::distributed::IsTorchDType</a> = typedef typename std::enable_if_t&lt;std::is_same&lt;T, uint8_t&gt;::value || std::is_same&lt;T, char&gt;::value || std::is_same&lt;T, int8_t&gt;::value || std::is_same&lt;T, int16_t&gt;::value || std::is_same&lt;T, int32_t&gt;::value || std::is_same&lt;T, int64_t&gt;::value || std::is_same&lt;T, float&gt;::value || std::is_same&lt;T, double&gt;::value&gt;</td>
+          <td class="memname">using <a class="el" href="namespacecpid_1_1distributed.html#a7c566c7f3d886bf4a671139a660ddb87">cpid::distributed::IsTorchDType</a> = typedef typename std::enable_if_t&lt; std::is_same&lt;T, uint8_t&gt;::value || std::is_same&lt;T, char&gt;::value || std::is_same&lt;T, int8_t&gt;::value || std::is_same&lt;T, int16_t&gt;::value || std::is_same&lt;T, int32_t&gt;::value || std::is_same&lt;T, int64_t&gt;::value || std::is_same&lt;T, float&gt;::value || std::is_same&lt;T, double&gt;::value&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -367,6 +369,21 @@ template&lt;typename T , IsTorchDType&lt; T &gt; * &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="af7e6e5ca4689e4737e96a8c7a4d74cf7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcpid_1_1distributed_1_1Work.html">Work</a> cpid::distributed::barrier </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a8b0ae8985e2ad924630634a7408d914b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -564,7 +581,7 @@ template&lt;typename T , IsTorchDType&lt; T &gt; * &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

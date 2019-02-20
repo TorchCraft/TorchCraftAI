@@ -102,8 +102,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a13ae90d756288ff1dfe7e149cf44af02"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisLogSink.html#a13ae90d756288ff1dfe7e149cf44af02">CherryVisLogSink</a> (<a class="el" href="classcherrypi_1_1CherryVisDumperModule.html">CherryVisDumperModule</a> *module)</td></tr>
-<tr class="separator:a13ae90d756288ff1dfe7e149cf44af02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad323aba3cedaca6ee11dd524de11efe6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisLogSink.html#ad323aba3cedaca6ee11dd524de11efe6">CherryVisLogSink</a> (<a class="el" href="classcherrypi_1_1CherryVisDumperModule.html">CherryVisDumperModule</a> *module, <a class="el" href="classcherrypi_1_1State.html">State</a> *state)</td></tr>
+<tr class="separator:ad323aba3cedaca6ee11dd524de11efe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2857a9325bcd692cd09c89746d56bfd"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisLogSink.html#ab2857a9325bcd692cd09c89746d56bfd">~CherryVisLogSink</a> ()</td></tr>
 <tr class="separator:ab2857a9325bcd692cd09c89746d56bfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac39cd7f544c0c570961053fc37f4370f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisLogSink.html#ac39cd7f544c0c570961053fc37f4370f">send</a> (google::LogSeverity severity, const char *full_filename, const char *base_filename, int line, const struct::tm *tm_time, const char *message, size_t message_len) override</td></tr>
@@ -113,11 +113,13 @@ Public Member Functions</h2></td></tr>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a092ff46b7be3e72ca7855d2321e656fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html">CherryVisDumperModule</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisLogSink.html#a092ff46b7be3e72ca7855d2321e656fd">module_</a></td></tr>
 <tr class="separator:a092ff46b7be3e72ca7855d2321e656fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd72ffe9b14e76612bdfe4676bfe9560"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisLogSink.html#afd72ffe9b14e76612bdfe4676bfe9560">state_</a></td></tr>
+<tr class="separator:afd72ffe9b14e76612bdfe4676bfe9560"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a1959d4d5da262647b55d356b45c5d7"><td class="memItemLeft" align="right" valign="top">std::thread::id&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1CherryVisLogSink.html#a1a1959d4d5da262647b55d356b45c5d7">threadId_</a></td></tr>
 <tr class="separator:a1a1959d4d5da262647b55d356b45c5d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a13ae90d756288ff1dfe7e149cf44af02"></a>
+<a class="anchor" id="ad323aba3cedaca6ee11dd524de11efe6"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -128,8 +130,18 @@ Protected Attributes</h2></td></tr>
           <td class="memname">cherrypi::CherryVisLogSink::CherryVisLogSink </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classcherrypi_1_1CherryVisDumperModule.html">CherryVisDumperModule</a> *&#160;</td>
-          <td class="paramname"><em>module</em></td><td>)</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>state</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -250,6 +262,26 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="afd72ffe9b14e76612bdfe4676bfe9560"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcherrypi_1_1State.html">State</a>* cherrypi::CherryVisLogSink::state_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1a1959d4d5da262647b55d356b45c5d7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -276,7 +308,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 28 2018 17:27:58 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 20 2019 18:40:11 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

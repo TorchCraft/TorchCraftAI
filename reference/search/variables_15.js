@@ -8,6 +8,7 @@ var searchData=
   ['velocityx',['velocityX',['../structtorchcraft_1_1replayer_1_1Unit.html#a3f0b947d87fda2a1d56d17fa995dfe02',1,'torchcraft::replayer::Unit::velocityX()'],['../classtorchcraft_1_1replayer_1_1detail_1_1UnitDiff.html#af5465d7c8ef246865273707d6148708f',1,'torchcraft::replayer::detail::UnitDiff::velocityX()']]],
   ['velocityy',['velocityY',['../structtorchcraft_1_1replayer_1_1Unit.html#a56009f1a1e9268341e174be13c49b1cf',1,'torchcraft::replayer::Unit::velocityY()'],['../classtorchcraft_1_1replayer_1_1detail_1_1UnitDiff.html#ac29b96f9e246042dde2f6701063873a1',1,'torchcraft::replayer::detail::UnitDiff::velocityY()']]],
   ['ventral_5fsacs',['Ventral_Sacs',['../namespacecherrypi_1_1buildtypes.html#a51292ea04192b0c47a072a97a320d3f8',1,'cherrypi::buildtypes']]],
+  ['visdomlines_5f',['visdomLines_',['../classcpid_1_1Checkpointer.html#a52f4b062d9fb4c25651f4dc801ce94ad',1,'cpid::Checkpointer']]],
   ['visibility',['visibility',['../classtorchcraft_1_1State.html#ac2c1beaf0d8079bb3e8edc8283f332cb',1,'torchcraft::State']]],
   ['visibility_5fsize',['visibility_size',['../classtorchcraft_1_1State.html#a28b19121cc70f8033e6a34d13b3c6700',1,'torchcraft::State']]],
   ['visible',['visible',['../structcherrypi_1_1Tile.html#ae0856412435e59ca750ee7bfdf14b683',1,'cherrypi::Tile::visible()'],['../structcherrypi_1_1Unit.html#a538fd376d7479819215a69d798d97640',1,'cherrypi::Unit::visible()'],['../structtorchcraft_1_1replayer_1_1Unit.html#a4ad753d3afc644868420677fcf6a0aec',1,'torchcraft::replayer::Unit::visible()']]],

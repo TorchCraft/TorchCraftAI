@@ -1,9 +1,12 @@
 var searchData=
 [
-  ['tasktimestats',['TaskTimeStats',['../classcherrypi_1_1Blackboard.html#a3b5dbcb04973f1565b89b8a970806149',1,'cherrypi::Blackboard']]],
-  ['tensordest',['TensorDest',['../structcherrypi_1_1UnitAttributeFeaturizer.html#a9b082304736bc7e9910665b27805f254',1,'cherrypi::UnitAttributeFeaturizer']]],
-  ['tensortransform',['TensorTransform',['../namespacecommon.html#a54cd622e23826275f4fc3b580c73dcf0',1,'common']]],
-  ['timeinterval',['TimeInterval',['../classcpid_1_1MetricsContext.html#ab04736c1bcf91e268faca6b694bb7d36',1,'cpid::MetricsContext']]],
-  ['timestamp',['Timestamp',['../classcpid_1_1MetricsContext.html#a13f3cabc968a52b04bc9b41061f1ff52',1,'cpid::MetricsContext']]],
-  ['type',['type',['../classcherrypi_1_1BufferedConsumer.html#ab1b10f023cd5afe85e31309503cbb8ef',1,'cherrypi::BufferedConsumer::type()'],['../classcherrypi_1_1BufferedProducer.html#ae4a5f852b2fc404241147afaad8bc470',1,'cherrypi::BufferedProducer::type()']]]
+  ['sampleoutput',['SampleOutput',['../classcpid_1_1ReplayBuffer.html#accd68f0b70311ff155c2fb3fd9f1953e',1,'cpid::ReplayBuffer']]],
+  ['setcreateprioritystate',['SetCreatePriorityState',['../structcherrypi_1_1UPCTuple.html#af55c3af3d4880b9fe19cc46c928ae85b',1,'cherrypi::UPCTuple']]],
+  ['spawnlist',['SpawnList',['../namespacecherrypi.html#a1beb028dfd5d3637403888148993d1a1',1,'cherrypi']]],
+  ['statet',['StateT',['../structcherrypi_1_1UPCTuple.html#a95e3a3ce11e86aafc094e14f905ca711',1,'cherrypi::UPCTuple']]],
+  ['stepfunctionstate',['StepFunctionState',['../classcherrypi_1_1LambdaModule.html#a1c80cf8ca327d1db44776340ee3c89e1',1,'cherrypi::LambdaModule']]],
+  ['stepfunctionstatemodule',['StepFunctionStateModule',['../classcherrypi_1_1LambdaModule.html#a85f6e4a6a51c1547be75c0ec69adabf9',1,'cherrypi::LambdaModule']]],
+  ['store',['Store',['../classcpid_1_1ReplayBuffer.html#a5048b94d61b457e8b46910b7dab6206c',1,'cpid::ReplayBuffer']]],
+  ['stringlist',['StringList',['../namespacevisdom.html#a5fb05f79fd318abaf712938aba55df5d',1,'visdom']]],
+  ['stringlistmap',['StringListMap',['../namespacevisdom.html#ae6cf981d835fa81157b55fadeff6f63a',1,'visdom']]]
 ];
