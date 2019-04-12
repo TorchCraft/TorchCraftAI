@@ -7,7 +7,7 @@ Once you've compiled CherryPi (Instructions for [Linux](https://torchcraft.githu
 
 ## (Recommended) Get trained models
 
-If you have an NVIDIA GPU and are using CUDA, you'll want to download the trained models of the [Build Order Switcher](https://s3.amazonaws.com/torchcraftai/models/1.0/bos_model_20181128.bin) and the [Building Placer](https://s3.amazonaws.com/torchcraftai/models/1.0/bp_model.bin).
+If you have an NVIDIA GPU and are using CUDA, you'll want to download the trained models of the [Build Order Switcher](https://dl.fbaipublicfiles.com/torchcraftai/models/1.0/bos_model_20181128.bin) and the [Building Placer](https://dl.fbaipublicfiles.com/torchcraftai/models/1.0/bp_model.bin).
 
 To enable the trained models, add the command line arguments specified under "Run the client". CherryPi can play without the trained models, but will be at reduced strength.
 
@@ -36,7 +36,7 @@ This is the recommanded way to run StarCraft. On a Mac, we recommend running a L
 Here, SC-Docker will only be used to run StarCraft, the opponent bot, and the TorchCraft server (`BWEnv.dll`).
 1. [Install Docker](https://docs.docker.com/install/)
 2. [Install SC-Docker](https://github.com/Games-and-Simulations/sc-docker) by cloning the GitHub repo and running `python setup.py install` manually. The version available via pip does not support the use-case described here yet.
-3. [Download this bot profile](https://s3.amazonaws.com/torchcraftai/aux/1.0/TorchCraft_scbw_profile.zip) and unzip it in `~/.scbw/bots/`. FYI: this is is just a folder having the necessary DLLs: BWAPI and TorchCraft (`BWEnv.dll`), and a minimal json config file.
+3. [Download this bot profile](https://dl.fbaipublicfiles.com/torchcraftai/aux/1.0/TorchCraft_scbw_profile.zip) and unzip it in `~/.scbw/bots/`. FYI: this is is just a folder having the necessary DLLs: BWAPI and TorchCraft (`BWEnv.dll`), and a minimal json config file.
 4. Run a game using SC-Docker. Example: `scbw.play --bots "TorchCraft" "Steamhammer"` (that only injects the TorchCraft server).
 5. Run the bot with `./cherrypi -hostname 127.0.0.1 [-bos_model bwapi-data/AI/bos_model.bin] [...]`. If on Mac, run the bot with `-hostname localhost`.
 

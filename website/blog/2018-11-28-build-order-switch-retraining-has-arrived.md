@@ -13,9 +13,9 @@ Now that the tournament is over, many authors provided new versions of their bot
 We added a new opening and simply re-trained our model against newly available and updated opponents.
 In internal evaluations, our win rate against the AIIDE 2018 winner [SAIDA](https://sscaitournament.com/index.php?action=botDetails&bot=SAIDA) is now at about 55-60% (SSCAIT version from 11/14) , up from 17% with the AIIDE versions.
 
-The new model is [available on S3](https://s3.amazonaws.com/torchcraftai/models/1.0/bos_model_20181128.bin) and can be used as described in [the documentation](docs/play-games.html):
+The new model is [available on S3](https://dl.fbaipublicfiles.com/torchcraftai/models/1.0/bos_model_20181128.bin) and can be used as described in [the documentation](docs/play-games.html):
 ```bash
-curl -o bwapi-data/AI/bos_model.bin https://s3.amazonaws.com/torchcraftai/models/1.0/bos_model_20181128.bin
+curl -o bwapi-data/AI/bos_model.bin https://dl.fbaipublicfiles.com/torchcraftai/models/1.0/bos_model_20181128.bin
 cherrypi[.exe] -hostname 127.0.0.1 -port 11111 -bos_model bwapi-data/AI/bos_model.bin -bp_model bwapi-data/AI/bp_model.bin
 ```
 
@@ -28,7 +28,7 @@ If the advantage over the currently active build order is higher than a threshol
 These transitions are highlighted in the plots with vertical lines.
 Click on the graphs to view the full-resolution versions.
 
-#### Game 1 [[replay](https://s3.amazonaws.com/torchcraftai/assets/bos-game1.rep)]
+#### Game 1 [[replay](https://dl.fbaipublicfiles.com/torchcraftai/assets/bos-game1.rep)]
 
 Played against SAIDA (SSCAIT version from 11/14).
 Our confidence in winning the game drops around the 4-minute mark when we become aware of SAIDA's planned expansion and its first military units, but stabilizes again at 5 minute after our Hydras managed to hold off the approaching Vultures.
@@ -40,7 +40,7 @@ Finally, we transition to a more diverse army composition with the switch to `zv
 <img src="/TorchCraftAI/blog/assets/bos-game1.svg"/>
 </a>
 
-#### Game 2 [[replay](https://s3.amazonaws.com/torchcraftai/assets/bos-game2.rep)]
+#### Game 2 [[replay](https://dl.fbaipublicfiles.com/torchcraftai/assets/bos-game2.rep)]
 
 This is a game against the AIIDE 2018 version of Locutus.
 We start the game with `3basepoollings`, an economy-heavy opening.
@@ -53,7 +53,7 @@ We finally defeat Locutus with an army made up of Zerglings, Mutalisks and Ultra
 <img src="/TorchCraftAI/blog/assets/bos-game2.svg"/>
 </a>
 
-#### Game 3 [[replay](https://s3.amazonaws.com/torchcraftai/assets/bos-game3.rep)]
+#### Game 3 [[replay](https://dl.fbaipublicfiles.com/torchcraftai/assets/bos-game3.rep)]
 
 This is another game against SAIDA (SSCAIT version from 11/14) in which CherryPi loses.
 The switch to `zvp10hatch`, which is a  happens quite early in response to early Vultures.
