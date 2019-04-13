@@ -16,9 +16,9 @@ For Protoss and Terran in particular, unit production buildings (in particular, 
 For defense buildings, placement is important to ensure that worker units are protected or choke points are blocked.
 
 Let's take a look at the [BuildingPlacer module](modules.md) that is used in CherryPi. 
-Its input is a [UPCTuple](design.md) with a "Create" command and specified unit **type** (which is required to be a building).
+Its input is a [UPCTuple](core-abstractions.md#upctuple) with a "Create" command and specified unit **type** (which is required to be a building).
 The module will then refine the **position** distribution to a concrete location.
-The actual construction will be performed by the [Builder module](modules.md); the BuildingPlacer module will however track this with a [proxy task](design.md) and perform re-tries with possibly different positions until the building is finally being constructed.
+The actual construction will be performed by the [Builder module](modules.md); the BuildingPlacer module will however track this with a [proxy task](core-abstractions.md#tasks) and perform re-tries with possibly different positions until the building is finally being constructed.
 
 
 ## Action Space Restrictions
