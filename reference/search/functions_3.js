@@ -27,7 +27,7 @@ var searchData=
   ['detectenemybuild',['detectEnemyBuild',['../classcherrypi_1_1ABBOzvpoverpoolbase.html#a0d601ee7fdea67c76cb997e392149447',1,'cherrypi::ABBOzvpoverpoolbase::detectEnemyBuild()'],['../classcherrypi_1_1ABBOzvt3hatchlurker.html#a94a4c09a22058c9d03686f6b55a7e3b5',1,'cherrypi::ABBOzvt3hatchlurker::detectEnemyBuild()']]],
   ['didfail',['didFail',['../classcherrypi_1_1Controller.html#ac29485a68abb2fe9c1f7a8c239d436f1',1,'cherrypi::Controller::didFail()'],['../classcherrypi_1_1BuilderControllerBase.html#a83bfdf2d099745002ced181f62e369c1',1,'cherrypi::BuilderControllerBase::didFail()']]],
   ['didsucceed',['didSucceed',['../classcherrypi_1_1Controller.html#ab79b1a20d8921ee803af15305ed3aa32',1,'cherrypi::Controller::didSucceed()'],['../classcherrypi_1_1BuilderControllerBase.html#a0d6c03eb5ae6ec5b80b192fd398301cf',1,'cherrypi::BuilderControllerBase::didSucceed()']]],
-  ['dirname',['dirname',['../namespacecommon_1_1fsutils.html#a537001fc5fb2097bd5b1b15592596d93',1,'common::fsutils']]],
+  ['dirname',['dirname',['../namespacecherrypi_1_1fsutils.html#a6e41c1f2fcebfaf8f7ea1642ba8917d0',1,'cherrypi::fsutils::dirname()'],['../namespacecommon_1_1fsutils.html#a537001fc5fb2097bd5b1b15592596d93',1,'common::fsutils::dirname()']]],
   ['discarddcontext',['discardDContext',['../classcpid_1_1Cpid2kWorker.html#abb9494a292c07cfbd5892cad9cfa54e3',1,'cpid::Cpid2kWorker']]],
   ['discretemaxsampler',['DiscreteMaxSampler',['../classcpid_1_1DiscreteMaxSampler.html#a84c7dc9087e0d672eacf67e87bbe8d2e',1,'cpid::DiscreteMaxSampler']]],
   ['dismiss',['dismiss',['../classcommon_1_1ScopeGuard.html#aafd7acae72176f26bd0bd2444e031173',1,'common::ScopeGuard']]],

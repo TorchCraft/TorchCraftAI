@@ -266,7 +266,7 @@ A skeleton class of the TorchCraftAI module can look like this:</p>
 In the above example, we did not require an upstream UPC to initiate an action.
 This is fine for micro-scenarios, but in a full game, higher-level modules will request specific actions at different points in the game; additionally, multiple actions may be requested in parallel.
 Below, we will consider individual episodes for each UPC that should be performed with our low-level model.
-The module scans the blackboard for relevant UPCs, and, if it finds a candidate, will instantiate a <a href="core-abstractions.md#controllers">Controller</a> to perform the requested action.
+The module scans the blackboard for relevant UPCs, and, if it finds a candidate, will instantiate a <a href="/TorchCraftAI/docs/core-abstractions.html#controllers">Controller</a> to perform the requested action.
 The episode is then tied to the life-time of the controller.
 The logic remains pretty similar, however instead of starting and finishing episodes in <code>onGameStart()</code> and <code>onGameEnd()</code> we'll use the controller's constructor and destructor.</p>
 <pre><code class="hljs css language-cpp"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyController</span> :</span> <span class="hljs-keyword">public</span> cherrypi::Controller {

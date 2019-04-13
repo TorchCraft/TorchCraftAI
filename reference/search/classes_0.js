@@ -13,6 +13,7 @@ var searchData=
   ['abbohydracheese',['ABBOhydracheese',['../classcherrypi_1_1ABBOhydracheese.html',1,'cherrypi']]],
   ['abbohydras',['ABBOhydras',['../classcherrypi_1_1ABBOhydras.html',1,'cherrypi']]],
   ['abbomidmassling',['ABBOmidmassling',['../classcherrypi_1_1ABBOmidmassling.html',1,'cherrypi']]],
+  ['abbop4gate',['ABBOp4gate',['../classcherrypi_1_1ABBOp4gate.html',1,'cherrypi']]],
   ['abbopve2gate1012',['ABBOpve2gate1012',['../classcherrypi_1_1ABBOpve2gate1012.html',1,'cherrypi']]],
   ['abbopve4gate',['ABBOpve4gate',['../classcherrypi_1_1ABBOpve4gate.html',1,'cherrypi']]],
   ['abbopvp2gatedt',['ABBOpvp2gatedt',['../classcherrypi_1_1ABBOpvp2gatedt.html',1,'cherrypi']]],

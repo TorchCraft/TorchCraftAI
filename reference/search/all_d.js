@@ -56,6 +56,7 @@ var searchData=
   ['normalpdf',['normalPDF',['../namespacecommon.html#aafe019d691deac5c07646f046796bc9f',1,'common::normalPDF(torch::Tensor x, torch::Tensor mean, torch::Tensor std)'],['../namespacecommon.html#af47e9d6eb984101dd1ca8602260acf7b',1,'common::normalPDF(torch::Tensor x, torch::Tensor mean, double std)']]],
   ['nottracking',['NotTracking',['../namespacecherrypi.html#af2386b7dab3bfecc1df2dcef144dc342a7d16123e4cbbeffacd9a0db5cdab945a',1,'cherrypi']]],
   ['novalue',['NoValue',['../structcherrypi_1_1utils_1_1NoValue.html',1,'cherrypi::utils']]],
+  ['nthreads',['nthreads',['../classcherrypi_1_1BufferedConsumer.html#a2efb19cff6971f044ccf07d2ba7316a7',1,'cherrypi::BufferedConsumer']]],
   ['nuclear_5fstrike',['Nuclear_Strike',['../structtorchcraft_1_1replayer_1_1Resources.html#af952d20c39931b01a111fb62369261cdaabfcb00bb2254061952dc9cd31852c1e',1,'torchcraft::replayer::Resources']]],
   ['null',['null',['../classcherrypi_1_1Rect2T.html#acfe760e326f4a60dd346e956bffc52cf',1,'cherrypi::Rect2T']]],
   ['numairattacks',['numAirAttacks',['../structcherrypi_1_1BuildType.html#a153d66610e84f3b0ae09794fae8063d0',1,'cherrypi::BuildType']]],

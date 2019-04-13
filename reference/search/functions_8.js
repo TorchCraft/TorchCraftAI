@@ -57,7 +57,7 @@ var searchData=
   ['iscontrollingunitwith',['isControllingUnitWith',['../classcherrypi_1_1ControllerBase.html#a0074b4c8dce76f71486ab1d5406719e1',1,'cherrypi::ControllerBase']]],
   ['isdebug',['isDebug',['../classtcbwapi_1_1TCGame.html#a366edf9270cda8470d22f7c7775c8da9',1,'tcbwapi::TCGame']]],
   ['isdetected',['isDetected',['../classtcbwapi_1_1TCUnit.html#a0302fa339e29ad7ce5fc56ac25ca1b7d',1,'tcbwapi::TCUnit']]],
-  ['isdir',['isdir',['../namespacecommon_1_1fsutils.html#ac76edac0fd66a206c313498891debda1',1,'common::fsutils']]],
+  ['isdir',['isdir',['../namespacecherrypi_1_1fsutils.html#a1d7c22e93ecd91769d39bb98fac8daac',1,'cherrypi::fsutils::isdir()'],['../namespacecommon_1_1fsutils.html#ac76edac0fd66a206c313498891debda1',1,'common::fsutils::isdir()']]],
   ['isdone',['isDone',['../classcpid_1_1Cpid2kWorker.html#a6f889e38174b20556f2b2d19692af8f6',1,'cpid::Cpid2kWorker::isDone()'],['../classcpid_1_1ReplayBuffer.html#aa83f21ed9fbf7a71d09bb1ef81da1221',1,'cpid::ReplayBuffer::isDone()'],['../classcpid_1_1Trainer.html#a8dfdbf82bb3d08a33cc5262a842d8ed2',1,'cpid::Trainer::isDone()']]],
   ['isequalbutnotnovalue',['isEqualButNotNoValue',['../namespacecherrypi_1_1utils.html#a77b79277452046b25c00ed9ae52adc96',1,'cherrypi::utils::isEqualButNotNoValue(A &amp;&amp;a, B &amp;&amp;b)'],['../namespacecherrypi_1_1utils.html#a00ac6069a17c4b9e587aa2eddb7b3596',1,'cherrypi::utils::isEqualButNotNoValue(A &amp;&amp;a, NoValue)'],['../namespacecherrypi_1_1utils.html#ab53ce5786ec22431579adefbd8f3d981',1,'cherrypi::utils::isEqualButNotNoValue(NoValue, B &amp;&amp;b)']]],
   ['iserror',['isError',['../classcpid_1_1RedisReply.html#a6780a18e1031ebda33b438649995a0fc',1,'cpid::RedisReply']]],

@@ -4,7 +4,7 @@ var searchData=
   ['maelstrommed',['Maelstrommed',['../structtorchcraft_1_1replayer_1_1Unit.html#a5f6cd6025bd54a25d93d8ce3afed1f49acdfaeaafd6739b07ab691738af1429c6',1,'torchcraft::replayer::Unit']]],
   ['map',['Map',['../namespacecherrypi_1_1bos.html#a7e7a60f51b6712a6f1d24f9010516729a46f3ea056caa3126b91f3f70beea068c',1,'cherrypi::bos']]],
   ['mapid',['MapId',['../namespacecherrypi_1_1bos.html#a7e7a60f51b6712a6f1d24f9010516729a46231103c5b6adfe07191962e3240486',1,'cherrypi::bos']]],
-  ['max',['Max',['../namespacecherrypi.html#a32ba27ff01921c2b9cfa083edeb1e5cda6a061313d22e51e0f25b7cd4dc065233',1,'cherrypi::Max()'],['../namespacecherrypi.html#a4f9f0d3eabd405b439c64b0f3d56a78fa4a2a6dbba8efd1eac26828d118339b9e',1,'cherrypi::MAX()']]],
+  ['max',['MAX',['../namespacecherrypi.html#a4f9f0d3eabd405b439c64b0f3d56a78fa4a2a6dbba8efd1eac26828d118339b9e',1,'cherrypi::MAX()'],['../namespacecherrypi.html#a32ba27ff01921c2b9cfa083edeb1e5cda6a061313d22e51e0f25b7cd4dc065233',1,'cherrypi::Max()']]],
   ['melee',['Melee',['../namespacecherrypi.html#a6c72971bf84ad3c50618e5c5dd016b6dafcbd772e48c4b07d7d3be13b37a82f5e',1,'cherrypi']]],
   ['metabolic_5fboost',['Metabolic_Boost',['../structtorchcraft_1_1replayer_1_1Resources.html#a7e1d378d66fd61a9120045dfbe4f7bfaa0056edefaf1b21f2d378c96acfff2318',1,'torchcraft::replayer::Resources']]],
   ['metasynaptic_5fnode',['Metasynaptic_Node',['../structtorchcraft_1_1replayer_1_1Resources.html#a7e1d378d66fd61a9120045dfbe4f7bfaa5b0061aae7c7f2f8a918f51bc0cd5cff',1,'torchcraft::replayer::Resources']]],

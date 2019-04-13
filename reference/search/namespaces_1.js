@@ -17,6 +17,7 @@ var searchData=
   ['featureimpl',['featureimpl',['../namespacecherrypi_1_1featureimpl.html',1,'cherrypi']]],
   ['features',['features',['../namespacecherrypi_1_1features.html',1,'cherrypi']]],
   ['fsutils',['fsutils',['../namespacecommon_1_1fsutils.html',1,'common']]],
+  ['fsutils',['fsutils',['../namespacecherrypi_1_1fsutils.html',1,'cherrypi']]],
   ['model',['model',['../namespacecherrypi_1_1model.html',1,'cherrypi']]],
   ['movefilters',['movefilters',['../namespacecherrypi_1_1movefilters.html',1,'cherrypi']]],
   ['netutils',['netutils',['../namespacecpid_1_1netutils.html',1,'cpid']]],

@@ -34,6 +34,7 @@ var searchData=
   ['nonblocking_5f',['nonBlocking_',['../classcherrypi_1_1BasePlayer.html#aabc0457576b3ead972aca0a456b57a47',1,'cherrypi::BasePlayer']]],
   ['norm1',['norm1',['../structcommon_1_1WeightSummary.html#afdea9ef3a0e27642ef5853a5607324ae',1,'common::WeightSummary']]],
   ['norm2',['norm2',['../structcommon_1_1WeightSummary.html#acc154373be28a7c7a998bcc48c29a56e',1,'common::WeightSummary']]],
+  ['nthreads',['nthreads',['../classcherrypi_1_1BufferedConsumer.html#a2efb19cff6971f044ccf07d2ba7316a7',1,'cherrypi::BufferedConsumer']]],
   ['numairattacks',['numAirAttacks',['../structcherrypi_1_1BuildType.html#a153d66610e84f3b0ae09794fae8063d0',1,'cherrypi::BuildType']]],
   ['numchannels',['numChannels',['../structcherrypi_1_1FeatureDescriptor.html#afe9565fdf476492d6732b315e58f552b',1,'cherrypi::FeatureDescriptor::numChannels()'],['../structcherrypi_1_1UnitAttributeFeaturizer.html#a71ea32882a2310cc94b5e1af08803ad5',1,'cherrypi::UnitAttributeFeaturizer::numChannels()']]],
   ['numgroundattacks',['numGroundAttacks',['../structcherrypi_1_1BuildType.html#ae3be766e7e497665a12210f0f446c209',1,'cherrypi::BuildType']]],

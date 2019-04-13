@@ -87,7 +87,7 @@ var searchData=
   ['knumunittypes',['kNumUnitTypes',['../structcherrypi_1_1UnitTypeFeaturizer.html#ad9a91881fbeff541700b2b688397c348',1,'cherrypi::UnitTypeFeaturizer::kNumUnitTypes()'],['../structcherrypi_1_1UnitTypeDefoggerFeaturizer.html#ac297d7ba463caeb24c9681d065077702',1,'cherrypi::UnitTypeDefoggerFeaturizer::kNumUnitTypes()'],['../structcherrypi_1_1UnitTypeMDefoggerFeaturizer.html#a08c500861cc2e6e55f3e42f504c13ddb',1,'cherrypi::UnitTypeMDefoggerFeaturizer::kNumUnitTypes()']]],
   ['kopeningbuildorderkey',['kOpeningBuildOrderKey',['../classcherrypi_1_1Blackboard.html#ac2dae19e74b527841abd8ef96659a8f3',1,'cherrypi::Blackboard']]],
   ['kpactionkey',['kPActionKey',['../namespacecpid.html#a66fbdc827ecce8857ed3a2149614c5b4',1,'cpid']]],
-  ['kpathsep',['kPathSep',['../namespacecommon_1_1fsutils.html#ae3dddfb4161e3966645bec6cadaa64c9',1,'common::fsutils']]],
+  ['kpathsep',['kPathSep',['../namespacecherrypi_1_1fsutils.html#afc1d8cc95b3e1534b66a9326d691545a',1,'cherrypi::fsutils::kPathSep()'],['../namespacecommon_1_1fsutils.html#ae3dddfb4161e3966645bec6cadaa64c9',1,'common::fsutils::kPathSep()']]],
   ['kpikey',['kPiKey',['../namespacecpid.html#a5e012a3c47f8a7f24c96e60fe8b12836',1,'cpid']]],
   ['kqkey',['kQKey',['../namespacecpid.html#a6b52ffbc9285d397d9fd8daba48cc447',1,'cpid']]],
   ['kranktransform',['kRankTransform',['../classcpid_1_1ESTrainer.html#a19c9ee604dbc2bf0291ec44f805f728aad80019a6f775769af652f064b6bb6f90',1,'cpid::ESTrainer']]],
