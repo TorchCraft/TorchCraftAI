@@ -128,7 +128,7 @@ void GathererController::step(State* state) {
         for (auto& area : state->areaInfo().areas()) {
           for (auto& base : area.baseLocations) {
             // 2 taken from AreaInfo definition
-            if (utils::distance(base, {unit}) <= 2) {
+            if (utils::distance(base, unit) <= 2) {
               basePositions.push_back(base);
               return;
             }
@@ -143,8 +143,7 @@ void GathererController::step(State* state) {
     if (unit->type->hasGroundWeapon && !unit->type->isWorker &&
         !unit->flying()) {
       for (auto& position : basePositions) {
-        if (utils::distance({unit}, position) <
-            FLAGS_gatherer_bastion_distance) {
+        if (utils::distance(unit, position) < FLAGS_gatherer_bastion_distance) {
           bastions.push_back(unit);
         }
       }
@@ -228,8 +227,7 @@ void GathererController::step(State* state) {
              if (!proxy->type->hasGroundWeapon || !proxy->completed()) {
                return false;
              }
-             if (utils::distance({proxy}, {enemy}) >
-                 FLAGS_gatherer_cannon_leash) {
+             if (utils::distance(proxy, enemy) > FLAGS_gatherer_cannon_leash) {
                return false;
              }
              return true;
@@ -314,7 +312,7 @@ void GathererController::step(State* state) {
 
 void GathererController::micro(State* state, Unit* worker, Unit* resource) {
   // Should this worker run away?
-  double distance = utils::distance({worker}, {resource});
+  double distance = utils::distance(worker, resource);
   bool shouldFlee = distance > FLAGS_gatherer_fearless_move &&
       worker->enemyUnitsInSightRange.end() !=
           std::find_if(
@@ -475,7 +473,7 @@ void GathererController::gather(
   // If the resource is far away or invisible, move to it instead of trying to
   // gather.
   auto moveTo = movefilters::pathMoveTo(state, worker, resource->pos());
-  bool resourceFar = utils::distance({resource}, moveTo) >= 30;
+  bool resourceFar = utils::distance(resource, moveTo) >= 30;
   if (resourceFar || !resource->visible || !resource->completed()) {
     addUpc(worker, moveTo, Command::Move);
     vlog(4, worker, resource, "moves to resource");

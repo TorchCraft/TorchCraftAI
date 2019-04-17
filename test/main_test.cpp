@@ -8,6 +8,7 @@
 #include "cherrypi.h"
 #include "common/assert.h"
 #include "common/rand.h"
+#include "src/forkserver.h"
 #include "test.h"
 #include "utils.h"
 
@@ -467,6 +468,7 @@ int main(int argc, char* argv[]) {
   FLAGS_minloglevel = google::ERROR;
   FLAGS_continue_on_assert = true;
   google::InitGoogleLogging(argv[0]);
+  cherrypi::ForkServer::startForkServer();
 
   gflags::SetUsageMessage(
       "[options] [test-spec ...]\n\n"
@@ -496,6 +498,8 @@ int main(int argc, char* argv[]) {
   // Setup lest options
   int status = runLest(specification(), parseLestArguments(argc, argv));
 
+  // This call breaks tests with '-j' option
+  // cherrypi::ForkServer::endForkServer();
   cherrypi::shutdown(FLAGS_logsinktostderr);
   return status;
 }

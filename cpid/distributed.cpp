@@ -10,16 +10,23 @@
 #include "common/utils.h"
 #include "netutils.h"
 
+#include <common/assert.h>
 #include <common/autograd/utils.h>
 
 #include <fmt/format.h>
 #include <glog/logging.h>
 
+#ifdef HAVE_C10D
 #include <c10d/FileStore.hpp>
 #include <c10d/ProcessGroupGloo.hpp>
 #include <c10d/ProcessGroupNCCL.hpp>
 #include <c10d/TCPStore.hpp>
 #include <gloo/transport/tcp/device.h>
+
+#define ASSERT_C10D_REQUIRED
+#else
+#define ASSERT_C10D_REQUIRED ASSERT(false, "cpid was built without c10d")
+#endif
 
 DEFINE_int64(
     c10d_rank,
@@ -69,6 +76,7 @@ Work::Work(Work&& other) {
   std::swap(onFinish_, other.onFinish_);
 }
 
+#ifdef HAVE_C10D
 bool Work::isCompleted() {
   for (auto& work : works_) {
     if (!work->isCompleted()) {
@@ -110,6 +118,27 @@ const std::exception_ptr Work::exception() const {
   LOG(FATAL)
       << "No exception found, perhaps your distributed operation did not fail?";
 }
+#else
+bool Work::isCompleted() {
+  ASSERT_C10D_REQUIRED;
+}
+
+bool Work::isSuccess() {
+  ASSERT_C10D_REQUIRED;
+}
+
+void Work::synchronize() {
+  ASSERT_C10D_REQUIRED;
+}
+
+void Work::wait() {
+  ASSERT_C10D_REQUIRED;
+}
+
+const std::exception_ptr Work::exception() const {
+  ASSERT_C10D_REQUIRED;
+}
+#endif
 
 Work::Work(std::vector<std::shared_ptr<ProcessGroup::Work>>&& works)
     : works_(std::move(works)) {}
@@ -143,6 +172,7 @@ void init() {
     auto jobid = getenv("SLURM_JOB_ID");
     auto stepid = getenv("SLURM_STEPID");
     auto worldSize = getenv("SLURM_STEP_NUM_TASKS");
+    std::string rdvu;
     if (jobid == nullptr || std::stoi(worldSize) == 1) {
       // If we're not on slurm, or if we only launch one task, we can just
       // use /tmp instead
@@ -153,7 +183,6 @@ void init() {
         FLAGS_c10d_size = 1;
       }
 
-      std::string rdvu;
       if (FLAGS_c10d_rdvu == "file") {
         if (FLAGS_c10d_size > 1) {
           throw std::runtime_error(
@@ -180,8 +209,6 @@ void init() {
         rdvu = std::move(split[1]);
       }
       cudaDeviceNumber = FLAGS_c10d_rank;
-      VLOG(2) << "Using filestore at " << rdvu;
-      store = std::make_shared<FileStore>(rdvu, FLAGS_c10d_size);
     } else {
       // If we're on slurm, automatically set rank and size based on slurm
       // variables
@@ -193,7 +220,6 @@ void init() {
       }
 
       // Setup the rendezvous.
-      std::string rdvu;
       if (FLAGS_c10d_rdvu == "file") {
         rdvu = fmt::format("./c10d.{}.{}.sock", jobid, stepid);
       } else { // if it looks like file:/path/to/rdvu
@@ -207,10 +233,12 @@ void init() {
       if (char const* localRank = ::getenv("SLURM_LOCALID")) {
         cudaDeviceNumber = std::stoi(localRank);
       }
-      VLOG(2) << "Using filestore at " << rdvu;
-      store = std::make_shared<FileStore>(rdvu, FLAGS_c10d_size);
     }
+#ifdef HAVE_C10D
+    VLOG(2) << "Using filestore at " << rdvu;
+    store = std::make_shared<FileStore>(rdvu, FLAGS_c10d_size);
     store->setTimeout(std::chrono::seconds::zero());
+#endif
 
     // Initialize the Process Groups
     // The destructor of the global context can conflict with the
@@ -236,9 +264,11 @@ void init() {
 }
 
 void setGPUToLocalRank() {
+#ifdef HAVE_CUDA
   if (common::gpuAvailable()) {
     cudaSetDevice(cudaDeviceNumber);
   }
+#endif
 }
 
 std::shared_ptr<Context> globalContext() {
@@ -281,8 +311,11 @@ Work Context::allreduce(torch::Tensor x, ReduceOp op) {
   if (size == 1) {
     return Work();
   }
+  ASSERT_C10D_REQUIRED;
+#ifdef HAVE_C10D
   std::vector<torch::Tensor> tensors({x.detach()});
   return Work({devicePG(x)->allreduce(tensors, {op})});
+#endif
 }
 
 Work Context::allreduceGradients(ag::Container const& model, ReduceOp op) {
@@ -313,8 +346,11 @@ Work Context::broadcast(torch::Tensor x, int root) {
   if (size == 1) {
     return Work();
   }
+  ASSERT_C10D_REQUIRED;
+#ifdef HAVE_C10D
   std::vector<torch::Tensor> tensors({x.detach()});
   return Work({devicePG(x)->broadcast(tensors, {root, 0})});
+#endif
 }
 Work Context::broadcast(ag::Container const& model, int root) {
   Work work;
@@ -346,6 +382,8 @@ Work Context::allgather(torch::Tensor out, torch::Tensor in) {
     out.copy_(in);
     return Work();
   }
+  ASSERT_C10D_REQUIRED;
+#ifdef HAVE_C10D
   std::vector<torch::Tensor> tin({in.detach()});
   std::vector<std::vector<torch::Tensor>> tout;
   tout.emplace_back();
@@ -353,14 +391,19 @@ Work Context::allgather(torch::Tensor out, torch::Tensor in) {
     tout.back().emplace_back(out[i]);
   }
   return Work({devicePG(in)->allgather(tout, tin)});
+#endif
 }
 
 Work Context::barrier() {
+  ASSERT_C10D_REQUIRED;
+#ifdef HAVE_C10D
   Work work;
   work.add(glooPG_->barrier());
   return work;
+#endif
 }
 
+#ifdef HAVE_C10D
 Context::Context(
     std::shared_ptr<Store> store,
     int rank,
@@ -376,6 +419,16 @@ Context::Context(
       gloo::transport::tcp::CreateDevice(addr.front().c_str()));
   glooPG_ = std::make_shared<ProcessGroupGloo>(store, rank, size, opts);
 }
+#else
+Context::Context(
+    std::shared_ptr<Store>,
+    int rank,
+    int size,
+    std::chrono::milliseconds)
+    : rank(rank), size(size) {
+  ASSERT(size == 1, "cpid was built without c10d - distributed is unsupported");
+}
+#endif
 
 template <typename T, IsTorchDType<T>*>
 Work allreduce(T* ptr, int64_t s, ReduceOp op) {

@@ -441,9 +441,11 @@ void State::findEnemyInfo() {
     }
   }
 
-  VLOG(0) << "Playing " << myRace() << " on " << mapName() << " at LF"
-          << latencyFrames() << " against " << (foundEnemy ? ename : "nobody")
-          << " (" << erace << ")";
+  VLOG(0) << "Playing " << myRace() << " vs " << erace << " ("
+          << (foundEnemy ? ename : "nobody") << ") on "
+          << mapWidth() / tc::BW::XYWalktilesPerBuildtile << "x"
+          << mapHeight() / tc::BW::XYWalktilesPerBuildtile << " map "
+          << mapName() << " (" << mapTitle() << ") at LF" << latencyFrames();
   if (!foundEnemy) {
     LOG(WARNING) << "No enemy information found";
   }

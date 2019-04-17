@@ -19,7 +19,7 @@ namespace fsutils = common::fsutils;
 
 namespace cherrypi {
 
-std::unique_ptr<PlayScriptScenario> makeBosScenario(
+std::unique_ptr<GameVsBotInWine> makeBosScenario(
     std::string const& maps,
     std::string const& opponents,
     std::string playOutputDir) {
@@ -27,7 +27,7 @@ std::unique_ptr<PlayScriptScenario> makeBosScenario(
   std::shuffle(
       pool.begin(), pool.end(), common::Rand::makeRandEngine<std::mt19937>());
   auto opponent = selectRandomOpponent(opponents);
-  auto scenario = std::make_unique<PlayScriptScenario>(
+  auto scenario = std::make_unique<GameVsBotInWine>(
       pool, opponent, std::move(playOutputDir));
   scenario->setAutoDelete(true);
   return scenario;

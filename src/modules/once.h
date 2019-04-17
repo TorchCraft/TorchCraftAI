@@ -8,7 +8,7 @@
 #pragma once
 
 #include "blackboard.h"
-#include "gameutils/initialconditions.h"
+#include "gameutils/scenariospecification.h"
 #include "modules/lambda.h"
 #include "state.h"
 

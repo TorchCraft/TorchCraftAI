@@ -29,7 +29,7 @@ MicroAction BehaviorSeries::onPerform(Agent& agent) {
 
 MicroAction BehaviorML::onPerform(Agent& agent) {
   for (auto& model : *(agent.task->models)) {
-    auto action = model->decode(agent.unit);
+    auto action = model.second->decode(agent.unit);
     if (action.isFinal) {
       return action;
     }
@@ -165,7 +165,6 @@ constexpr double kKiteRatioFallback = 0.5; // Magic: 0+
 constexpr double kKiteRatioBreathe = 0.5; // Magic: 0+
 constexpr int kKiteFrameMargin = 3; // Magic: 0+
 constexpr int kKiteRangeMargin = 4; // Magic: 0+
-constexpr float kKiteFleeDistance = 60; // Magic: 48+
 MicroAction BehaviorKite::onPerform(Agent& agent) {
   auto& task = agent.task;
   State* state = agent.state;
@@ -308,6 +307,54 @@ MicroAction BehaviorKite::onPerform(Agent& agent) {
 MicroAction BehaviorFormation::onPerform(Agent& agent) {
   if (!agent.targetInRange && agent.formationPosition != kInvalidPosition) {
     return doAction(agent.moveTo(agent.formationPosition));
+  }
+
+  return pass;
+}
+
+MicroAction BehaviorDetect::onPerform(Agent& agent) {
+  auto& task = agent.task;
+  auto unit = agent.unit;
+  auto unitType = unit->type;
+  if (unitType != buildtypes::Terran_Science_Vessel &&
+      unitType != buildtypes::Protoss_Observer &&
+      unitType != buildtypes::Zerg_Overlord) {
+    return pass;
+  }
+
+  Unit* cloakedTarget = utils::getBestScoreCopy(
+      utils::filterUnits(
+          task->targets_,
+          [](Unit* e) { return e->cloaked() || e->burrowed(); }),
+      [&](Unit* e) { return utils::distance(unit, e); },
+      kfInfty);
+  if (cloakedTarget) {
+    Unit* ally = utils::getBestScoreCopy(
+        task->squadUnits(),
+        [&](Unit* u) {
+          if (u == unit || !u->canAttack(cloakedTarget)) {
+            return kfInfty;
+          }
+          return utils::distance(u, cloakedTarget);
+        },
+        kfInfty);
+    if (ally && utils::distance(unit, cloakedTarget) < unit->sightRange - 4) {
+      VLOG(3) << unit << " senses ally near cloaked target, moving to " << ally
+              << " near cloaked " << cloakedTarget;
+      return doAction(agent.smartMove(ally));
+    }
+  }
+  if (!unit->threateningEnemies.empty()) {
+    auto threat = unit->threateningEnemies[0];
+    auto dir = Vec2(unit) - Vec2(threat);
+    dir.normalize();
+    VLOG(3) << unit << " senses threat, moving away from " << threat;
+    return doAction(agent.smartMove(Position(Vec2(unit) + dir * 25)));
+  }
+
+  if (cloakedTarget) {
+    VLOG(3) << unit << " senses cloaked target, moving to " << cloakedTarget;
+    return doAction(agent.smartMove(cloakedTarget));
   }
 
   return pass;

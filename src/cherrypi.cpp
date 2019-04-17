@@ -187,7 +187,8 @@ class PrefixLogSink : public google::LogSink {
     auto& chan = (logToStderr_) ? std::cerr : logFilesForSink[severity];
     static auto vfilter =
         std::regex(FLAGS_vfilter, std::regex_constants::egrep);
-    if (!FLAGS_vfilter.empty() && !std::regex_search(fullFilename, vfilter)) {
+    if (severity == google::GLOG_INFO && !FLAGS_vfilter.empty() &&
+        !std::regex_search(fullFilename, vfilter)) {
       return;
     }
 

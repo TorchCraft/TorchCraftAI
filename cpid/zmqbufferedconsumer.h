@@ -1,54 +1,19 @@
 /*
  * Copyright (c) 2017-present, Facebook, Inc.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * This source code is licensed under the MIT license found in the LICENSE file
+ * in the root directory of this source tree.
  */
 
 #pragma once
 
 #include "zmqbufferedproducer.h"
 
+#include <atomic>
+
 namespace cpid {
-namespace detail {
 
-/**
- * Wraps ReqRepClient assuming perform() is called from a dedicated thread.
- * In particular, this class takes care to perform all client operations
- * (construct, send, updateEndpoints) within perform().
- */
-class RRClientWrapper {
- public:
-  enum class Action {
-    Send,
-    WaitForReplies,
-    SendRetries,
-  };
-
-  RRClientWrapper(
-      size_t maxBacklogSize,
-      std::vector<std::string> endpoints,
-      std::shared_ptr<zmq::context_t> context);
-
-  void updateEndpoints(std::vector<std::string> endpoints);
-  void perform(Action action, std::vector<char>&& msg);
-  size_t numScheduledForRetry() const {
-    return retries_.size();
-  }
-
- private:
-  size_t const maxBacklogSize_;
-  std::vector<std::string> endpoints_;
-  std::shared_ptr<zmq::context_t> context_;
-  std::mutex mutex_;
-  std::unique_ptr<ReqRepClient> rrc_;
-  bool endpointsChanged_ = false;
-  std::queue<std::vector<char>> retries_;
-};
-} // namespace detail
-
-/**
- * A buffered consumer that sends data via ZeroMQ.
+/** A buffered consumer that sends data via ZeroMQ.
  *
  * The intended use-case is for this class to be used together with
  * ZeroMQBufferedConsumer to implement distributed producer-consumer setups.
@@ -69,14 +34,14 @@ class RRClientWrapper {
  * As in common::BufferedConsumer, you specify the number of threads and a queue
  * size. In addition, you supply a list of end points that
  * ZeroMQBufferedProducer instances have been bound to. Data will be send to
- * end-points in a round-robin fashion. If producer end points don't accept new
+ * end-points in a round-robin fashion. If producer endpoints don't accept new
  * data (because their queue is full and items are not consumed fast enough),
  * `enqueue()` will eventually block and perform retries.
  */
 template <typename T>
 class ZeroMQBufferedConsumer {
-  using RRClientWrapper = detail::RRClientWrapper;
-  using ClientAction = std::pair<RRClientWrapper::Action, std::vector<char>>;
+  using Request = std::vector<char>;
+  using Reply = std::vector<char>;
 
  public:
   ZeroMQBufferedConsumer(
@@ -84,15 +49,17 @@ class ZeroMQBufferedConsumer {
       size_t maxQueueSize,
       std::vector<std::string> endpoints,
       std::shared_ptr<zmq::context_t> context = nullptr);
+  ~ZeroMQBufferedConsumer();
 
   void enqueue(T arg);
   void updateEndpoints(std::vector<std::string> endpoints);
-  /// Wait for replies, send out all retries
-  void flush();
 
  private:
-  std::unique_ptr<detail::RRClientWrapper> client_;
-  std::unique_ptr<common::BufferedConsumer<ClientAction>> bcsend_;
+  size_t const maxConcurrentRequests_;
+  std::list<std::pair<Request, std::future<Reply>>> pending_;
+  std::atomic<bool> stop_{false};
+  ReqRepClient client_;
+  std::unique_ptr<common::BufferedConsumer<Request>> bcsend_;
   std::unique_ptr<common::BufferedConsumer<T>> bcser_;
 };
 
@@ -101,36 +68,70 @@ ZeroMQBufferedConsumer<T>::ZeroMQBufferedConsumer(
     uint8_t nthreads,
     size_t maxQueueSize,
     std::vector<std::string> endpoints,
-    std::shared_ptr<zmq::context_t> context) {
-  client_ = std::make_unique<detail::RRClientWrapper>(
-      maxQueueSize, std::move(endpoints), std::move(context));
-  // BufferedConsumer for sending out data
-  bcsend_ = std::make_unique<common::BufferedConsumer<ClientAction>>(
-      1, 1, [this, maxQueueSize](ClientAction ca) {
-        client_->perform(ca.first, std::move(ca.second));
-        // XXX We can't queue up retries indefinitely, so let's do some busy
-        // waiting with exponential backoff for retries.
-        if (client_->numScheduledForRetry() > maxQueueSize) {
-          auto start = std::chrono::steady_clock::now();
-          int ntry = 0;
-          while (client_->numScheduledForRetry() > maxQueueSize) {
-            if (ntry++ > 0) {
-              std::this_thread::sleep_for(std::chrono::milliseconds(
-                  int(10 * std::pow(2, std::min(ntry, 5)))));
-            }
-            client_->perform(
-                RRClientWrapper::Action::SendRetries, std::vector<char>());
-            client_->perform(
-                RRClientWrapper::Action::WaitForReplies, std::vector<char>());
+    std::shared_ptr<zmq::context_t> context)
+    : maxConcurrentRequests_(std::min(maxQueueSize, size_t(64))),
+      client_(maxConcurrentRequests_, endpoints, context) {
+  // BufferedConsumer for sending out data. With a single thread, this will
+  // simply run in the calling thread (protected by a mutex).
+  bcsend_ = std::make_unique<common::BufferedConsumer<Request>>(
+      0, 1, [this](Request ca) {
+        // Check pending requests. We'll keep on retrying with an exponential
+        // (bounded) backoff. For this implementation we're painfully reminded
+        // of the rawness of C++11's thread support library: we can't attach
+        // callbacks to futures (i.e. future::then()) or wait for multiple
+        // futures at once.
+        // This is the reason we limit the maximum queue size for ReqRepClient
+        // to 64 (tuned by manual monkeying).
+        int ntry = 0;
+        while (pending_.size() >= maxConcurrentRequests_ && !stop_.load()) {
+          if (ntry++ > 0) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(
+                int(10 * std::pow(2, std::min(ntry, 5)))));
           }
-          auto elapsed = std::chrono::steady_clock::now() - start;
-          auto ms =
-              std::chrono::duration_cast<std::chrono::milliseconds>(elapsed)
-                  .count();
-          VLOG_ALL(1) << "ZeroMQBufferedConsumer: waited " << ms
-                      << "ms for retries";
+
+          for (auto it = pending_.begin(); it != pending_.end();) {
+            auto& [req, fut] = *it;
+            if (fut.wait_for(std::chrono::seconds(0)) !=
+                std::future_status::ready) {
+              ++it;
+              continue;
+            }
+            Reply reply;
+            try {
+              reply = fut.get();
+            } catch (std::exception const& ex) {
+              // Something failed -- need to resend
+              VLOG(1)
+                  << "ZeroMQBufferedConsumer: got exception instead of reply: "
+                  << ex.what();
+              auto copy = req;
+              *it = std::make_pair(
+                  std::move(copy), client_.request(std::move(req)));
+              ++it;
+              continue;
+            }
+
+            // Recepient confirmed?
+            if (detail::kConfirm.compare(
+                    0, detail::kConfirm.size(), reply.data(), reply.size()) ==
+                0) {
+              it = pending_.erase(it);
+            } else {
+              VLOG(0) << "ZeroMQBufferedConsumer: got non-affirmative "
+                         "reply of size "
+                      << reply.size() << ", retrying";
+              auto copy = req;
+              *it = std::make_pair(
+                  std::move(copy), client_.request(std::move(req)));
+              ++it;
+            }
+          }
         }
+
+        auto copy = ca;
+        pending_.emplace_back(std::move(copy), client_.request(std::move(ca)));
       });
+
   // BufferedConsumer for data serialization
   bcser_ = std::make_unique<common::BufferedConsumer<T>>(
       nthreads, maxQueueSize, [this](T data) {
@@ -140,9 +141,15 @@ ZeroMQBufferedConsumer<T>::ZeroMQBufferedConsumer(
           cereal::BinaryOutputArchive ar(os);
           ar(data);
         }
-        bcsend_->enqueue(
-            std::make_pair(RRClientWrapper::Action::Send, buf.takeData()));
+        bcsend_->enqueue(buf.takeData());
       });
+}
+
+template <typename T>
+ZeroMQBufferedConsumer<T>::~ZeroMQBufferedConsumer() {
+  bcser_.reset();
+  stop_.store(true);
+  bcsend_.reset();
 }
 
 template <typename T>
@@ -153,17 +160,7 @@ void ZeroMQBufferedConsumer<T>::enqueue(T arg) {
 template <typename T>
 void ZeroMQBufferedConsumer<T>::updateEndpoints(
     std::vector<std::string> endpoints) {
-  client_->updateEndpoints(std::move(endpoints));
-}
-
-template <typename T>
-void ZeroMQBufferedConsumer<T>::flush() {
-  bcser_->wait();
-  bcsend_->enqueue(std::make_pair(
-      RRClientWrapper::Action::WaitForReplies, std::vector<char>()));
-  bcsend_->enqueue(std::make_pair(
-      RRClientWrapper::Action::SendRetries, std::vector<char>()));
-  bcsend_->wait();
+  client_.updateEndpoints(std::move(endpoints));
 }
 
 } // namespace cpid

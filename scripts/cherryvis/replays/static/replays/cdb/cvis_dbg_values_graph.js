@@ -113,6 +113,8 @@ function cvis_dbg_values_graph_init(global_data, cvis_state) {
     var parent = element.parent();
     var c = element.clone();
     c.removeAttr('style');
+    c.removeAttr('height');
+    c.removeAttr('width');
     element.remove();
     parent.append(c);
     return c[0];

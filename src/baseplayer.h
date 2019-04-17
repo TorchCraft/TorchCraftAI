@@ -83,6 +83,8 @@ class BasePlayer {
     return steps_;
   }
 
+  virtual void init(){};
+
   void leave();
 
   void dumpTraceAlongReplay(std::string const& replayFile);

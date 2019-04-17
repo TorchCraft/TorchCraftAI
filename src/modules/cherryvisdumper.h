@@ -160,6 +160,7 @@ class CherryVisDumperModule : public Module {
   }
 
   static void writeGameSummary(State* final_state, std::string const& file);
+  static std::string parseReplayFileName(std::string name);
 
   class TreeNode : public std::stringstream {
    public:

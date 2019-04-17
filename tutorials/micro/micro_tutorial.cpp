@@ -28,6 +28,7 @@
 
 #include "common.h"
 #include "flags.h"
+#include "gameutils/scenarioprovider.h"
 #include "micromodule.h"
 #include "model.h"
 #include "rule_module.h"
@@ -71,15 +72,15 @@ void runEnvironmentInThread(
   while (!state.finish) {
     std::shared_ptr<MicroModule> microModule;
     try {
-      auto provider = std::make_shared<MicroFixedScenario>(
-          FLAGS_max_frames - 1,
-          FLAGS_scenario,
-          FLAGS_enable_gui && threadId == 0);
+      auto provider =
+          std::make_shared<MicroScenarioProviderFixed>(FLAGS_scenario);
+      provider->setMaxFrames(FLAGS_max_frames - 1);
+      provider->setGui(FLAGS_enable_gui && threadId == 0);
       provider->setMapPathPrefix(FLAGS_map_path_prefix);
       std::string replayFile = "";
       auto respawn = [&]() {
         provider->loadScenario(FLAGS_scenario);
-        return provider->spawnNextScenario(
+        return provider->startNewScenario(
             [&](BasePlayer* bot) {
               bot->addModule(Module::make<TopModule>());
               bot->addModule(Module::make<MicroModule>(
@@ -102,7 +103,7 @@ void runEnvironmentInThread(
       int nsteps = 0;
       uint64_t gamesPlayed = 0;
       auto computeReplayPath = [&]() -> std::string {
-        if ((rand() % std::max(FLAGS_dump_replays_rate, 1UL)) != 0) {
+        if ((rand() % std::max<uint64_t>(FLAGS_dump_replays_rate, 1UL)) != 0) {
           return "";
         }
         if (FLAGS_dump_replays == "never") {
@@ -123,7 +124,6 @@ void runEnvironmentInThread(
       };
       std::shared_ptr<BasePlayer> p1, p2;
       while (!state.finish) {
-        provider->cleanScenario();
         replayFile = computeReplayPath();
         provider->setReplay(replayFile);
         auto setup = respawn();
@@ -136,7 +136,7 @@ void runEnvironmentInThread(
         // Quit only if:
         //  - we're done
         //  - game isn't active anymore, trainer says we should stop
-        while (!provider->isFinished(nsteps, false /*checkAttack*/)) {
+        while (!provider->isFinished(nsteps)) {
           if (state.finish ||
               (microModule->started_ &&
                !trainer->isActive(microModule->handle_))) {
@@ -147,7 +147,7 @@ void runEnvironmentInThread(
           nsteps++;
           state.throughputCounter++;
         }
-        if (!provider->isFinished(nsteps, false /*checkAttack*/)) {
+        if (!provider->isFinished(nsteps)) {
           // Never do anything with aborted episodes
           microModule->aborted_ = true;
         } else if (p1 && p2) { // If not first episode
@@ -295,8 +295,7 @@ int run(int argc, char** argv) {
     auto model = training->trainer->model();
     model->eval();
     auto evaluator = training->trainer->makeEvaluator(
-        FLAGS_num_test_episodes,
-        std::move(std::make_unique<cpid::BaseSampler>()));
+        FLAGS_num_test_episodes, std::make_unique<cpid::BaseSampler>());
     startWorkers(evaluator);
     while (!evaluator->update()) {
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -402,7 +401,7 @@ int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
   if (FLAGS_list_scenarios) {
-    auto scenarioNames = cherrypi::MicroFixedScenario::listScenarios();
+    auto scenarioNames = cherrypi::MicroScenarioProviderFixed::listScenarios();
     for (auto& scenarioName : scenarioNames) {
       std::cout << scenarioName << std::endl;
     }

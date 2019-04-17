@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "gameutils/botscenario.h"
+#include "gameutils/gamevsbot.h"
 
 #include "models/bandit.h"
 
@@ -37,7 +37,7 @@ char constexpr kDefaultModules[] =
     "Harass,"
     "StaticDefenceFocusFireModule";
 
-std::unique_ptr<PlayScriptScenario> makeBosScenario(
+std::unique_ptr<GameVsBotInWine> makeBosScenario(
     std::string const& maps,
     std::string const& opponents,
     std::string playOutputDir);

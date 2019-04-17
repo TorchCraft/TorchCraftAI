@@ -40,11 +40,13 @@ CASE("blobpublisher/api/fixed_endpoint") {
 
 CASE("blobpubsub/simple") {
   int64_t tag;
+  std::mutex m;
   std::promise<std::string> msgP;
   auto recv = [&](void const* data, size_t len, int64_t t) {
-    tag = t;
     std::string s(static_cast<char const*>(data));
     EXPECT(s.size() + 1 == len); // s is null-terminated string
+    std::scoped_lock l(m);
+    tag = t;
     msgP.set_value(s);
   };
 
@@ -59,7 +61,10 @@ CASE("blobpubsub/simple") {
   EXPECT(tag == 0xF00);
 
   // publish std::vector<char>
-  msgP = std::promise<std::string>();
+  {
+    std::scoped_lock l(m);
+    msgP = std::promise<std::string>();
+  }
   std::vector<char> d{'h', 'a', 'l', 'l', 'o', '\0'};
   pub.publish(std::move(d), 0xF01);
   s = msgP.get_future().get();
@@ -76,7 +81,10 @@ CASE("blobpubsub/simple") {
   EXPECT_THROWS(sub.updateEndpoints({}));
   BlobPublisher pub2({}, context);
   sub.updateEndpoints({pub2.endpoint()});
-  msgP = std::promise<std::string>();
+  {
+    std::scoped_lock l(m);
+    msgP = std::promise<std::string>();
+  }
   pub2.publish("bonjour", 8, 0xF02);
   s = msgP.get_future().get();
   EXPECT(s == "bonjour");

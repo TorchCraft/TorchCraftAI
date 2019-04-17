@@ -87,6 +87,9 @@ class State {
   const std::string mapName() const {
     return tcstate_->map_name;
   }
+  const std::string mapTitle() const {
+    return tcstate_->map_title;
+  }
   Rect mapRect() const {
     return Rect(0, 0, mapWidth_, mapHeight_);
   }
@@ -180,6 +183,13 @@ class State {
     return &areaInfo_;
   }
 
+  void setMapHack(bool h) {
+    mapHack_ = h;
+  }
+  bool mapHack() {
+    return mapHack_;
+  }
+
  private:
   typedef std::unordered_map<int, bool> Tech2StatusMap;
   typedef std::unordered_map<int, UpgradeLevel> Upgrade2LevelMap;
@@ -221,6 +231,8 @@ class State {
   Upgrade2LevelMap upgrade2LevelMap_;
 
   std::vector<std::pair<std::string, Duration>> stateUpdateTimeSpent_;
+
+  bool mapHack_ = false;
 };
 
 } // namespace cherrypi

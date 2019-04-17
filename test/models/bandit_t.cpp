@@ -7,7 +7,7 @@
 
 #include "test.h"
 
-#include "gameutils/selfplayscenario.h"
+#include "gameutils/game.h"
 #include "modules.h"
 #include <common/fsutils.h>
 

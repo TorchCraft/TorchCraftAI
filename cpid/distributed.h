@@ -7,15 +7,11 @@
 
 #pragma once
 
+#include <autogradpp/autograd.h>
+#include <gflags/gflags.h>
 #include <memory>
 
-#include <c10d/ProcessGroup.hpp>
-#include <c10d/Store.hpp>
-#include <c10d/Types.hpp>
-
-#include <gflags/gflags.h>
-
-#include <autogradpp/autograd.h>
+#include "c10d.h"
 
 // Distributed logging utilities.
 #define VLOG_MASTER(lvl) \

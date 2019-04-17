@@ -25,6 +25,9 @@ void extractOneHotGroundHeight(torch::Tensor, State*, Rect const&);
 void extractBuildability(torch::Tensor, State*, Rect const&);
 void extractTallDoodad(torch::Tensor, State*, Rect const&);
 void extractStartLocations(torch::Tensor, State*, Rect const&);
+void extractXYGrid(torch::Tensor, State*, Rect const&);
+void extractResources(torch::Tensor, State*, Rect const&);
+void extractHasStructure(torch::Tensor, State*, Rect const&);
 // tilesfeatures.cpp
 void extractFogOfWar(torch::Tensor, State*, Rect const&);
 void extractCreep(torch::Tensor, State*, Rect const&);
@@ -82,9 +85,12 @@ void initialize() {
       &featureimpl::extractCandidateEnemyStartLocations,
       1);
   ADD_PLAIN_FEATURE(StartLocations, &featureimpl::extractStartLocations, 1);
+  ADD_PLAIN_FEATURE(XYGrid, &featureimpl::extractXYGrid, 2);
   ADD_PLAIN_FEATURE(
       ReservedAsUnbuildable, &featureimpl::extractReservedAsUnbuildable, 1);
   ADD_PLAIN_FEATURE(TallDoodad, &featureimpl::extractTallDoodad, 1);
+  ADD_PLAIN_FEATURE(Resources, &featureimpl::extractResources, 1);
+  ADD_PLAIN_FEATURE(HasStructure, &featureimpl::extractHasStructure, 1);
   ADD_PLAIN_FEATURE(UserFeature1, &featureimpl::noop, 1);
   ADD_PLAIN_FEATURE(UserFeature2, &featureimpl::noop, 2);
 

@@ -30,11 +30,10 @@ std::string Checkpointer::getModelPath() const {
 }
 
 void Checkpointer::updateDone(int updateCount) {
-  auto metrics = trainer_->metricsContext();
-
   onUpdate(updateCount);
 
-  if (updateCount > 0 && (updateCount % epochLength_) == 0) {
+  if ((updateCount / epochLength_) > (lastEpochUpdateNum_ / epochLength_)) {
+    lastEpochUpdateNum_ = updateCount;
     onEpoch(updateCount);
   }
 }
@@ -68,8 +67,21 @@ void Checkpointer::printSummary(
   }
   if (dist::globalContext()->rank == 0) {
     for (size_t i = 0; i < values.size(); ++i) {
-      LOG(INFO) << sortedMeans[i].first << " " << values[i]
-                << " (min: " << valuesMin[i] << " max: " << valuesMax[i] << ")";
+      switch (metricsSummaryFormat_) {
+        case FORMAT_DEFAULT:
+          LOG(INFO) << sortedMeans[i].first << " " << values[i]
+                    << " (min: " << valuesMin[i] << " max: " << valuesMax[i]
+                    << ")";
+          break;
+        case FORMAT_TORCHBOARD:
+          LOG(INFO) << fmt::format(
+              "TORCHBOARD_METRICS[{}] = {} (min: {}, max: {})",
+              sortedMeans[i].first,
+              values[i],
+              valuesMin[i],
+              valuesMax[i]);
+          break;
+      }
     }
   }
 }
@@ -114,7 +126,7 @@ void Checkpointer::onUpdate(int updateCount) {
   auto metrics = trainer_->metricsContext();
   updateHook_(updateCount);
 
-  if (visdomKeys_.size() != 0 && !visdomOnEpoch_ &&
+  if (metrics && visdomKeys_.size() != 0 && !visdomOnEpoch_ &&
       updateCount % visdomPlotFreq_ == 0) {
     std::vector<float> values;
     for (const auto& key : visdomKeys_) {
@@ -136,78 +148,105 @@ void Checkpointer::onUpdate(int updateCount) {
 
 void Checkpointer::onEpoch(int updateCount) {
   auto metrics = trainer_->metricsContext();
-  auto means = metrics->getMeanEventValues();
-  std::vector<float> sampleCount;
-  if (metrics->hasCounter("sampleCount")) {
-    sampleCount.push_back(metrics->getCounter("sampleCount"));
-    if (aggregateMetrics_) {
-      dist::allreduce(sampleCount);
-    } else {
-      // if we don't reduce, use an estimate of the sampleCount
-      sampleCount[0] *= dist::globalContext()->size;
-    }
-  } else {
-    sampleCount.push_back(0);
-  }
-
   if (dist::globalContext()->rank == 0) {
-    LOG(INFO) << "EPOCH " << updateCount / epochLength_ << " done.";
-    hires_clock::time_point now = hires_clock::now();
-    std::chrono::duration<double, std::milli> dur = now - lastEpochStamp_;
-    LOG(INFO) << "Speed: " << double(epochLength_) / (dur.count() / 1000.)
-              << " updates/s    "
-              << double(sampleCount[0]) / (dur.count() / 1000.) << " frames/s";
-    lastEpochStamp_ = now;
+    switch (metricsSummaryFormat_) {
+      case FORMAT_DEFAULT:
+        LOG(INFO) << "EPOCH " << updateCount / epochLength_ << " done.";
+        break;
+      case FORMAT_TORCHBOARD:
+        LOG(INFO) << fmt::format(
+            "TORCHBOARD_METRICS[epoch] = {}", updateCount / epochLength_);
+        break;
+    }
+  }
+  std::unordered_map<std::string, float> means;
+  if (metrics) {
+    means = metrics->getMeanEventValues();
+    std::vector<float> sampleCount;
+    if (metrics->hasCounter("sampleCount")) {
+      sampleCount.push_back(metrics->getCounter("sampleCount"));
+      if (aggregateMetrics_) {
+        dist::allreduce(sampleCount);
+      } else {
+        // if we don't reduce, use an estimate of the sampleCount
+        sampleCount[0] *= dist::globalContext()->size;
+      }
+    } else {
+      sampleCount.push_back(0);
+    }
+
+    if (dist::globalContext()->rank == 0) {
+      hires_clock::time_point now = hires_clock::now();
+      std::chrono::duration<double, std::milli> dur = now - lastEpochStamp_;
+      auto updatesPerSec = double(epochLength_) / (dur.count() / 1000.);
+      auto framesPerSec = double(sampleCount[0]) / (dur.count() / 1000.);
+      switch (metricsSummaryFormat_) {
+        case FORMAT_DEFAULT:
+          LOG(INFO) << "Speed: " << updatesPerSec << " updates/s    "
+                    << framesPerSec << " frames/s";
+          break;
+        case FORMAT_TORCHBOARD:
+          LOG(INFO) << fmt::format(
+              "TORCHBOARD_METRICS[updatesPerSec] = {}", updatesPerSec);
+          LOG(INFO) << fmt::format(
+              "TORCHBOARD_METRICS[framesPerSec] = {}", framesPerSec);
+          break;
+      }
+      lastEpochStamp_ = now;
+    }
+
+    if (printMetricsSummary_ || (visdomKeys_.size() != 0 && visdomOnEpoch_)) {
+      if (visdomKeys_.size() != 0 && visdomOnEpoch_) {
+        std::vector<float> values;
+        for (const auto& key : visdomKeys_) {
+          if (means.count(key) > 0) {
+            values.push_back(means[key]);
+          } else {
+            LOG(WARNING) << "Unknown key: " << key;
+          }
+        }
+        if (aggregateMetrics_) {
+          reduceMetrics(values);
+        }
+        if (dist::globalContext()->rank == 0) {
+          plotVisdom(values, updateCount);
+        }
+      }
+      if (printMetricsSummary_) {
+        auto minRed = [](float a, float b) { return std::min(a, b); };
+        auto maxRed = [](float a, float b) { return std::max(a, b); };
+        auto mins = metrics->reduceEventValues(minRed, 1e20);
+        auto maxs = metrics->reduceEventValues(maxRed, -1e20);
+        if (dist::globalContext()->rank == 0) {
+          LOG(INFO) << "Metrics summary:";
+        }
+        printSummary(means, mins, maxs);
+        auto means_inter = metrics->getMeanIntervals();
+        auto mins_inter = metrics->reduceIntervals(minRed, 1e20);
+        auto maxs_inter = metrics->reduceIntervals(maxRed, -1e20);
+        if (dist::globalContext()->rank == 0) {
+          LOG(INFO) << "Timings summary:";
+        }
+        printSummary(means_inter, mins_inter, maxs_inter);
+      }
+    }
+
+    if (dist::globalContext()->rank == 0) {
+      LOG(INFO) << "";
+    }
   }
 
   epochHook_(updateCount);
 
-  if (printMetricsSummary_ || (visdomKeys_.size() != 0 && visdomOnEpoch_)) {
-    if (visdomKeys_.size() != 0 && visdomOnEpoch_) {
-      std::vector<float> values;
-      for (const auto& key : visdomKeys_) {
-        if (means.count(key) > 0) {
-          values.push_back(means[key]);
-        } else {
-          LOG(WARNING) << "Unknown key: " << key;
-        }
-      }
-      if (aggregateMetrics_) {
-        reduceMetrics(values);
-      }
-      if (dist::globalContext()->rank == 0) {
-        plotVisdom(values, updateCount);
-      }
-    }
-    if (printMetricsSummary_) {
-      auto minRed = [](float a, float b) { return std::min(a, b); };
-      auto maxRed = [](float a, float b) { return std::max(a, b); };
-      auto mins = metrics->reduceEventValues(minRed, 1e20);
-      auto maxs = metrics->reduceEventValues(maxRed, -1e20);
-      if (dist::globalContext()->rank == 0) {
-        LOG(INFO) << "Metrics summary:";
-      }
-      printSummary(means, mins, maxs);
-      auto means_inter = metrics->getMeanIntervals();
-      auto mins_inter = metrics->reduceIntervals(minRed, 1e20);
-      auto maxs_inter = metrics->reduceIntervals(maxRed, -1e20);
-      if (dist::globalContext()->rank == 0) {
-        LOG(INFO) << "Timings summary:";
-      }
-      printSummary(means_inter, mins_inter, maxs_inter);
-    }
-  }
-
-  if (dist::globalContext()->rank == 0) {
-    LOG(INFO) << "";
-  }
   if (dumpMetrics_) {
+    ASSERT(metrics);
     metrics->dumpJson(
         checkpointPath_ + std::to_string(dist::globalContext()->rank) +
         "-epoch_" + std::to_string(updateCount / epochLength_) +
         "-metrics.json");
   }
   if (flushMetrics_) {
+    ASSERT(metrics);
     metrics->clear();
   }
   if (dist::globalContext()->rank == 0) {
@@ -249,9 +288,11 @@ Checkpointer& Checkpointer::checkpointPath(std::string const& path) {
   if (path.length() && path[path.length() - 1] != fsutils::kPathSep) {
     checkpointPath_ += fsutils::kPathSep;
   }
+  fsutils::mkdir(checkpointPath_);
   ASSERT(
       fsutils::isdir(checkpointPath_),
-      fmt::format("Checkpoint path is not a directory: {}", checkpointPath_));
+      fmt::format(
+          "Unable to create checkpoint path directory: {}", checkpointPath_));
   return *this;
 }
 

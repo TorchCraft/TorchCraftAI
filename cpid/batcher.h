@@ -104,6 +104,7 @@ class AsyncBatcher {
   priority_mutex accessMutex_;
   std::shared_mutex modelMutex_;
 
+  std::atomic_size_t querySize_; // To make TSAN happy
   std::vector<ag::Variant> queries_;
   std::vector<std::shared_ptr<std::promise<ag::Variant>>> replies_;
 
@@ -150,7 +151,7 @@ class SubBatchAsyncBatcher : public AsyncBatcher {
       const torch::Tensor& out,
       std::vector<int64_t> const& batchSizes);
 
-  static std::vector<long> findBatchInfo(
+  static std::vector<int64_t> findBatchInfo(
       ag::Variant const& batchInfoVar,
       std::string const& variableName);
 

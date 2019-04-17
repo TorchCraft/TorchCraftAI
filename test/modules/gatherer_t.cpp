@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "gameutils/scenario.h"
+#include "gameutils/game.h"
 #include "test.h"
 
 #include "buildorders/base.h"
@@ -291,11 +291,14 @@ void runBenchmark(
     size_t maxDrones = 24,
     bool upRightOnly = true,
     std::string scmap = "maps/(4)Fighting Spirit.scx") {
-  std::unique_ptr<MeleeScenario> scenario;
+  std::unique_ptr<GameSinglePlayer> scenario;
   std::unique_ptr<Player> bot;
 
   do {
-    scenario = std::make_unique<MeleeScenario>(scmap, "Zerg", "Terran");
+    scenario = std::make_unique<GameSinglePlayer>(
+        cherrypi::GameOptions(scmap).gameType(GameType::Melee),
+        GamePlayerOptions(tc::BW::Race::Zerg),
+        GamePlayerOptions(tc::BW::Race::Terran));
     bot = std::make_unique<Player>(scenario->makeClient());
     bot->setWarnIfSlow(false);
     bot->setRealtimeFactor(FLAGS_rtfactor);
@@ -364,12 +367,11 @@ void runBenchmark(
 }
 
 void runWithBuild(std::shared_ptr<Module> gatherer) {
-  std::unique_ptr<MeleeScenario> scenario;
   std::unique_ptr<Player> bot;
 
-  scenario = std::make_unique<MeleeScenario>(
-      "maps/(4)Fighting Spirit.scx", "Zerg", "Terran");
-  bot = std::make_unique<Player>(scenario->makeClient());
+  auto scenario =
+      GameSinglePlayerMelee("maps/(4)Fighting Spirit.scx", "Zerg", "Terran");
+  bot = std::make_unique<Player>(scenario.makeClient());
   bot->setWarnIfSlow(false);
   bot->setRealtimeFactor(FLAGS_rtfactor);
 

@@ -7,7 +7,7 @@
  * Tests tagged '.distributed' should be run with ./distrun.
  */
 
-#ifdef HAVE_CPID
+#if defined(HAVE_CPID) && defined(HAVE_C10D)
 #include "test.h"
 
 #include "utils.h"
@@ -125,7 +125,7 @@ CASE("distributed/allgather[.distributed]") {
   }
 }
 
-CASE("distributed/context") {
+CASE("distributed/context_TSANUnsafe") {
   auto file = fsutils::mktemp();
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(file); });
   auto constexpr nThreads = 3;
@@ -157,7 +157,7 @@ CASE("distributed/context") {
   }
 }
 
-CASE("distributed/barrier") {
+CASE("distributed/barrier_TSANUnsafe") {
   auto file = fsutils::mktemp();
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(file); });
   auto constexpr nThreads = 3;
@@ -194,7 +194,7 @@ CASE("distributed/barrier") {
   EXPECT(finished.load() == 3);
 }
 
-CASE("distributed/barrier_timeout") {
+CASE("distributed/barrier_timeout_TSANUnsafe") {
   auto file = fsutils::mktemp();
   auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(file); });
   auto constexpr nThreads = 3;

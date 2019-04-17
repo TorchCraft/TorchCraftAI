@@ -22,6 +22,11 @@
 #include <unistd.h>
 #endif // WITHOUT_POSIX
 
+#ifdef __linux__
+#include <linux/prctl.h>
+#include <sys/prctl.h>
+#endif
+
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
@@ -179,7 +184,8 @@ int recvfd(int socket) {
 void checkedPipe(int* p) {
   if (pipe(p) != 0) {
     LOG(ERROR) << "pipe failed with error " << errno;
-    throw std::system_error(errno, std::system_category());
+    throw std::system_error(
+        errno, std::system_category(), "ForkServer: pipe failed");
   }
 }
 
@@ -239,6 +245,9 @@ int popen2(
     VLOG(4) << debugstr.str();
   }
 
+#ifdef __linux__
+  pid_t ppid_before_fork = getpid();
+#endif
   pid = fork();
   if (pid < 0) {
     // Failed
@@ -250,8 +259,25 @@ int popen2(
     close(p_stdout[0]);
     close(p_stdout[1]);
     LOG(ERROR) << "fork failed with error " << errno;
-    throw std::system_error(forkErrno, std::system_category());
+    throw std::system_error(
+        forkErrno, std::system_category(), "ForkServer: fork() failed");
   } else if (pid == 0) {
+    // Children
+#ifdef __linux__
+    // This ensures that child processes die when the parent dies
+    // See https://stackoverflow.com/a/36945270 for explanation
+    int r = prctl(PR_SET_PDEATHSIG, SIGHUP);
+    if (r == -1) {
+      perror(0);
+      exit(1);
+    }
+    // test in case the original parent exited just
+    // before the prctl() call
+    if (getppid() != ppid_before_fork) {
+      exit(1);
+    }
+#endif
+
     // Redirect stdin and stdout
     if (infp != nullptr) {
       close(0);

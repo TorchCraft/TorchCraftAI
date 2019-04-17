@@ -78,7 +78,7 @@ class SquadTask : public Task {
   std::unordered_map<Unit const*, Agent>* agents_;
 
   /// Models to solicit for UPCs
-  std::vector<std::shared_ptr<MicroModel>>* models;
+  std::unordered_map<std::string, std::shared_ptr<MicroModel>>* models;
 
   /// Enemies this Squad should target
   std::vector<Unit*> targets_;
@@ -104,7 +104,7 @@ class SquadTask : public Task {
       std::vector<Unit*> targets,
       std::unordered_map<Unit const*, EnemyState>* enemyStates,
       std::unordered_map<Unit const*, Agent>* agents,
-      std::vector<std::shared_ptr<MicroModel>>* models)
+      std::unordered_map<std::string, std::shared_ptr<MicroModel>>* models)
       : Task(upcId, units),
         targets(std::move(targets)),
         targetingLocation(false),
@@ -123,7 +123,7 @@ class SquadTask : public Task {
       int y,
       std::unordered_map<Unit const*, EnemyState>* enemyStates,
       std::unordered_map<Unit const*, Agent>* agents,
-      std::vector<std::shared_ptr<MicroModel>>* models)
+      std::unordered_map<std::string, std::shared_ptr<MicroModel>>* models)
       : Task(upcId, units),
         targetX(x),
         targetY(y),

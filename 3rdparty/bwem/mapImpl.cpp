@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the BWEM Library.
-// BWEM is free software, licensed under the MIT/X11 License. 
+// BWEM is free software, licensed under the MIT/X11 License.
 // A copy of the license is provided with the library in the LICENSE file.
 // Copyright (c) 2015, 2016, Igor Dimitrijevic
 //
@@ -82,10 +82,10 @@ void MapImpl::Initialize(BWAPI::Game* bw)
 		m_StartingLocations.push_back(t);
 
 ///	bw << "Map::Initialize-resize: " << timer.ElapsedMilliseconds() << " ms" << endl; timer.Reset();
-	
+
 	LoadData(bw);
 ///	bw << "Map::LoadData: " << timer.ElapsedMilliseconds() << " ms" << endl; timer.Reset();
-	
+
 	DecideSeasOrLakes();
 ///	bw << "Map::DecideSeasOrLakes: " << timer.ElapsedMilliseconds() << " ms" << endl; timer.Reset();
 
@@ -290,7 +290,7 @@ void MapImpl::ComputeAltitude()
 
 	// 1) Fill in and sort DeltasByAscendingAltitude
 	const int range = max(WalkSize().x, WalkSize().y) / 2 + 3;		// should suffice for maps with no Sea.
-	
+
 	vector<pair<WalkPosition, altitude_t>> DeltasByAscendingAltitude;
 
 	for (int dy = 0 ; dy <= range ; ++dy)
@@ -323,7 +323,7 @@ void MapImpl::ComputeAltitude()
 		for (int i = 0 ; i < (int)ActiveSeaSideList.size() ; ++i)
 		{
 			ActiveSeaSide & Current = ActiveSeaSideList[i];
-			if (altitude - Current.lastAltitudeGenerated >= 2 * altitude_scale)		// optimization : once a seaside miniTile verifies this condition, 
+			if (altitude - Current.lastAltitudeGenerated >= 2 * altitude_scale)		// optimization : once a seaside miniTile verifies this condition,
 				fast_erase(ActiveSeaSideList, i--);									// we can throw it away as it will not generate min altitudes anymore
 			else
 				for (auto delta : {	WalkPosition(d.x, d.y), WalkPosition(-d.x, d.y), WalkPosition(d.x, -d.y), WalkPosition(-d.x, -d.y),
@@ -432,7 +432,7 @@ void MapImpl::ProcessBlockingNeutrals()
 
 
 // Helper class for void Map::ComputeAreas()
-// Maintains some information about an area being computed 
+// Maintains some information about an area being computed
 // A TempAreaInfo is not Valid() in two cases:
 //   - a default-constructed TempAreaInfo instance is never Valid (used as a dummy value to simplify the algorithm).
 //   - any other instance becomes invalid when absorbed (see Merge)
@@ -531,7 +531,7 @@ static pair<Area::id, Area::id> findNeighboringAreas(WalkPosition p, const MapIm
 
 static Area::id chooseNeighboringArea(Area::id a, Area::id b)
 {
-	static map<pair<Area::id, Area::id>, int> map_AreaPair_counter;
+	static thread_local map<pair<Area::id, Area::id>, int> map_AreaPair_counter;
 
 	if (a > b) swap(a, b);
 	return (map_AreaPair_counter[make_pair(a, b)]++ % 2 == 0) ? a : b;
@@ -545,7 +545,7 @@ vector<TempAreaInfo> MapImpl::ComputeTempAreas(const vector<pair<WalkPosition, M
 	{
 		const WalkPosition pos = Current.first;
 		MiniTile * cur = Current.second;
-		
+
 		pair<Area::id, Area::id> neighboringAreas = findNeighboringAreas(pos, this);
 		if (!neighboringAreas.first)			// no neighboring area : creates of a new area
 		{
@@ -584,7 +584,7 @@ vector<TempAreaInfo> MapImpl::ComputeTempAreas(const vector<pair<WalkPosition, M
 				TempAreaList[chooseNeighboringArea(smaller, bigger)].Add(cur);
 				m_RawFrontier.emplace_back(neighboringAreas, pos);
 			}
-		}	
+		}
 	}
 
 	// Remove from the frontier obsolete positions
@@ -765,6 +765,3 @@ bool MapImpl::FindBasesForStartingLocations()
 
 
 }} // namespace BWEM::detail
-
-
-

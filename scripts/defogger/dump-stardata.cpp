@@ -28,19 +28,20 @@ int main(int argc, char** argv) {
 
   torchcraft::replayer::Replayer tcrep;
 
-  Replayer replay(FLAGS_input);
-  replay.setCombineFrames(3);
+  ReplayerConfiguration replayerConfiguration;
+  replayerConfiguration.replayPath = FLAGS_input;
+  replayerConfiguration.combineFrames = 3;
+  TCReplayer replay(replayerConfiguration);
   replay.init();
-  auto state = replay.state();
+  
+  tcrep.setMapFromState(replay.tcstate());
 
-  tcrep.setMapFromState(state->tcstate());
-
-  while (!state->gameEnded()) {
-    state->tcstate()->frame->creep_map.clear();
-    tcrep.push(state->tcstate()->frame);
+  while (!replay.isComplete()) {
+    replay.tcstate()->frame->creep_map.clear();
+    tcrep.push(replay.tcstate()->frame);
     replay.step();
   }
-  tcrep.push(state->tcstate()->frame);
+  tcrep.push(replay.tcstate()->frame);
   tcrep.setKeyFrame(-1);
 
   tcrep.save(FLAGS_output, true);

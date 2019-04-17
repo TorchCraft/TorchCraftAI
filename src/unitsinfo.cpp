@@ -297,6 +297,37 @@ void UnitsInfo::update() {
 
   bool updateMyGroups = false;
 
+  if (state_->mapHack()) {
+    for (auto& e : state_->tcstate()->frame->units) {
+      for (auto& v : e.second) {
+        auto ut = tc::BW::UnitType::_from_integral_nothrow(v.type);
+        if (!ut) {
+          continue;
+        }
+        Unit* u = &mapHackUnitsMap_[v.id];
+        if (!u->type) {
+          u->firstSeen = frame;
+        }
+
+        auto* prevType = u->type;
+
+        updateUnit(u, v, state_->tcstate(), /*maphack = */ true);
+
+        if (u->type != prevType) {
+          u->firstSeen = frame;
+        }
+      }
+    }
+
+    for (int id : state_->tcstate()->deaths) {
+      mapHackUnitsMap_.erase(id);
+    }
+    mapHackUnits_.clear();
+    for (auto& v : mapHackUnitsMap_) {
+      mapHackUnits_.emplace_back(&v.second);
+    }
+  }
+
   for (auto& v : state_->units()) {
     Unit* u = &unitsMap_[v.first];
     u->threateningEnemies.clear();
@@ -575,7 +606,11 @@ static int unitSightRange(const Unit* u, tc::State* tcstate) {
   return u->type->sightRange;
 }
 
-void UnitsInfo::updateUnit(Unit* u, const tc::Unit& tcu, tc::State* tcstate) {
+void UnitsInfo::updateUnit(
+    Unit* u,
+    const tc::Unit& tcu,
+    tc::State* tcstate,
+    bool maphack) {
   u->id = tcu.id;
   if (FLAGS_inferEnemyPositions) {
     inferMoveUnit(u, Position(tcu.x, tcu.y));
@@ -646,6 +681,9 @@ void UnitsInfo::updateUnit(Unit* u, const tc::Unit& tcu, tc::State* tcstate) {
   u->hasCollision = !u->flying() && !u->burrowed();
 
   for (auto& order : tcu.orders) {
+    if (maphack) {
+      break;
+    }
     if (utils::tcOrderIsAttack(order.type)) {
       auto unit = getUnit(order.targetId);
       if (unit != nullptr) {
@@ -829,6 +867,15 @@ void UnitsInfo::inferUpdateNearbyUnits() {
       }
     }
   }
+}
+
+const UnitsInfo::Units& UnitsInfo::mapHacked() {
+  if (!state_->mapHack()) {
+    throw std::runtime_error(
+        "Trying to get mapHacked units on a state that doesn't have mapHack "
+        "on");
+  }
+  return mapHackUnits_;
 }
 
 } // namespace cherrypi

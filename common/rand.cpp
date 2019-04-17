@@ -74,7 +74,7 @@ at::Generator* Rand::gen() {
 }
 
 std::string randId(size_t len) {
-  static std::mt19937 rng = std::mt19937(std::random_device()());
+  thread_local std::mt19937 rng = std::mt19937(std::random_device()());
   static const char alphanum[] = "0123456789abcdefghijklmnopqrstuvwxyz";
   std::uniform_int_distribution<int> dis(0, sizeof(alphanum) - 2);
   std::string s(len, 0);

@@ -87,7 +87,7 @@ ag::Variant makeBatchVariant(
  * true, then we mask out any item of value \param{maskValue}
  */
 std::vector<ag::Variant> unBatchVariant(
-    ag::Variant batch,
+    ag::Variant const& batch,
     int stride = 1,
     bool maskOut = false,
     double maskValue = -1);
@@ -366,6 +366,6 @@ ag::Variant applyTransform(ag::Variant input, const TensorTransform& fun);
  * Utility to get the device of a variant. If the variants contains several
  * tensors, we assume they have the same device
  */
-at::Device getVariantDevice(ag::Variant x);
+at::Device getVariantDevice(ag::Variant const& x);
 
 } // namespace common

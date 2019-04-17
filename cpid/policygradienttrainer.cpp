@@ -242,11 +242,14 @@ std::shared_ptr<ReplayBufferFrame> BatchedPGTrainer::makeFrame(
 
   auto action = trainerOutput[kActionKey];
   auto value = trainerOutput[kValueKey];
-  auto prob = trainerOutput[kPActionKey];
+  float prob = 1.0f;
+  if (trainerOutput.getDict().count(kPActionKey) > 0) {
+    prob = trainerOutput[kPActionKey].item<float>();
+  }
 
   torch::NoGradGuard g_;
   return std::make_shared<BatchedPGReplayBufferFrame>(
-      state, action, prob.item<float>(), reward);
+      state, action, prob, reward);
 }
 
 } // namespace cpid

@@ -77,6 +77,13 @@ class Checkpointer {
   /// If true, we dump the json of the metrics at each epoch
   TORCH_ARG(bool, dumpMetrics) = false;
 
+  /// Choose a format for stdout metrics
+  enum MetricsSummaryFormat {
+    FORMAT_DEFAULT,
+    FORMAT_TORCHBOARD,
+  };
+  TORCH_ARG(MetricsSummaryFormat, metricsSummaryFormat) = FORMAT_DEFAULT;
+
   /// If true, we reduce accross nodes using the max operator instead
   TORCH_ARG(bool, reduceMax) = true;
 
@@ -101,5 +108,6 @@ class Checkpointer {
 
   std::vector<std::string> visdomLines_;
   hires_clock::time_point lastEpochStamp_;
+  int lastEpochUpdateNum_ = 0;
 };
 } // namespace cpid

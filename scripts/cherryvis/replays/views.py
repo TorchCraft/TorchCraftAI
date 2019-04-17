@@ -10,8 +10,21 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, Http404, FileResponse
 from django.conf import settings
 
-def get_replay_values(rep_file, cvis_dir):
+def get_replay_values(rep_file, cvis_dir, pattern=None):
+    display_name = rep_file
+    if pattern is not None:
+        # Try to shorten files by removing prefix already in pattern
+        display_parts = os.path.normpath(display_name).split(os.sep)
+        pattern_parts = os.path.normpath(pattern).split(os.sep)
+        for i, d in enumerate(display_parts):
+            if i < len(pattern_parts) and pattern_parts[i] == d:
+                continue
+            if i == 0:
+                break
+            display_name = '/'.join(display_parts[i:])
+            break
     return {
+        'display_name': display_name,
         'path': rep_file,
         'abspath': os.path.abspath(rep_file),
         'cvis': cvis_dir,
@@ -44,7 +57,7 @@ def get_all_available_replays(pattern=''):
             if not os.path.isdir(cvis_dir_name):
                 cvis_dir_name = ''
             all_files.append(get_replay_values(
-                rep_file=filename, cvis_dir=cvis_dir_name
+                rep_file=filename, cvis_dir=cvis_dir_name, pattern=pattern
             ))
     for f in settings.REPLAY_ADDITIONAL_FILES:
         all_files.append(get_replay_values(

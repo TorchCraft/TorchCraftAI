@@ -43,7 +43,6 @@ CASE("common/rand/local_seed") {
 
   const int threadCount = 4;
 
-  std::mutex thMutex;
   auto thread = [&](int ind) {
     if (ind < 2) {
       Rand::setLocalSeed(42);
@@ -98,7 +97,6 @@ CASE("common/rand/torch") {
 
   const int threadCount = 4;
 
-  std::mutex thMutex;
   auto thread = [&](int ind) {
     if (ind < 2) {
       Rand::setLocalSeed(42);

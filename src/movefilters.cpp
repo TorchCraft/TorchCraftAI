@@ -95,7 +95,7 @@ bool positionAvoids(Unit* unit, Position const& pos, Unit* nmy) {
   // center on unitPos
   nmyPos -= unitPos;
   tgtPos -= unitPos;
-  unitPos -= unitPos;
+  unitPos = Vec2T<double>(0, 0);
   // line from unitPos to tgtPos
   auto directionUnit = tgtPos - unitPos;
   directionUnit.normalize();

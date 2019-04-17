@@ -47,7 +47,7 @@ class Player : public BasePlayer {
     mapHack_ = on;
   }
 
-  void init();
+  virtual void init() override;
   void run();
 
  private:

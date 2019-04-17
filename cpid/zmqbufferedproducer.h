@@ -53,8 +53,7 @@ class ZeroMQBufferedProducer {
   ZeroMQBufferedProducer(
       uint8_t nthreads,
       size_t maxQueueSize,
-      std::string endpoint = std::string(),
-      std::shared_ptr<zmq::context_t> context = nullptr);
+      std::string endpoint = std::string());
   ~ZeroMQBufferedProducer();
 
   std::optional<T> get();
@@ -64,7 +63,7 @@ class ZeroMQBufferedProducer {
   void stop();
 
  protected:
-  void handleRequest(std::vector<char>&& message, ReqRepServer::ReplyFn reply);
+  void handleRequest(void const* buf, size_t len, ReqRepServer::ReplyFn reply);
 
  private:
   std::optional<T> produce();
@@ -82,17 +81,16 @@ template <typename T>
 ZeroMQBufferedProducer<T>::ZeroMQBufferedProducer(
     uint8_t nthreads,
     size_t maxQueueSize,
-    std::string endpoint,
-    std::shared_ptr<zmq::context_t> context)
+    std::string endpoint)
     : maxInQueue_(maxQueueSize) {
   bprod_ = std::make_unique<common::BufferedProducer<T>>(
       nthreads, maxQueueSize, [this] { return produce(); });
   rrs_ = std::make_unique<ReqRepServer>(
-      [this](std::vector<char>&& message, ReqRepServer::ReplyFn reply) {
-        handleRequest(std::move(message), reply);
+      [this](void const* buf, size_t len, ReqRepServer::ReplyFn reply) {
+        handleRequest(buf, len, reply);
       },
-      std::move(endpoint),
-      std::move(context));
+      1,
+      std::move(endpoint));
 }
 
 template <typename T>
@@ -113,22 +111,22 @@ void ZeroMQBufferedProducer<T>::stop() {
 
 template <typename T>
 void ZeroMQBufferedProducer<T>::handleRequest(
-    std::vector<char>&& message,
+    void const* buf,
+    size_t len,
     ReqRepServer::ReplyFn reply) {
-  VLOG_ALL(2) << "ZeroMQBufferedProducer: received " << message.size()
-              << " bytes";
+  VLOG(2) << "ZeroMQBufferedProducer: received " << len << " bytes";
   {
     std::lock_guard<std::mutex> lock(mutex_);
     if (queue_.size() >= maxInQueue_) {
-      VLOG_ALL(0)
-          << "ZeroMQBufferedProducer: queue is full, cannot accept message";
+      VLOG(0) << "ZeroMQBufferedProducer: queue is full, cannot accept message";
       reply(detail::kDeny.c_str(), detail::kDeny.size());
       return;
     } else if (queue_.size() > 0) {
-      VLOG_ALL(1) << "ZeroMQBufferedProducer: queue size " << queue_.size();
+      VLOG(1) << "ZeroMQBufferedProducer: queue size " << queue_.size();
     }
     // Place in queue
-    queue_.emplace(std::move(message));
+    queue_.emplace(
+        static_cast<char const*>(buf), static_cast<char const*>(buf) + len);
   }
 
   // Notify client that we received the message

@@ -15,6 +15,7 @@
 #include "utils.h"
 #include "zstdstream.h"
 
+#include <common/assert.h>
 #include <common/fsutils.h>
 
 using json = nlohmann::json;
@@ -92,6 +93,40 @@ void CherryVisDumperModule::onGameStart(State* s) {
   }
 }
 
+std::string CherryVisDumperModule::parseReplayFileName(std::string parsed) {
+  // See corresponding code in OpenBW's version of BWAPI
+  // https://github.com/OpenBW/bwapi/blob/develop-openbw/bwapi/BWAPI/Source/BWAPI/GameEvents.cpp#L380
+  std::replace(parsed.begin(), parsed.end(), '\\', '/');
+  // Remove illegal characters
+  parsed.erase(
+      std::remove_if(
+          parsed.begin(),
+          parsed.end(),
+          [](char c) {
+            if ((unsigned char)c >= 128)
+              return false;
+            if (c >= 'a' && c <= 'z')
+              return false;
+            if (c >= 'A' && c <= 'Z')
+              return false;
+            if (c >= '0' && c <= '9')
+              return false;
+            if (c == '-' || c == '-')
+              return false;
+            if (c == '_' || c == '_')
+              return false;
+            if (c == '.')
+              return false;
+            if (c == '/')
+              return false;
+            if (c == ' ')
+              return false;
+            return true;
+          }),
+      parsed.end());
+  return parsed;
+}
+
 void CherryVisDumperModule::onGameEnd(State* s) {
   if (replayFileName_.empty()) {
     VLOG(1) << "No replay file provided, will not dump bot trace data";
@@ -128,7 +163,8 @@ void CherryVisDumperModule::onGameEnd(State* s) {
   // TODO: We need to parse "replayFileName_"
   // e.g. %BOTNAME%_%BOTRACE%
   try {
-    std::string dumpDirectory(replayFileName_ + ".cvis/");
+    std::string parsedFilename = parseReplayFileName(replayFileName_);
+    std::string dumpDirectory(parsedFilename + ".cvis/");
     VLOG(1) << "Dumping bot trace to " << dumpDirectory;
     fsutils::mkdir(dumpDirectory);
 
@@ -319,6 +355,7 @@ void CherryVisDumperModule::writeTrees(std::string const& dumpDirectory) {
 nlohmann::json CherryVisDumperModule::getTensorSummary(
     std::string const& name,
     at::Tensor const& t) {
+  ASSERT(t.numel() > 0, "Cant produce a CherryVis summary for an empty Tensor");
   // median requires contiguous tensors
   auto tensor = t.to(at::kFloat).contiguous();
   std::vector<int> shape;
@@ -368,6 +405,10 @@ void CherryVisDumperModule::dumpTensorsSummary(
                  << "a tensor - summary will not be dumped";
       continue;
     }
+    // Skip tensors with 0 elements
+    if (t.second.get().numel() == 0) {
+      continue;
+    }
     frameSummaries.push_back(getTensorSummary(t.first, t.second.get()));
   }
 }
@@ -386,6 +427,10 @@ void CherryVisDumperModule::dumpTerrainHeatmaps(
     if (t.second.get().dim() != 2) {
       LOG(ERROR) << "Heatmap " << t.first << " has dimension "
                  << t.second.get().dim() << " but should be 2";
+      continue;
+    }
+    // Skip tensors with 0 elements
+    if (t.second.get().numel() == 0) {
       continue;
     }
     auto values = t.second.get().to(at::kCPU).to(at::kFloat);

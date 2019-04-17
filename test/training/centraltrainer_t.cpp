@@ -100,6 +100,16 @@ class PartialCentralTrainer : public MyCentralTrainer {
   }
 };
 
+class ContinuousCentralTrainer : public PartialCentralTrainer {
+ public:
+  using PartialCentralTrainer::PartialCentralTrainer;
+
+ protected:
+  bool serveContinuously() const override {
+    return true;
+  }
+};
+
 void worker(
     std::shared_ptr<Trainer> trainer,
     int numEpisodes,
@@ -210,6 +220,55 @@ CASE("centraltrainer/partial[.hide]") {
     EXPECT(trainer->numFramesReceived == trainer->numCorrectFramesReceived);
     EXPECT(trainer->numFramesReceived == trainer->numMariosReceived);
     EXPECT(trainer->numFinalFramesReceived == numTotalEpisodes);
+    for (auto l : trainer->batchLengths) {
+      EXPECT(l == partialLength);
+    }
+  } else {
+    EXPECT(trainer->numFramesReceived == 0U);
+  }
+}
+
+CASE("centraltrainer/continuous[.hide]") {
+  dist::init();
+
+  auto metrics = std::make_shared<MetricsContext>();
+  auto trainer = std::make_shared<ContinuousCentralTrainer>(
+      dist::globalContext()->rank % 4 == 0,
+      nullptr,
+      nullptr,
+      std::make_unique<BaseSampler>());
+  trainer->setMetricsContext(metrics);
+
+  std::vector<std::thread> threads;
+  int64_t numTotalBatches = 0;
+  int64_t numEpisodeTails = 0;
+  int64_t nThreads = 5;
+  for (auto i = 0; i < nThreads; i++) {
+    threads.emplace_back(worker, trainer, 10, 30, 30);
+    numTotalBatches += 30;
+    numEpisodeTails += 19;
+  }
+  // Sometimes we get edge effects
+  numTotalBatches -= nThreads;
+  numEpisodeTails -= nThreads;
+  numTotalBatches *= dist::globalContext()->size;
+  numEpisodeTails *= dist::globalContext()->size;
+
+  int64_t numReceived = 0;
+  while (numReceived < numTotalBatches) {
+    trainer->update();
+    numReceived = trainer->numBatchesReceived;
+    dist::allreduce(&numReceived, 1);
+  }
+  for (auto& th : threads) {
+    EXPECT((th.join(), true));
+  }
+
+  EXPECT(numReceived >= numTotalBatches);
+  if (trainer->isServer()) {
+    EXPECT(trainer->numFramesReceived == trainer->numCorrectFramesReceived);
+    EXPECT(trainer->numFramesReceived == trainer->numMariosReceived);
+    EXPECT(trainer->numFinalFramesReceived >= numEpisodeTails);
     for (auto l : trainer->batchLengths) {
       EXPECT(l == partialLength);
     }

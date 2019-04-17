@@ -8,7 +8,7 @@
 #include "buildtype.h"
 #include "features/defoggerfeatures.h"
 #include "features/features.h"
-#include "gameutils/botscenario.h"
+#include "gameutils/gamevsbot.h"
 #include "models/defogger.h"
 #include "upcstorage.h"
 
@@ -30,7 +30,6 @@ DEFINE_string(
     "bwapi-data/replays/%BOTNAME%_%BOTRACE%.rep",
     "Where to save resulting replays");
 DEFINE_string(model_path, "", "npz file to load a model from");
-DEFINE_bool(forkserver, false, "Use a fork server");
 DEFINE_bool(gui, false, "Enable OpenBW GUI");
 
 // This model matches --run 007_ml_090801010002000000020000 in the
@@ -73,10 +72,7 @@ std::shared_ptr<DefoggerModel> makeModel() {
 int main(int argc, char** argv) {
   google::InitGoogleLogging(argv[0]);
   gflags::ParseCommandLineFlags(&argc, &argv, true);
-
-  if (FLAGS_forkserver) {
-    OpenBwProcess::startForkServer();
-  }
+  ForkServer::startForkServer();
   cherrypi::init();
 
   if (FLAGS_seed >= 0) {
@@ -89,7 +85,7 @@ int main(int argc, char** argv) {
 
   FLAGS_replay_path = std::regex_replace(
       FLAGS_replay_path, std::regex("\\$PID"), std::to_string(getpid()));
-  auto opponent = std::make_unique<BotScenario>(
+  auto opponent = std::make_unique<GameVsBotInOpenBW>(
       FLAGS_map,
       tc::BW::Race::_from_string(FLAGS_race.c_str()),
       FLAGS_opponent,
@@ -205,4 +201,3 @@ int main(int argc, char** argv) {
   cherrypi::shutdown(FLAGS_logsinktostderr);
   return EXIT_SUCCESS;
 }
-

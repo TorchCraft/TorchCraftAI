@@ -24,3 +24,24 @@
 #include "modules/tactics.h"
 #include "modules/top.h"
 #include "modules/upctocommand.h"
+
+namespace cherrypi {
+// Top and bottom modules that are always present
+char constexpr kAutoTopModule[] = "Top";
+char constexpr kAutoBottomModule[] = "UPCToCommand";
+
+/// The default set of modules.
+/// This is what CherryPi uses in a normal game.
+char constexpr kDefaultModules[] =
+    "CreateGatherAttack,"
+    "Strategy,"
+    "GenericAutoBuild,"
+    "BuildingPlacer,"
+    "Builder,"
+    "Tactics,"
+    "SquadCombat,"
+    "Scouting,"
+    "Gatherer,"
+    "Harass,"
+    "StaticDefenceFocusFireModule";
+} // namespace cherrypi

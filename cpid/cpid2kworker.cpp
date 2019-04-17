@@ -19,7 +19,6 @@
 #include <cereal/archives/json.hpp>
 #include <fmt/format.h>
 #include <glog/logging.h>
-#include <nlohmann/json.hpp>
 #include <prettyprint/prettyprint.hpp>
 
 using json = nlohmann::json;
@@ -31,6 +30,15 @@ std::string rolePattern(std::string_view role) {
   // All workers are identified by `$N$role_$id`
   return fmt::format("?{}_*", role);
 }
+std::string assertEnv(char const* name) {
+  char* value;
+  ASSERT(
+      value = std::getenv(name),
+      fmt::format("Environment variable {} is not set!", name));
+  return value;
+}
+constexpr std::string_view kRedisMetricsKey = "metrics";
+constexpr char kCpid2kIdEnv[] = "CPID2K_ID";
 } // namespace
 
 std::string const Cpid2kWorker::kAnyRole = "*";
@@ -43,6 +51,16 @@ Cpid2kWorkerInfo Cpid2kWorkerInfo::withLocalIp() {
   Cpid2kWorkerInfo info;
   info.host = netutils::getInterfaceAddresses()[0];
   return info;
+}
+
+Cpid2kWorkerInfo Cpid2kWorkerInfo::withLocalIpFromEnvVars() {
+  Cpid2kWorkerInfo info = withLocalIp();
+  info.id = assertEnv(kCpid2kIdEnv);
+  return info;
+}
+
+bool Cpid2kWorkerInfo::roleIs(std::string_view role) {
+  return common::gmatch(id, rolePattern(role));
 }
 
 Cpid2kHeartBeater::Cpid2kHeartBeater(
@@ -241,6 +259,138 @@ void Cpid2kHeartBeater::run() {
   }
 }
 
+Cpid2kGlobalState::Cpid2kGlobalState(
+    std::string prefix,
+    int64_t updateIntervalMs)
+    : prefix_(std::move(prefix)) {
+  pcInterval_ = std::chrono::milliseconds(updateIntervalMs);
+}
+
+void Cpid2kGlobalState::update(RedisClient& client) {
+  auto lock = std::lock_guard(mutex_);
+  while (true) {
+    try {
+      tryUpdate(client);
+      return;
+    } catch (std::exception const& ex) {
+      // Verify connectivity
+      if (client.isConnected()) {
+        throw; // Something else went wrong, bubble up
+      }
+
+      VLOG(0) << fmt::format(
+          "{} error during global state update, retrying: {}",
+          prefix_,
+          ex.what());
+    }
+
+    // Re-connect and retry; reconnect() throws if not successful
+    // If we can connect, simply try again.
+    client.reconnect();
+  }
+}
+
+bool Cpid2kGlobalState::isDone() {
+  return isDone_;
+}
+
+/// Provides information about peers, filtered by role.
+std::vector<Cpid2kWorkerInfo> Cpid2kGlobalState::peers(std::string_view role) {
+  auto lock = std::lock_guard(mutex_);
+  auto rp = rolePattern(role);
+  std::vector<Cpid2kWorkerInfo> result;
+  for (auto const& winfo : peers_) {
+    if (common::gmatch(winfo.id, rp)) {
+      result.push_back(winfo);
+    }
+  }
+  return result;
+}
+
+std::vector<std::string> Cpid2kGlobalState::serviceEndpoints(
+    std::string const& serviceName) {
+  auto lock = std::lock_guard(mutex_);
+  std::vector<std::string> endpoints;
+  for (auto const& winfo : peers_) {
+    auto it = winfo.services.find(serviceName);
+    if (it != winfo.services.end()) {
+      endpoints.push_back(fmt::format("tcp://{}:{}", winfo.host, it->second));
+    }
+  }
+  return endpoints;
+}
+
+/// Fetches global job meta-data from the central redis instance.
+void Cpid2kGlobalState::tryUpdate(RedisClient& client) {
+  if (Clock::now() - lastPeersCheck_ < pcInterval_) {
+    return;
+  }
+
+  auto replies = client.commands({
+      client.format({"GET", fmt::format("{}:done", prefix_)}),
+      client.format({"GET", fmt::format("{}:peerv", prefix_)}),
+  });
+  ASSERT(replies.size() == 2);
+
+  isDone_ = replies[0].isString() && replies[0].string() == "true";
+  int64_t newPeerv =
+      replies[1].isString() ? std::stol(replies[1].string()) : -1;
+  lastPeersCheck_ = Clock::now();
+  if (newPeerv == peerv_) {
+    VLOG(3) << fmt::format("{} peerv unchanged at {}", prefix_, peerv_);
+    return;
+  }
+  peerv_ = newPeerv;
+
+  // Fetch list of all peers by scanning the database for heartbeats. This is an
+  // iterative process, i.e. we'll keep track of a cursor and query the database
+  // multiple times. Note that the COUNT option is only a hint and there's no
+  // reason to expect that the SCAN call return min(num_matching, batch_size)
+  // elements. See also https://redis.io/commands/scan.
+  auto batchSize = 256;
+  auto pattern = fmt::format("{}:heartbeat:*", prefix_);
+  std::string cursor = "0";
+  std::vector<std::string> keys;
+  do {
+    auto reply = client.command(
+        {"SCAN", cursor, "MATCH", pattern, "COUNT", std::to_string(batchSize)});
+    if (reply.size() != 2) {
+      throw std::runtime_error("Can't scan heartbeat table");
+    }
+    cursor = reply.at(0).string();
+    for (auto const& r : reply.at(1)) {
+      keys.push_back(r.string());
+    }
+  } while (cursor != "0");
+
+  // Fetch peer data
+  std::vector<Cpid2kWorkerInfo> peers;
+  if (!keys.empty()) {
+    std::vector<std::string_view> args;
+    args.push_back("MGET");
+    for (auto const& key : keys) {
+      args.push_back(key);
+    }
+    auto reply = client.command(args);
+
+    for (auto const& r : reply) {
+      if (r.isNil()) {
+        continue;
+      }
+
+      peers.emplace_back();
+      common::IMembuf buf(r.stringv());
+      std::istream is(&buf);
+      cereal::JSONInputArchive ar(is);
+      ar(cereal::make_nvp("data", peers.back()));
+    }
+  }
+
+  VLOG(2) << fmt::format(
+      "{} got information about {} peers", prefix_, peers.size());
+  peers_ = std::move(peers);
+}
+
 Cpid2kWorker::Cpid2kWorker(
     Cpid2kWorkerInfo info,
     std::string prefix,
@@ -251,19 +401,35 @@ Cpid2kWorker::Cpid2kWorker(
       prefix_(prefix),
       host_(host),
       port_(port),
-      hb_(std::move(info),
-          std::move(prefix),
-          std::move(host),
-          port,
-          hbIntervalMs) {
-  // TODO: check peerv during heartbeats (= single request)?
+      hb_(std::move(info), prefix, std::move(host), port, hbIntervalMs),
+      gs_(prefix, hbIntervalMs / 2) {
   pcInterval_ = std::chrono::milliseconds(hbIntervalMs / 2);
 }
 
 Cpid2kWorker::~Cpid2kWorker() {}
 
+std::unique_ptr<Cpid2kWorker> Cpid2kWorker::fromEnvVars(
+    Cpid2kWorkerInfo const& info) {
+  return std::make_unique<cpid::Cpid2kWorker>(
+      std::move(info),
+      assertEnv("CPID2K_REDIS_PREFIX"),
+      assertEnv("CPID2K_REDIS_HOST"),
+      std::stoi(assertEnv("CPID2K_REDIS_PORT")));
+}
+
+std::unique_ptr<Cpid2kWorker> Cpid2kWorker::fromEnvVars() {
+  if (!std::getenv(kCpid2kIdEnv)) {
+    return nullptr;
+  }
+  return fromEnvVars(Cpid2kWorkerInfo::withLocalIpFromEnvVars());
+}
+
 Cpid2kWorkerInfo const& Cpid2kWorker::info() const {
   return info_;
+}
+
+std::string_view Cpid2kWorker::prefix() const {
+  return prefix_;
 }
 
 /// Checks whether this worker is considered dead by the scheduler
@@ -280,9 +446,8 @@ bool Cpid2kWorker::isDone() {
     return true;
   }
 
-  auto lock = std::lock_guard(mutex_);
-  updateGlobalState();
-  return isDone_;
+  gs_.update(*threadLocalClient());
+  return gs_.isDone();
 }
 
 /// Returns a prefixed key.
@@ -308,33 +473,14 @@ std::shared_ptr<RedisClient> Cpid2kWorker::threadLocalClient() {
 
 /// Provides information about peers, filtered by role.
 std::vector<Cpid2kWorkerInfo> Cpid2kWorker::peers(std::string_view role) {
-  auto lock = std::lock_guard(mutex_);
-  updateGlobalState();
-
-  auto rp = rolePattern(role);
-  std::vector<Cpid2kWorkerInfo> result;
-  for (auto const& winfo : peers_) {
-    if (common::gmatch(winfo.id, rp)) {
-      result.push_back(winfo);
-    }
-  }
-  return result;
+  gs_.update(*threadLocalClient());
+  return gs_.peers(role);
 }
 
 std::vector<std::string> Cpid2kWorker::serviceEndpoints(
     std::string const& serviceName) {
-  auto lock = std::lock_guard(mutex_);
-  updateGlobalState();
-
-  // Update list of endpoints of server accepting episodes
-  std::vector<std::string> endpoints;
-  for (auto const& winfo : peers_) {
-    auto it = winfo.services.find(serviceName);
-    if (it != winfo.services.end()) {
-      endpoints.push_back(fmt::format("tcp://{}:{}", winfo.host, it->second));
-    }
-  }
-  return endpoints;
+  gs_.update(*threadLocalClient());
+  return gs_.serviceEndpoints(serviceName);
 }
 
 /**
@@ -357,20 +503,19 @@ std::vector<std::string> Cpid2kWorker::serviceEndpoints(
 distributed::Context& Cpid2kWorker::dcontext(
     std::string const& role, // need std::string here for unordered_map lookup
     std::chrono::milliseconds timeout) {
-  auto lock = std::lock_guard(mutex_);
-  updateGlobalState();
+  gs_.update(*threadLocalClient());
 
   // Collect relevant peers to determine rank and size
-  auto rp = rolePattern(role);
+  auto peers = gs_.peers(role);
   std::vector<std::string> peerIds;
-  for (auto const& winfo : peers_) {
-    if (common::gmatch(winfo.id, rp)) {
-      peerIds.push_back(winfo.id);
-    }
+  for (auto const& winfo : peers) {
+    peerIds.push_back(winfo.id);
   }
   if (peerIds.empty()) {
     throw std::runtime_error(fmt::format(
-        "No peers found matching role '{}' (pattern '{}')", role, rp));
+        "No peers found matching role '{}' (pattern '{}')",
+        role,
+        rolePattern(role)));
   }
   std::sort(peerIds.begin(), peerIds.end());
 
@@ -451,9 +596,16 @@ void Cpid2kWorker::discardDContext(std::string const& role) {
 /// specified time has passed.
 /// Returns true once a worker is available and false if the function times
 /// out. A timeout of zero will disable timing out.
+/// If there will be no worker with the given role, throw an exception.
 bool Cpid2kWorker::waitForOne(
     std::string_view role,
     std::chrono::milliseconds timeout) {
+  int64_t count = numWorkersWithRoleInSpec(role);
+  if (count == 0) {
+    throw std::runtime_error(
+        fmt::format("No such worker in job spec: {}", role));
+  }
+
   auto start = Clock::now();
   while (peers(role).size() < 1) {
     if (timeout != kNoTimeout && Clock::now() - start > timeout) {
@@ -471,28 +623,7 @@ bool Cpid2kWorker::waitForOne(
 bool Cpid2kWorker::waitForAll(
     std::string_view role,
     std::chrono::milliseconds timeout) {
-  // Parse job specification to determine the number of workers we need to wait
-  // for. The pattern is the same as rolePattern() but without the '_*' suffix
-  // for concrete worker IDs.
-  auto pattern = fmt::format("?{}", role);
-  int64_t count = [&] {
-    auto reply = threadLocalClient()->get(fmt::format("{}:jobspec", prefix_));
-    auto data = reply.string();
-    int n = 0;
-    try {
-      auto spec = json::parse(data);
-      for (auto const& part : spec) {
-        if (common::gmatch(part["name"].get<std::string>(), pattern)) {
-          n += part["count"].get<int>();
-        }
-      }
-    } catch (std::exception const& ex) {
-      throw std::runtime_error(
-          fmt::format("Cannot parse jobspec: {}", ex.what()));
-    }
-    return n;
-  }();
-
+  int64_t count = numWorkersWithRoleInSpec(role);
   VLOG(2) << fmt::format(
       "{} waiting for {} peers with role {}", info_.id, count, role);
   auto start = Clock::now();
@@ -505,6 +636,20 @@ bool Cpid2kWorker::waitForAll(
   return true;
 }
 
+void Cpid2kWorker::appendMetrics(
+    std::string_view metricsName,
+    nlohmann::json const& json) {
+  auto redis = threadLocalClient();
+  auto reply = redis->command(
+      {"RPUSH",
+       fmt::format(
+           "{}:{}:{}:{}", prefix_, kRedisMetricsKey, info_.id, metricsName),
+       json.dump(-1, ' ')});
+  if (reply.isError()) {
+    LOG(WARNING) << "[cpid2k] Unable to appendMetrics: " << reply.error();
+  }
+}
+
 std::shared_ptr<RedisClient> Cpid2kWorker::redisClient(std::thread::id id) {
   auto it = threadClients_.find(id);
   if (it != threadClients_.end()) {
@@ -514,97 +659,156 @@ std::shared_ptr<RedisClient> Cpid2kWorker::redisClient(std::thread::id id) {
   return threadClients_[id];
 }
 
-/// Fetches global job meta-data with (limited) retries on failure.
-void Cpid2kWorker::updateGlobalState() {
-  while (true) {
-    try {
-      updateGlobalStateImpl();
-      return;
-    } catch (std::exception const& ex) {
-      // Verify connectivity
-      auto rds = redisClient(std::this_thread::get_id());
-      if (rds->isConnected()) {
-        throw; // Something else went wrong, bubble up
+int Cpid2kWorker::numWorkersWithRoleInSpec(std::string_view role) {
+  // Parse job specification to determine the number of workers we need to wait
+  // for. The pattern is the same as rolePattern() but without the '_*' suffix
+  // for concrete worker IDs.
+  auto pattern = fmt::format("?{}", role);
+  auto reply = threadLocalClient()->get(fmt::format("{}:jobspec", prefix_));
+  auto data = reply.string();
+  int n = 0;
+  try {
+    auto spec = json::parse(data);
+    for (auto const& part : spec) {
+      if (common::gmatch(part["name"].get<std::string>(), pattern)) {
+        n += part["count"].get<int>();
       }
-
-      VLOG(0) << fmt::format(
-          "{} error during global state update, retrying: {}",
-          info_.id,
-          ex.what());
     }
+  } catch (std::exception const& ex) {
+    throw std::runtime_error(
+        fmt::format("Cannot parse jobspec: {}", ex.what()));
+  }
+  return n;
+}
 
-    // Re-connect and retry; reconnect() throws if not successful
-    // If we can connect, simply try again.
-    redisClient(std::this_thread::get_id())->reconnect();
+Cpid2kMetrics::Cpid2kMetrics(
+    std::shared_ptr<Cpid2kWorker> worker,
+    std::chrono::milliseconds sendInterval)
+    : worker_(worker), sendInterval_(sendInterval), stop_(false) {
+  thr_ = std::thread(&Cpid2kMetrics::run, this);
+}
+Cpid2kMetrics::~Cpid2kMetrics() {
+  stop_ = true;
+  thr_.join();
+}
+
+namespace {
+struct FnAggregator : Cpid2kMetrics::Aggregator {
+  FnAggregator(
+      std::string_view type,
+      std::function<float(float, float)> fn,
+      float initialValue)
+      : fn(fn), currentValue(initialValue) {
+    this->type = type;
+  }
+  virtual void add(float value) override {
+    currentValue = fn(currentValue, value);
+  }
+  virtual nlohmann::json value() const override {
+    return nlohmann::json(currentValue);
+  }
+
+  std::function<float(float, float)> fn;
+  float currentValue = 0;
+};
+
+struct MeanAggregator : Cpid2kMetrics::Aggregator {
+  MeanAggregator() : currentValue(0), count(0) {
+    type = "mean_agg";
+  }
+  virtual void add(float value) override {
+    currentValue += value;
+    count += 1;
+  }
+  virtual nlohmann::json value() const override {
+    ASSERT(count > 0);
+    return {
+        {"sum", currentValue},
+        {"sum_coefs", count},
+    };
+  }
+
+  float currentValue = 0;
+  int count = 0;
+};
+} // namespace
+
+void Cpid2kMetrics::push(std::vector<EventMetric> const& metrics) {
+  std::unique_lock l(aggregatorsMutex_);
+  for (auto const& m : metrics) {
+    auto it = aggregators_.find(m.name);
+    std::unique_ptr<Aggregator> agg;
+    if (it == aggregators_.end()) {
+      aggregators_[m.name] = [&]() -> std::unique_ptr<Aggregator> {
+        switch (m.aggregation) {
+          case AggregateMax:
+            return std::make_unique<FnAggregator>(
+                "max",
+                [](float a, float b) -> float { return std::max<float>(a, b); },
+                m.value);
+          case AggregateMin:
+            return std::make_unique<FnAggregator>(
+                "min",
+                [](float a, float b) -> float { return std::min<float>(a, b); },
+                m.value);
+          case AggregateSum:
+            return std::make_unique<FnAggregator>(
+                "sum", [](float a, float b) -> float { return a + b; }, 0);
+          case AggregateLast:
+            return std::make_unique<FnAggregator>(
+                "last", [](float a, float b) -> float { return b; }, m.value);
+          case AggregateMean:
+            return std::make_unique<MeanAggregator>();
+          default:
+            ASSERT(false, "Unknown aggregation type");
+        }
+      }();
+      it = aggregators_.find(m.name);
+    }
+    it->second->add(m.value);
   }
 }
 
-/// Fetches global job meta-data from the central redis instance.
-void Cpid2kWorker::updateGlobalStateImpl() {
-  if (Clock::now() - lastPeersCheck_ < pcInterval_) {
-    return;
-  }
-
-  auto rds = redisClient(std::this_thread::get_id());
-  auto replies = rds->commands({
-      rds->format({"GET", fmt::format("{}:done", prefix_)}),
-      rds->format({"GET", fmt::format("{}:peerv", prefix_)}),
-  });
-  ASSERT(replies.size() == 2);
-
-  isDone_ = replies[0].isString() && replies[0].string() == "true";
-  int64_t newPeerv = std::stol(replies[1].string());
-  lastPeersCheck_ = Clock::now();
-  if (newPeerv == peerv_) {
-    VLOG(3) << fmt::format("{} peerv unchanged at {}", info_.id, peerv_);
-    return;
-  }
-  peerv_ = newPeerv;
-
-  // Fetch list of all peers by scanning the database for heartbeats. This is an
-  // iterative process, i.e. we'll keep track of a cursor and query the database
-  // multiple times. Note that the COUNT option is only a hint and there's no
-  // reason to expect that the SCAN call return min(num_matching, batch_size)
-  // elements. See also https://redis.io/commands/scan.
-  auto batchSize = 256;
-  auto pattern = fmt::format("{}:heartbeat:*", prefix_);
-  std::string cursor = "0";
-  std::vector<std::string> keys;
-  do {
-    auto reply = rds->command(
-        {"SCAN", cursor, "MATCH", pattern, "COUNT", std::to_string(batchSize)});
-    if (reply.size() != 2) {
-      throw std::runtime_error("Can't scan heartbeat table");
-    }
-    cursor = reply.at(0).string();
-    for (auto const& r : reply.at(1)) {
-      keys.push_back(r.string());
-    }
-  } while (cursor != "0");
-
-  // Fetch peer data
-  std::vector<std::string_view> args;
-  args.push_back("MGET");
-  for (auto const& key : keys) {
-    args.push_back(key);
-  }
-  auto reply = rds->command(args);
-
-  std::vector<Cpid2kWorkerInfo> peers;
-  for (auto const& r : reply) {
-    if (r.isNil()) {
+void Cpid2kMetrics::run() {
+  auto lastSent = Clock::now();
+  while (!stop_) {
+    if (Clock::now() - lastSent < sendInterval_) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(500));
       continue;
     }
+    lastSent = Clock::now();
+    std::unordered_map<std::string, std::unique_ptr<Aggregator>> aggregators;
+    {
+      std::unique_lock l(aggregatorsMutex_);
+      std::swap(aggregators, aggregators_);
+    }
 
-    peers.emplace_back();
-    common::IMembuf buf(r.stringv());
-    std::istream is(&buf);
-    cereal::JSONInputArchive ar(is);
-    ar(cereal::make_nvp("data", peers.back()));
+    if (aggregators.empty()) {
+      continue;
+    }
+    auto rds = worker_->threadLocalClient();
+    auto now = common::timestamp();
+    std::vector<std::string> commandAsStr = {
+        "RPUSH",
+        fmt::format("{}:metricEvents", worker_->prefix()),
+    };
+    for (auto const& it : aggregators) {
+      commandAsStr.emplace_back(
+          nlohmann::json({{"time", now},
+                          {"type", std::string(it.second->type)},
+                          {"name", it.first},
+                          {"value", it.second->value()}})
+              .dump(-1, ' '));
+    }
+    std::vector<std::string_view> eventsAsStrView;
+    for (auto const& cmd : commandAsStr) {
+      eventsAsStrView.push_back(cmd);
+    }
+    auto reply = rds->command(eventsAsStrView);
+    if (reply.isError()) {
+      LOG(WARNING) << "[cpid2k] Unable to push metrics: " << reply.error();
+      continue;
+    }
   }
-  VLOG(2) << fmt::format(
-      "{} got information about {} peers", info_.id, peers.size());
-  peers_ = std::move(peers);
 }
-
 } // namespace cpid

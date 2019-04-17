@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "gameutils/scenario.h"
+#include "gameutils/game.h"
 #include "test.h"
 
 #include <glog/logging.h>
@@ -162,7 +162,7 @@ class SecondBaseModule : public FivePoolModule {
 // ATen is required for position masks
 #ifdef HAVE_ATEN
 std::unique_ptr<Player> setupPlayerWithMask(
-    Scenario const& sc,
+    GameSinglePlayerUMS const& sc,
     torch::Tensor mask) {
   auto player = std::make_unique<Player>(sc.makeClient());
 
@@ -199,7 +199,7 @@ SCENARIO("buildingplacer/fivepool_restrict_v") {
     }
   }
 
-  auto scenario = Scenario("test/maps/eco-base-zerg.scm", "Zerg");
+  auto scenario = GameSinglePlayerUMS("test/maps/eco-base-zerg.scm", "Zerg");
   auto player = setupPlayerWithMask(scenario, mask);
   auto state = player->state();
 
@@ -243,7 +243,7 @@ SCENARIO("buildingplacer/fivepool_restrict_h") {
     }
   }
 
-  auto scenario = Scenario("test/maps/eco-base-zerg.scm", "Zerg");
+  auto scenario = GameSinglePlayerUMS("test/maps/eco-base-zerg.scm", "Zerg");
   auto player = setupPlayerWithMask(scenario, mask);
   auto state = player->state();
 
@@ -277,7 +277,9 @@ SCENARIO("buildingplacer/fivepool_restrict_h") {
 #endif // HAVE_ATEN
 
 SCENARIO("buildingplacer/second_base") {
-  auto scenario = MeleeScenario("maps/(2)Heartbreak Ridge.scx", "Zerg");
+  auto scenario = GameSinglePlayer(
+      GameOptions("maps/(2)Heartbreak Ridge.scx").gameType(GameType::Melee),
+      GamePlayerOptions(tc::BW::Race::Zerg));
   auto player = std::make_unique<Player>(scenario.makeClient());
 
   player->addModule(Module::make<CreateGatherAttackModule>());
@@ -322,7 +324,7 @@ SCENARIO("buildingplacer/second_base") {
 }
 
 SCENARIO("buildingplacer/invalid_dirac") {
-  Scenario scenario("test/maps/eco-base-zerg.scm", "Zerg");
+  auto scenario = GameSinglePlayerUMS("test/maps/eco-base-zerg.scm", "Zerg");
   Player player(scenario.makeClient());
   player.setRealtimeFactor(FLAGS_rtfactor);
 

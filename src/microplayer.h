@@ -35,6 +35,9 @@ class MicroPlayer : public BasePlayer {
 
   void onGameStart();
   void onGameEnd();
+
+ protected:
+  bool gameStarted_ = false;
 };
 
 } // namespace cherrypi

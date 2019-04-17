@@ -21,6 +21,7 @@ enum class PositionFilterPolicy { ACCEPT_IF_ALL = 1, ACCEPT_IF_ANY };
  */
 class PositionFilter {
  public:
+  virtual ~PositionFilter() = default;
   virtual bool isValid(Unit*, Position const&) = 0;
   virtual float score(Unit*, Position const&) = 0;
   virtual bool blocking() = 0;

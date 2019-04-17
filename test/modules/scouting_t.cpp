@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "gameutils/scenario.h"
+#include "gameutils/game.h"
 #include "test.h"
 
 #include <glog/logging.h>
@@ -57,8 +57,8 @@ void addScoutingModules(Player& bot) {
 } // namespace
 
 SCENARIO("scouting/search_and_destroy") {
-  auto scenario =
-      MeleeScenario("test/maps/fighting_spirit_fow.scm", "Zerg", "Protoss");
+  auto scenario = GameSinglePlayerMelee(
+      "test/maps/fighting_spirit_fow.scm", "Zerg", "Protoss");
   Player bot(scenario.makeClient());
 
   // Scenario setup: we should be able to find an unseen building
@@ -89,7 +89,8 @@ SCENARIO("scouting/search_and_destroy") {
 // TODO: Sometimes the Zerglings won't be able to kill the marines in time and
 // the test will fail.
 SCENARIO("scouting/blocked_ramp_above[.dev]") {
-  auto scenario = Scenario("test/maps/fighting_spirit_fow_static.scm", "Zerg");
+  auto scenario =
+      GameSinglePlayerUMS("test/maps/fighting_spirit_fow_static.scm", "Zerg");
   Player bot(scenario.makeClient());
 
   // Scenario setup: we should be able to find the enemy if they blocked their
@@ -122,7 +123,8 @@ SCENARIO("scouting/blocked_ramp_above[.dev]") {
 }
 
 SCENARIO("scouting/blocked_ramp_below") {
-  auto scenario = Scenario("test/maps/fighting_spirit_fow_static.scm", "Zerg");
+  auto scenario =
+      GameSinglePlayerUMS("test/maps/fighting_spirit_fow_static.scm", "Zerg");
   Player bot(scenario.makeClient());
 
   // Scenario setup: we should be able to find the enemy if they blocked their
@@ -151,7 +153,8 @@ SCENARIO("scouting/blocked_ramp_below") {
 }
 
 SCENARIO("scouting/second_base") {
-  auto scenario = Scenario("test/maps/fighting_spirit_fow_static.scm", "Zerg");
+  auto scenario =
+      GameSinglePlayerUMS("test/maps/fighting_spirit_fow_static.scm", "Zerg");
   Player bot(scenario.makeClient());
 
   // Scenario setup: we should be able to infer the base location from
@@ -185,7 +188,8 @@ SCENARIO("scouting/second_base") {
 }
 
 SCENARIO("scouting/blocked_natural") {
-  auto scenario = Scenario("test/maps/fighting_spirit_fow_static.scm", "Zerg");
+  auto scenario =
+      GameSinglePlayerUMS("test/maps/fighting_spirit_fow_static.scm", "Zerg");
   Player bot(scenario.makeClient());
 
   // Scenario setup: we should be able to find an unseen building

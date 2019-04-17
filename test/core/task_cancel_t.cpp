@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <fstream>
 
-#include "gameutils/scenario.h"
+#include "gameutils/game.h"
 #include "test.h"
 
 #include <glog/logging.h>
@@ -107,7 +107,8 @@ class MockCombatModule : public CombatModule {
 } // namespace
 
 SCENARIO("task_cancel/12_marines_vs_base") {
-  auto scenario = Scenario("test/maps/12-marines-vs-base.scm", "Terran");
+  auto scenario =
+      GameSinglePlayerUMS("test/maps/12-marines-vs-base.scm", "Terran");
   Player bot(scenario.makeClient());
 
   bot.addModule(Module::make<TopModule>());

@@ -5,15 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#include "common/autograd.h"
+#include "cpid/optimizers.h"
 #include "test.h"
-#include <glog/logging.h>
-
 #include <autogradpp/autograd.h>
+#include <common/autograd/debug.h>
 #include <common/autograd/models.h>
 #include <common/autograd/operations.h>
 #include <common/rand.h>
 #include <common/serialization.h>
-
+#include <glog/logging.h>
 CASE("autograd/variant_ref/dict") {
   ag::Variant test = ag::VariantDict{{"key", torch::zeros({4, 5})}};
   EXPECT(test["key"].size(0) == 4);
@@ -21,6 +22,52 @@ CASE("autograd/variant_ref/dict") {
   EXPECT(test["key"].view(-1).size(0) == 20);
   test["key"].fill_(1);
   EXPECT(test["key"].sum().item<int32_t>() == 20);
+}
+
+class DummyTrainer {
+ public:
+  ag::Container model_ = ag::Linear(5, 1).make();
+  ag::Optimizer optim_;
+
+  template <class Archive>
+  void save(Archive& ar) const {
+    ar(CEREAL_NVP(*model_));
+    ar(CEREAL_NVP(optim_));
+  }
+
+  template <class Archive>
+  void load(Archive& ar) {
+    ar(CEREAL_NVP(*model_));
+    ar(CEREAL_NVP(optim_));
+    optim_->add_parameters(model_->parameters());
+    optim_->zero_grad();
+  }
+};
+
+CASE("autograd/load_model") {
+  {
+    auto dummy = std::make_shared<DummyTrainer>();
+    dummy->optim_ = cpid::selectOptimizer(dummy->model_);
+    auto input = torch::randn({5});
+    auto output = dummy->model_->forward(input)[0];
+    output.backward();
+    dummy->optim_->step();
+    ag::save("test.bin", dummy);
+    for (auto& var : dummy->model_->parameters()) {
+      EXPECT(var.grad().defined() == true);
+    }
+  }
+  {
+    auto dummy = std::make_shared<DummyTrainer>();
+    ag::load("test.bin", dummy);
+    auto input = torch::randn({5});
+    auto output = dummy->model_->forward(input)[0];
+    output.backward();
+    dummy->optim_->step();
+    for (auto& var : dummy->model_->parameters()) {
+      EXPECT(var.grad().defined() == true);
+    }
+  }
 }
 
 CASE("autograd/variant_ref/dict/singleton_list") {
@@ -257,4 +304,12 @@ CASE("autograd/mhattention") {
           batch[i].slice(0, 0, numQueries[i]), outputs[i].squeeze(0)));
     }
   }
+}
+
+CASE("autograd/cudamemory") {
+#ifdef CUDA_FOUND
+  EXPECT_NO_THROW(common::torchMemoryUsage());
+#else // CUDA_FOUND
+  EXPECT_THROWS(common::torchMemoryUsage());
+#endif // CUDA_FOUND
 }

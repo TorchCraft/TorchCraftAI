@@ -64,7 +64,15 @@ function search_near_frames(data, search_pattern, current_frame, is_match, limit
   });
 
   var total_count = matching.length;
-  matching = matching.slice(0, limit);
+  if (matching.length > limit) {
+    // Always display all the logs from the current frame
+    if (matching[limit - 1].frame == current_frame) {
+      matching = matching.filter(d => d.frame == current_frame);
+    }
+    else {
+      matching = matching.slice(0, limit);
+    }
+  }
   return {
     'total_count': total_count,
     'entries': matching,

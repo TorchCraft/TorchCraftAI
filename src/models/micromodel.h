@@ -14,6 +14,8 @@ namespace cherrypi {
 struct MicroModel {
   virtual void forward(State* state) = 0;
   virtual MicroAction decode(Unit* unit) = 0;
+  virtual void onGameEnd(State* state) = 0;
+  virtual void onGameStart(State* state) = 0;
 };
 
 } // namespace cherrypi

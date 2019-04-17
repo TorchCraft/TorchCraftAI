@@ -46,6 +46,14 @@ class Behavior {
 // Class declarations for micro Behaviors
 #define CPI_DEFINE_BEHAVIOR(NAME)                   \
   class Behavior##NAME : public Behavior {          \
+   public:                                          \
+    virtual MicroAction onPerform(Agent&) override; \
+  };
+
+// Class declarations for micro Behaviors
+#define CPI_DEFINE_INHERIT_BEHAVIOR(NAME, NAMEP)    \
+  class Behavior##NAME : public Behavior##NAMEP {   \
+   public:                                          \
     virtual MicroAction onPerform(Agent&) override; \
   };
 
@@ -55,6 +63,7 @@ CPI_DEFINE_BEHAVIOR(IfIrradiated)
 CPI_DEFINE_BEHAVIOR(IfStormed)
 CPI_DEFINE_BEHAVIOR(VsScarab)
 CPI_DEFINE_BEHAVIOR(Formation)
+CPI_DEFINE_BEHAVIOR(Detect)
 CPI_DEFINE_BEHAVIOR(AsZergling)
 CPI_DEFINE_BEHAVIOR(AsMutaliskVsScourge)
 CPI_DEFINE_BEHAVIOR(AsMutaliskMicro)
@@ -62,7 +71,8 @@ CPI_DEFINE_BEHAVIOR(AsScourge)
 CPI_DEFINE_BEHAVIOR(AsLurker)
 CPI_DEFINE_BEHAVIOR(AsHydralisk)
 CPI_DEFINE_BEHAVIOR(AsOverlord)
-CPI_DEFINE_BEHAVIOR(AsDefiler)
+CPI_DEFINE_BEHAVIOR(AsDefilerConsumeOnly)
+CPI_DEFINE_INHERIT_BEHAVIOR(AsDefiler, AsDefilerConsumeOnly)
 CPI_DEFINE_BEHAVIOR(Chase)
 CPI_DEFINE_BEHAVIOR(Kite)
 CPI_DEFINE_BEHAVIOR(EngageCooperatively)

@@ -4,6 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 
 FIND_PACKAGE(CURL REQUIRED)
+FIND_PACKAGE(Threads)
 
 ADD_DEFINITIONS(-DCEREAL_RAPIDJSON_HAS_STDSTRING)
 
@@ -20,7 +21,7 @@ TARGET_INCLUDE_DIRECTORIES(visdom
 )
 
 # Torch is here as a hack to find the right CUDA Paths. FindCUDA will work.
-TARGET_LINK_LIBRARIES(visdom ${CURL_LIBRARIES} glog Torch)
+TARGET_LINK_LIBRARIES(visdom ${CURL_LIBRARIES} ${LIB_glog} Torch ${CMAKE_THREAD_LIBS_INIT})
 
 ADD_EXECUTABLE(visdom_test test.cpp)
-TARGET_LINK_LIBRARIES(visdom_test visdom glog gflags)
+TARGET_LINK_LIBRARIES(visdom_test visdom ${LIB_glog} gflags)

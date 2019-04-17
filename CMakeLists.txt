@@ -8,7 +8,7 @@ CMAKE_POLICY(VERSION 3.0)
 PROJECT(CherryPi)
 ENABLE_TESTING()
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 INCLUDE(TargetLinkCherpi)
 
 SET(CMAKE_CXX_STANDARD 17)
@@ -67,10 +67,23 @@ ELSE(MSVC)
     -Wno-unknown-warning-option)
   OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON)
   INCLUDE(ChooseLinker)
+
+  # ALE for Atari emulator
+  ADD_SUBDIRECTORY("${PROJECT_SOURCE_DIR}/3rdparty/ale" EXCLUDE_FROM_ALL)
+  SET_TARGET_PROPERTIES(ale-lib PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+  TARGET_INCLUDE_DIRECTORIES(ale-lib SYSTEM PUBLIC "${PROJECT_SOURCE_DIR}/3rdparty/ale/src")
 ENDIF(MSVC)
 
 # Static version required for advanced, experimental functionality
 FIND_PACKAGE(ZSTD 1.0 REQUIRED static)
+
+# GLOG < 0.3.5 (the one in ubuntu packets) doesn't support cmake :(
+FIND_PACKAGE(glog CONFIG NAMES google-glog glog)
+IF(NOT TARGET glog::glog)
+  FIND_LIBRARY(LIB_glog NAMES glog)
+ELSE()
+  SET(LIB_glog glog::glog)
+ENDIF(NOT TARGET glog::glog)
 
 # Pytorch hack... Otherwise it redefines LOG
 ADD_DEFINITIONS(-DC10_USE_GLOG)
@@ -79,11 +92,16 @@ ADD_DEFINITIONS(-DCEREAL_THREAD_SAFE)
 INCLUDE_DIRECTORIES(3rdparty)
 ADD_SUBDIRECTORY(3rdparty/fmt EXCLUDE_FROM_ALL)
 
-OPTION(WITH_CPIDLIB "Include training library" ON)
 # Gloo supports Linux only, and the training library depends on it
-IF(APPLE OR MSVC)
-  SET(WITH_CPIDLIB OFF)
-ENDIF(APPLE OR MSVC)
+IF (MSVC OR APPLE)
+  OPTION(WITH_CPIDLIB "Include training library (!UNSUPPORTED, DOESNT BUILD!)" OFF)
+  SET(CPID_DISTRIBUTED 0)
+ELSE()
+  OPTION(WITH_CPIDLIB "Include training library" ON)
+  SET(CPID_DISTRIBUTED 1)
+  ADD_DEFINITIONS(-DHAVE_C10D)
+ENDIF()
+
 FIND_PACKAGE(Torch REQUIRED)
 ADD_SUBDIRECTORY(common)
 
@@ -128,6 +146,7 @@ ELSE(ONLY_BENCH)
     IF(WITH_CPIDLIB)
       ADD_SUBDIRECTORY(cpid)
       ADD_DEFINITIONS(-DHAVE_CPID)
+      ADD_SUBDIRECTORY(atari)
     ENDIF(WITH_CPIDLIB)
   ENDIF(NOT MSVC)
   ADD_SUBDIRECTORY(src)

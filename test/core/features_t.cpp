@@ -662,3 +662,63 @@ CASE("features/unit_type_defogger") {
           .sum()
           .item<float>() == 0);
 }
+
+CASE("features/xygrid") {
+  using lest::approx;
+  auto replay = replayTo(10, "test/maps/replays/bwrep_gyvu8.rep");
+  auto* state = replay->state();
+
+  int mapW = state->mapWidth();
+  int mapH = state->mapHeight();
+  auto ref = torch::stack(torch::meshgrid(
+                              {torch::arange(0, 512), torch::arange(0, 512)}))
+                 .to(torch::kFloat);
+  ref = ref.slice(1, 0, mapH).slice(2, 0, mapW).contiguous().div_(512);
+
+  auto f1 = featurizePlain(state, {PlainFeatureType::XYGrid});
+  EXPECT(f1.offset.x == 0);
+  EXPECT(f1.offset.y == 0);
+  EXPECT(f1.tensor.sizes().vec() == std::vector<int64_t>({2, mapH, mapW}));
+  EXPECT(
+      f1.tensor[0].sum().item<float>() == approx(ref[0].sum().item<float>()));
+  EXPECT(
+      f1.tensor[1].sum().item<float>() == approx(ref[1].sum().item<float>()));
+
+  auto f2 =
+      featurizePlain(state, {PlainFeatureType::XYGrid}, Rect(10, 10, 100, 98));
+  EXPECT(
+      f2.tensor[0].sum().item<float>() ==
+      approx(ref[0].slice(0, 10, 108).slice(1, 10, 110).sum().item<float>()));
+  EXPECT(
+      f2.tensor[1].sum().item<float>() ==
+      approx(ref[1].slice(0, 10, 108).slice(1, 10, 110).sum().item<float>()));
+  auto f3 =
+      featurizePlain(state, {PlainFeatureType::XYGrid}, Rect(-10, 410, 30, 10));
+  EXPECT(
+      f3.tensor[0].sum().item<float>() + (10 * 10) ==
+      approx(ref[0].slice(0, 410, 420).slice(1, 0, 20).sum().item<float>()));
+  EXPECT(
+      f3.tensor[1].sum().item<float>() + (10 * 10) ==
+      approx(ref[1].slice(0, 410, 420).slice(1, 0, 20).sum().item<float>()));
+  auto bbox =
+      cherrypi::Rect::centeredWithSize(state->mapRect().center(), 512, 512);
+  auto f4 = featurizePlain(state, {PlainFeatureType::XYGrid}, bbox);
+  EXPECT(
+      f4.tensor[0].sum().item<float>() + (512 * (512 - mapW)) ==
+      approx(ref[0].sum().item<float>()));
+  EXPECT(
+      f4.tensor[1].sum().item<float>() + (512 * (512 - mapW)) ==
+      approx(ref[1].sum().item<float>()));
+
+  /*
+  Visdom vs;
+  vs.heatmap(f1.tensor[0], makeOpts({{"title", "f1_y"}}));
+  vs.heatmap(f1.tensor[1], makeOpts({{"title", "f1_x"}}));
+  vs.heatmap(f2.tensor[0], makeOpts({{"title", "f2_y"}}));
+  vs.heatmap(f2.tensor[1], makeOpts({{"title", "f2_x"}}));
+  vs.heatmap(f3.tensor[0], makeOpts({{"title", "f3_y"}}));
+  vs.heatmap(f3.tensor[1], makeOpts({{"title", "f3_x"}}));
+  vs.heatmap(f4.tensor[0], makeOpts({{"title", "f3_y"}}));
+  vs.heatmap(f4.tensor[1], makeOpts({{"title", "f3_x"}}));
+  */
+}

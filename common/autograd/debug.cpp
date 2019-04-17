@@ -6,6 +6,9 @@
  */
 
 #include "debug.h"
+#ifdef CUDA_FOUND
+#include <THC/THCCachingAllocator.h>
+#endif // CUDA_FOUND
 #include <fmt/ostream.h>
 #include <torch/csrc/autograd/function.h>
 
@@ -155,8 +158,8 @@ WeightSummary::WeightSummary(torch::nn::Module& module) {
     norm1 = (norm1 * weightsBefore + weightTensor1D.norm(1).item<float>()) /
         weights;
     norm2 = sqrt(
-                pow(norm2, 2) * weightsBefore +
-                weightTensor1D.norm(2).pow(2).item<float>()) /
+                pow(norm2 * weightsBefore, 2) +
+                weightTensor1D.pow(2).sum().item<float>()) /
         weights;
   }
 }
@@ -174,4 +177,16 @@ std::string WeightSummary::toString() const {
 std::ostream& operator<<(std::ostream& out, const WeightSummary& summary) {
   return out << summary.toString();
 }
+
+std::pair<int64_t, int64_t> torchMemoryUsage(int device) {
+#ifdef CUDA_FOUND
+  cudaDeviceSynchronize();
+  return std::pair(
+      THCCachingAllocator_currentMemoryAllocated(device),
+      THCCachingAllocator_currentMemoryCached(device));
+#else // CUDA_FOUND
+  throw std::runtime_error("did not compile with CUDA support");
+#endif // CUDA_FOUND
+}
+
 } // namespace common

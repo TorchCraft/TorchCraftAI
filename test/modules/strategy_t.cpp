@@ -6,7 +6,7 @@
  */
 
 #include "fivepool.h"
-#include "gameutils/selfplayscenario.h"
+#include "gameutils/game.h"
 #include "modules.h"
 #include "player.h"
 #include "test.h"
@@ -17,7 +17,7 @@ DECLARE_double(rtfactor);
 using namespace cherrypi;
 using namespace autobuild;
 
-auto createMyPlayer(SelfPlayScenario* scenario) {
+auto createMyPlayer(GameMultiPlayer* scenario) {
   auto bot = std::make_shared<Player>(scenario->makeClient1());
   bot->setRealtimeFactor(FLAGS_rtfactor);
   bot->addModule(Module::make<CreateGatherAttackModule>());
@@ -31,7 +31,7 @@ auto createMyPlayer(SelfPlayScenario* scenario) {
   return bot;
 }
 
-auto createEnemyPlayer(SelfPlayScenario* scenario, const std::string& race) {
+auto createEnemyPlayer(GameMultiPlayer* scenario, const std::string& race) {
   auto bot = std::make_shared<Player>(scenario->makeClient2());
   bot->setRealtimeFactor(FLAGS_rtfactor);
   bot->addModule(Module::make<CreateGatherAttackModule>());
@@ -46,7 +46,7 @@ auto createEnemyPlayer(SelfPlayScenario* scenario, const std::string& race) {
 }
 
 SCENARIO("strategy/5pool") {
-  auto scenario = SelfPlayScenario(
+  auto scenario = GameMultiPlayer(
       "maps/(4)Fighting Spirit.scx", tc::BW::Race::Zerg, tc::BW::Race::Zerg);
 
   FLAGS_build = "5pool";
@@ -76,7 +76,7 @@ SCENARIO("strategy/5pool") {
 }
 
 SCENARIO("strategy/2hatchhydras") {
-  auto scenario = SelfPlayScenario(
+  auto scenario = GameMultiPlayer(
       "maps/(4)Fighting Spirit.scx", tc::BW::Race::Zerg, tc::BW::Race::Protoss);
   FLAGS_build = "12hatchhydras";
 

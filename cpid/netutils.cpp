@@ -56,10 +56,11 @@ std::vector<std::string> getInterfaceAddresses() {
   }
   try {
     std::vector<std::string> addresses;
-    while (ifa != nullptr) {
-      struct sockaddr* addr = ifa->ifa_addr;
+    auto ptr = ifa;
+    while (ptr != nullptr) {
+      struct sockaddr* addr = ptr->ifa_addr;
       if (addr) {
-        bool is_loopback = ifa->ifa_flags & IFF_LOOPBACK;
+        bool is_loopback = ptr->ifa_flags & IFF_LOOPBACK;
         bool is_ip = addr->sa_family == AF_INET || addr->sa_family == AF_INET6;
         if (is_ip && !is_loopback) {
           try {
@@ -68,7 +69,7 @@ std::vector<std::string> getInterfaceAddresses() {
           }
         }
       }
-      ifa = ifa->ifa_next;
+      ptr = ptr->ifa_next;
     }
 
     ::freeifaddrs(ifa);

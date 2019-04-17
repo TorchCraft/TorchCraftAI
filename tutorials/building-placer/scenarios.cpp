@@ -92,11 +92,13 @@ void setupRuleBasedPlayer(BasePlayer* player, bool includeOffense = true) {
 
 class VsRulesScenarioProvider : public BuildingPlacerScenarioProvider {
  public:
-  VsRulesScenarioProvider(std::string mapPool, bool gui = false)
-      : BuildingPlacerScenarioProvider(kMaxFrames, std::move(mapPool), gui) {}
+  VsRulesScenarioProvider(std::string mapPool)
+      : BuildingPlacerScenarioProvider(std::move(mapPool)) {
+    setMaxFrames(kMaxFrames);
+  }
 
   virtual std::pair<std::shared_ptr<BasePlayer>, std::shared_ptr<BasePlayer>>
-  spawnNextScenario(
+  startNewScenario(
       const std::function<void(BasePlayer*)>& setup1,
       const std::function<void(BasePlayer*)>& setup2) override {
     map_ = selectMap(mapPool_);
@@ -106,6 +108,10 @@ class VsRulesScenarioProvider : public BuildingPlacerScenarioProvider {
         tc::BW::Race::Zerg,
         GameType::Melee,
         replayPath_);
+
+    game_ = nullptr;
+    player1_ = nullptr;
+    player2_ = nullptr;
 
     setupLearningPlayer(player1_.get());
     setupRuleBasedPlayer(player2_.get());
@@ -128,13 +134,19 @@ class VsRulesScenarioProvider : public BuildingPlacerScenarioProvider {
 
 class SunkenPlacementScenarioProvider : public BuildingPlacerScenarioProvider {
  public:
-  SunkenPlacementScenarioProvider(std::string mapPool, bool gui = false)
-      : BuildingPlacerScenarioProvider(kMaxFrames, std::move(mapPool), gui) {}
+  SunkenPlacementScenarioProvider(std::string mapPool)
+      : BuildingPlacerScenarioProvider(std::move(mapPool)) {
+    setMaxFrames(kMaxFrames);
+  }
 
   virtual std::pair<std::shared_ptr<BasePlayer>, std::shared_ptr<BasePlayer>>
-  spawnNextScenario(
+  startNewScenario(
       const std::function<void(BasePlayer*)>& setup1,
       const std::function<void(BasePlayer*)>& setup2) override {
+    game_ = nullptr;
+    player1_ = nullptr;
+    player2_ = nullptr;
+
     map_ = selectMap(mapPool_);
     loadMap<Player>(
         map_,
@@ -169,9 +181,14 @@ std::unique_ptr<BuildingPlacerScenarioProvider> makeBPRLScenarioProvider(
     std::string const& maps,
     bool gui) {
   if (name == "vsrules") {
-    return std::make_unique<VsRulesScenarioProvider>(maps, gui);
+    auto scenarioProvider = std::make_unique<VsRulesScenarioProvider>(maps);
+    scenarioProvider->setGui(gui);
+    return scenarioProvider;
   } else if (name == "sunkenplacement") {
-    return std::make_unique<SunkenPlacementScenarioProvider>(maps, gui);
+    auto scenarioProvider =
+        std::make_unique<SunkenPlacementScenarioProvider>(maps);
+    scenarioProvider->setGui(gui);
+    return scenarioProvider;
   } else {
     throw std::runtime_error("Unsupported scenario " + name);
   }

@@ -51,6 +51,29 @@ CASE("common/parallel/bufferedconsumer/1c") {
   run(10, 5);
 }
 
+CASE("common/parallel/bufferedconsumer/enqueue_or_replace_oldest") {
+  std::mutex m;
+  std::unique_lock l(m);
+  int total = 0;
+  std::atomic<bool> insideCallback = false;
+
+  auto producer = std::make_unique<BufferedConsumer<int>>(1, 1, [&](int i) {
+    insideCallback = true;
+    std::unique_lock l2(m);
+    total += i;
+    insideCallback = false;
+  });
+  EXPECT_NO_THROW(producer->enqueue(1));
+  while (!insideCallback) {
+  }
+  // Now the producer queue is empty
+  producer->enqueueOrReplaceOldest(10); // Should get added to the list
+  producer->enqueueOrReplaceOldest(100); // Should replace the previous one
+  l.unlock();
+  producer->wait();
+  EXPECT(total == 101);
+}
+
 CASE("common/parallel/bufferedproducer/starved") {
   int i = 0;
   std::mutex mutex;

@@ -14,6 +14,14 @@
 #include <random>
 #include <unistd.h>
 
+#ifndef HOST_NAME_MAX
+#if defined(_POSIX_HOST_NAME_MAX)
+#define HOST_NAME_MAX _POSIX_HOST_NAME_MAX
+#elif defined(MAXHOSTNAMELEN)
+#define HOST_NAME_MAX MAXHOSTNAMELEN
+#endif
+#endif /* HOST_NAME_MAX */
+
 using Episode = cpid::ReplayBuffer::Episode;
 using Store = cpid::ReplayBuffer::Store;
 

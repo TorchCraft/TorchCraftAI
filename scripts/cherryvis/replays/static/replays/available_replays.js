@@ -33,6 +33,7 @@ function create_new_replay_element(entry, template) {
     }})(entry));
   new_replay_html.find('.cvis-replay-short').text(entry['name']);
   new_replay_html.find('.cvis-replay-long').text(entry['path']);
+  new_replay_html.find('.cvis-replay-displayname').text(entry['display_name']);
   new_replay_html.find('.cvis-replay-time'
     ).attr('data-time', 1000*entry['last_change']
     ).attr('data-time-local-diff', (new Date()).getTime() - (new Date(1000*entry['local_time'])).getTime()
@@ -59,7 +60,7 @@ function refresh_replays_list_html(data, html) {
     return;
   $.each(data, function(i, d) {
     // Order by date DESC
-    d['id'] = (10000000000 - parseInt(d['last_change'])) + '_' + d['path'];
+    d['id'] = (10000000000 - parseInt(d['last_change'])) + '_PATH=' + d['path'] + '_HASCVIS=' + d['has_cvis_data'];
   });
   $('.cvis-replays-total').text(data.length);
   data = data.slice(0, 100);

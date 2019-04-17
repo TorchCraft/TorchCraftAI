@@ -15,16 +15,22 @@ MicroPlayer::MicroPlayer(std::shared_ptr<tc::Client> client)
     : BasePlayer(client) {}
 
 void MicroPlayer::onGameStart() {
-  for (auto& module : modules_) {
-    module->onGameStart(state_);
+  if (!gameStarted_) {
+    for (auto& module : modules_) {
+      module->onGameStart(state_);
+    }
   }
   lastStep_ = hires_clock::now();
+  gameStarted_ = true;
 }
 
 void MicroPlayer::onGameEnd() {
-  for (auto& module : modules_) {
-    module->onGameEnd(state_);
+  if (gameStarted_) {
+    for (auto& module : modules_) {
+      module->onGameEnd(state_);
+    }
   }
+  gameStarted_ = false;
 }
 
 } // namespace cherrypi

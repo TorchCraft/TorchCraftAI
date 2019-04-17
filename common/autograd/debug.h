@@ -74,4 +74,14 @@ struct WeightSummary {
 };
 std::ostream& operator<<(std::ostream& out, const WeightSummary& summary);
 
+/**
+ * Show the current memory usage, the first element is the amount allocated,
+ * or currently used by tensors that are alive, and the second element
+ * is the amount cached by the caching allocator.
+ * WARNING: This function will call cudaDeviceSynchronize, so it's extremely
+ * expensive, and should not be in any training runs unless it's hidden behind
+ * an if statement.
+ */
+std::pair<int64_t, int64_t> torchMemoryUsage(int device = 0);
+
 } // namespace common

@@ -5,8 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "initialconditions.h"
-#include "state.h"
+#include "rewards.h"
 #include "utils.h"
 
 namespace cherrypi {

@@ -275,6 +275,7 @@ void load(Archive& archive, torch::Tensor& tensor) {
         tensor.numel() * tensor.type().elementSizeInBytes());
   }
   tensor.detach_();
+  tensor.set_requires_grad(required_grad);
 }
 
 namespace detail {
@@ -416,7 +417,7 @@ void load(Archive& ar, torch::nn::Module module) {
     ar(size);
   }
   else {
-    size = version;
+    size = magic;
     version = 0;
   }
 

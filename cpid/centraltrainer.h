@@ -61,6 +61,9 @@ class CentralTrainer : public Trainer {
       ag::Variant state,
       float reward) override;
 
+  virtual EpisodeHandle startEpisode() override;
+  virtual void forceStopEpisode(EpisodeHandle const&) override;
+
   std::shared_lock<std::shared_timed_mutex> modelReadLock();
   std::unique_lock<std::shared_timed_mutex> modelWriteLock();
 
@@ -72,25 +75,43 @@ class CentralTrainer : public Trainer {
   /// node. This _depends_ on the deprecation of EpisodeKey
   virtual void receivedFrames(GameUID const&, std::string const&) = 0;
 
+  /// Callback for locally generated episode data that can be sent out.
+  /// If this returns `false`, the data will be put into the local replay
+  /// buffer.
+  virtual bool episodeClientEnqueue(EpisodeData const&);
+
   /// Allows implementing trainers to send partial episodes
   /// TODO: set up synchronization so the partial episodes end up
   /// on the same node.
   virtual uint32_t getMaxBatchLength() const;
   virtual uint32_t getSendInterval() const;
 
- private:
-  void dequeueEpisodes();
+  /// Allows implementing trainers to decide whether to serve end-of-frame
+  /// in the middle of the episode or not.
+  virtual bool serveContinuously() const;
+
+  /// A protected constructor that doesn't set up a server
+  CentralTrainer(
+      ag::Container model,
+      ag::Optimizer optim,
+      std::unique_ptr<BaseSampler> sampler,
+      std::unique_ptr<AsyncBatcher> batcher = nullptr);
 
   // Each instance either has a server or client
   std::shared_ptr<EpisodeServer> server_;
   std::shared_ptr<EpisodeClient> client_;
+  std::thread dequeueEpisodes_;
+  void dequeueEpisodes();
 
   std::mutex newGamesMutex_;
   std::queue<EpisodeTuple> newBatches_;
 
   std::shared_timed_mutex modelMutex_;
-  std::thread dequeueEpisodes_;
   std::atomic<bool> stop_{false};
+
+  // Some state variables for when we serve continuously
+  class BufferPool;
+  std::unique_ptr<BufferPool> bufferPool_;
 };
 
 } // namespace cpid

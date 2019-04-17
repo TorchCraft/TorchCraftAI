@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "gameutils/scenario.h"
+#include "gameutils/game.h"
 #include "test.h"
 
 #include <glog/logging.h>
@@ -101,7 +101,7 @@ class BuildAllUnitsModule : public AutoBuildModule {
 } // namespace
 
 SCENARIO("builder/zerg_all_units[.flaky]") {
-  auto scenario = Scenario("test/maps/eco-base-zerg.scm", "Zerg");
+  auto scenario = GameSinglePlayerUMS("test/maps/eco-base-zerg.scm", "Zerg");
   Player bot(scenario.makeClient());
   bot.setRealtimeFactor(FLAGS_rtfactor);
   bot.setWarnIfSlow(false);

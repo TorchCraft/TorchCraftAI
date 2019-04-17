@@ -30,7 +30,7 @@ void SquadCombatModule::step(State* s) {
   auto board = state->board();
 
   for (auto& model : models_) {
-    model->forward(state);
+    model.second->forward(state);
   }
 
   // Form new squads based on new UPCs
@@ -242,8 +242,29 @@ void SquadCombatModule::updateTask(std::shared_ptr<Task> task) {
   }
 }
 
-void SquadCombatModule::enqueueModel(std::shared_ptr<MicroModel> model) {
-  models_.push_back(model);
+void SquadCombatModule::enqueueModel(
+    std::shared_ptr<MicroModel> model,
+    std::string name) {
+  models_.insert({name, model});
+}
+
+std::shared_ptr<MicroModel> SquadCombatModule::getModel(std::string name) {
+  if (models_.find(name) != models_.end()) {
+    return models_[name];
+  }
+  return nullptr;
+}
+
+void SquadCombatModule::onGameStart(State* s) {
+  for (auto& model : models_) {
+    model.second->onGameStart(s);
+  }
+}
+
+void SquadCombatModule::onGameEnd(State* s) {
+  for (auto& model : models_) {
+    model.second->onGameEnd(s);
+  }
 }
 
 BehaviorList SquadCombatModule::makeDeleteBehaviors() {
@@ -252,12 +273,14 @@ BehaviorList SquadCombatModule::makeDeleteBehaviors() {
                       std::make_shared<BehaviorIfStormed>(),
                       std::make_shared<BehaviorVsScarab>(),
                       std::make_shared<BehaviorFormation>(),
+                      std::make_shared<BehaviorDetect>(),
                       std::make_shared<BehaviorAsZergling>(),
                       std::make_shared<BehaviorAsMutaliskVsScourge>(),
                       std::make_shared<BehaviorAsMutaliskMicro>(),
                       std::make_shared<BehaviorAsScourge>(),
                       std::make_shared<BehaviorAsLurker>(),
                       std::make_shared<BehaviorAsHydralisk>(),
+                      std::make_shared<BehaviorAsDefiler>(),
                       std::make_shared<BehaviorAsOverlord>(),
                       std::make_shared<BehaviorChase>(),
                       std::make_shared<BehaviorKite>(),

@@ -66,6 +66,7 @@ void Player::init() {
           .count());
   if (mapHack_) {
     comms.emplace_back(tc::BW::Command::MapHack);
+    state_->setMapHack(true);
   }
   if (!client_->send(comms)) {
     throw std::runtime_error(std::string("Send failure: ") + client_->error());

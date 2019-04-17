@@ -389,13 +389,18 @@ class UnitsInfo {
     return destroyUnits_;
   }
 
+  /// Parse the units directly from the tcstate, this is only reasonable
+  /// when we have mapHack on. Keep in mind not all things that we precompute,
+  /// like beingAttackedByEnemies, etc, are filled out in the mapHacked units.
+  const Units& mapHacked();
+
   const std::unordered_map<const BuildType*, int>& inferredEnemyUnitTypes();
 
   void update();
 
  protected:
   State* state_ = nullptr;
-  void updateUnit(Unit* i, const tc::Unit& u, tc::State* tcstate);
+  void updateUnit(Unit*, const tc::Unit&, tc::State*, bool maphack = false);
   void updateGroups(Unit* i);
   size_t inferPositionsUnitAtIndex(Position pos);
   Position
@@ -440,6 +445,9 @@ class UnitsInfo {
   FrameNum lastInferUpdateNearbyUnits;
 
   std::minstd_rand rngEngine;
+
+  std::unordered_map<UnitId, Unit> mapHackUnitsMap_;
+  Units& mapHackUnits_ = unitContainers_[15];
 };
 
 } // namespace cherrypi

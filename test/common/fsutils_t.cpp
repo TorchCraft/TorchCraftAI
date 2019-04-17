@@ -64,6 +64,8 @@ CASE("fsutils/cd_pwd") {
 CASE("fsutils/basename") {
   using fsutils::basename;
   EXPECT(basename("") == "");
+  EXPECT(basename(".") == ".");
+  EXPECT(basename("..") == "..");
   EXPECT(basename("/") == "/");
   EXPECT(basename("////") == "/");
   EXPECT(basename("/a") == "a");
@@ -96,6 +98,8 @@ CASE("fsutils/basename") {
 CASE("fsutils/dirname") {
   using fsutils::dirname;
   EXPECT(dirname("") == ".");
+  EXPECT(dirname(".") == ".");
+  EXPECT(dirname("..") == ".");
   EXPECT(dirname("/") == "/");
   EXPECT(dirname("////") == "/");
   EXPECT(dirname("/a") == "/");
@@ -522,4 +526,27 @@ CASE("fsutils/glob") {
     auto expected = std::vector<std::string>{dir + "/dir1/sub1/file4"};
     EXPECT(result == expected);
   }
+}
+
+CASE("fsutils/md5") {
+  auto dir = fsutils::mktempd();
+  auto cleanup = utils::makeGuard([&]() { fsutils::rmrf(dir); });
+  auto f = dir + "/test";
+
+  auto strmd5 = [&](std::string const& s) {
+    {
+      std::ofstream file(f);
+      file << s;
+    }
+    return fsutils::md5(f);
+  };
+
+  EXPECT(strmd5("hi") == strmd5("hi"));
+  EXPECT(strmd5("hi") != strmd5("bye"));
+
+  char randStr1[65536];
+  char randStr2[65536];
+  randStr1[0] = '0';
+  randStr2[0] = '1';
+  EXPECT(strmd5(std::string(randStr1)) != strmd5(std::string(randStr2)));
 }

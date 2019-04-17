@@ -29,7 +29,7 @@ void CreateGatherAttackModule::step(State* state) {
       break;
     }
     if (topUpcId < 0) {
-      LOG(WARNING) << "Could not find UPC tuple from top module";
+      VLOG(0) << "Could not find UPC tuple from top module";
       return;
     }
   }

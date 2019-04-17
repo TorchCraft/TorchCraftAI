@@ -80,7 +80,7 @@ torch::Tensor scatterSum2d_iterative(
     // offset = Y * stride + X
     auto offsets =
         at::add(posCpu[b].select(1, 1), posCpu[b].select(1, 0), sizeX);
-    auto oacc = offsets.accessor<int, 1>();
+    auto oacc = offsets.accessor<int32_t, 1>();
 
     planeDest.push_back(std::vector<int64_t>());
     planeEls.push_back(std::vector<int64_t>());
@@ -271,8 +271,11 @@ ag::Variant makeBatchVariant(
   return ag::Variant(0);
 }
 
-std::vector<ag::Variant>
-unBatchVariant(ag::Variant batch, int stride, bool maskOut, double maskValue) {
+std::vector<ag::Variant> unBatchVariant(
+    ag::Variant const& batch,
+    int stride,
+    bool maskOut,
+    double maskValue) {
   std::vector<ag::Variant> reply;
   if (batch.isTensorList() || batch.isTensor()) {
     const ag::tensor_list& out = batch.isTensorList()
@@ -831,7 +834,7 @@ ag::Variant applyTransform(ag::Variant input, const TensorTransform& fun) {
   return input;
 }
 
-at::Device getVariantDevice(ag::Variant x) {
+at::Device getVariantDevice(ag::Variant const& x) {
   if (x.isTensor()) {
     return x.get().options().device();
   } else if (x.isTensorList()) {

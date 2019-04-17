@@ -13,7 +13,7 @@
 #include "modules/autobuild.h"
 
 #ifdef HAVE_CPID
-#include <cpid/centraltrainer.h>
+#include <cpid/trainer.h>
 #endif // HAVE_CPID
 
 #include <autogradpp/autograd.h>

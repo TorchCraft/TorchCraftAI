@@ -22,6 +22,10 @@ Install emscripten from sources (https://kripken.github.io/emscripten-site/docs/
 ```
 Then open your web browser at http://127.0.0.1:8770/
 
+By default, CherryVis is configured only to accept local connections. This is for your security; CherryVis is a window into your filesystem and you probably don't want to make its contents publicly accessible. But if you do want to accept incoming connections, you can run:
+```
+./server.py --host 0.0.0.0:8770
+```
 
 # Generating replays in CherryPi
 The following command will run a game against another bot.

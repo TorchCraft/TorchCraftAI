@@ -12,7 +12,7 @@
 #include <tuple>
 #include <vector>
 
-#include "gameutils/microfixedscenario.h"
+#include "gameutils/microscenarioproviderfixed.h"
 #include "modules.h"
 #include "trainingsetup.h"
 

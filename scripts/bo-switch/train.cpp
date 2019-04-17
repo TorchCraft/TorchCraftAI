@@ -14,10 +14,10 @@
 #include "models/bos/sample.h"
 
 #include "forkserver.h"
-#include "models/bandit.h"
+#include "gameutils/game.h"
 #include "gameutils/openbwprocess.h"
+#include "models/bandit.h"
 #include "player.h"
-#include "gameutils/selfplayscenario.h"
 #include "upcstorage.h"
 #include "zstdstream.h"
 
@@ -26,9 +26,9 @@
 #include <common/rand.h>
 #include <common/serialization.h>
 #include <cpid/batcher.h>
+#include <cpid/checkpointer.h>
 #include <cpid/optimizers.h>
 #include <cpid/sampler.h>
-#include <cpid/checkpointer.h>
 
 #include <fmt/format.h>
 #include <fmt/ostream.h>
@@ -193,7 +193,6 @@ DECLARE_double(bos_min_advantage);
 using namespace cherrypi;
 using namespace cpid;
 namespace dist = cpid::distributed;
-auto const vsopts = &visdom::makeOpts;
 namespace fsutils = common::fsutils;
 
 namespace {
@@ -275,11 +274,10 @@ class BosTrainer : public CentralTrainer {
 
     VLOG(0) << "Validation " << id << " done";
     VLOG(0) << "V" << id << " " << validMetrics->getMeanEventValues();
-    validMetrics->dumpJson(
-        fmt::format(
-            "{}_vmetrics_{:05d}.json",
-            dist::globalContext()->rank,
-            numEpisodes / 1000));
+    validMetrics->dumpJson(fmt::format(
+        "{}_vmetrics_{:05d}.json",
+        dist::globalContext()->rank,
+        numEpisodes / 1000));
 
     loop_->batchSize = prevBatchSize;
   }
@@ -416,7 +414,7 @@ class BosTrainer : public CentralTrainer {
 };
 
 std::atomic<bool> gStopGameThreads(false);
-std::vector<std::unique_ptr<PlayScriptScenario>> gScenarios;
+std::vector<std::unique_ptr<GameVsBotInWine>> gScenarios;
 std::mutex gScenariosMutex;
 
 bool randomBuildOrderSwitch(
@@ -566,8 +564,8 @@ void runGame(
 
       nextSampleFrame += FLAGS_skip_frames;
       if (state->currentFrame() >= nextSwitchableFrame) {
-        auto switched =
-            randomBuildOrderSwitch(handle.gameID(), trainer, state, switchProba);
+        auto switched = randomBuildOrderSwitch(
+            handle.gameID(), trainer, state, switchProba);
         if (FLAGS_mode == "polit") {
           if (switched) {
             nextSwitchableFrame += common::Rand::sample(committmentDist);
@@ -630,7 +628,7 @@ void runGameThread(std::shared_ptr<Trainer> trainer, int num) {
 
   uint32_t numGames = 0;
   int gamesWithCurrentScenario = -1;
-  std::unique_ptr<PlayScriptScenario> scenario;
+  std::unique_ptr<GameVsBotInWine> scenario;
   while (!gStopGameThreads.load()) {
     auto handle = trainer->startEpisode();
     if (!handle) {

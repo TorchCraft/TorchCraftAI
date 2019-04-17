@@ -543,6 +543,7 @@ function start_replay(arr, callback_when_done) {
   first_frame_played = false;
 
   players = [];
+  var activePlayers = [];
   for (var i = 0; i != 12; ++i) {
 
       if (_player_get_value(i, C_PLAYER_ACTIVE)) {
@@ -551,12 +552,19 @@ function start_replay(arr, callback_when_done) {
         var used_supply     = _player_get_value(i, C_USED_ZERG_SUPPLY + race);
         var available_supply   = _player_get_value(i, C_AVAILABLE_ZERG_SUPPLY + race);
 
+        activePlayers.push(i);
         if (used_supply == 4 && available_supply > 0) {
           console.log(used_supply + " / " + available_supply)
           players.push(i);
           $('.per-player-info' + players.length).show();
         }
       }
+  }
+  if (players.length == 0) {
+    players = activePlayers;
+    for (var i = 0; i < activePlayers.length; ++i) {
+      $('.per-player-info' + (i+1)).show();
+    }
   }
   for (var i = players.length + 1; i <= 12; i++) {
     $('.per-player-info' + i).hide();

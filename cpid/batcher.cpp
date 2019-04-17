@@ -7,6 +7,8 @@
 
 #include "batcher.h"
 #include "common/autograd.h"
+#include "common/utils.h"
+#include <chrono>
 #include <fmt/format.h>
 #include <shared_mutex>
 
@@ -23,7 +25,7 @@ AsyncBatcher::AsyncBatcher(
       padValue_(padValue),
       stripOutput_(stripOutput),
       stripValue_(stripValue),
-      accessMutex_(1) {
+      accessMutex_(2) {
   // If batch_size < 0, we don't start batching now
   // This prevents race conditions for inherited classes,
   // because we want the object to be fully constructed before batching anything
@@ -67,66 +69,71 @@ ag::Variant AsyncBatcher::batchedForward(ag::Variant state) {
 
   auto myPromise = std::make_shared<std::promise<ag::Variant>>();
   {
-    // will lock with lowest priority
-    std::unique_lock<priority_mutex> accessLock(accessMutex_);
-    while (true) {
-      if (!shouldConsume()) // if the batch is not full, we can proceed with
-        // insertion
-        break;
-      // if the batch is full, we shouldn't queue more items
-      // give the consumer thread a chance to get the lock
-      accessLock.unlock();
-      std::this_thread::sleep_for(std::chrono::milliseconds(2));
-      accessLock.lock();
-    }
+    // Lock with hi prio if batch isn't full, otherwise low prio
+    priority_lock accessLock(accessMutex_, shouldConsume() ? 0 : 2);
+    accessLock.lock();
 
     replies_.push_back(myPromise);
     queries_.emplace_back(std::move(state));
+    querySize_ = queries_.size();
 
     if (replies_.size() != queries_.size()) {
       LOG(FATAL) << "Size mismatch between replies (" << replies_.size()
                  << ") and queries(" << queries_.size() << ")";
     }
-
-    if (shouldConsume()) {
-      // when we hit the last element of the batch, we can send a notification
-      batchReadyCV_.notify_all();
-    }
   }
+  batchReadyCV_.notify_all();
 
   ag::Variant reply = myPromise->get_future().get();
   return reply;
 }
 
 bool AsyncBatcher::shouldConsume() {
-  return int(queries_.size()) >= batchSize_;
+  return querySize_.load() >= size_t(batchSize_);
 }
 
 void AsyncBatcher::consumeThread() {
+  typedef std::chrono::high_resolution_clock clock_;
+  typedef std::chrono::duration<double, std::ratio<1>> second_;
+  common::setCurrentThreadName("asyncbatcher");
+  auto lastOverloadedAlert = clock_::now();
   while (true) {
     // create the lock, but doesn't actually lock
     priority_lock accessLock(accessMutex_, 1);
     accessLock.lock();
 
-    // wait for the batch to be ready
-    if (!batchReadyCV_.wait_for(
-            accessLock, std::chrono::milliseconds(200), [this]() {
-              return shouldStop_.load() || shouldConsume();
-            })) {
-      if (queries_.size() > 0) {
-        // Carry on with this incomplete forward
-        VLOG(3) << "Doing incomplete forward";
-      } else {
-        // No queries, nothing to do for now
-        continue;
-      }
-    }
+    batchReadyCV_.wait(
+        accessLock, [&] { return shouldStop_.load() || queries_.size() > 0; });
+
     if (shouldStop_.load()) {
       return;
     }
 
+    if (queries_.size() > 5 * (size_t)batchSize_ &&
+        std::chrono::duration_cast<second_>(clock_::now() - lastOverloadedAlert)
+                .count() > 5.0f) {
+      LOG(WARNING) << "AsyncBatcher is overloaded: " << queries_.size()
+                   << " queries queued for batch size " << batchSize_;
+      lastOverloadedAlert = clock_::now();
+    }
+
+    auto todoSize = std::min((size_t)batchSize_, queries_.size());
+    decltype(queries_) queries;
+    decltype(replies_) replies;
+    for (auto i = 0U; i < todoSize; i++) {
+      queries.emplace_back(std::move(queries_[i]));
+      replies.emplace_back(std::move(replies_[i]));
+    }
+    std::move(queries_.begin() + todoSize, queries_.end(), queries_.begin());
+    std::move(replies_.begin() + todoSize, replies_.end(), replies_.begin());
+    queries_.resize(queries_.size() - todoSize);
+    replies_.resize(replies_.size() - todoSize);
+
+    querySize_ = queries_.size();
+    accessLock.unlock();
+
     try {
-      ag::Variant input = this->makeBatch(queries_);
+      ag::Variant input = this->makeBatch(queries);
       ag::Variant out;
       {
         torch::NoGradGuard g_;
@@ -136,26 +143,20 @@ void AsyncBatcher::consumeThread() {
 
       auto replies_values = this->unBatch(out);
 
-      if (replies_.size() != replies_values.size()) {
+      if (replies.size() != replies_values.size()) {
         LOG(FATAL) << "The batch size of the reply (" << replies_values.size()
                    << ") doesn't match the expected batch size ("
-                   << replies_.size() << ")";
+                   << replies.size() << ")";
       }
 
-      for (size_t i = 0; i < replies_.size(); ++i) {
-        replies_[i]->set_value(std::move(replies_values[i]));
+      for (size_t i = 0; i < replies.size(); ++i) {
+        replies[i]->set_value(std::move(replies_values[i]));
       }
     } catch (...) {
-      for (size_t i = 0; i < replies_.size(); ++i) {
-        replies_[i]->set_exception(std::current_exception());
+      for (size_t i = 0; i < replies.size(); ++i) {
+        replies[i]->set_exception(std::current_exception());
       }
     }
-
-    // batch consumed, we can mark this one as done
-    replies_.clear();
-    queries_.clear();
-
-    accessLock.unlock();
   }
 }
 
@@ -299,7 +300,7 @@ std::vector<ag::Variant> SubBatchAsyncBatcher::unBatch(
     } else if (q.second.isList()) {
       unbatchedPerKey[q.first] = std::vector<ag::Variant>(q.second.getList());
     } else if (q.second.isTensor()) {
-      std::vector<long> batchInfo;
+      std::vector<int64_t> batchInfo;
       if (hasBatchInfo) {
         batchInfo = findBatchInfo(batched.at(kBatchInfoKey), q.first);
       }
@@ -411,7 +412,7 @@ ag::Variant SubBatchAsyncBatcher::makeBatch(
   return batchVariant;
 }
 
-std::vector<long> SubBatchAsyncBatcher::findBatchInfo(
+std::vector<int64_t> SubBatchAsyncBatcher::findBatchInfo(
     ag::Variant const& batchInfoVar,
     std::string const& variableName) {
   if (!batchInfoVar.isDict()) {
@@ -419,9 +420,9 @@ std::vector<long> SubBatchAsyncBatcher::findBatchInfo(
         "Wrong format for batch info variable (key \"{}\")", kBatchInfoKey));
   }
   if (batchInfoVar.getDict().count(variableName) > 0) {
-    return tensorToVec<long>(batchInfoVar.getDict().at(variableName).get());
+    return tensorToVec<int64_t>(batchInfoVar.getDict().at(variableName).get());
   }
-  return std::vector<long>();
+  return std::vector<int64_t>();
 }
 
 std::vector<torch::Tensor> SubBatchAsyncBatcher::forEachSubbatch(
@@ -429,7 +430,7 @@ std::vector<torch::Tensor> SubBatchAsyncBatcher::forEachSubbatch(
     std::string const& inputName,
     torch::Tensor batchedInput,
     std::function<torch::Tensor(torch::Tensor)> do_fn) {
-  std::vector<long> batchInfo;
+  std::vector<int64_t> batchInfo;
   if (input.getDict().count(kBatchInfoKey) > 0) {
     batchInfo = findBatchInfo(input.getDict().at(kBatchInfoKey), inputName);
   }

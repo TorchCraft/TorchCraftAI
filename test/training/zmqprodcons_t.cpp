@@ -23,7 +23,7 @@ using namespace cpid;
 CASE("zmqprodcons/e2e") {
   auto context = std::make_shared<zmq::context_t>();
   auto constexpr N = 20;
-  ZeroMQBufferedProducer<std::string> prod(2, N * 2, std::string(), context);
+  ZeroMQBufferedProducer<std::string> prod(2, N * 2);
   ZeroMQBufferedConsumer<std::string> cons(1, 4, {prod.endpoint()}, context);
 
   std::atomic<size_t> ncharsSent{0};
@@ -56,98 +56,121 @@ CASE("zmqprodcons/e2e") {
   EXPECT(ncharsSent.load() == ncharsRecv);
 }
 
-CASE("zmqprodcons/e2e/fair") {
+CASE("zmqcons/retries") {
   auto context = std::make_shared<zmq::context_t>();
-  auto constexpr N = 20;
-  ZeroMQBufferedProducer<std::string> prod1(2, N * 2, std::string(), context);
-  ZeroMQBufferedProducer<std::string> prod2(2, N * 2, std::string(), context);
-  ZeroMQBufferedConsumer<std::string> cons1(
-      1, 4, {prod1.endpoint(), prod2.endpoint()}, context);
-  ZeroMQBufferedConsumer<std::string> cons2(
-      1, 4, {prod1.endpoint(), prod2.endpoint()}, context);
-
-  std::atomic<size_t> ncharsSent{0};
-  auto produceStrings = [&](ZeroMQBufferedConsumer<std::string>* cons,
-                            size_t sz) {
-    auto rengine = common::Rand::makeRandEngine<std::mt19937>();
-    for (int i = 0; i < N; i++) {
-      std::string s;
-      for (size_t j = 0; j < sz; j++) {
-        s += char('a' + (rengine() % 26));
-      }
-      ncharsSent += s.size();
-      cons->enqueue(std::move(s));
+  auto constexpr nrounds = 4;
+  auto const N = int(std::pow(2, nrounds));
+  std::atomic<size_t> nrecv{0};
+  std::atomic<size_t> ncharsAccepted{0};
+  // Our server denies every other request
+  ReqRepServer srv([&](void const* buf,
+                       size_t len,
+                       ReqRepServer::ReplyFn reply) {
+    common::IMembuf mbuf(std::string_view(static_cast<char const*>(buf), len));
+    common::zstd::istream is(&mbuf);
+    cereal::BinaryInputArchive ar(is);
+    std::string s;
+    ar(s);
+    // To make things simple, accept and ignore empty string requests
+    if (s.length() == 0) {
+      reply(detail::kConfirm.c_str(), detail::kConfirm.size());
+      return;
     }
-  };
-  std::thread clT1(produceStrings, &cons1, 1024);
-  std::thread clT2(produceStrings, &cons2, 2048);
 
-  size_t ncharsRecv1 = 0;
-  size_t ncharsRecv2 = 0;
-  auto fetchStrings = [&](ZeroMQBufferedProducer<std::string>* prod,
-                          size_t* dest) {
-    for (int i = 0; i < N; i++) {
-      auto ed = prod->get();
-      *dest += ed->size();
+    nrecv++;
+    if (nrecv % 2 == 0) {
+      reply(detail::kDeny.c_str(), detail::kDeny.size());
+      VLOG(0) << "reply deny";
+    } else {
+      reply(detail::kConfirm.c_str(), detail::kConfirm.size());
+      ncharsAccepted += s.length();
+      VLOG(0) << "reply ok, got " << s.length();
     }
-  };
-  std::thread srvT1(fetchStrings, &prod1, &ncharsRecv1);
-  std::thread srvT2(fetchStrings, &prod2, &ncharsRecv2);
+  });
+  ZeroMQBufferedConsumer<std::string> cons(0, N, {srv.endpoint()}, context);
 
-  clT1.join();
-  clT2.join();
-  srvT1.join();
-  srvT2.join();
-  EXPECT(ncharsSent.load() == ncharsRecv1 + ncharsRecv2);
-  EXPECT(ncharsRecv1 == ncharsRecv2);
-}
-
-CASE("zmqprodcons/prod/full_buffer") {
-  auto context = std::make_shared<zmq::context_t>();
-  auto constexpr N = 20;
-  // Small producer queue will trigger negative replies and retries by the
-  // consumer.
-  auto constexpr QS = 10;
-  ZeroMQBufferedProducer<std::string> prod(1, QS, std::string(), context);
-  ZeroMQBufferedConsumer<std::string> cons(0, N, {prod.endpoint()}, context);
-
-  // Enqueue messages. Some of them will be denied since the producer queue runs
-  // full. The consumer will keep them around for retries.
-  size_t ncharsSentFirstQS{0};
+  size_t nsent = 0;
   size_t ncharsSent{0};
   auto rengine = common::Rand::makeRandEngine<std::mt19937>();
-  int nsent = 0;
   auto sendOneString = [&]() {
     size_t sz = 1 + (rengine() % 1023);
     std::string s;
     for (size_t j = 0; j < sz; j++) {
       s += char('a' + (rengine() % 26));
     }
-    if (nsent < QS) {
-      ncharsSentFirstQS += s.size();
-    }
     ncharsSent += s.size();
     cons.enqueue(std::move(s));
     nsent++;
   };
-  for (int i = 0; i < N; i++) {
+
+  // Send out N requests -- these will all be sent out as-is without retries.
+  for (auto i = 0; i < N; i++) {
     sendOneString();
   }
 
-  // Finally, grab all messages. The consumer will not re-queue messages
-  // automatically unless we enqueue further ones.
-  size_t ncharsRecv = 0;
-  for (int i = 0; i < N; i++) {
-    if (i == QS) {
-      EXPECT(ncharsSentFirstQS == ncharsRecv);
-      // We should have some room now -- flush pending retries
-      cons.flush();
+  // The server rejects every other message so we need to trigger log(N)=nrounds
+  // rounds of resends to get everything accepted.
+  size_t expectedRecv = N;
+  size_t pending = N;
+  for (auto i = 0; i < nrounds; i++) {
+    while (nrecv.load() < expectedRecv) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
-    auto ed = prod.get();
-    ncharsRecv += ed->size();
+    // We did not accept everything yet
+    EXPECT(ncharsAccepted.load() < ncharsSent);
+
+    // Trigger resends. On every round our resends are cut in half so we need to
+    // enqueue a sufficient number of empty strings for this.
+    for (int j = pending; j <= N; j++) {
+      cons.enqueue(std::string());
+    }
+    pending /= 2;
+    expectedRecv += pending;
   }
 
-  EXPECT(ncharsSent == ncharsRecv);
+  while (nrecv.load() < expectedRecv) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  }
+  // Done!
+  EXPECT(ncharsAccepted.load() == ncharsSent);
+}
+
+CASE("zmqprod/full_buffer") {
+  auto context = std::make_shared<zmq::context_t>();
+  auto constexpr QS = 10;
+  ZeroMQBufferedProducer<std::string> prod(1, QS);
+  ReqRepClient client(1, {prod.endpoint()}, context);
+
+  // The producer has two queues so we should be able to get QS*2 affirmative
+  // replies out of it for accessing any string.
+  auto naccepted = 0;
+  for (auto i = 0; naccepted < QS * 2 && i < QS * 10; i++) {
+    common::OMembuf buf;
+    std::string s = "hello";
+    {
+      common::zstd::ostream os(&buf);
+      cereal::BinaryOutputArchive ar(os);
+      ar(s);
+    }
+    auto reply = client.request(buf.takeData()).get();
+    if (std::string_view(reply.data(), reply.size()) == detail::kConfirm) {
+      naccepted++;
+    }
+  }
+  EXPECT(naccepted == QS * 2);
+
+  // Every other request will now result in a "deny" message
+  for (auto i = 0; i < 5; i++) {
+    common::OMembuf buf;
+    std::string s = "hello";
+    {
+      common::zstd::ostream os(&buf);
+      cereal::BinaryOutputArchive ar(os);
+      ar(s);
+    }
+    auto reply = client.request(buf.takeData()).get();
+    EXPECT(std::string_view(reply.data(), reply.size()) == detail::kDeny);
+  }
 }
 
 namespace {
@@ -166,8 +189,8 @@ void bench(
   std::vector<std::thread> prodTs;
   std::vector<std::shared_ptr<ZeroMQBufferedProducer<Data>>> prods;
   for (auto i = 0U; i < numProds; i++) {
-    prods.push_back(std::make_shared<ZeroMQBufferedProducer<Data>>(
-        numThreadsP, 128, std::string(), context));
+    prods.push_back(
+        std::make_shared<ZeroMQBufferedProducer<Data>>(numThreadsP, 128));
     endpoints.push_back(prods.back()->endpoint());
     prodTs.emplace_back([&, prod = prods.back()] {
       while (true) {
@@ -183,6 +206,10 @@ void bench(
   std::atomic<bool> stop{false};
   std::vector<std::thread> conTs;
   for (auto i = 0U; i < numCons; i++) {
+    // We're using a fairly small buffer here. Production is instant, but the
+    // producer will accrue a future for every request that it sends. If the
+    // buffer is full (which is what this test is aiming for) we'll have to wait
+    // for up to buffer_size futures on every enqueue().
     conTs.emplace_back([&] {
       ZeroMQBufferedConsumer<Data> cons(numThreadsC, 128, endpoints, context);
       Data d(msize);

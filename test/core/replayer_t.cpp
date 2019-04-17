@@ -22,6 +22,7 @@ CASE("replayer/zerg") {
   auto& uinfo = state->unitsInfo();
   auto& ainfo = state->areaInfo();
 
+  EXPECT(state->tcstate() == replay.tcstate());
   EXPECT(state->mapWidth() == 512);
   EXPECT(state->mapHeight() == 512);
 
@@ -32,6 +33,7 @@ CASE("replayer/zerg") {
   replay.init();
 
   while (!state->gameEnded() && state->currentFrame() < 100) {
+    EXPECT(state->gameEnded() == replay.isComplete());
     replay.step();
   }
   EXPECT(!state->gameEnded());
@@ -114,4 +116,16 @@ CASE("replayer/win[hide]") {
   EXPECT(state->areaInfo().numMyBases() == 4);
   EXPECT(state->gameEnded() == true);
   EXPECT(state->won() == true);
+}
+
+CASE("replayer/bwem_weird_static_building") {
+  Replayer replay("test/maps/replays/bwrep_0nxvd.rep");
+  auto* state = replay.state();
+  replay.init();
+
+  // Just make sure this does not crash BWEM on first frame
+  while (state->gameEnded() && state->currentFrame() < 10) {
+    replay.step();
+  }
+  EXPECT(true);
 }

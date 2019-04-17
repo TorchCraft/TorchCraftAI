@@ -10,7 +10,7 @@
 #include "blackboard.h"
 #include "buildtype.h"
 #include "cherrypi.h"
-#include "gameutils/selfplayscenario.h"
+#include "gameutils/game.h"
 #include "modules.h"
 #include "player.h"
 
@@ -85,7 +85,7 @@ void setEnergy(BasePlayer& bot, Unit* u, int amount) {
 CASE("openbw/cheats/upgrade") {
   using namespace tc::BW;
   auto map = "test/maps/micro-big.scm";
-  auto scenario = SelfPlayScenario(
+  auto scenario = GameMultiPlayer(
       map, tc::BW::Race::Zerg, tc::BW::Race::Zerg, GameType::UseMapSettings);
   Player bot(scenario.makeClient1());
   Player enemy(scenario.makeClient2());

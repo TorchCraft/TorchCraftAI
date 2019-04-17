@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "gameutils/scenario.h"
+#include "gameutils/game.h"
 #include "test.h"
 
 #include <glog/logging.h>
@@ -44,7 +44,7 @@ class MoveZerglingsModule : public Module {
 } // namespace
 
 SCENARIO("unitsinfo/topspeed") {
-  auto scenario = Scenario("test/maps/eco-base-zerg.scm", "Zerg");
+  auto scenario = GameSinglePlayerUMS("test/maps/eco-base-zerg.scm", "Zerg");
   Player bot(scenario.makeClient());
 
   namespace bt = buildtypes;
@@ -100,4 +100,104 @@ SCENARIO("unitsinfo/topspeed") {
   } while (!state->gameEnded() && !found);
   VLOG(0) << "Done after " << state->currentFrame() << " frames";
   EXPECT(found);
+}
+
+static auto createPlayer = [](auto client, auto hack) {
+  auto bot = std::make_shared<Player>(client);
+  for (auto name : utils::stringSplit(kDefaultModules, ',')) {
+    if (!name.empty()) {
+      bot->addModule(Module::make(name));
+    }
+  }
+  bot->addModule(Module::make(kAutoBottomModule));
+
+  bot->setMapHack(hack);
+
+  bot->init();
+  return bot;
+};
+
+SCENARIO("unitsinfo/maphack") {
+  auto scenario = GameMultiPlayer(
+      "maps/(4)Fighting Spirit.scx", tc::BW::Race::Zerg, tc::BW::Race::Zerg);
+
+  std::shared_ptr<Player> p1 = createPlayer(scenario.makeClient1(), true);
+  std::shared_ptr<Player> p2 = createPlayer(scenario.makeClient2(), true);
+
+  auto s1 = p1->state();
+  auto s2 = p2->state();
+  int const kMaxFrames = 5000;
+  // We make sure the number of mistakes are low. Because the player
+  // execute not in sync, we're never 100% sure if the mapHacked state
+  // perfectly corresponds to the player state we haven't seen.
+  // In practice, there's very few frames of these misalignments
+  auto nMistakes = 0;
+  do {
+    p1->step();
+    p2->step();
+
+    auto uHash = [&](Unit* u) {
+      uint64_t result = 0;
+      result = (result << 12) + u->x;
+      result = (result << 12) + u->y;
+      result = (result << 12) + u->type->unit;
+      result = (result << 12) + u->unit.health;
+      return result;
+    };
+
+    std::map<int64_t, int32_t> s1u;
+    std::map<int64_t, int32_t> s2u;
+    for (auto& u : s1->unitsInfo().myUnits()) {
+      s1u[uHash(u)]++;
+    }
+    for (auto& u : s2->unitsInfo().myUnits()) {
+      s2u[uHash(u)]++;
+    }
+
+    auto checkmhu = [&](auto& mhu) {
+      std::map<int64_t, int32_t> p1mhu;
+      std::map<int64_t, int32_t> p2mhu;
+      for (auto& u : mhu) {
+        if (u->playerId == s1->playerId()) {
+          p1mhu[uHash(u)]++;
+        }
+        if (u->playerId == s2->playerId()) {
+          p2mhu[uHash(u)]++;
+        }
+      }
+
+      if (p1mhu != s1u) {
+        nMistakes++;
+      }
+      if (p2mhu != s2u) {
+        nMistakes++;
+      }
+    };
+
+    auto s1mhu = s1->unitsInfo().mapHacked();
+    auto s2mhu = s2->unitsInfo().mapHacked();
+    checkmhu(s1mhu);
+    checkmhu(s2mhu);
+
+    if ((s1->currentFrame() > kMaxFrames) ||
+        (s2->currentFrame() > kMaxFrames)) {
+      break;
+    }
+    EXPECT(nMistakes < 10);
+  } while (!(s1->gameEnded() || s2->gameEnded()));
+}
+
+SCENARIO("unitsinfo/throw_on_nomaphack") {
+  auto scenario = GameMultiPlayer(
+      "maps/(4)Fighting Spirit.scx", tc::BW::Race::Zerg, tc::BW::Race::Zerg);
+
+  std::shared_ptr<Player> p1 = createPlayer(scenario.makeClient1(), false);
+  std::shared_ptr<Player> p2 = createPlayer(scenario.makeClient2(), false);
+
+  auto s1 = p1->state();
+  auto s2 = p2->state();
+  p1->step();
+  p2->step();
+  EXPECT_THROWS(s1->unitsInfo().mapHacked());
+  EXPECT_THROWS(s2->unitsInfo().mapHacked());
 }

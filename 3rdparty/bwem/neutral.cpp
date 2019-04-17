@@ -122,8 +122,12 @@ void Neutral::RemoveFromTiles()
 vector<const Area *> Neutral::BlockedAreas() const
 {
 	vector<const Area *> Result;
-	for (WalkPosition w : m_blockedAreas)
-		Result.push_back(GetMap()->GetArea(w));
+	for (WalkPosition w : m_blockedAreas) {
+		const Area* a = GetMap()->GetArea(w);
+		if (a != nullptr) {
+			Result.push_back(a);
+		}
+	}
 
 	return Result;
 }

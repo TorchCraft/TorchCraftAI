@@ -7,6 +7,8 @@
 
 #include "redisclient.h"
 
+#include <unordered_map>
+
 #include <fmt/format.h>
 
 namespace cpid {
@@ -333,8 +335,17 @@ void RedisReply::ensureType(int type) const {
     throw std::runtime_error("Error: " + std::string(reply_->str));
   }
   if (reply_->type != type) {
-    throw std::runtime_error(
-        fmt::format("Expected reply of type {}, got {}", type, reply_->type));
+    static std::unordered_map<decltype(REDIS_REPLY_ARRAY), std::string>
+        typeToStr = {{REDIS_REPLY_ARRAY, "ARRAY"},
+                     {REDIS_REPLY_ERROR, "ERROR"},
+                     {REDIS_REPLY_INTEGER, "INTEGER"},
+                     {REDIS_REPLY_NIL, "NIL"},
+                     {REDIS_REPLY_STATUS, "STATUS"},
+                     {REDIS_REPLY_STRING, "STRING"}};
+    throw std::runtime_error(fmt::format(
+        "Expected reply of type {}, got {}",
+        typeToStr[type],
+        typeToStr[reply_->type]));
   }
   // ok!
 }

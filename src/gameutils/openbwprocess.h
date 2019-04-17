@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "forkserver.h"
 #include <atomic>
 #include <future>
 #include <string>
@@ -24,16 +25,6 @@ namespace cherrypi {
  */
 class OpenBwProcess {
  public:
-  struct EnvVar {
-    std::string key;
-    std::string value;
-    bool overwrite = false;
-    template <class Archive>
-    void serialize(Archive& archive) {
-      archive(key, value, overwrite);
-    }
-  };
-
   // Totally thread safe!
   OpenBwProcess(std::vector<EnvVar> const& vars);
   OpenBwProcess(std::string, std::vector<EnvVar> const& vars);
@@ -46,20 +37,14 @@ class OpenBwProcess {
   /// Returns whether the client connected successfully connected.
   bool connect(torchcraft::Client* client, int timeoutMs = -1);
 
-  /// Starts a fork server, and uses this to spawn future openbw instances
-  /// instead.
-  /// After this function has been called, instantiating an OpenBwProcess will
-  /// transparently launch the respective processes via the fork server.
-  /// At program exit, the server will automatically be shut down.
-  static void startForkServer();
-  /// Manual shutdown of fork server.
-  static void endForkServer();
+  /// No further forks will be started, and subsequent
+  /// OpenBwProcess constructors will throw
+  static void preventFurtherProcesses();
 
  private:
   void redirectOutput();
 
   int pid_;
-  bool launchedWithForkServer_;
   std::string socketPath_;
   int fd_ = -1;
   int wfd_ = -1;

@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <fstream>
 
-#include "gameutils/scenario.h"
+#include "gameutils/game.h"
 #include "test.h"
 
 #include <glog/logging.h>
@@ -84,7 +84,7 @@ void microScenario(
     int kMaxFrames = 100000,
     int prevMyAvg = -1,
     int prevTheirAvg = -1) {
-  auto scenario = Scenario(map, race);
+  auto scenario = GameSinglePlayerUMS(map, race);
   Player bot(scenario.makeClient());
   bot.setRealtimeFactor(FLAGS_rtfactor);
   moduleFunc(bot);
@@ -340,10 +340,12 @@ SCENARIO("combat/zergling_swarm[.dev]") {
         std::vector<SpawnPosition> zerglings;
         std::vector<SpawnPosition> marines;
         for (auto i = 0U; i < 300; i++) {
-          zerglings.emplace_back(1, UnitType::Zerg_Zergling, 10, 132);
+          zerglings.emplace_back(
+              SpawnPosition{1, UnitType::Zerg_Zergling, 10, 132});
         }
         for (auto i = 0U; i < 100; i++) {
-          marines.emplace_back(1, UnitType::Terran_Marine, 160, 132);
+          marines.emplace_back(
+              SpawnPosition{1, UnitType::Terran_Marine, 160, 132});
         }
         bot.addModule(
             OnceModule::makeWithSpawns(std::move(zerglings), "MySpawns"));
@@ -605,7 +607,7 @@ SCENARIO("combat/no_hit_larval") {
 SCENARIO("combat/cloaked_flags_set") {
   using namespace tc::BW;
 
-  auto scenario = Scenario("test/maps/micro-empty.scm", "Zerg");
+  auto scenario = GameSinglePlayerUMS("test/maps/micro-empty.scm", "Zerg");
   Player bot(scenario.makeClient());
   bot.setRealtimeFactor(FLAGS_rtfactor);
   bot.addModule(OnceModule::makeWithSpawns(
@@ -638,7 +640,8 @@ SCENARIO("combat/cloaked_flags_set") {
 }
 
 SCENARIO("experimental/random_fighting_spirit[hide]") {
-  auto scenario = Scenario("test/maps/fighting_spirit_nofow.scm", "Terran");
+  auto scenario =
+      GameSinglePlayerUMS("test/maps/fighting_spirit_nofow.scm", "Terran");
   auto battles = std::vector<std::string>({
       "test/battles/TL_PvT_GG32647.json",
       "test/battles/TL_PvT_IC409383.json",
@@ -675,19 +678,19 @@ SCENARIO("experimental/random_fighting_spirit[hide]") {
     VLOG(1) << "Doing battle " << choice << "/" << data.size();
 
     for (auto i = 0U; i < battle[0].size(); i++) {
-      myspawns.emplace_back(
+      myspawns.emplace_back(SpawnPosition{
           1,
           tc::BW::UnitType::_from_integral(battle[0][i][0].get<int>()),
           battle[0][i][1].get<int>(),
-          battle[0][i][2].get<int>());
+          battle[0][i][2].get<int>()});
       myspawnset.push_back(battle[0][i][0].get<int>());
     }
     for (auto i = 0U; i < battle[1].size(); i++) {
-      theirspawns.emplace_back(
+      theirspawns.emplace_back(SpawnPosition{
           1,
           tc::BW::UnitType::_from_integral(battle[1][i][0].get<int>()),
           battle[1][i][1].get<int>(),
-          battle[1][i][2].get<int>());
+          battle[1][i][2].get<int>()});
       theirspawnset.push_back(battle[1][i][0].get<int>());
     }
     break;

@@ -7,9 +7,8 @@
 
 #pragma once
 
+#include "distributed.h"
 #include "redisclient.h"
-
-#include <c10d/Store.hpp>
 
 #include <memory>
 

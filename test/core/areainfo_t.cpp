@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "gameutils/scenario.h"
+#include "gameutils/game.h"
 #include "test.h"
 
 #include "buildorders/base.h"
@@ -20,11 +20,10 @@ using namespace cherrypi;
 CASE("core/areaInfo/cache[hide]") {
   const std::string scmap = "maps/(4)Circuit Breaker.scx";
 
-  std::unique_ptr<MeleeScenario> scenario;
   std::unique_ptr<Player> bot;
 
-  scenario = std::make_unique<MeleeScenario>(scmap, "Zerg", "Terran");
-  bot = std::make_unique<Player>(scenario->makeClient());
+  auto scenario = GameSinglePlayerMelee(scmap, "Zerg", "Terran");
+  bot = std::make_unique<Player>(scenario.makeClient());
   bot->setWarnIfSlow(false);
 
   bot->addModule(Module::make<CreateGatherAttackModule>());

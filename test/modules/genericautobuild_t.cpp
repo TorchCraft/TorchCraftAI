@@ -7,7 +7,7 @@
 
 #include "buildorders/base.h"
 #include "fivepool.h"
-#include "gameutils/selfplayscenario.h"
+#include "gameutils/game.h"
 #include "modules.h"
 #include "player.h"
 #include "registry.h"
@@ -42,7 +42,7 @@ REGISTER_SUBCLASS_3(ABBOBase, ABBOTest2, UpcId, State*, Module*);
 class GenericAutobuildTestUtils {
  public:
   static auto createMyPlayer(
-      SelfPlayScenario* scenario,
+      GameMultiPlayer* scenario,
       std::function<void(State*)> init_fn = nullptr) {
     auto bot = std::make_shared<Player>(scenario->makeClient1());
     if (init_fn) {
@@ -60,7 +60,7 @@ class GenericAutobuildTestUtils {
     return bot;
   }
 
-  static auto createEnemyPlayer(SelfPlayScenario* scenario) {
+  static auto createEnemyPlayer(GameMultiPlayer* scenario) {
     auto bot = std::make_shared<Player>(scenario->makeClient2());
     bot->setRealtimeFactor(FLAGS_rtfactor);
     bot->init();
@@ -82,7 +82,7 @@ class GenericAutobuildTestUtils {
 
 SCENARIO("genericautobuild") {
   GIVEN("build order initialized with kBuildOrderKey") {
-    auto scenario = SelfPlayScenario(
+    auto scenario = GameMultiPlayer(
         "maps/(4)Fighting Spirit.scx", tc::BW::Race::Zerg, tc::BW::Race::Zerg);
 
     auto ourBot =
@@ -103,7 +103,7 @@ SCENARIO("genericautobuild") {
   }
 
   GIVEN("build order initialized with kOpeningBuildOrderKey") {
-    auto scenario = SelfPlayScenario(
+    auto scenario = GameMultiPlayer(
         "maps/(4)Fighting Spirit.scx", tc::BW::Race::Zerg, tc::BW::Race::Zerg);
 
     auto ourBot =
@@ -125,7 +125,7 @@ SCENARIO("genericautobuild") {
   }
 
   GIVEN("A blank state") {
-    auto scenario = SelfPlayScenario(
+    auto scenario = GameMultiPlayer(
         "maps/(4)Fighting Spirit.scx", tc::BW::Race::Zerg, tc::BW::Race::Zerg);
 
     auto ourBot =

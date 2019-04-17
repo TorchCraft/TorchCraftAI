@@ -39,7 +39,11 @@ class SquadCombatModule : public Module {
   virtual void step(State* s) override;
   /// Adds a MicroModel to the end of the list of models which will be updated
   /// and solicited for UPCs
-  void enqueueModel(std::shared_ptr<MicroModel>);
+  void enqueueModel(std::shared_ptr<MicroModel> model, std::string name);
+
+  std::shared_ptr<MicroModel> getModel(std::string);
+  virtual void onGameEnd(State* state) override;
+  virtual void onGameStart(State* state) override;
 
  protected:
   State* state;
@@ -51,7 +55,7 @@ class SquadCombatModule : public Module {
   std::unordered_map<Unit const*, EnemyState> enemyStates_;
 
   /// Models for SquadCombat to solicit for unit UPCs
-  std::vector<std::shared_ptr<MicroModel>> models_;
+  std::unordered_map<std::string, std::shared_ptr<MicroModel>> models_;
 
   /// Takes incoming UPCs (usually from the Tactics module) and forms
   /// clusters of units that fight collaboratively.

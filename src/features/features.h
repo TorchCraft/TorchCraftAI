@@ -52,11 +52,22 @@ enum class PlainFeatureType {
   /// Whether this walktile contains a doodad that alters the ground height and
   /// thus affects visibility and attack miss rates.
   TallDoodad,
-  /// One-hot ground height: channel for height 0, 2, 4 and off the map (4
+  /// One-hot ground height: channel for height 0, 2, 4 and on the map (4
   /// total)
   OneHotGroundHeight,
   /// Whether this position is a starting location
   StartLocations,
+  /// Grid of X/Y coordinates from (0,0) top left to (N,M) bottom right. One
+  /// channel for Y, one channel for X. -1 outside of map. N is map_width/512, M
+  /// map_height/512 (all in walktiles).
+  XYGrid,
+  /// 1 if there is a resource tile at this location, 0 otherwise
+  Resources,
+  /// This map tile has a structure on it, so it's not passable.
+  /// Since this works at the walktile level and structures are on pixels,
+  /// it will mark a walktile as impassable as long as the walktile is at
+  /// all partially impassable.
+  HasStructure,
 
   /// User-defined single-channel feature
   UserFeature1 = 1001,

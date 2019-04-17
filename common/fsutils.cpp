@@ -7,6 +7,7 @@
 
 #include "fsutils.h"
 
+#include "assert.h"
 #include "str.h"
 
 #ifdef WITHOUT_POSIX
@@ -16,10 +17,13 @@
 #endif
 
 #else
+#include <common/checksum.h>
+#include <common/language.h>
 #include <dirent.h>
 #include <fcntl.h>
 #include <fnmatch.h>
 #include <glob.h>
+#include <sys/mman.h>
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <sys/time.h>
@@ -373,6 +377,26 @@ std::vector<std::string> glob(std::string const& pattern) {
   globfree(&buf);
   return out;
 }
+
+std::vector<unsigned char> md5(std::string const& path) {
+  std::ifstream input(path);
+  auto sz = size(path);
+
+  auto fd = ::open(path.c_str(), O_RDONLY);
+  auto guard = common::makeGuard([fd] { ::close(fd); });
+  if (fd < 0) {
+    throw std::system_error(errno, std::system_category());
+  }
+
+  auto fb = mmap(0, sz, PROT_READ, MAP_PRIVATE, fd, 0);
+  if (fb == MAP_FAILED) {
+    throw std::system_error(errno, std::system_category());
+  }
+  auto result = common::md5sum(fb, sz);
+  ::munmap(fb, sz);
+
+  return result;
+}
 #endif // WITHOUT_POSIX
 
 std::string basename(std::string const& path, std::string const& ext) {
@@ -426,14 +450,13 @@ std::string dirname(std::string const& path) {
 }
 
 void mkdir(std::string const& path, int mode) {
-  auto interimPath = std::string();
-  for (auto part : stringSplit(path, kPathSep)) {
-    interimPath = interimPath + part;
-    if (!interimPath.empty() && !isdir(interimPath)) {
-      createDir(interimPath, mode);
-    }
-    interimPath = interimPath + kPathSep;
+  if (path.empty() || path == "/" || path == "." || isdir(path)) {
+    return;
   }
+  auto parent = dirname(path);
+  ASSERT(path != parent);
+  mkdir(parent);
+  createDir(path, mode);
 }
 
 void mv(std::string const& src, std::string const& dest) {

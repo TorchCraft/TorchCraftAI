@@ -177,13 +177,12 @@ void runGameThread(std::shared_ptr<Trainer> trainer, int num) {
 
   while (!trainer->isDone()) {
     try {
-      provider->cleanScenario();
       if (FLAGS_save_eval_replays && trainer->is<Evaluator>()) {
         fsutils::mkdir(fmt::format("{}/replays", gResultsDir));
         provider->setReplayPath(
             fmt::format("{}/replays/{}.rep", gResultsDir, gameId));
       }
-      auto players = provider->spawnNextScenario(setupFn, setupFn);
+      auto players = provider->startNewScenario(setupFn, setupFn);
 
       // This might have taken some time, so check stop condition again
       if (trainer->isDone()) {
@@ -488,7 +487,7 @@ int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
   cherrypi::initLogging(argv[0], "", true);
 
-  OpenBwProcess::startForkServer();
+  cherrypi::ForkServer::startForkServer();
   cherrypi::init();
   dist::init();
 

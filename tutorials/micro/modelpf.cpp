@@ -9,8 +9,11 @@
 #include "utils/debugging.h"
 #include "utils/upcs.h"
 
+#ifdef HAVE_CUDA
 #include <c10/cuda/CUDAFunctions.h>
 #include <cuda_runtime.h>
+#endif
+
 #include <fmt/ostream.h>
 #include <prettyprint/prettyprint.hpp>
 
@@ -24,8 +27,7 @@ static constexpr BoundingBox<21> bounds{};
 
 std::vector<torch::Tensor> initializeMesh() {
   auto lst = std::vector<torch::Tensor>();
-  for (auto i = 0U; i < torch::cuda::device_count(); i++) {
-    cudaSetDevice(i);
+  auto addMesh = [&]() {
     lst.push_back(at::stack(
                       {torch::arange(0, bounds.kHeight, defaultDevice())
                            .repeat({bounds.kWidth, 1}),
@@ -34,8 +36,16 @@ std::vector<torch::Tensor> initializeMesh() {
                            .t()},
                       2)
                       .toType(at::kFloat));
+  };
+#ifdef HAVE_CUDA
+  for (auto i = 0U; i < torch::cuda::device_count(); i++) {
+    cudaSetDevice(i);
+    addMesh();
   }
   cudaSetDevice(0);
+#else
+  addMesh();
+#endif
   return lst;
 }
 } // namespace
@@ -46,8 +56,12 @@ torch::Tensor PiecewiseLinearPotential::forward(
     torch::Tensor locs,
     torch::Tensor params) {
   // locs: U x (y, x); params: U x 2
-  auto eMesh = mesh_[c10::cuda::current_device()].unsqueeze(2).expand(
-      {-1, -1, locs.size(0), -1});
+#ifdef HAVE_CUDA
+  auto meshIdx = c10::cuda::current_device();
+#else
+  auto meshIdx = 0UL;
+#endif
+  auto eMesh = mesh_[meshIdx].unsqueeze(2).expand({-1, -1, locs.size(0), -1});
   auto pLocs = locs.toType(at::kFloat).unsqueeze_(0).unsqueeze_(0);
   // H x W x U
   auto distfield = (pLocs.expand_as(eMesh) - eMesh).pow_(2).sum(3).sqrt_();
@@ -65,6 +79,7 @@ torch::Tensor PiecewiseLinearPotential::forward(
 }
 
 struct PFFeaturizer : public MicroFeaturizer {
+  virtual ~PFFeaturizer() = default;
   virtual int mapPadding() override {
     return kMovementBoundingBox - 1;
   }
@@ -130,10 +145,10 @@ std::vector<MicroModel::MicroAction> PFModel::decodeOutput(
       auto uy = ourUnits[i]->y;
       float bestMoveScore = std::numeric_limits<float>::lowest();
       int bestMoveY = -1, bestMoveX = -1;
-      for (auto y = std::max(0L, offset - uy);
+      for (auto y = std::max<int64_t>(0L, offset - uy);
            y < std::min(moveMax, kMapHeight + offset - uy);
            y++) {
-        for (auto x = std::max(0L, offset - ux);
+        for (auto x = std::max<int64_t>(0L, offset - ux);
              x < std::min(moveMax, kMapHeight + offset - ux);
              x++) {
           // Do we check for walkability here? Maybe it doesn't matter

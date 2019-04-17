@@ -363,6 +363,11 @@ BuildOrderConfigurations buildOrdersForTraining() {
       .ourRaces({protoss})
       .enemyRaces({protoss});
       
+  builds["pvpgategateobs"]
+      .validOpening(true)
+      .ourRaces({protoss})
+      .enemyRaces({protoss});
+      
   builds["pve4gate"]
       .validOpening(true)
       .ourRaces({protoss});

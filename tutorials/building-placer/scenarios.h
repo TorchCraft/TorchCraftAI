@@ -12,14 +12,11 @@
 namespace cherrypi {
 
 /// This provides access to a few scenario internals for easier logging from
-/// outside spawnNextScenario()
+/// outside startNewScenario()
 class BuildingPlacerScenarioProvider : public ScenarioProvider {
  public:
-  BuildingPlacerScenarioProvider(
-      int maxFrame,
-      std::string mapPool,
-      bool gui = false)
-      : ScenarioProvider(maxFrame, gui), mapPool_(std::move(mapPool)) {}
+  BuildingPlacerScenarioProvider(std::string mapPool)
+      : ScenarioProvider(), mapPool_(std::move(mapPool)) {}
 
   void setReplayPath(std::string path) {
     replayPath_ = std::move(path);
@@ -35,12 +32,6 @@ class BuildingPlacerScenarioProvider : public ScenarioProvider {
   }
   std::string currentBuild2() const {
     return build2_;
-  }
-
-  virtual void cleanScenario() override {
-    scenario_ = nullptr;
-    player1_ = nullptr;
-    player2_ = nullptr;
   }
 
  protected:

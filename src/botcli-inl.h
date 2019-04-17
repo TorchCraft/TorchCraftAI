@@ -9,6 +9,7 @@
 
 #include "cherrypi.h"
 #include "common/rand.h"
+#include "modules.h"
 #include "player.h"
 #include "utils.h"
 
@@ -20,29 +21,11 @@
  * `Player` instance accordingly.
  */
 
-namespace {
-// Top and bottom modules that are always present
-char constexpr kAutoTopModule[] = "Top";
-char constexpr kAutoBottomModule[] = "UPCToCommand";
-
-/// The default set of modules.
-/// This is what CherryPi uses in a normal game.
-char constexpr kDefaultModules[] =
-    "CreateGatherAttack,"
-    "Strategy,"
-    "GenericAutoBuild,"
-    "BuildingPlacer,"
-    "Builder,"
-    "Tactics,"
-    "SquadCombat,"
-    "Scouting,"
-    "Gatherer,"
-    "Harass,"
-    "StaticDefenceFocusFireModule";
-} // namespace
-
 // Command line flags
-DEFINE_string(modules, kDefaultModules, "Comma-separated list of bot modules");
+DEFINE_string(
+    modules,
+    cherrypi::kDefaultModules,
+    "Comma-separated list of bot modules");
 DEFINE_int32(frameskip, 1, "Frame skip for screen updates");
 DEFINE_int32(timeout, 120000, "Timeout for TorchCraft connection");
 DEFINE_int32(seed, -1, "Random seed. Used default seed if -1");

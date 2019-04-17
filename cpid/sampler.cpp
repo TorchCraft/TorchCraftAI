@@ -77,12 +77,8 @@ ag::Variant MultinomialSampler::computeProba(
 
 DiscreteMaxSampler::DiscreteMaxSampler(
     const std::string& policyKey,
-    const std::string& actionKey,
-    const std::string& pActionKey)
-    : BaseSampler(),
-      policyKey_(policyKey),
-      actionKey_(actionKey),
-      pActionKey_(pActionKey) {}
+    const std::string& actionKey)
+    : BaseSampler(), policyKey_(policyKey), actionKey_(actionKey) {}
 
 ag::Variant DiscreteMaxSampler::sample(ag::Variant in) {
   torch::NoGradGuard g_;
@@ -101,7 +97,6 @@ ag::Variant DiscreteMaxSampler::sample(ag::Variant in) {
   }
 
   dict[actionKey_] = ag::Variant(std::get<1>(pi.max(1)));
-  dict[pActionKey_] = ag::Variant(1);
   return in;
 }
 
@@ -184,12 +179,8 @@ ag::Variant ContinuousGaussianSampler::computeProba(
 
 ContinuousDeterministicSampler::ContinuousDeterministicSampler(
     const std::string& policyKey,
-    const std::string& actionKey,
-    const std::string& pActionKey)
-    : BaseSampler(),
-      policyKey_(policyKey),
-      actionKey_(actionKey),
-      pActionKey_(pActionKey) {}
+    const std::string& actionKey)
+    : BaseSampler(), policyKey_(policyKey), actionKey_(actionKey) {}
 
 ag::Variant ContinuousDeterministicSampler::sample(ag::Variant in) {
   torch::NoGradGuard g_;
@@ -208,7 +199,6 @@ ag::Variant ContinuousDeterministicSampler::sample(ag::Variant in) {
   }
 
   dict[actionKey_] = ag::Variant(pi.clone());
-  dict[pActionKey_] = ag::Variant(1);
   return in;
 }
 

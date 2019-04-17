@@ -170,8 +170,8 @@ SCENARIO("batcher.SubBatchAsyncBatcher") {
                        unbatched[1].getDict()["result"].get()};
     EXPECT(res[0].sizes() == at::IntList({}));
     EXPECT(res[1].sizes() == at::IntList({}));
-    EXPECT(res[0].item<long>() == 10);
-    EXPECT(res[1].item<long>() == 5);
+    EXPECT(res[0].item<int64_t>() == 10);
+    EXPECT(res[1].item<int64_t>() == 5);
   }
 
   GIVEN("padding in tensor_list") {
@@ -182,12 +182,12 @@ SCENARIO("batcher.SubBatchAsyncBatcher") {
     auto out = batchersb->makeBatchTensors(tensors, 0);
     batchersb->allowPadding(false);
     EXPECT(out.sizes() == at::IntList({5, 10}));
-    EXPECT(out[0][9].item<long>() == 1);
-    EXPECT(out[1][9].item<long>() == 1);
-    EXPECT(out[2][8].item<long>() == 2);
-    EXPECT(out[3][8].item<long>() == 2);
-    EXPECT(out[4][8].item<long>() == 2);
-    EXPECT(out[4][9].item<long>() == 0);
+    EXPECT(out[0][9].item<int64_t>() == 1);
+    EXPECT(out[1][9].item<int64_t>() == 1);
+    EXPECT(out[2][8].item<int64_t>() == 2);
+    EXPECT(out[3][8].item<int64_t>() == 2);
+    EXPECT(out[4][8].item<int64_t>() == 2);
+    EXPECT(out[4][9].item<int64_t>() == 0);
   }
 
   GIVEN("padding in Dict") {
@@ -200,11 +200,11 @@ SCENARIO("batcher.SubBatchAsyncBatcher") {
     auto out = batchersb->makeBatch(vars, 0)["k"];
     batchersb->allowPadding(false);
     EXPECT(out.sizes() == at::IntList({5, 10}));
-    EXPECT(out[0][9].item<long>() == 1);
-    EXPECT(out[1][9].item<long>() == 1);
-    EXPECT(out[2][8].item<long>() == 2);
-    EXPECT(out[3][8].item<long>() == 2);
-    EXPECT(out[4][8].item<long>() == 2);
-    EXPECT(out[4][9].item<long>() == 0);
+    EXPECT(out[0][9].item<int64_t>() == 1);
+    EXPECT(out[1][9].item<int64_t>() == 1);
+    EXPECT(out[2][8].item<int64_t>() == 2);
+    EXPECT(out[3][8].item<int64_t>() == 2);
+    EXPECT(out[4][8].item<int64_t>() == 2);
+    EXPECT(out[4][9].item<int64_t>() == 0);
   }
 }

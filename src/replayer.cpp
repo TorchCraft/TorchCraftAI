@@ -17,7 +17,7 @@ namespace {
 std::unique_ptr<OpenBwProcess> startOpenBw(
     std::string replayPath,
     bool forceGui = false) {
-  auto envVars = std::vector<OpenBwProcess::EnvVar>{
+  auto envVars = std::vector<EnvVar>{
       {"BWAPI_CONFIG_AUTO_MENU__GAME_TYPE", "MELEE", true},
       {"BWAPI_CONFIG_AUTO_MENU__MAP", replayPath.c_str(), true},
       {"OPENBW_ENABLE_UI", (forceGui ? "1" : "0"), forceGui},
@@ -27,8 +27,12 @@ std::unique_ptr<OpenBwProcess> startOpenBw(
 
 } // namespace
 
-Replayer::Replayer(std::string replayPath, bool forceGui) {
-  openbw_ = startOpenBw(std::move(replayPath), forceGui);
+TCReplayer::TCReplayer(std::string replayPath)
+    : TCReplayer(ReplayerConfiguration{replayPath}) {}
+
+TCReplayer::TCReplayer(ReplayerConfiguration configuration)
+    : configuration_(configuration) {
+  openbw_ = startOpenBw(configuration_.replayPath, configuration_.forceGui);
 
   // Setup client
   client_ = std::make_shared<tc::Client>();
@@ -44,51 +48,33 @@ Replayer::Replayer(std::string replayPath, bool forceGui) {
     throw std::runtime_error(
         std::string("Error initializing connection: ") + client_->error());
   }
-  if (!client_->state()->replay) {
+  if (!tcstate()->replay) {
     throw std::runtime_error("Expected replay map");
   }
-
-  state_ = std::make_unique<State>(client_);
 }
 
-Replayer::~Replayer() {}
-
-void Replayer::setPerspective(PlayerId playerId) {
-  state_->setPerspective(playerId);
+torchcraft::State* TCReplayer::tcstate() const {
+  return client_->state();
 }
 
-void Replayer::setCombineFrames(int n) {
-  if (initialized_) {
-    throw std::runtime_error("Set combineFrames before calling init()");
-  }
-  combineFrames_ = n;
-}
-
-State* Replayer::state() {
-  return state_.get();
-}
-
-size_t Replayer::steps() const {
-  return steps_;
-}
-
-void Replayer::init() {
-  steps_ = 0;
-
-  std::vector<tc::Client::Command> comms;
-  comms.emplace_back(tc::BW::Command::SetSpeed, 0);
-  comms.emplace_back(
-      tc::BW::Command::SetCombineFrames, combineFrames_, combineFrames_);
-  comms.emplace_back(tc::BW::Command::SetMaxFrameTimeMs, 0);
-  comms.emplace_back(tc::BW::Command::SetBlocking, false);
-  if (!client_->send(comms)) {
-    throw std::runtime_error(std::string("Send failure: ") + client_->error());
+void TCReplayer::init() {
+  std::vector<tc::Client::Command> commands;
+  commands.emplace_back(tc::BW::Command::SetSpeed, 0);
+  commands.emplace_back(
+      tc::BW::Command::SetCombineFrames,
+      configuration_.combineFrames,
+      configuration_.combineFrames);
+  commands.emplace_back(tc::BW::Command::SetMaxFrameTimeMs, 0);
+  commands.emplace_back(tc::BW::Command::SetBlocking, false);
+  if (!client_->send(commands)) {
+    throw std::runtime_error(
+        std::string("Failed to send commands: ") + client_->error());
   }
   initialized_ = true;
 }
 
-void Replayer::step() {
-  if (state_->gameEnded()) {
+void TCReplayer::step() {
+  if (isComplete()) {
     // Return here if the game is over. Otherwise, client_->receive() will
     // just wait and time out eventually.
     VLOG(0) << "Game did end already";
@@ -100,23 +86,44 @@ void Replayer::step() {
     throw std::runtime_error(
         std::string("Receive failure: ") + client_->error());
   }
-  setLoggingFrame(client_->state()->frame_from_bwapi);
 
-  state_->update();
-  if (state_->gameEnded()) {
-    unsetLoggingFrame();
-    return;
-  }
-
-  state_->board()->checkPostStep();
-  unsetLoggingFrame();
+  onStep();
 }
 
-void Replayer::run() {
+void TCReplayer::run() {
   init();
   do {
     step();
-  } while (!state_->gameEnded());
+  } while (!isComplete());
+}
+
+// Replayer
+
+Replayer::Replayer(std::string replayPath)
+    : Replayer(ReplayerConfiguration{replayPath}) {}
+
+Replayer::Replayer(ReplayerConfiguration configuration)
+    : TCReplayer(configuration) {
+  state_ = std::make_unique<State>(client_);
+}
+
+State* Replayer::state() {
+  return state_.get();
+}
+
+void Replayer::setPerspective(PlayerId playerId) {
+  state_->setPerspective(playerId);
+}
+
+void Replayer::onStep() {
+  setLoggingFrame(tcstate()->frame_from_bwapi);
+
+  state_->update();
+  if (!isComplete()) {
+    state_->board()->checkPostStep();
+  }
+
+  unsetLoggingFrame();
 }
 
 } // namespace cherrypi

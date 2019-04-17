@@ -124,5 +124,7 @@ void writeLines(std::string const& path, std::vector<std::string>);
 std::vector<std::string>
 readLinesPartition(std::string const& path, int partition, int numPartitions);
 
+std::vector<unsigned char> md5(std::string const& path);
+
 } // namespace fsutils
 } // namespace common

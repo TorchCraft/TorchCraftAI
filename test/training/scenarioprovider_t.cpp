@@ -7,32 +7,32 @@
 
 #include "test.h"
 
-#include "gameutils/microfixedscenario.h"
+#include "gameutils/microscenarioproviderfixed.h"
 #include "microplayer.h"
 #include "modules.h"
 
 using namespace cherrypi;
 
-CASE("scenarioprovider/simple_fixed_micro") {
-  ScenarioInfo scenario;
-  scenario.allyList =
-      SpawnList({{1, tc::BW::UnitType::Zerg_Mutalisk, 100, 140}});
-  scenario.enemyList =
-      SpawnList({{2, tc::BW::UnitType::Zerg_Hydralisk, 115, 142}});
-  auto provider = std::make_shared<MicroFixedScenario>(200000, scenario, false);
+namespace {
+// a dummy setup that adds no useful modules
+auto dummyPlayerSetup = [](BasePlayer* bot) {
+  bot->addModule(Module::make<TopModule>());
+  bot->addModule(Module::make<UPCToCommandModule>());
+  bot->setRealtimeFactor(-1);
+};
+} // namespace
 
-  // not needed, but shouldn't crash
-  provider->cleanScenario();
+CASE("scenarioprovider/simple_fixed_micro__TSANUnsafe") {
+  FixedScenario scenario;
+  scenario.allies() = {{1, tc::BW::UnitType::Zerg_Mutalisk, 100, 140}};
+  scenario.enemies() = {{2, tc::BW::UnitType::Zerg_Hydralisk, 115, 142}};
+  auto provider = std::make_shared<MicroScenarioProviderFixed>(scenario);
 
-  // a dummy setup that adds no useful modules
-  auto setup = [](BasePlayer* bot) {
-    bot->addModule(Module::make<TopModule>());
-    bot->addModule(Module::make<UPCToCommandModule>());
-    bot->setRealtimeFactor(-1);
-  };
-
-  for (int i = 0; i < 10; i++) {
-    auto players = provider->spawnNextScenario(setup, setup);
+  // Spawn scenarios multiple times and ensure that the state is correct each
+  // time This implies correct cleanup of the previous scenario
+  for (int i = 0; i < 10; ++i) {
+    auto players =
+        provider->startNewScenario(dummyPlayerSetup, dummyPlayerSetup);
 
     // Check that we have all the units that we wanted
     auto& ui1 = players.first->state()->unitsInfo();
@@ -43,26 +43,22 @@ CASE("scenarioprovider/simple_fixed_micro") {
     EXPECT(ui2.myUnitsOfType(buildtypes::Zerg_Hydralisk).size() == 2u);
 
     // some dummy steps
-    for (int j = 0; j < 20; j++) {
+    for (int j = 0; j < 20; ++j) {
       players.first->step();
       players.second->step();
     }
-
-    provider->cleanScenario();
-    EXPECT(ui1.myUnits().size() == 0u);
-    EXPECT(ui2.myUnits().size() == 0u);
   }
-  // ask for a different scenario
-  ScenarioInfo scenarioInfo;
-  scenarioInfo.allyList = {{3, tc::BW::UnitType::Protoss_Zealot, 100, 140},
-                           {1, tc::BW::UnitType::Protoss_Dragoon, 100, 140}};
-  scenarioInfo.enemyList = {{2, tc::BW::UnitType::Terran_Marine, 120, 140},
-                            {3, tc::BW::UnitType::Terran_Medic, 120, 140}};
 
-  provider->loadScenario(scenarioInfo);
+  scenario = {};
+  scenario.allies() = {{3, tc::BW::UnitType::Protoss_Zealot, 100, 140},
+                       {1, tc::BW::UnitType::Protoss_Dragoon, 100, 140}};
+  scenario.enemies() = {{2, tc::BW::UnitType::Terran_Marine, 120, 140},
+                        {3, tc::BW::UnitType::Terran_Medic, 120, 140}};
 
-  for (int i = 0; i < 10; i++) {
-    auto players = provider->spawnNextScenario(setup, setup);
+  for (int i = 0; i < 10; ++i) {
+    provider->loadScenario(scenario);
+    auto players =
+        provider->startNewScenario(dummyPlayerSetup, dummyPlayerSetup);
 
     // Check that we have all the units that we wanted
     auto& ui1 = players.first->state()->unitsInfo();
@@ -75,13 +71,78 @@ CASE("scenarioprovider/simple_fixed_micro") {
     EXPECT(ui2.myUnitsOfType(buildtypes::Terran_Medic).size() == 3u);
 
     // some dummy steps
-    for (int j = 0; j < 20; j++) {
+    for (int j = 0; j < 20; ++j) {
       players.first->step();
       players.second->step();
     }
 
-    provider->cleanScenario();
+    provider->loadScenario(FixedScenario());
+    auto newPlayers =
+        provider->startNewScenario(dummyPlayerSetup, dummyPlayerSetup);
     EXPECT(ui1.myUnits().size() == 0u);
     EXPECT(ui2.myUnits().size() == 0u);
+    EXPECT(newPlayers.first->state()->unitsInfo().myUnits().size() == 0u);
+    EXPECT(newPlayers.first->state()->unitsInfo().myUnits().size() == 0u);
   }
+}
+
+CASE("scenarioprovider/fixed_micro_tech__TSANUnsafe") {
+  MicroScenarioProviderFixed provider;
+  FixedScenario scenarioTech, scenarioStoneAge;
+  scenarioStoneAge.enemies() = scenarioStoneAge.allies() =
+      scenarioTech.enemies() =
+          scenarioTech.allies() = {{1, tc::BW::UnitType::Zerg_Overlord, 5, 5}};
+
+  scenarioTech.addUpgrade(0, tc::BW::UpgradeType::Zerg_Melee_Attacks, 3);
+  scenarioTech.addUpgrade(0, tc::BW::UpgradeType::Zerg_Missile_Attacks, 2);
+  scenarioTech.addUpgrade(0, tc::BW::UpgradeType::Zerg_Carapace, 1);
+  scenarioTech.addTech(0, tc::BW::TechType::Lurker_Aspect);
+  scenarioTech.addUpgrade(1, tc::BW::UpgradeType::Protoss_Ground_Weapons, 3);
+  scenarioTech.addUpgrade(1, tc::BW::UpgradeType::Protoss_Ground_Armor, 2);
+  scenarioTech.addUpgrade(1, tc::BW::UpgradeType::Protoss_Plasma_Shields, 1);
+  scenarioTech.addTech(1, tc::BW::TechType::Psionic_Storm);
+
+  // Verify that we get upgrades and tech
+  provider.loadScenario(scenarioTech);
+  auto players = provider.startNewScenario(dummyPlayerSetup, dummyPlayerSetup);
+
+  // some dummy steps
+  auto stepNTimes = [&](int times) {
+    for (int j = 0; j < times; ++j) {
+      players.first->step();
+      players.second->step();
+    }
+  };
+
+  stepNTimes(20);
+
+  auto p0 = [&]() { return players.first->state(); };
+  auto p1 = [&]() { return players.second->state(); };
+
+  // This should ALWAYS be true
+  EXPECT(p0()->hasResearched(buildtypes::Scanner_Sweep) == true);
+
+  EXPECT(p0()->getUpgradeLevel(buildtypes::Zerg_Melee_Attacks_3) == 3);
+  EXPECT(p0()->getUpgradeLevel(buildtypes::Zerg_Missile_Attacks_2) == 2);
+  EXPECT(p0()->getUpgradeLevel(buildtypes::Zerg_Carapace_1) == 1);
+  EXPECT(p0()->hasResearched(buildtypes::Lurker_Aspect) == true);
+  EXPECT(p1()->getUpgradeLevel(buildtypes::Protoss_Ground_Weapons_3) == 3);
+  EXPECT(p1()->getUpgradeLevel(buildtypes::Protoss_Ground_Armor_2) == 2);
+  EXPECT(p1()->getUpgradeLevel(buildtypes::Protoss_Plasma_Shields_1) == 1);
+  EXPECT(p1()->hasResearched(buildtypes::Psionic_Storm) == true);
+
+  // Verify that we lose upgrades and tech
+  provider.loadScenario(scenarioStoneAge);
+  players = provider.startNewScenario(dummyPlayerSetup, dummyPlayerSetup);
+
+  stepNTimes(20);
+
+  EXPECT(p0()->getUpgradeLevel(buildtypes::Zerg_Melee_Attacks_3) == 0);
+  EXPECT(p0()->getUpgradeLevel(buildtypes::Zerg_Missile_Attacks_2) == 0);
+  EXPECT(p0()->getUpgradeLevel(buildtypes::Zerg_Carapace_1) == 0);
+  EXPECT(p0()->hasResearched(buildtypes::Lurker_Aspect) == false);
+  EXPECT(p1()->getUpgradeLevel(buildtypes::Protoss_Ground_Weapons_3) == 0);
+  EXPECT(p1()->getUpgradeLevel(buildtypes::Protoss_Ground_Armor_2) == 0);
+  EXPECT(p1()->getUpgradeLevel(buildtypes::Protoss_Plasma_Shields_1) == 0);
+  EXPECT(p1()->hasResearched(buildtypes::Psionic_Storm) == false);
 }

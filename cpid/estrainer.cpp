@@ -14,7 +14,9 @@
 
 #include "distributed.h"
 #include <ATen/CPUGenerator.h>
+#ifdef HAVE_CUDA
 #include <ATen/CUDAGenerator.h>
+#endif
 #include <math.h>
 
 namespace cpid {
@@ -409,8 +411,10 @@ ag::Container ESTrainer::generateModel(int generation, int64_t seed) {
 
   std::shared_ptr<at::Generator> generator;
   if (perturbed->options().device().is_cuda()) {
+#ifdef HAVE_CUDA
     generator = std::make_shared<at::CUDAGenerator>(&at::globalContext());
     assert(perturbed->options() == originalModel->options());
+#endif
   } else {
     generator = std::make_shared<at::CPUGenerator>(&at::globalContext());
     assert(perturbed->options() == originalModel->options());

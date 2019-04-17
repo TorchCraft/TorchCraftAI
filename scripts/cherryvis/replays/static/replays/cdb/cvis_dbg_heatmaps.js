@@ -135,7 +135,7 @@ function cvis_dbg_heatmaps_init(global_data, cvis_state) {
       1 - alpha,
       saturation,
       mean,
-      std > 0.0001 ? std : 1.0,
+      Math.max(std, 0.000000001),
       fast_rendering
     );
   }

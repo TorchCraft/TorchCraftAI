@@ -9,7 +9,7 @@
 #include <glog/logging.h>
 
 #include "fivepool.h"
-#include "gameutils/selfplayscenario.h"
+#include "gameutils/game.h"
 #include "modules.h"
 #include "player.h"
 #include "test.h"
@@ -98,7 +98,7 @@ class MockBuilderModule : public BuilderModule {
   }
 };
 
-std::shared_ptr<Player> createMyPlayer(SelfPlayScenario* scenario) {
+std::shared_ptr<Player> createMyPlayer(GameMultiPlayer* scenario) {
   std::shared_ptr<Player> bot =
       std::make_shared<Player>(scenario->makeClient1());
   bot->setFrameskip(3);
@@ -117,7 +117,7 @@ std::shared_ptr<Player> createMyPlayer(SelfPlayScenario* scenario) {
   return bot;
 }
 
-std::shared_ptr<Player> createEnemyPlayer(SelfPlayScenario* scenario) {
+std::shared_ptr<Player> createEnemyPlayer(GameMultiPlayer* scenario) {
   std::shared_ptr<Player> bot =
       std::make_shared<Player>(scenario->makeClient2());
   bot->setFrameskip(3);
@@ -139,7 +139,7 @@ std::shared_ptr<Player> createEnemyPlayer(SelfPlayScenario* scenario) {
 }
 
 std::shared_ptr<Player> createEnemyPlayerWithScoutingUPC(
-    SelfPlayScenario* scenario,
+    GameMultiPlayer* scenario,
     bool sendScouts,
     bool sendExplorer) {
   std::shared_ptr<Player> bot =
@@ -180,7 +180,7 @@ int countDeadUnits(State* state) {
 // Disabling this because new worker defense intentionally avoids over-pulling
 // workers
 SCENARIO("scouting/detect/zerg_zerg[hide]") {
-  auto scenario = SelfPlayScenario(
+  auto scenario = GameMultiPlayer(
       "maps/(4)Fighting Spirit.scx", tc::BW::Race::Zerg, tc::BW::Race::Zerg);
 
   std::shared_ptr<Player> botNormal = createMyPlayer(&scenario);
@@ -213,7 +213,7 @@ SCENARIO("scouting/detect/zerg_zerg[hide]") {
 }
 
 SCENARIO("scouting/detect/zerg_terran[hide]") {
-  auto scenario = SelfPlayScenario(
+  auto scenario = GameMultiPlayer(
       "maps/(4)Fighting Spirit.scx", tc::BW::Race::Terran, tc::BW::Race::Zerg);
 
   std::shared_ptr<Player> botNormal = createMyPlayer(&scenario);
@@ -243,7 +243,7 @@ SCENARIO("scouting/detect/zerg_terran[hide]") {
 }
 
 SCENARIO("scouting/detect/zerg_protoss[hide]") {
-  auto scenario = SelfPlayScenario(
+  auto scenario = GameMultiPlayer(
       "maps/(4)Fighting Spirit.scx", tc::BW::Race::Protoss, tc::BW::Race::Zerg);
 
   std::shared_ptr<Player> botNormal = createMyPlayer(&scenario);
@@ -273,7 +273,7 @@ SCENARIO("scouting/detect/zerg_protoss[hide]") {
 }
 
 SCENARIO("scouting/detect/makeupc/noupc[hide]") {
-  auto scenario = SelfPlayScenario(
+  auto scenario = GameMultiPlayer(
       "maps/(4)Fighting Spirit.scx", tc::BW::Race::Protoss, tc::BW::Race::Zerg);
 
   std::shared_ptr<Player> botNormal = createMyPlayer(&scenario);
@@ -319,7 +319,7 @@ SCENARIO("scouting/detect/makeupc/noupc[hide]") {
 }
 
 SCENARIO("scouting/detect/makeupc/noexplore[hide]") {
-  auto scenario = SelfPlayScenario(
+  auto scenario = GameMultiPlayer(
       "maps/(4)Fighting Spirit.scx", tc::BW::Race::Protoss, tc::BW::Race::Zerg);
 
   std::shared_ptr<Player> botNormal = createMyPlayer(&scenario);
@@ -366,7 +366,7 @@ SCENARIO("scouting/detect/makeupc/noexplore[hide]") {
 }
 
 SCENARIO("scouting/detect/makeupc/explore[hide]") {
-  auto scenario = SelfPlayScenario(
+  auto scenario = GameMultiPlayer(
       "maps/(4)Fighting Spirit.scx", tc::BW::Race::Protoss, tc::BW::Race::Zerg);
 
   std::shared_ptr<Player> botNormal = createMyPlayer(&scenario);

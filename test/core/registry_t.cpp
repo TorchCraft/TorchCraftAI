@@ -69,6 +69,7 @@ REGISTER_SUBCLASS_0(Derived0A, DerivedFrom0A); // Compiles, different base
 // One ctor argument
 struct Base1 {
   Base1(std::string const& name) : name(name) {}
+  virtual ~Base1() = default;
   virtual std::string id() {
     return "base1";
   }

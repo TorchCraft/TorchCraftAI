@@ -35,7 +35,7 @@ IF(MSVC)
   ADD_EXECUTABLE(cherrypi ${SRCS})
   # ws2_32 wsock32 Iphlpapi are required by libzmq
   TARGET_LINK_LIBRARIES(cherrypi Torch bwapilib bwem tcbwapi torchcraft common
-    gflags_static glog shlwapi ws2_32 wsock32 Iphlpapi fmt)
+    gflags_static ${LIB_glog} shlwapi ws2_32 wsock32 Iphlpapi fmt)
 ELSE(MSVC)
   LIST(REMOVE_ITEM SRCS ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
   ADD_LIBRARY(cherpi ${SRCS})
@@ -45,7 +45,7 @@ ELSE(MSVC)
   SET_PROPERTY(TARGET cherpi PROPERTY
     COMPILE_DEFINITIONS ${BACKWARD_DEFINITIONS})
   TARGET_LINK_LIBRARIES(cherpi bwapilib bwreplib bwem tcbwapi torchcraft visdom
-    Torch gflags glog pthread cnpy fmt common
+    Torch gflags ${LIB_glog} pthread cnpy fmt common
     ${BACKWARD_LIBRARIES})
   IF(WITH_CPIDLIB)
     TARGET_LINK_LIBRARIES(cherpi cpid)

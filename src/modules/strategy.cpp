@@ -28,7 +28,8 @@ DEFINE_string(
     bandit,
     kBanditExpMooRolling,
     "Which bandit algorithm to use: "
-    "none|ucb1|ucb1exploit|thompson|thompsonrolling|expmoorolling");
+    "none|random|ucb1|ucb1rolling|ucb1exploit|thompson|thompsonrolling|"
+    "expmoorolling");
 DEFINE_double(
     ucb1_c,
     0.3, // 2.0 is a classic default

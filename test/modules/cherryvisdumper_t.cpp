@@ -9,7 +9,7 @@
 
 #include "features/features.h"
 #include "features/unitsfeatures.h"
-#include "gameutils/selfplayscenario.h"
+#include "gameutils/game.h"
 #include "modules.h"
 #include "modules/cherryvisdumper.h"
 #include "player.h"
@@ -44,26 +44,17 @@ void addDefaultModules(std::shared_ptr<Player> bot) {
   bot->addModule(Module::make<UPCToCommandModule>());
 }
 
-std::shared_ptr<Player> createMyPlayer(SelfPlayScenario* scenario) {
-  auto bot = std::make_shared<Player>(scenario->makeClient1());
+std::shared_ptr<Player> createMyPlayer(GameMultiPlayer& scenario) {
+  auto bot = std::make_shared<Player>(scenario.makeClient1());
   addDefaultModules(bot);
   return bot;
 }
 
-std::shared_ptr<Player> createEnemyPlayer(SelfPlayScenario* scenario) {
-  auto bot = std::make_shared<Player>(scenario->makeClient2());
+std::shared_ptr<Player> createEnemyPlayer(GameMultiPlayer& scenario) {
+  auto bot = std::make_shared<Player>(scenario.makeClient2());
   addDefaultModules(bot);
   bot->init();
   return bot;
-}
-
-SelfPlayScenario createScenario(std::string const& replayPath) {
-  return SelfPlayScenario(
-      "maps/(4)Fighting Spirit.scx",
-      tc::BW::Race::Zerg,
-      tc::BW::Race::Zerg,
-      GameType::Melee,
-      replayPath);
 }
 } // namespace
 
@@ -74,11 +65,17 @@ SCENARIO("cherryvisdumper") {
         ? fsutils::mktempd()
         : FLAGS_cvisdumper_t_store_replays;
     auto replayPath = directory + "/example_use_case.rep";
-    auto scenario = createScenario(replayPath);
-    auto ourBot = createMyPlayer(&scenario);
+    auto scenario = GameMultiPlayer(
+        GameOptions("maps/(4)Fighting Spirit.scx")
+            .gameType(GameType::Melee)
+            .replayPath(replayPath),
+        GamePlayerOptions(tc::BW::Race::Zerg),
+        GamePlayerOptions(tc::BW::Race::Zerg));
+    auto ourBot = createMyPlayer(scenario);
     // Add the tracer module before 'init' call
     ourBot->dumpTraceAlongReplay(replayPath);
     ourBot->init();
+    auto p2 = createEnemyPlayer(scenario);
 
     // Now let's play with the tracer functions
     auto state = ourBot->state();
@@ -240,7 +237,6 @@ SCENARIO("cherryvisdumper") {
     demoLogging();
     demoTree();
 
-    auto p2 = createEnemyPlayer(&scenario);
     int i = 0;
     constexpr int kDumpTensorsEvery = 1000;
     constexpr int kUnitLogsEvery = 200;
@@ -259,6 +255,9 @@ SCENARIO("cherryvisdumper") {
     }
     EXPECT((kDumpTensorsEvery < i));
 
+    if (state->gameEnded()) {
+      return;
+    }
     p2->leave();
     while (!state->gameEnded()) {
       ourBot->step();

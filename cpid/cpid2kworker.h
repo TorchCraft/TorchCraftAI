@@ -8,6 +8,7 @@
 #pragma once
 
 #include "distributed.h"
+#include <nlohmann/json.hpp>
 
 #include <mutex>
 #include <thread>
@@ -18,6 +19,9 @@ class RedisClient;
 
 struct Cpid2kWorkerInfo {
   static Cpid2kWorkerInfo withLocalIp();
+  static Cpid2kWorkerInfo withLocalIpFromEnvVars();
+
+  bool roleIs(std::string_view role);
 
   template <typename Archive>
   void serialize(Archive& ar) {
@@ -78,6 +82,36 @@ class Cpid2kHeartBeater {
 };
 
 /**
+ * Encapsulates information about the participating peers in a cpid2k job.
+ */
+class Cpid2kGlobalState {
+ public:
+  using Clock = std::chrono::steady_clock;
+
+  Cpid2kGlobalState(std::string prefix, int64_t updateIntervalMs = 5 * 1000);
+
+  void update(RedisClient& client);
+
+  std::string_view prefix() const {
+    return prefix_;
+  }
+  bool isDone();
+  std::vector<Cpid2kWorkerInfo> peers(std::string_view role);
+  std::vector<std::string> serviceEndpoints(std::string const& serviceName);
+
+ private:
+  void tryUpdate(RedisClient& client);
+
+  std::string prefix_;
+  std::mutex mutex_;
+  int64_t peerv_ = -1; // Version number for peer information
+  Clock::time_point lastPeersCheck_;
+  std::chrono::milliseconds pcInterval_;
+  std::vector<Cpid2kWorkerInfo> peers_;
+  bool isDone_ = false;
+};
+
+/**
  * Helper class for job coordination via a central Redis instance.
  *
  * In a nutshell, the Cpid2kWorker class does the following:
@@ -110,12 +144,18 @@ class Cpid2kWorker {
       int64_t hbIntervalMs = 10 * 1000);
   ~Cpid2kWorker();
 
+  static std::unique_ptr<Cpid2kWorker> fromEnvVars(Cpid2kWorkerInfo const&);
+  static std::unique_ptr<Cpid2kWorker> fromEnvVars();
+
   Cpid2kWorkerInfo const& info() const;
   std::string_view prefix() const;
   bool consideredDead() const;
   bool isDone();
   std::string redisKey(std::string_view key) const;
   std::shared_ptr<RedisClient> threadLocalClient();
+  Cpid2kHeartBeater& heartBeater() {
+    return hb_;
+  }
 
   distributed::Context& dcontext(
       std::string const& role = kAnyRole,
@@ -130,11 +170,11 @@ class Cpid2kWorker {
   bool waitForAll(
       std::string_view role,
       std::chrono::milliseconds timeout = kNoTimeout);
+  void appendMetrics(std::string_view metricsName, nlohmann::json const& json);
 
  private:
   std::shared_ptr<RedisClient> redisClient(std::thread::id id);
-  void updateGlobalState();
-  void updateGlobalStateImpl();
+  int numWorkersWithRoleInSpec(std::string_view role);
 
   std::mutex mutex_; // General mutex to make functions thread-safe
   Cpid2kWorkerInfo info_;
@@ -142,16 +182,66 @@ class Cpid2kWorker {
   std::string host_;
   int port_;
   Cpid2kHeartBeater hb_;
-  int64_t peerv_ = -1; // Version number for peer information
-  Clock::time_point lastPeersCheck_;
+  Cpid2kGlobalState gs_;
   std::chrono::milliseconds pcInterval_;
-  std::vector<Cpid2kWorkerInfo> peers_;
-  bool isDone_ = false;
   std::unordered_map<std::string, std::unique_ptr<distributed::Context>>
       dcontexts_;
   std::unordered_map<std::string, std::vector<std::string>> dcontextIds_;
   std::unordered_map<std::thread::id, std::shared_ptr<RedisClient>>
       threadClients_;
+};
+
+/**
+ * Helper class to aggregate metrics locally, and send them reguarly as events
+ * in the redis database as key 'prefix:metricEvents'
+ */
+class Cpid2kMetrics {
+ public:
+  enum AggregationType {
+    AggregateMean,
+    AggregateSum,
+    AggregateMin,
+    AggregateMax,
+    AggregateLast,
+  };
+  struct EventMetric {
+    template <typename T>
+    EventMetric(
+        std::string n,
+        T v,
+        AggregationType a = AggregateMean,
+        typename std::enable_if_t<std::is_arithmetic<T>::value>* = 0)
+        : name(std::move(n)), value(float(v)), aggregation(a) {}
+    virtual ~EventMetric() = default;
+    std::string name;
+    float value;
+    AggregationType aggregation;
+  };
+  struct Aggregator {
+    virtual ~Aggregator() = default;
+    virtual void add(float value) = 0;
+    virtual nlohmann::json value() const = 0;
+    std::string_view type;
+  };
+
+  Cpid2kMetrics(
+      std::shared_ptr<Cpid2kWorker> worker,
+      std::chrono::milliseconds sendInterval = std::chrono::seconds(30));
+  ~Cpid2kMetrics();
+  void push(std::vector<EventMetric> const& metrics);
+
+ protected:
+  void run();
+  using Clock = std::chrono::steady_clock;
+
+  std::shared_ptr<Cpid2kWorker> worker_;
+  std::chrono::milliseconds sendInterval_;
+
+  std::thread thr_;
+  std::atomic<bool> stop_;
+
+  std::mutex aggregatorsMutex_;
+  std::unordered_map<std::string, std::unique_ptr<Aggregator>> aggregators_;
 };
 
 } // namespace cpid

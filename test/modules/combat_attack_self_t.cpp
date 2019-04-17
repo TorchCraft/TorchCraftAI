@@ -8,8 +8,7 @@
 #include <cstdlib>
 #include <fstream>
 
-#include "gameutils/scenario.h"
-#include "gameutils/selfplayscenario.h"
+#include "gameutils/game.h"
 #include "test.h"
 
 #include <glog/logging.h>
@@ -93,7 +92,7 @@ void microScenario(
     int kMaxFrames = 100000,
     int prevMyAvg = -1,
     int prevTheirAvg = -1) {
-  auto scenario = SelfPlayScenario(
+  auto scenario = GameMultiPlayer(
       map, tc::BW::Race::Zerg, tc::BW::Race::Zerg, GameType::UseMapSettings);
   Player bot1(scenario.makeClient1());
   Player bot2(scenario.makeClient2());

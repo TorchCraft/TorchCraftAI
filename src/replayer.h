@@ -8,6 +8,7 @@
 #pragma once
 
 #include "cherrypi.h"
+#include "src/gameutils/openbwprocess.h"
 
 #include <torchcraft/client.h>
 
@@ -15,41 +16,63 @@
 
 namespace cherrypi {
 
-class OpenBwProcess;
 class State;
 
+struct ReplayerConfiguration {
+  std::string replayPath;
+  bool forceGui = false;
+  int combineFrames = 3;
+};
+
 /**
- * Playback a BroodWar replay using OpenBW.
+ * Play back a Brood War replay using OpenBW
  *
- * This class allows you to playback an existing BroodWar replay (.rep file)
- * step-by-step with access to the usual common bot state object.
+ * Provides a TorchCraft view of the game state.
  */
-class Replayer {
+class TCReplayer {
  public:
-  Replayer(std::string replayPath, bool forceGui = false);
-  ~Replayer();
+  TCReplayer(std::string replayPath);
+  TCReplayer(ReplayerConfiguration);
+  virtual ~TCReplayer(){};
 
-  /// Convenience wrapper for State::setPerspective()
-  void setPerspective(PlayerId playerId);
-
-  /// Combine n server-side frames before taking any action.
-  /// Set this before calling init().
-  void setCombineFrames(int n);
-
-  State* state();
-  size_t steps() const;
+  torchcraft::State* tcstate() const;
 
   void init();
   void step();
   void run();
+  bool isComplete() {
+    return tcstate()->game_ended;
+  }
 
- private:
+  virtual void onStep(){};
+
+ protected:
+  ReplayerConfiguration configuration_;
   std::unique_ptr<OpenBwProcess> openbw_;
-  std::shared_ptr<tc::Client> client_;
-  std::unique_ptr<State> state_;
-  size_t steps_ = 0;
-  int combineFrames_ = 3;
+  std::shared_ptr<torchcraft::Client> client_;
   bool initialized_ = false;
+};
+
+/**
+ * Play back a Brood War replay using OpenBW
+ *
+ * Runs the bot alongside the replay, and provides access to the bot's state.
+ */
+class Replayer : public TCReplayer {
+ public:
+  Replayer(std::string replayPath);
+  Replayer(ReplayerConfiguration);
+  virtual ~Replayer() override{};
+
+  /// Convenience wrapper for State::setPerspective()
+  void setPerspective(PlayerId);
+
+  State* state();
+
+  virtual void onStep() override;
+
+ protected:
+  std::unique_ptr<State> state_;
 };
 
 } // namespace cherrypi

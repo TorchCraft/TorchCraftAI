@@ -65,10 +65,6 @@ struct UpdateLoop {
       std::string const& ytitle,
       std::vector<float> values,
       std::vector<std::string> legend = {});
-  void
-  updatePlot(std::string const& title, std::string const& ytitle, float value) {
-    updatePlot(title, ytitle, {value});
-  }
 
   // Batch of features to (inputs, targets)
   virtual std::pair<ag::tensor_list, ag::tensor_list> preproc(

@@ -12,6 +12,7 @@
 #include <future>
 #include <memory>
 #include <queue>
+#include <shared_mutex>
 #include <string>
 #include <thread>
 #include <vector>
@@ -24,109 +25,118 @@ class socket_t;
 namespace cpid {
 
 /**
- * Server for ZeroMQ REQ-REP pattern.
+ * A request-reply server backed by ZeroMQ.
  *
- * This server will listen for messages in a dedicated thread. The callback
- * function supplied in the constructor will be called for every message that is
- * receveid. Users are expected to call the supplied reply function within
- * handleRequest() -- if they don't, they'll be reminded with a runtime_error.
+ * This server will listen for messages in a dedicated thread and call the
+ * supplied callback function for every incoming request. Note that if
+ * `numThreads` is greater than one, the callback function maybe be called
+ * concurrently from multiple threads.
+ * The callback function will be supplied with a reply function; this function
+ * *must* be called before returning. Failure to do so will return in a fatal
+ * error (i.e. program abort).
  */
 class ReqRepServer final {
  public:
   using ReplyFn = std::function<void(void const* buf, size_t len)>;
   using CallbackFn =
-      std::function<void(std::vector<char>&& message, ReplyFn reply)>;
+      std::function<void(void const* buf, size_t len, ReplyFn reply)>;
 
   /// Constructor.
+  /// This instance will handle up to numThreads replies concurrently.
   /// If endpoint is an empty string, bind to local IP with automatic port
   /// selection.
-  /// The callback will be called from a dedicated thread -- it should not take
-  /// a long time. Make sure to call reply() from it.
+  /// The callback will be called from dedicated threads.
   ReqRepServer(
       CallbackFn callback,
-      std::string endpoint = std::string(),
-      std::shared_ptr<zmq::context_t> context = nullptr);
+      size_t numThreads = 1,
+      std::string endpoint = std::string());
   ~ReqRepServer();
 
   std::string endpoint() const;
 
  private:
   void listen(std::string endpoint, std::promise<std::string>&& endpointP);
+  void runWorker(std::string const& endpoint);
 
   CallbackFn callback_;
+  size_t numThreads_;
   std::shared_ptr<zmq::context_t> context_;
+  std::mutex contextM_;
   mutable std::string endpoint_;
   mutable std::future<std::string> endpointF_;
   mutable std::mutex endpointM_;
   std::thread thread_;
-  std::atomic<bool> stop_{false};
 };
 
 /**
- * Client for ZeroMQ REQ-REP pattern.
+ * A request-reply client backed by ZeroMQ.
  *
- * This client can be connected to multiple ReqRepServers and will send out
- * requests in a round-robin fashion.  It provides some basic robustness
- * regarding slow or crashing servers by implementing the ZeroMQ Lazy Pirate
- * pattern: if the server does not send a reply in time, retries will be
- * attempted. Once a reply has been received, the `handleReply()` function will
- * be called (to be provided by subclasses). The server list can be updated
- * without loss of messages.
+ * This class provides a futures-based interface to the request-reply pattern.
+ * You call request() and get a future fo your (future) reply. Note that
+ * requests() will always happily accept the request and move into in internal
+ * queue. This queue is *unbounded* -- if this is a concern you should add some
+ * manual blocking logic; see ZeroMQBufferedConsumer() for an example.
  *
- * The client keeps a backlog of requests that could not be delivered yet and
- * for which delivery should be attempted at a later point. The size of this
- * backlog has to be specified during construction.
- *
- * A few words regarding retries and the callback function: since this class
- * provides a purely synchronous interface, send and receive operations are only
- * performed during `request()`, `waitForReplies()` and `updateEndpoints()`
- * calls. These are the functions that might result in a call to the supplied
- * callback function.
+ * The client can be connected to multiple ReqRepServers and will send out
+ * requests in a round-robin fashion. The number of concurrent replies that can
+ * be sent is controlled with the `maxConcurrentRequests` parameter. There are
+ * some basic robustness guarantees regarding slow or crashing servers: if a
+ * server does not send a reply in time, retries will be attempted. The number
+ * of retries can be limited; in this case, the future will be fulfilled with an
+ * exception. The server list can be updated loss of messages.
  */
-class ReqRepClient {
+class ReqRepClient final {
  public:
   using Clock = std::chrono::steady_clock;
   using TimePoint = std::chrono::time_point<Clock>;
-  using CallbackFn = std::function<
-      void(std::vector<char>&& request, void const* reply, size_t len)>;
+  using Blob = std::vector<char>;
 
   ReqRepClient(
-      CallbackFn callback,
-      size_t maxBacklogSize,
+      size_t maxConcurrentRequests,
       std::vector<std::string> endpoints,
       std::shared_ptr<zmq::context_t> context = nullptr);
-  virtual ~ReqRepClient();
+  ~ReqRepClient();
 
-  void request(std::vector<char> msg);
-  void waitForReplies();
-  void updateEndpoints(std::vector<std::string> endpoints);
+  std::future<std::vector<char>> request(std::vector<char> msg);
+  /// Returns true if the endpoints changed
+  bool updateEndpoints(std::vector<std::string> endpoints);
 
-  void setReplyTimeout(std::chrono::milliseconds timeout);
-  void setReplyTimeoutMs(size_t timeoutMs) {
-    setReplyTimeout(std::chrono::milliseconds(timeoutMs));
+  void setReplyTimeout(std::chrono::milliseconds timeout) {
+    setReplyTimeoutMs(timeout.count());
   }
+  void setReplyTimeoutMs(size_t timeoutMs);
+  void setMaxRetries(size_t count);
 
  private:
-  void send(std::vector<char>&& msg);
-  void processBacklog();
+  void run();
 
-  bool waitForReply(size_t sidx);
-  void processAvailableReply(size_t sidx);
-  zmq::socket_t makeSocket(std::string const& endpoint);
+  struct QueueItem {
+    Blob msg;
+    std::promise<Blob> promise;
+    size_t retries = 0;
+    QueueItem(Blob msg) : msg(std::move(msg)) {}
+    QueueItem() = default;
+    QueueItem(QueueItem&&) = default;
+    QueueItem& operator=(QueueItem&&) = default;
+    QueueItem(QueueItem const&) = delete;
+    QueueItem& operator=(QueueItem const&) = delete;
+  };
 
-  CallbackFn callback_;
   std::shared_ptr<zmq::context_t> context_;
+
+  std::shared_mutex epM_;
   std::vector<std::string> endpoints_;
-  std::vector<zmq::socket_t> sockets_;
-  // One message and one flag for each socket
-  std::vector<std::vector<char>> messages_;
-  std::vector<bool> available_;
-  std::vector<TimePoint> sentTimes_;
-  size_t socketIndex_ = 0;
-  // Backlog of messages that still need to be sent
-  std::queue<std::vector<char>> backlog_;
-  size_t const maxBacklogSize_;
-  std::chrono::milliseconds replyTimeout_{10000};
+  bool endpointsChanged_ = false;
+
+  std::mutex queueM_;
+  std::queue<QueueItem> queue_;
+  size_t const maxConcurrentRequests_;
+  std::atomic<size_t> replyTimeoutMs_{10 * 1000};
+  std::atomic<size_t> maxRetries_{std::numeric_limits<size_t>::max()};
+  std::thread thread_;
+  std::atomic<bool> stop_{false};
+  std::string signalEndpoint_;
+  std::unique_ptr<zmq::socket_t> signalSocket_;
 };
 
 } // namespace cpid

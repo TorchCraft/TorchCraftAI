@@ -484,7 +484,6 @@ MicroAction BehaviorAsScourge::onPerform(Agent& agent) {
 
 constexpr int kLurkerBurrowFrames = 24; // Magic: 0+
 constexpr int kLurkerUnburrowFrames = 12; // Magic: 0+
-constexpr int kLurkerAwaitFrames = 12; // Magic: 0+
 MicroAction BehaviorAsLurker::onPerform(Agent& agent) {
   if (agent.unit->type != buildtypes::Zerg_Lurker) {
     return pass;
@@ -765,6 +764,45 @@ MicroAction BehaviorAsHydralisk::onPerform(Agent& agent) {
   return pass;
 }
 
+MicroAction BehaviorAsDefilerConsumeOnly::onPerform(Agent& agent) {
+  auto* defiler = agent.unit;
+
+  if (defiler->type != buildtypes::Zerg_Defiler) {
+    return pass;
+  }
+
+  auto consumeValue = [&](Unit* const target) {
+    if (!target->isMine)
+      return -1.;
+    double typeValue = 0;
+    if (target->type == buildtypes::Zerg_Zergling) {
+      typeValue = 1.0;
+    }
+    if (target->type == buildtypes::Zerg_Overlord) {
+      typeValue = 0.1;
+    }
+    if (target->type == buildtypes::Zerg_Drone) {
+      typeValue = 0.1;
+    }
+    if (target->type == buildtypes::Zerg_Hydralisk) {
+      typeValue = 0.1;
+    }
+    if (typeValue <= 0) {
+      return typeValue;
+    }
+    return typeValue / std::max(1.f, utils::distance(target, agent.unit));
+  };
+  auto energy = agent.unit->unit.energy;
+
+  if (energy < 195) {
+    auto upc = agent.tryCastSpellOnUnit(buildtypes::Consume, consumeValue, 0.0);
+    if (upc)
+      return doAction(upc);
+  }
+
+  return pass;
+}
+
 MicroAction BehaviorAsDefiler::onPerform(Agent& agent) {
   auto* defiler = agent.unit;
 
@@ -793,27 +831,6 @@ MicroAction BehaviorAsDefiler::onPerform(Agent& agent) {
     return target->type->subjectiveValue * (target->isEnemy ? 1.0 : -1.0) *
         range / std::max(range, double(utils::distance(defiler, target)));
   };
-  auto consumeValue = [&](Unit* const target) {
-    if (!target->isMine)
-      return -1.;
-    double typeValue = 0;
-    if (target->type == buildtypes::Zerg_Zergling) {
-      typeValue = 1.0;
-    }
-    if (target->type == buildtypes::Zerg_Overlord) {
-      typeValue = 0.1;
-    }
-    if (target->type == buildtypes::Zerg_Drone) {
-      typeValue = 0.1;
-    }
-    if (target->type == buildtypes::Zerg_Hydralisk) {
-      typeValue = 0.1;
-    }
-    if (typeValue <= 0) {
-      return typeValue;
-    }
-    return typeValue / std::max(1.f, utils::distance(target, agent.unit));
-  };
 
   auto energy = agent.unit->unit.energy;
   if (energy >= 150) {
@@ -840,9 +857,7 @@ MicroAction BehaviorAsDefiler::onPerform(Agent& agent) {
       return doAction(upc);
   }
   if (energy < 195) {
-    auto upc = agent.tryCastSpellOnUnit(buildtypes::Consume, consumeValue, 0.0);
-    if (upc)
-      return doAction(upc);
+    return BehaviorAsDefilerConsumeOnly::onPerform(agent);
   }
 
   return pass;
@@ -856,46 +871,8 @@ MicroAction BehaviorAsOverlord::onPerform(Agent& agent) {
     return pass;
   }
 
-  Unit* cloakedTarget = utils::getBestScoreCopy(
-      utils::filterUnits(
-          task->targets_,
-          [](Unit* e) { return e->cloaked() || e->burrowed(); }),
-      [&](Unit* e) { return utils::distance(unit, e); },
-      kfInfty);
-  if (cloakedTarget) {
-    Unit* ally = utils::getBestScoreCopy(
-        task->squadUnits(),
-        [&](Unit* u) {
-          if (u == unit || !u->canAttack(cloakedTarget)) {
-            return kfInfty;
-          }
-          return utils::distance(u, cloakedTarget);
-        },
-        kfInfty);
-    if (ally && utils::distance(unit, cloakedTarget) < unit->sightRange - 4) {
-      VLOG(3) << unit << " senses ally near cloaked target, moving to " << ally
-              << " near cloaked " << cloakedTarget;
-      return doAction(agent.smartMove(ally));
-    }
-  }
-  if (!unit->threateningEnemies.empty()) {
-    auto threat = unit->threateningEnemies[0];
-    auto dir = Vec2(unit) - Vec2(threat);
-    dir.normalize();
-    VLOG(3) << unit << " senses threat, moving away from " << threat;
-    return doAction(agent.smartMove(Position(Vec2(unit) + dir * 25)));
-  }
-
-  if (cloakedTarget) {
-    VLOG(3) << unit << " senses cloaked target, moving to " << cloakedTarget;
-    return doAction(agent.smartMove(cloakedTarget));
-  }
-
   // Stay away from other Overlords when there are no threats nearby.
   // This prevents Corsairs from murdering all our Overlords at once.
-  //
-  // TODO: Meet these requirements using MoveFilters rather than this custom
-  // logic
   Unit* repellant = nullptr;
   {
     auto enemies = unit->threateningEnemies;

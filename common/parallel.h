@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <common/assert.h>
 #include <condition_variable>
 #include <future>
 #include <iostream>
@@ -58,9 +59,14 @@ class BufferedConsumer {
   /// context (and thus block).
   void enqueue(T arg);
 
+  /// Same as 'enqueue', except that if the queue is full, the oldest element
+  /// will be removed before inserting
+  /// Only works for nthreads > 0
+  void enqueueOrReplaceOldest(T arg);
+
   void run();
 
- private:
+ protected:
   size_t const maxQueueSize_;
   bool stop_ = false;
   int64_t consuming_ = 0;
@@ -177,6 +183,24 @@ void BufferedConsumer<T>::enqueue(T arg) {
     }
     itemDone_.notify_all();
   }
+}
+
+template <typename T>
+void BufferedConsumer<T>::enqueueOrReplaceOldest(T arg) {
+  ASSERT(
+      !threads_.empty(),
+      "Please use BufferedConsumer::enqueue when not using threads");
+  {
+    std::unique_lock<std::mutex> lock(mutex_);
+    if (stop_) {
+      throw std::runtime_error("BufferedConsumer not active");
+    }
+    if (queue_.size() >= maxQueueSize_) {
+      queue_.pop();
+    }
+    queue_.push(std::move(arg));
+  }
+  itemReady_.notify_one();
 }
 
 template <typename T>

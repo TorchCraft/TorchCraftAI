@@ -72,7 +72,7 @@ void BlobPublisher::publish(void const* data, size_t len, int64_t tag) {
 void BlobPublisher::publish(std::vector<char>&& data, int64_t tag) {
   {
     auto lock = std::lock_guard(dataM_);
-    data_ = data;
+    std::swap(data_, data);
     tag_ = tag;
     dflags_ = DataFlags::HasData | DataFlags::NewData;
   }
@@ -186,6 +186,8 @@ void BlobSubscriber::listen() {
   zmq::socket_t socket(*context_.get(), zmq::socket_type::sub);
   socket.setsockopt(ZMQ_RCVTIMEO, 250 /*milliseconds*/);
   socket.setsockopt(ZMQ_LINGER, 0);
+  socket.setsockopt(ZMQ_RCVHWM, 4); // we send large-ish blobs around and the
+                                    // default high water mark is 1000
   socket.setsockopt(ZMQ_SUBSCRIBE, nullptr, 0); // We want all messages
   socket.connect(endpoint);
   VLOG(1) << "BlobSubscriber connecting to " << endpoint;

@@ -8,7 +8,9 @@
 #include "test.h"
 
 #include "common/autograd.h"
+#ifdef HAVE_CUDA
 #include "cuda_runtime_api.h"
+#endif
 
 #include <prettyprint/prettyprint.hpp>
 
@@ -129,7 +131,9 @@ CASE("common/scatterSum2d/timed[.hidden]") {
         for (auto i = 0U; i < reps; i++) {
           common::scatterSum2d(indices, values, {H, W});
         }
+#ifdef HAVE_CUDA
         cudaDeviceSynchronize();
+#endif
         auto end = hires_clock::now();
         std::chrono::duration<double, std::milli> duration = end - start;
         VLOG(0) << "ScatterSum: " << duration.count() / 1000. / reps;
@@ -574,16 +578,17 @@ CASE("common/WeightSummary") {
   apple->parameters()[0][0][0].zero_();
   apple->parameters()[0][0][1].zero_().add_(3);
   apple->parameters()[0][0][2].zero_().add_(4);
+  apple->parameters()[1].zero_();
+
   for (auto& parameter : banana->parameters()) {
     parameter.zero_().add_(2);
   }
+  banana->parameters()[1].zero_().add_(100);
+
   for (auto& parameter : cherry->parameters()) {
     parameter.zero_();
   }
   cherry->parameters()[0][0][4].add_(std::numeric_limits<float>::quiet_NaN());
-
-  apple->parameters()[1].zero_();
-  banana->parameters()[1].zero_().add_(100);
   cherry->parameters()[1].zero_();
 
   auto appleSummary = common::WeightSummary(*apple);
@@ -607,10 +612,10 @@ CASE("common/WeightSummary") {
   float bananaNorm1 = (2 * 4 + 100) / 5.;
   float bananaNorm2 = sqrt(2 * 2 * 4 + 100 * 100) / 5.;
   constexpr float epsilon = 0.001;
-  EXPECT(abs(appleSummary.norm1 - appleNorm1) < epsilon);
-  EXPECT(abs(appleSummary.norm2 - appleNorm2) < epsilon);
-  EXPECT(abs(bananaSummary.norm1 - bananaNorm1) < epsilon);
-  EXPECT(abs(bananaSummary.norm2 - bananaNorm2) < epsilon);
+  EXPECT(std::abs(appleSummary.norm1 - appleNorm1) < epsilon);
+  EXPECT(std::abs(appleSummary.norm2 - appleNorm2) < epsilon);
+  EXPECT(std::abs(bananaSummary.norm1 - bananaNorm1) < epsilon);
+  EXPECT(std::abs(bananaSummary.norm2 - bananaNorm2) < epsilon);
   EXPECT(std::isnan(cherrySummary.norm1));
   EXPECT(std::isnan(cherrySummary.norm2));
 }
