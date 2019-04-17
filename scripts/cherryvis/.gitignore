@@ -1,0 +1,7 @@
+cherryvis/__pycache__/
+replays/__pycache__/
+replays/migrations/__pycache__/
+lib/__pycache__/
+lib/migrations/__pycache__/
+db.sqlite3
+venv_django/
