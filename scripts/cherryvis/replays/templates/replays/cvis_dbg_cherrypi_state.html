@@ -1,0 +1,250 @@
+
+<li>
+    <a href="#cherrypi-state" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+        <i class="fab fa-android"></i>
+        Bot state
+    </a>
+    <div class="collapse show" id="cherrypi-state">
+      <ul class="nav nav-tabs" id="cherrypi-state-tabs-nav" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" href="#selected-units-tab" role="tab" aria-controls="selected-units-tab" aria-selected="true">
+            <i class="fas fa-hand-pointer"></i> selected
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" data-toggle="tab" href="#board-values-tab" role="tab" aria-controls="board-values-tab" aria-selected="false">
+            <i class="far fa-clipboard"></i> board
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" data-toggle="tab" href="#logs-tab" role="tab" aria-controls="logs-tab" aria-selected="false">
+            <i class="fas fa-file"></i> logs
+          </a>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="cherrypi-state-tabs">
+        <!-- SELECTED UNITS -->
+        <div class="tab-pane fade active show" id="selected-units-tab" role="tabpanel">
+          <ul class="list-unstyled" id="cdbSelectedUnitsView">
+            <li class="template collapse">
+              <div class="row sidebar-item-container">
+                <!-- Unit basic info -->
+                <div class="col-md-6 no-pad-left unit-link"></div>
+                <div class="col-md-3 pad-cell unit-cherrypi-id">i??</div>
+                <div class="col-md-3 unit-track">
+                  <button class="btn btn-sm btn-info track-unit-btn" type="button">Track</button>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row sidebar-item-container hide-if-units-selected">
+                <div class="col-md-12 no-pad-left">
+                  Selected units info will be displayed here
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- BOARD VALUES -->
+        <div class="tab-pane fade" id="board-values-tab" role="tabpanel">
+          <ul class="list-unstyled" id="cdbBoardView">
+            <li>
+              <div class="sidebar-item-container">
+                <div class="form-group row">
+                  <input type="text" class="form-control" id="cdbBoardSearch" placeholder="Search keys/vals">
+                </div>
+                <div class="cvis-hide-when-board-disabled">
+                  <span class="cvis-board-num-results"></span> results (<span class="cvis-board-num-results-displayed"></span> displayed)
+                </div>
+              </div>
+            </li>
+            <li class="cvis-board-entry">
+              <div class="sidebar-item-container">
+                <div class="row cvis-board-table-header">
+                  <div class="col-sm-7">
+                    KEY
+                  </div>
+                  <div class="col-sm-5">
+                    VALUE
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="cvis-board-entry template collapse sidebar-item-container">
+              <div class="sidebar-item-container lighten-when-hover">
+                <div class="row">
+                  <div class="col-sm-7 cvis-board-entry-key"></div>
+                  <div class="col-sm-5 cvis-board-entry-val"></div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- LOGS -->
+        <div class="tab-pane fade" id="logs-tab" role="tabpanel">
+          <ul class="list-unstyled logs-list" id="cdbBotGlobalLogsView">
+            <li class="logs-search-li">
+              <div class="sidebar-item-container sidebar-item-container-no-pad">
+                <div class="form-group row">
+                  <input type="text" class="form-control logs-search" placeholder="Search in logs">
+                </div>
+                <div class="cvis-show-when-logs-enabled">
+                  <span class="cvis-logs-num-results"></span> results (<span class="cvis-logs-num-results-displayed"></span> displayed)
+                </div>
+              </div>
+            </li>
+            <li class="cvis-log-entry template collapse cvis-has-frame-id sidebar-item-container">
+              <div class="row">
+                <div class="col-md-2 p-0">
+                  <a href="#" class="log-link-frame cvis-link-frame">
+                  </a>
+                </div>
+                <div class="col-md-10 p-0 log-content">
+                  <div class="log-data">
+                    <div class="d-flex">
+                      <div class="py-0 pl-2 flex-grow-1 log-message-container"></div>
+                      <div class="py-0"><button class="float-right btn btn-sm btn-info btn-toggle-log-attachments" type="button">Toggle</button></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="collapse row ml-2 log-attachments-container">
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- TRACKED TASKS WILL BE INSERTED HERE -->
+        <div class="collapse tab-pane fade template-tracked-task unit-track-and-update" role="tabpanel">
+          <ul class="list-unstyled">
+            <li>
+              <div class="sidebar-item-container">
+                <div class="row">
+                  <div class="col-sm-12">General information about task <span class="task-id">t??</span></div>
+                </div>
+                <ul class="list-unstyled">
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-4">Module</div>
+                      <div class="col-sm-8 task-module-owner">??</div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-4">Task::getName()</div>
+                      <div class="col-sm-8 task-name">??</div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-4">Task::upcId()</div>
+                      <div class="col-sm-8 task-upc-id">??</div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-4">Posted in</div>
+                      <div class="col-sm-8"><a href="#" class="cvis-has-frame-id task-posted-frame-link" style="display: inline">f???</a></div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+          <ul class="list-unstyled">
+            <li>
+              <div class="sidebar-item-container">
+                <div class="row">
+                  <div class="col-sm-12">Task units</div>
+                </div>
+                <ul class="list-unstyled task-units-list">
+                  <li class="template collapse">
+                    <div class="row sidebar-item-container">
+                      <div class="col-md-6 no-pad-left unit-link"></div>
+                      <div class="col-md-3 pad-cell unit-cherrypi-id">i??</div>
+                      <div class="col-md-3 unit-track">
+                        <button class="btn btn-sm btn-info track-unit-btn" type="button">Track</button>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- TRACKED UNITS WILL BE INSERTED HERE -->
+        <div class="collapse tab-pane fade template-tracked-unit unit-track-and-update" role="tabpanel">
+          <ul class="list-unstyled">
+            <li>
+              <div class="sidebar-item-container hide-when-unit-found">
+                <div class="alert alert-danger" role="alert">
+                  <h4 class="alert-heading">Not found!</h4>
+                  <p class="text-dark">The unit <strong class="unit-cherrypi-id">i??</strong> is not in the game at the current frame - nothing to display.</p>
+                  <hr>
+                  <p class="mb-0 text-dark"><strong>Hint:</strong> the unit was first seen by cherrypi at frame <a href="#" class="cvis-has-frame-id first-seen-frame-link" style="display: inline">???</a></p>
+                </div>
+              </div>
+              <div class="sidebar-item-container show-when-unit-found">
+                <div class="row">
+                  <div class="col-sm-12">General information about <span class="unit-bw-id">bw??</span>/<span class="unit-cherrypi-id">i??</span></div>
+                </div>
+                <ul class="list-unstyled">
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-4">Current type</div>
+                      <div class="col-sm-5 unit-type-name">??</div>
+                      <div class="col-sm-3">(<span class="unit-type-id">???</span>)</div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-4">Current HP</div>
+                      <div class="col-sm-8 cur-hp">??</div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-4">Position</div>
+                      <div class="col-sm-8 unit-position"></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row sidebar-item-container">
+                      <div class="col-sm-4">Task</div>
+                      <div class="col-sm-5 task-name">??</div>
+                      <div class="col-sm-3">
+                        <button class="btn btn-sm btn-info track-task-btn" type="button">Track</button>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <!-- UNIT LOGS -->
+            <li>
+              <div class="sidebar-item-container">
+                <div class="row">
+                  <div class="col-sm-12">Unit logs</div>
+                </div>
+                <div class="hide-when-unit-logs-found">
+                  <div class="alert alert-secondary" role="alert">
+                    <h4 class="alert-heading">Not unit logs!</h4>
+                    <p class="text-dark">There are no unit logs for unit <strong class="unit-cherrypi-id">i??</strong>.</p>
+                    <hr>
+                    <p class="mb-0 text-dark"><strong>Did you know?</strong> you can log unit-specific messages, probabilities distributions and more - see <em>cherryvisdumper_t.cpp</em> for a working example</p>
+                  </div>
+                </div>
+                <div class="show-when-unit-logs-found">
+                  <ul class="list-unstyled logs-list unit-logs">
+                  </ul>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+</li>
