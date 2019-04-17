@@ -1,0 +1,66 @@
+*~
+=9.0
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+*.swp
+*.[ao]
+*.so
+doxygen
+Testing
+openbw/build
+*_cotire.cmake
+cotire/
+*.mpq
+Doxyfile
+build/
+/*.dll
+bwapi-data
+__pycache__
+*.pyc
+
+# Node
+node_modules
+package-lock.json
+
+# binaries
+cherrypi
+cherrypi-exp
+
+# Test Output
+/core
+cherrypi.log
+opponent.log
+tc_bwapilauncher.log
+.gdb_history
+
+# Model checkpoint
+train_micro.bin
+
+# Windows binaries/libraries
+3rdparty/*.lib
+3rdparty/libzmq
+deps/
+Debug/
+Release/
+
+########################################
+# VisualStudio
+
+.vs/
+VisualStudio/cherrypi/bwapilib/Release/
+VisualStudio/cherrypi/bwapilib/bwapilib.dir/
+VisualStudio/cherrypi/bwem/Release/
+VisualStudio/cherrypi/bwem/bwem.dir/
+VisualStudio/cherrypi/src/fair_rush.dir/
+VisualStudio/cherrypi/tc/torchcraft.dir/
+VisualStudio/cherrypi/tcbwapi/tcbwapi.dir/
+VisualStudio/gflags/gflags_static.dir/
+VisualStudio/gflags/lib/
+VisualStudio/glog/Release/
+VisualStudio/glog/glog.dir/
+VisualStudio/install/Debug
+VisualStudio/install/Release
+VisualStudio/install/include

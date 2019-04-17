@@ -1,0 +1,3 @@
+- `npm install`
+- `yarn run start`
+- For more, consult [Docusaurus' doc](https://docusaurus.io/docs/en/installation.html)
