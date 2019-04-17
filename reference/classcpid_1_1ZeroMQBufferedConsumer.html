@@ -104,13 +104,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a138d894398629833fce02788e9e4eb9d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html#a138d894398629833fce02788e9e4eb9d">ZeroMQBufferedConsumer</a> (uint8_t nthreads, size_t maxQueueSize, std::vector&lt; std::string &gt; endpoints, std::shared_ptr&lt; zmq::context_t &gt; context=nullptr)</td></tr>
 <tr class="separator:a138d894398629833fce02788e9e4eb9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ae706a860038c8a67579db29f113131"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html#a1ae706a860038c8a67579db29f113131">~ZeroMQBufferedConsumer</a> ()</td></tr>
+<tr class="separator:a1ae706a860038c8a67579db29f113131"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae231d3829b1008208aee311ff68f3558"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html#ae231d3829b1008208aee311ff68f3558">enqueue</a> (T arg)</td></tr>
 <tr class="separator:ae231d3829b1008208aee311ff68f3558"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3c5c3b8f4a6b906acf70d28db50d2e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html#ad3c5c3b8f4a6b906acf70d28db50d2e9">updateEndpoints</a> (std::vector&lt; std::string &gt; endpoints)</td></tr>
 <tr class="separator:ad3c5c3b8f4a6b906acf70d28db50d2e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d55cd66e88db059330e5c466d4acdcd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html#a9d55cd66e88db059330e5c466d4acdcd">flush</a> ()</td></tr>
-<tr class="memdesc:a9d55cd66e88db059330e5c466d4acdcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for replies, send out all retries.  <a href="#a9d55cd66e88db059330e5c466d4acdcd">More...</a><br /></td></tr>
-<tr class="separator:a9d55cd66e88db059330e5c466d4acdcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
@@ -121,7 +120,7 @@ class cpid::ZeroMQBufferedConsumer&lt; T &gt;</h3>
 <p>[Producer] -&gt; [Consumer]</p>
 <p>Then, assuming that items can be serialized with cereal, the ZeroMQBufferedConsumer/Producer classes enable the following design:</p>
 <p>[Producer] -&gt; [<a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html" title="A buffered consumer that sends data via ZeroMQ. ">ZeroMQBufferedConsumer</a>] | TCP | [<a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html" title="A buffered producer that obtains data via ZeroMQ. ">ZeroMQBufferedProducer</a>] -&gt; [Consumer]</p>
-<p>As in <a class="el" href="classcommon_1_1BufferedConsumer.html" title="A simple producer/consumer class. ">common::BufferedConsumer</a>, you specify the number of threads and a queue size. In addition, you supply a list of end points that <a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html" title="A buffered producer that obtains data via ZeroMQ. ">ZeroMQBufferedProducer</a> instances have been bound to. Data will be send to end-points in a round-robin fashion. If producer end points don't accept new data (because their queue is full and items are not consumed fast enough), <code><a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html#ae231d3829b1008208aee311ff68f3558">enqueue()</a></code> will eventually block and perform retries. </p>
+<p>As in <a class="el" href="classcommon_1_1BufferedConsumer.html" title="A simple producer/consumer class. ">common::BufferedConsumer</a>, you specify the number of threads and a queue size. In addition, you supply a list of end points that <a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html" title="A buffered producer that obtains data via ZeroMQ. ">ZeroMQBufferedProducer</a> instances have been bound to. Data will be send to end-points in a round-robin fashion. If producer endpoints don't accept new data (because their queue is full and items are not consumed fast enough), <code><a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html#ae231d3829b1008208aee311ff68f3558">enqueue()</a></code> will eventually block and perform retries. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a138d894398629833fce02788e9e4eb9d"></a>
 <div class="memitem">
@@ -163,6 +162,23 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a1ae706a860038c8a67579db29f113131"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html">cpid::ZeroMQBufferedConsumer</a>&lt; T &gt;::~<a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html">ZeroMQBufferedConsumer</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="ae231d3829b1008208aee311ff68f3558"></a>
 <div class="memitem">
@@ -179,25 +195,6 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a9d55cd66e88db059330e5c466d4acdcd"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classcpid_1_1ZeroMQBufferedConsumer.html">cpid::ZeroMQBufferedConsumer</a>&lt; T &gt;::flush </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Wait for replies, send out all retries. </p>
 
 </div>
 </div>
@@ -225,7 +222,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:57 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

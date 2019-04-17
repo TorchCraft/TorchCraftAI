@@ -2,7 +2,7 @@ var searchData=
 [
   ['valid_5f',['valid_',['../classcherrypi_1_1movefilters_1_1FuncPositionFilter.html#af4050ca3b1512ddbf0ed4d4df2ab5326',1,'cherrypi::movefilters::FuncPositionFilter']]],
   ['validlocations',['validLocations',['../structcherrypi_1_1BuildingPlacerSample.html#aab28b77fbb3804e56392d42d06c15f1e',1,'cherrypi::BuildingPlacerSample']]],
-  ['value',['value',['../structcherrypi_1_1EnvVar.html#a9004de299f3afef0d72b46cd819af47a',1,'cherrypi::EnvVar::value()'],['../structcherrypi_1_1OpenBwProcess_1_1EnvVar.html#a6f81f889e9296cfc3f8ee3479845f26e',1,'cherrypi::OpenBwProcess::EnvVar::value()']]],
+  ['value',['value',['../structcherrypi_1_1EnvVar.html#a9004de299f3afef0d72b46cd819af47a',1,'cherrypi::EnvVar::value()'],['../structcpid_1_1Cpid2kMetrics_1_1EventMetric.html#a790b647476d3aecc5d1ef8219ce863a2',1,'cpid::Cpid2kMetrics::EventMetric::value()'],['../structcpid_1_1Cpid2kMetrics_1_1Aggregator.html#a43c48afba62e9019b210596d5928cf0c',1,'cpid::Cpid2kMetrics::Aggregator::value()']]],
   ['var_5fdiffs',['var_diffs',['../classtorchcraft_1_1replayer_1_1detail_1_1UnitDiff.html#aabb57de523dd3a639c0f15961c8ec557',1,'torchcraft::replayer::detail::UnitDiff']]],
   ['var_5fids',['var_ids',['../classtorchcraft_1_1replayer_1_1detail_1_1UnitDiff.html#a535355eaea279b9a5dcfd31c9ce5767c',1,'torchcraft::replayer::detail::UnitDiff']]],
   ['variantinfo',['variantInfo',['../namespacecommon.html#a182601d099eaa2a84e1bca8cc8257bd8',1,'common']]],

@@ -10,6 +10,7 @@ var searchData=
   ['replication',['Replication',['../namespacecommon.html#a5d2f6ab6c2580a0834320dc08c87e279a8c340dc334134096f68b880b42a8692c',1,'common']]],
   ['researching',['Researching',['../structtorchcraft_1_1replayer_1_1Unit.html#a5f6cd6025bd54a25d93d8ce3afed1f49a12ee54cf8ab27aea8c3542deb322052d',1,'torchcraft::replayer::Unit']]],
   ['reservedasunbuildable',['ReservedAsUnbuildable',['../namespacecherrypi.html#ad5a3f15bd0c2b47a402c200ec0435276a87fe66b7de0487cc6297579fe57a67d5',1,'cherrypi']]],
+  ['resources',['Resources',['../namespacecherrypi.html#ad5a3f15bd0c2b47a402c200ec0435276addcf50c29294d4414f3f7c1bbc892cb5',1,'cherrypi']]],
   ['resources5log',['Resources5Log',['../namespacecherrypi_1_1bos.html#a7e7a60f51b6712a6f1d24f9010516729af526165e717b715e3b14ec4bc2560370',1,'cherrypi::bos']]],
   ['restoration',['Restoration',['../structtorchcraft_1_1replayer_1_1Resources.html#af952d20c39931b01a111fb62369261cda8e7fc1b74000ddc1cf450256b2ea89f0',1,'torchcraft::replayer::Resources']]],
   ['returncargo',['ReturnCargo',['../namespacecherrypi.html#a4f9f0d3eabd405b439c64b0f3d56a78fae2e6ff97e39b41a5511b9824e8016d41',1,'cherrypi']]]

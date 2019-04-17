@@ -90,6 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classcpid_1_1Cpid2kWorker-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -129,6 +130,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5eaedd0ae5d3f62e1e04d2e6e1b82859"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcpid_1_1RedisClient.html">RedisClient</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Cpid2kWorker.html#a5eaedd0ae5d3f62e1e04d2e6e1b82859">threadLocalClient</a> ()</td></tr>
 <tr class="memdesc:a5eaedd0ae5d3f62e1e04d2e6e1b82859"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a Redis client dedicated to the calling thread.  <a href="#a5eaedd0ae5d3f62e1e04d2e6e1b82859">More...</a><br /></td></tr>
 <tr class="separator:a5eaedd0ae5d3f62e1e04d2e6e1b82859"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64694674eb32426920fa4ed5afc010c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcpid_1_1Cpid2kHeartBeater.html">Cpid2kHeartBeater</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Cpid2kWorker.html#a64694674eb32426920fa4ed5afc010c1">heartBeater</a> ()</td></tr>
+<tr class="separator:a64694674eb32426920fa4ed5afc010c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42c6d56a9ee7a663589c75faa210790c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcpid_1_1distributed_1_1Context.html">distributed::Context</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Cpid2kWorker.html#a42c6d56a9ee7a663589c75faa210790c">dcontext</a> (std::string const &amp;role=<a class="el" href="classcpid_1_1Cpid2kWorker.html#a27b31fa9b03ea0d3076afc4d28d7faf6">kAnyRole</a>, std::chrono::milliseconds timeout=<a class="el" href="classcpid_1_1Cpid2kWorker.html#a5a535e60766ee9ead68b2183ea12050c">kDefaultTimeout</a>)</td></tr>
 <tr class="memdesc:a42c6d56a9ee7a663589c75faa210790c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a <a class="el" href="namespacecpid_1_1distributed.html">cpid::distributed</a> context among workers with the given by role.  <a href="#a42c6d56a9ee7a663589c75faa210790c">More...</a><br /></td></tr>
 <tr class="separator:a42c6d56a9ee7a663589c75faa210790c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,6 +149,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af56afad7b3d7c57f87c5d5de4d49767f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Cpid2kWorker.html#af56afad7b3d7c57f87c5d5de4d49767f">waitForAll</a> (std::string_view role, std::chrono::milliseconds timeout=<a class="el" href="classcpid_1_1Cpid2kWorker.html#a8c9101e468757faf105e4e034b1697b3">kNoTimeout</a>)</td></tr>
 <tr class="memdesc:af56afad7b3d7c57f87c5d5de4d49767f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Block until a all workers with the specified role are available, or until a specified time has passed.  <a href="#af56afad7b3d7c57f87c5d5de4d49767f">More...</a><br /></td></tr>
 <tr class="separator:af56afad7b3d7c57f87c5d5de4d49767f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39f0a2ea1ec078b829c4a4b52a3f22ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Cpid2kWorker.html#a39f0a2ea1ec078b829c4a4b52a3f22ed">appendMetrics</a> (std::string_view metricsName, nlohmann::json const &amp;json)</td></tr>
+<tr class="separator:a39f0a2ea1ec078b829c4a4b52a3f22ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a59bb5dea8f77f6c5976912caa550407d"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classcpid_1_1Cpid2kWorker.html">Cpid2kWorker</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Cpid2kWorker.html#a59bb5dea8f77f6c5976912caa550407d">fromEnvVars</a> (<a class="el" href="structcpid_1_1Cpid2kWorkerInfo.html">Cpid2kWorkerInfo</a> const &amp;)</td></tr>
+<tr class="separator:a59bb5dea8f77f6c5976912caa550407d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a039cd03ede256200216f62dfc3e45221"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classcpid_1_1Cpid2kWorker.html">Cpid2kWorker</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Cpid2kWorker.html#a039cd03ede256200216f62dfc3e45221">fromEnvVars</a> ()</td></tr>
+<tr class="separator:a039cd03ede256200216f62dfc3e45221"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -239,6 +251,32 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a39f0a2ea1ec078b829c4a4b52a3f22ed"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cpid::Cpid2kWorker::appendMetrics </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>metricsName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">nlohmann::json const &amp;&#160;</td>
+          <td class="paramname"><em>json</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="af43248c091f0c9cef85735e016c797a4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -302,6 +340,76 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Discards the <a class="el" href="namespacecpid_1_1distributed.html">cpid::distributed</a> context that was previously created for workers with the specified role. </p>
+
+</div>
+</div>
+<a class="anchor" id="a59bb5dea8f77f6c5976912caa550407d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classcpid_1_1Cpid2kWorker.html">Cpid2kWorker</a> &gt; cpid::Cpid2kWorker::fromEnvVars </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcpid_1_1Cpid2kWorkerInfo.html">Cpid2kWorkerInfo</a> const &amp;&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a039cd03ede256200216f62dfc3e45221"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classcpid_1_1Cpid2kWorker.html">Cpid2kWorker</a> &gt; cpid::Cpid2kWorker::fromEnvVars </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a64694674eb32426920fa4ed5afc010c1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcpid_1_1Cpid2kHeartBeater.html">Cpid2kHeartBeater</a>&amp; cpid::Cpid2kWorker::heartBeater </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -481,7 +589,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Block until a worker with the specified role is available, or until a specified time has passed. </p>
-<p>Returns true once a worker is available and false if the function times out. A timeout of zero will disable timing out. </p>
+<p>Returns true once a worker is available and false if the function times out. A timeout of zero will disable timing out. If there will be no worker with the given role, throw an exception. </p>
 
 </div>
 </div>
@@ -553,7 +661,7 @@ Static Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

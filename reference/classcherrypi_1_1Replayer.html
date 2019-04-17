@@ -89,45 +89,72 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classcherrypi_1_1Replayer-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">cherrypi::Replayer Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Playback a BroodWar replay using OpenBW.  
+<p>Play back a Brood War replay using OpenBW.  
  <a href="classcherrypi_1_1Replayer.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="src_2replayer_8h_source.html">replayer.h</a>&gt;</code></p>
+
+<p>Inherits <a class="el" href="classcherrypi_1_1TCReplayer.html">cherrypi::TCReplayer</a>.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa72836fec0bbc3dafe4f031b11b2db86"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#aa72836fec0bbc3dafe4f031b11b2db86">Replayer</a> (std::string replayPath, bool forceGui=false)</td></tr>
-<tr class="separator:aa72836fec0bbc3dafe4f031b11b2db86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca342c3d3a7fa37b44460c112469c627"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#aca342c3d3a7fa37b44460c112469c627">~Replayer</a> ()</td></tr>
-<tr class="separator:aca342c3d3a7fa37b44460c112469c627"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83ec5956ff8084c312c570391048fde0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#a83ec5956ff8084c312c570391048fde0">setPerspective</a> (<a class="el" href="namespacecherrypi.html#aa1303192d0851eeda87c4a45759c7327">PlayerId</a> playerId)</td></tr>
-<tr class="memdesc:a83ec5956ff8084c312c570391048fde0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience wrapper for <a class="el" href="classcherrypi_1_1State.html#a0a5627f408d66de43488bfa116e1f9ce" title="For replays, treat units from this player as allied units. ">State::setPerspective()</a>  <a href="#a83ec5956ff8084c312c570391048fde0">More...</a><br /></td></tr>
-<tr class="separator:a83ec5956ff8084c312c570391048fde0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8885d836b1b38cbb792a0fbd26ad8d0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#a8885d836b1b38cbb792a0fbd26ad8d0d">setCombineFrames</a> (int n)</td></tr>
-<tr class="memdesc:a8885d836b1b38cbb792a0fbd26ad8d0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Combine n server-side frames before taking any action.  <a href="#a8885d836b1b38cbb792a0fbd26ad8d0d">More...</a><br /></td></tr>
-<tr class="separator:a8885d836b1b38cbb792a0fbd26ad8d0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f597a1d85bf3cebfe15d8047f7b5e65"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#a4f597a1d85bf3cebfe15d8047f7b5e65">Replayer</a> (std::string replayPath)</td></tr>
+<tr class="separator:a4f597a1d85bf3cebfe15d8047f7b5e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0813301adb8ad6f7cb6dbeaa08ae6a77"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#a0813301adb8ad6f7cb6dbeaa08ae6a77">Replayer</a> (<a class="el" href="structcherrypi_1_1ReplayerConfiguration.html">ReplayerConfiguration</a>)</td></tr>
+<tr class="separator:a0813301adb8ad6f7cb6dbeaa08ae6a77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a855cfa4bc37843e4fab4edd37f1e1042"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#a855cfa4bc37843e4fab4edd37f1e1042">~Replayer</a> () override</td></tr>
+<tr class="separator:a855cfa4bc37843e4fab4edd37f1e1042"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2750dcfe23e8e7b75c859e039e9fc21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#aa2750dcfe23e8e7b75c859e039e9fc21">setPerspective</a> (<a class="el" href="namespacecherrypi.html#aa1303192d0851eeda87c4a45759c7327">PlayerId</a>)</td></tr>
+<tr class="memdesc:aa2750dcfe23e8e7b75c859e039e9fc21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience wrapper for <a class="el" href="classcherrypi_1_1State.html#a0a5627f408d66de43488bfa116e1f9ce" title="For replays, treat units from this player as allied units. ">State::setPerspective()</a>  <a href="#aa2750dcfe23e8e7b75c859e039e9fc21">More...</a><br /></td></tr>
+<tr class="separator:aa2750dcfe23e8e7b75c859e039e9fc21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0f4a1abb63ca5686b79511d94a5ae6a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#ae0f4a1abb63ca5686b79511d94a5ae6a">state</a> ()</td></tr>
 <tr class="separator:ae0f4a1abb63ca5686b79511d94a5ae6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab457475963c925a49a0106848048b160"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#ab457475963c925a49a0106848048b160">steps</a> () const </td></tr>
-<tr class="separator:ab457475963c925a49a0106848048b160"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4bcc9fa38d627a3fe61659972f0e1963"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#a4bcc9fa38d627a3fe61659972f0e1963">init</a> ()</td></tr>
-<tr class="separator:a4bcc9fa38d627a3fe61659972f0e1963"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0083a9386a5d031c4bb7160a182b7b42"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#a0083a9386a5d031c4bb7160a182b7b42">step</a> ()</td></tr>
-<tr class="separator:a0083a9386a5d031c4bb7160a182b7b42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b4080b97fcfd7551a0caa6e89b80e2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#a3b4080b97fcfd7551a0caa6e89b80e2f">run</a> ()</td></tr>
-<tr class="separator:a3b4080b97fcfd7551a0caa6e89b80e2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ac3766347a49864b3c25daeadd9e3ac"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#a1ac3766347a49864b3c25daeadd9e3ac">onStep</a> () override</td></tr>
+<tr class="separator:a1ac3766347a49864b3c25daeadd9e3ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classcherrypi_1_1TCReplayer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcherrypi_1_1TCReplayer')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcherrypi_1_1TCReplayer.html">cherrypi::TCReplayer</a></td></tr>
+<tr class="memitem:a2d9bace4f378299ed06f5c395c68aee8 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#a2d9bace4f378299ed06f5c395c68aee8">TCReplayer</a> (std::string replayPath)</td></tr>
+<tr class="separator:a2d9bace4f378299ed06f5c395c68aee8 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbd3c2ae9d875cea30113aa25cebeef6 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#abbd3c2ae9d875cea30113aa25cebeef6">TCReplayer</a> (<a class="el" href="structcherrypi_1_1ReplayerConfiguration.html">ReplayerConfiguration</a>)</td></tr>
+<tr class="separator:abbd3c2ae9d875cea30113aa25cebeef6 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1fb045f3249fa3e0de5163507e0b1d3 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#ae1fb045f3249fa3e0de5163507e0b1d3">~TCReplayer</a> ()</td></tr>
+<tr class="separator:ae1fb045f3249fa3e0de5163507e0b1d3 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c8abc5dfdeb808dca2fc5873b17a582 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtorchcraft_1_1State.html">torchcraft::State</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#a5c8abc5dfdeb808dca2fc5873b17a582">tcstate</a> () const </td></tr>
+<tr class="separator:a5c8abc5dfdeb808dca2fc5873b17a582 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a645ee2c5451cae9e3a51c529afd047c1 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#a645ee2c5451cae9e3a51c529afd047c1">init</a> ()</td></tr>
+<tr class="separator:a645ee2c5451cae9e3a51c529afd047c1 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a906044e86c0e644da2fe063f16f71c1b inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#a906044e86c0e644da2fe063f16f71c1b">step</a> ()</td></tr>
+<tr class="separator:a906044e86c0e644da2fe063f16f71c1b inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a953849f66d3bb758efb74b14a8e35ff1 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#a953849f66d3bb758efb74b14a8e35ff1">run</a> ()</td></tr>
+<tr class="separator:a953849f66d3bb758efb74b14a8e35ff1 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5407446f545778b193da6704ac3befc7 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#a5407446f545778b193da6704ac3befc7">isComplete</a> ()</td></tr>
+<tr class="separator:a5407446f545778b193da6704ac3befc7 inherit pub_methods_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:aa0e445b7b909847aeb5a609746dfa4da"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classcherrypi_1_1State.html">State</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Replayer.html#aa0e445b7b909847aeb5a609746dfa4da">state_</a></td></tr>
+<tr class="separator:aa0e445b7b909847aeb5a609746dfa4da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classcherrypi_1_1TCReplayer"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcherrypi_1_1TCReplayer')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcherrypi_1_1TCReplayer.html">cherrypi::TCReplayer</a></td></tr>
+<tr class="memitem:add9293425087791b9628eb74fc16b143 inherit pro_attribs_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structcherrypi_1_1ReplayerConfiguration.html">ReplayerConfiguration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#add9293425087791b9628eb74fc16b143">configuration_</a></td></tr>
+<tr class="separator:add9293425087791b9628eb74fc16b143 inherit pro_attribs_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff09d8bc1ee16e0609212165b6339472 inherit pro_attribs_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classcherrypi_1_1OpenBwProcess.html">OpenBwProcess</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#aff09d8bc1ee16e0609212165b6339472">openbw_</a></td></tr>
+<tr class="separator:aff09d8bc1ee16e0609212165b6339472 inherit pro_attribs_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c2f22349d3f41fb957e0d4097e75d8b inherit pro_attribs_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classtorchcraft_1_1Client.html">torchcraft::Client</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#a4c2f22349d3f41fb957e0d4097e75d8b">client_</a></td></tr>
+<tr class="separator:a4c2f22349d3f41fb957e0d4097e75d8b inherit pro_attribs_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5620cd53ea4d8a3ab361e2d04d6f031 inherit pro_attribs_classcherrypi_1_1TCReplayer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1TCReplayer.html#aa5620cd53ea4d8a3ab361e2d04d6f031">initialized_</a> = false</td></tr>
+<tr class="separator:aa5620cd53ea4d8a3ab361e2d04d6f031 inherit pro_attribs_classcherrypi_1_1TCReplayer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Playback a BroodWar replay using OpenBW. </p>
-<p>This class allows you to playback an existing BroodWar replay (.rep file) step-by-step with access to the usual common bot state object. </p>
+<div class="textblock"><p>Play back a Brood War replay using OpenBW. </p>
+<p>Runs the bot alongside the replay, and provides access to the bot's state. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aa72836fec0bbc3dafe4f031b11b2db86"></a>
+<a class="anchor" id="a4f597a1d85bf3cebfe15d8047f7b5e65"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -135,90 +162,80 @@ Public Member Functions</h2></td></tr>
           <td class="memname">cherrypi::Replayer::Replayer </td>
           <td>(</td>
           <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>replayPath</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>replayPath</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forceGui</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="aca342c3d3a7fa37b44460c112469c627"></a>
+<a class="anchor" id="a0813301adb8ad6f7cb6dbeaa08ae6a77"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">cherrypi::Replayer::~Replayer </td>
+          <td class="memname">cherrypi::Replayer::Replayer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcherrypi_1_1ReplayerConfiguration.html">ReplayerConfiguration</a>&#160;</td>
+          <td class="paramname"><em>configuration</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a855cfa4bc37843e4fab4edd37f1e1042"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual cherrypi::Replayer::~Replayer </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a4bcc9fa38d627a3fe61659972f0e1963"></a>
+<a class="anchor" id="a1ac3766347a49864b3c25daeadd9e3ac"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void cherrypi::Replayer::init </td>
+          <td class="memname">void cherrypi::Replayer::onStep </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a class="anchor" id="a3b4080b97fcfd7551a0caa6e89b80e2f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cherrypi::Replayer::run </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Reimplemented from <a class="el" href="classcherrypi_1_1TCReplayer.html#acb7f153d92629a894580287df0535447">cherrypi::TCReplayer</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a8885d836b1b38cbb792a0fbd26ad8d0d"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cherrypi::Replayer::setCombineFrames </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Combine n server-side frames before taking any action. </p>
-<p>Set this before calling <a class="el" href="classcherrypi_1_1Replayer.html#a4bcc9fa38d627a3fe61659972f0e1963">init()</a>. </p>
-
-</div>
-</div>
-<a class="anchor" id="a83ec5956ff8084c312c570391048fde0"></a>
+<a class="anchor" id="aa2750dcfe23e8e7b75c859e039e9fc21"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -251,32 +268,23 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0083a9386a5d031c4bb7160a182b7b42"></a>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="aa0e445b7b909847aeb5a609746dfa4da"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void cherrypi::Replayer::step </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classcherrypi_1_1State.html">State</a>&gt; cherrypi::Replayer::state_</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ab457475963c925a49a0106848048b160"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t cherrypi::Replayer::steps </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -288,7 +296,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

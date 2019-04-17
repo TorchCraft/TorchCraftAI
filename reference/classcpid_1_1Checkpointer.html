@@ -104,6 +104,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a3ce5d601c071b23b897a86e8e5dd62f3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Checkpointer.html#a3ce5d601c071b23b897a86e8e5dd62f3">MetricsSummaryFormat</a> { <a class="el" href="classcpid_1_1Checkpointer.html#a3ce5d601c071b23b897a86e8e5dd62f3acfb250911ceed1b6ef951e42233a4929">FORMAT_DEFAULT</a>, 
+<a class="el" href="classcpid_1_1Checkpointer.html#a3ce5d601c071b23b897a86e8e5dd62f3aaeb578c45b7397b14f83110f684c11d6">FORMAT_TORCHBOARD</a>
+ }<tr class="memdesc:a3ce5d601c071b23b897a86e8e5dd62f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Choose a format for stdout metrics.  <a href="classcpid_1_1Checkpointer.html#a3ce5d601c071b23b897a86e8e5dd62f3">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:a3ce5d601c071b23b897a86e8e5dd62f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a7251595009f7debb2847b9ec28f559"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Checkpointer.html#a8a7251595009f7debb2847b9ec28f559">Hook</a> = std::function&lt; void(int)&gt;</td></tr>
 <tr class="separator:a8a7251595009f7debb2847b9ec28f559"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -154,6 +159,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a655abb8aec3c99130e390a67cf625f1a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Checkpointer.html#a655abb8aec3c99130e390a67cf625f1a">TORCH_ARG</a> (bool, dumpMetrics)</td></tr>
 <tr class="memdesc:a655abb8aec3c99130e390a67cf625f1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, we dump the json of the metrics at each epoch.  <a href="#a655abb8aec3c99130e390a67cf625f1a">More...</a><br /></td></tr>
 <tr class="separator:a655abb8aec3c99130e390a67cf625f1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2b7468d89de1c702823248655b673be"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Checkpointer.html#ad2b7468d89de1c702823248655b673be">TORCH_ARG</a> (<a class="el" href="classcpid_1_1Checkpointer.html#a3ce5d601c071b23b897a86e8e5dd62f3">MetricsSummaryFormat</a>, metricsSummaryFormat)</td></tr>
+<tr class="separator:ad2b7468d89de1c702823248655b673be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace4da35c9c34ead3c3aef4dc530914b1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Checkpointer.html#ace4da35c9c34ead3c3aef4dc530914b1">TORCH_ARG</a> (bool, reduceMax)</td></tr>
 <tr class="memdesc:ace4da35c9c34ead3c3aef4dc530914b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, we reduce accross nodes using the max operator instead.  <a href="#ace4da35c9c34ead3c3aef4dc530914b1">More...</a><br /></td></tr>
 <tr class="separator:ace4da35c9c34ead3c3aef4dc530914b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,6 +201,8 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a52f4b062d9fb4c25651f4dc801ce94ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1b3c537abbdd12d3f27d73d4acd2b00"><td class="memItemLeft" align="right" valign="top">hires_clock::time_point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Checkpointer.html#ab1b3c537abbdd12d3f27d73d4acd2b00">lastEpochStamp_</a></td></tr>
 <tr class="separator:ab1b3c537abbdd12d3f27d73d4acd2b00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a662a7dcb053e45878e5bc7017954eb95"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Checkpointer.html#a662a7dcb053e45878e5bc7017954eb95">lastEpochUpdateNum_</a> = 0</td></tr>
+<tr class="separator:a662a7dcb053e45878e5bc7017954eb95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a8a7251595009f7debb2847b9ec28f559"></a>
@@ -205,6 +214,27 @@ Protected Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="a3ce5d601c071b23b897a86e8e5dd62f3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classcpid_1_1Checkpointer.html#a3ce5d601c071b23b897a86e8e5dd62f3">cpid::Checkpointer::MetricsSummaryFormat</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Choose a format for stdout metrics. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a3ce5d601c071b23b897a86e8e5dd62f3acfb250911ceed1b6ef951e42233a4929"></a>FORMAT_DEFAULT&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a3ce5d601c071b23b897a86e8e5dd62f3aaeb578c45b7397b14f83110f684c11d6"></a>FORMAT_TORCHBOARD&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
 
 </div>
 </div>
@@ -754,6 +784,32 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ad2b7468d89de1c702823248655b673be"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cpid::Checkpointer::TORCH_ARG </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcpid_1_1Checkpointer.html#a3ce5d601c071b23b897a86e8e5dd62f3">MetricsSummaryFormat</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">metricsSummaryFormat&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ace4da35c9c34ead3c3aef4dc530914b1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -887,6 +943,26 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a662a7dcb053e45878e5bc7017954eb95"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cpid::Checkpointer::lastEpochUpdateNum_ = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ad6f04044b509008bce06cc4cd56a4221"></a>
 <div class="memitem">
 <div class="memproto">
@@ -934,7 +1010,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

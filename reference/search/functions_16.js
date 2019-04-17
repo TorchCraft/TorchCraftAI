@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['wait',['wait',['../classcherrypi_1_1BufferedConsumer.html#a620a744719f04f99243f76a524c9fecc',1,'cherrypi::BufferedConsumer::wait()'],['../classcpid_1_1distributed_1_1Work.html#aeecfc5cf2b4a53b20b4074b634242699',1,'cpid::distributed::Work::wait()'],['../classcpid_1_1RedisStore.html#a005cd6841cc9974e414c70d288be5749',1,'cpid::RedisStore::wait(std::vector&lt; std::string &gt; const &amp;keys) override'],['../classcpid_1_1RedisStore.html#a18fdf2f45b5b507bc29e5bf61735bc37',1,'cpid::RedisStore::wait(std::vector&lt; std::string &gt; const &amp;keys, std::chrono::milliseconds const &amp;timeout) override'],['../classcommon_1_1BufferedConsumer.html#aa4ecbfb9f8799b3d2274c6b6d521f960',1,'common::BufferedConsumer::wait()']]],
+  ['wait',['wait',['../structc10d_1_1Store.html#a0484100bba58ed8a2ce0aa441b729563',1,'c10d::Store::wait(const std::vector&lt; std::string &gt; &amp;keys)=0'],['../structc10d_1_1Store.html#aecfc1bb42ad4a551fbc83b148ce8f144',1,'c10d::Store::wait(const std::vector&lt; std::string &gt; &amp;keys, const std::chrono::milliseconds &amp;timeout)=0'],['../classcpid_1_1distributed_1_1Work.html#aeecfc5cf2b4a53b20b4074b634242699',1,'cpid::distributed::Work::wait()'],['../classcpid_1_1RedisStore.html#a005cd6841cc9974e414c70d288be5749',1,'cpid::RedisStore::wait(std::vector&lt; std::string &gt; const &amp;keys) override'],['../classcpid_1_1RedisStore.html#a18fdf2f45b5b507bc29e5bf61735bc37',1,'cpid::RedisStore::wait(std::vector&lt; std::string &gt; const &amp;keys, std::chrono::milliseconds const &amp;timeout) override'],['../classcommon_1_1BufferedConsumer.html#aa4ecbfb9f8799b3d2274c6b6d521f960',1,'common::BufferedConsumer::wait()']]],
   ['waitforall',['waitForAll',['../classcpid_1_1Cpid2kWorker.html#af56afad7b3d7c57f87c5d5de4d49767f',1,'cpid::Cpid2kWorker']]],
   ['waitforone',['waitForOne',['../classcpid_1_1Cpid2kWorker.html#a19c62abb6c7a17f109c0456b8e38d885',1,'cpid::Cpid2kWorker']]],
-  ['waitforreplies',['waitForReplies',['../classcpid_1_1ReqRepClient.html#ade5ff57f651be6e5d1160ebb04ff913d',1,'cpid::ReqRepClient']]],
   ['waitpid',['waitpid',['../classcherrypi_1_1ForkServer.html#a86377e2cc3988ea08611f7b5fb69e617',1,'cherrypi::ForkServer']]],
   ['walkable',['walkable',['../namespacecherrypi_1_1movefilters.html#a7d50e85713464c572f70642cb0e164d0',1,'cherrypi::movefilters']]],
   ['walkpath',['walkPath',['../classcherrypi_1_1AreaInfo.html#a0d4928287cb710dc4dcee78b4f164a74',1,'cherrypi::AreaInfo']]],
@@ -12,11 +11,12 @@ var searchData=
   ['weightedmaskedsoftmax',['weightedMaskedSoftmax',['../namespacecommon.html#ae4caa699050fa90de074d7e0a506754a',1,'common']]],
   ['weightsummary',['WeightSummary',['../structcommon_1_1WeightSummary.html#ad5d6e57837271ab2b59ab1678d1eff04',1,'common::WeightSummary']]],
   ['what',['what',['../classcommon_1_1zstd_1_1exception.html#a0bc70ebd90f0bc8e0bfd8418fd73ea87',1,'common::zstd::exception']]],
-  ['which',['which',['../namespacecherrypi_1_1fsutils.html#a1de46e6501c3ba69208e98cbeb8eb21e',1,'cherrypi::fsutils::which()'],['../namespacecommon_1_1fsutils.html#a76c872b1156abbc18a40f2469801d4c3',1,'common::fsutils::which()']]],
+  ['which',['which',['../namespacecommon_1_1fsutils.html#a76c872b1156abbc18a40f2469801d4c3',1,'common::fsutils']]],
   ['width',['width',['../classcherrypi_1_1Rect2T.html#ad1134ea566b6dc3079e8964d8dc01a6e',1,'cherrypi::Rect2T']]],
   ['winrate',['winRate',['../classcherrypi_1_1model_1_1BuildOrderCount.html#a6b5d212144507847b57c33a6673b5b0c',1,'cherrypi::model::BuildOrderCount']]],
   ['wins',['wins',['../classcherrypi_1_1model_1_1BuildOrderCount.html#ab91e17d9c60565da3d7182974d9c9c1e',1,'cherrypi::model::BuildOrderCount']]],
   ['withlocalip',['withLocalIp',['../structcpid_1_1Cpid2kWorkerInfo.html#aae7a5ded41fc94c1f4a07866163663bd',1,'cpid::Cpid2kWorkerInfo']]],
+  ['withlocalipfromenvvars',['withLocalIpFromEnvVars',['../structcpid_1_1Cpid2kWorkerInfo.html#a9cf4dea5f9c4c6c4c7f9da99c0d3d954',1,'cpid::Cpid2kWorkerInfo']]],
   ['won',['won',['../classcherrypi_1_1State.html#a14d9ed8b9cb3734f8ec872c0cccfd453',1,'cherrypi::State']]],
   ['work',['Work',['../classcpid_1_1distributed_1_1Work.html#af6919f34734328e48664552e96c05bee',1,'cpid::distributed::Work::Work(std::function&lt; void()&gt; onFinish)'],['../classcpid_1_1distributed_1_1Work.html#a8bd6f8d101376db2cfc6002ac63e5cc1',1,'cpid::distributed::Work::Work(Work const &amp;)=delete'],['../classcpid_1_1distributed_1_1Work.html#acd4bfd9a975132c69b7298e76fc0cc40',1,'cpid::distributed::Work::Work(Work &amp;&amp;)']]],
   ['workerbuildercontroller',['WorkerBuilderController',['../classcherrypi_1_1WorkerBuilderController.html#a1c3bf5b315ea7ba2e73bc073eff919ff',1,'cherrypi::WorkerBuilderController']]],
@@ -25,7 +25,7 @@ var searchData=
   ['writefilepath',['writeFilepath',['../classcherrypi_1_1model_1_1EnemyHistory.html#aa247d6165338f0606f2d5f0217d95c81',1,'cherrypi::model::EnemyHistory']]],
   ['writefull',['writeFull',['../namespacecherrypi.html#a9b111b5b77c41b6e718045678f388f26',1,'cherrypi']]],
   ['writegamesummary',['writeGameSummary',['../classcherrypi_1_1CherryVisDumperModule.html#a5e192b2fadf69b48d6c1a093e7003fbd',1,'cherrypi::CherryVisDumperModule']]],
-  ['writelines',['writeLines',['../namespacecherrypi_1_1fsutils.html#ad9b8d8f3739ccfea169243edf8793a9c',1,'cherrypi::fsutils::writeLines()'],['../namespacecommon_1_1fsutils.html#abcc7107f55a4d0b06c322c6e8f0235c2',1,'common::fsutils::writeLines()']]],
+  ['writelines',['writeLines',['../namespacecommon_1_1fsutils.html#abcc7107f55a4d0b06c322c6e8f0235c2',1,'common::fsutils']]],
   ['writetail',['writeTail',['../namespacetorchcraft_1_1replayer.html#a57f5cbb068bb0fc2921f4fde359580e8',1,'torchcraft::replayer']]],
   ['writetensors',['writeTensors',['../classcherrypi_1_1CherryVisDumperModule.html#a7fe899aa2488e89389dd70c4436a5f73',1,'cherrypi::CherryVisDumperModule']]],
   ['writetrees',['writeTrees',['../classcherrypi_1_1CherryVisDumperModule.html#af6026800684c31548032c9214a18b76e',1,'cherrypi::CherryVisDumperModule']]]

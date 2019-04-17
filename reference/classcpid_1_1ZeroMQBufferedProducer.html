@@ -103,8 +103,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a236b63376a8047fe04bfcf8e348c756d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html#a236b63376a8047fe04bfcf8e348c756d">ZeroMQBufferedProducer</a> (uint8_t nthreads, size_t maxQueueSize, std::string <a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html#a90e29aeff5466e3093f922115b3bf74e">endpoint</a>=std::string(), std::shared_ptr&lt; zmq::context_t &gt; context=nullptr)</td></tr>
-<tr class="separator:a236b63376a8047fe04bfcf8e348c756d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6d14682276dc46a55ff26d312fc2af4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html#ac6d14682276dc46a55ff26d312fc2af4">ZeroMQBufferedProducer</a> (uint8_t nthreads, size_t maxQueueSize, std::string <a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html#a90e29aeff5466e3093f922115b3bf74e">endpoint</a>=std::string())</td></tr>
+<tr class="separator:ac6d14682276dc46a55ff26d312fc2af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a922d8d9e33cdb4af5f9c2098db65bd2e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html#a922d8d9e33cdb4af5f9c2098db65bd2e">~ZeroMQBufferedProducer</a> ()</td></tr>
 <tr class="separator:a922d8d9e33cdb4af5f9c2098db65bd2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2be23b13ad23fbcbd262fec870dda909"><td class="memItemLeft" align="right" valign="top">std::optional&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html#a2be23b13ad23fbcbd262fec870dda909">get</a> ()</td></tr>
@@ -116,8 +116,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:ac34bdf85b399cbbc8195a10fca99e263"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html#ac34bdf85b399cbbc8195a10fca99e263">handleRequest</a> (std::vector&lt; char &gt; &amp;&amp;message, <a class="el" href="classcpid_1_1ReqRepServer.html#a439407fc1b12018b76a4cbdbc20ce094">ReqRepServer::ReplyFn</a> reply)</td></tr>
-<tr class="separator:ac34bdf85b399cbbc8195a10fca99e263"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8df4e3c3e66b88b379e23b8c32e2444e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html#a8df4e3c3e66b88b379e23b8c32e2444e">handleRequest</a> (void const *buf, size_t len, <a class="el" href="classcpid_1_1ReqRepServer.html#a439407fc1b12018b76a4cbdbc20ce094">ReqRepServer::ReplyFn</a> reply)</td></tr>
+<tr class="separator:a8df4e3c3e66b88b379e23b8c32e2444e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
@@ -131,7 +131,7 @@ class cpid::ZeroMQBufferedProducer&lt; T &gt;</h3>
 <p>As in <a class="el" href="classcommon_1_1BufferedProducer.html" title="A simple producer class. ">common::BufferedProducer</a> you specify a number of threads in the constructor which will be used to deserialize data. Calling <a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html#a2be23b13ad23fbcbd262fec870dda909">get()</a> returns data. Destructing the object will stop all threads.</p>
 <p>Make sure that you're calling <a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html#a2be23b13ad23fbcbd262fec870dda909">get()</a> fast enough; if you expect delays for consumption set maxQueueSize accordingly. If the queue runs full the server will not accept new data from the network. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a236b63376a8047fe04bfcf8e348c756d"></a>
+<a class="anchor" id="ac6d14682276dc46a55ff26d312fc2af4"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -153,13 +153,7 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>endpoint</em> = <code>std::string()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::shared_ptr&lt; zmq::context_t &gt;&#160;</td>
-          <td class="paramname"><em>context</em> = <code>nullptr</code>&#160;</td>
+          <td class="paramname"><em>endpoint</em> = <code>std::string()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -231,7 +225,7 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ac34bdf85b399cbbc8195a10fca99e263"></a>
+<a class="anchor" id="a8df4e3c3e66b88b379e23b8c32e2444e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -243,8 +237,14 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="classcpid_1_1ZeroMQBufferedProducer.html">cpid::ZeroMQBufferedProducer</a>&lt; T &gt;::handleRequest </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; char &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"><em>message</em>, </td>
+          <td class="paramtype">void const *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>len</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -290,7 +290,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:57 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

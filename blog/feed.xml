@@ -4,7 +4,7 @@
         <title>TorchCraftAI Blog</title>
         <link>https://torchcraft.github.io/TorchCraftAI/blog</link>
         <description>The best place to stay up-to-date with the latest TorchCraftAI news and events.</description>
-        <lastBuildDate>Wed, 28 Nov 2018 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 20 Feb 2019 06:00:00 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>Feed for Node.js</generator>
         <image>
@@ -13,6 +13,13 @@
             <link>https://torchcraft.github.io/TorchCraftAI/blog</link>
         </image>
         <copyright>Copyright © 2019 Facebook</copyright>
+        <item>
+            <title><![CDATA[Releasing CherryVis: a replay viewer for TorchCraftAI]]></title>
+            <link>https://torchcraft.github.io/TorchCraftAI/blog/2019/02/20/releasing-cherryvis.html</link>
+            <guid>https://torchcraft.github.io/TorchCraftAI/blog/2019/02/20/releasing-cherryvis.html</guid>
+            <pubDate>Wed, 20 Feb 2019 06:00:00 GMT</pubDate>
+            <description><![CDATA[  <p>We're glad to announce today that we are open sourcing CherryVis. Based on OpenBW's <a href="http://www.openbw.com/replay-viewer/">replay viewer</a>, CherryVis allows you to to view StarCraft replays alongside information about the bot's state. It's a powerful tool to simultaneously understand, dev...</p>]]></description>
+        </item>
         <item>
             <title><![CDATA[Build Order Switch Retraining Has Arrived]]></title>
             <link>https://torchcraft.github.io/TorchCraftAI/blog/2018/11/28/build-order-switch-retraining-has-arrived.html</link>

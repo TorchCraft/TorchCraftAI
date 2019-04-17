@@ -88,8 +88,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classcpid_1_1CentralTrainer-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">cpid::CentralTrainer Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
@@ -102,7 +104,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p><code>#include &lt;<a class="el" href="centraltrainer_8h_source.html">centraltrainer.h</a>&gt;</code></p>
 
 <p>Inherits <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a>.</p>
+
+<p>Inherited by <a class="el" href="classcpid_1_1CentralCpid2kTrainer.html">cpid::CentralCpid2kTrainer</a>.</p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer_1_1BufferPool.html">BufferPool</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a38f390ee26049a5a2c9e400dae868b08"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a38f390ee26049a5a2c9e400dae868b08">CentralTrainer</a> (bool <a class="el" href="classcpid_1_1CentralTrainer.html#ab8c3c872cc5c9c23be2fb891089562c2">isServer</a>, ag::Container <a class="el" href="classcpid_1_1Trainer.html#a725e7be593702910a92eb8e27b100a73">model</a>, ag::Optimizer <a class="el" href="classcpid_1_1Trainer.html#ad0f87b4190a741893c7050af55ba17f5">optim</a>, std::unique_ptr&lt; <a class="el" href="classcpid_1_1BaseSampler.html">BaseSampler</a> &gt; sampler, std::unique_ptr&lt; <a class="el" href="classcpid_1_1AsyncBatcher.html">AsyncBatcher</a> &gt; batcher=nullptr)</td></tr>
@@ -121,6 +130,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a61e470bf6021e9c0c79bc827db840469"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56bddb2b23872c50cc991915a00b183b"><td class="memItemLeft" align="right" valign="top">virtual std::shared_ptr&lt; <a class="el" href="structcpid_1_1ReplayBufferFrame.html">ReplayBufferFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a56bddb2b23872c50cc991915a00b183b">makeFrame</a> (ag::Variant trainerOutput, ag::Variant state, float reward) override</td></tr>
 <tr class="separator:a56bddb2b23872c50cc991915a00b183b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64bef9d54de04e1ea019fb254b62490b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a64bef9d54de04e1ea019fb254b62490b">startEpisode</a> () override</td></tr>
+<tr class="memdesc:a64bef9d54de04e1ea019fb254b62490b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if succeeded to register an episode, and false otherwise.  <a href="#a64bef9d54de04e1ea019fb254b62490b">More...</a><br /></td></tr>
+<tr class="separator:a64bef9d54de04e1ea019fb254b62490b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28310271c5c14bf906d2063b0eea906b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a28310271c5c14bf906d2063b0eea906b">forceStopEpisode</a> (<a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;) override</td></tr>
+<tr class="separator:a28310271c5c14bf906d2063b0eea906b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e7749cc2ffc0a20a1ac830c32acc783"><td class="memItemLeft" align="right" valign="top">std::shared_lock&lt; std::shared_timed_mutex &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a0e7749cc2ffc0a20a1ac830c32acc783">modelReadLock</a> ()</td></tr>
 <tr class="separator:a0e7749cc2ffc0a20a1ac830c32acc783"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add3f238aabea2b884907668f395047c5"><td class="memItemLeft" align="right" valign="top">std::unique_lock&lt; std::shared_timed_mutex &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#add3f238aabea2b884907668f395047c5">modelWriteLock</a> ()</td></tr>
@@ -154,11 +168,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8dfdbf82bb3d08a33cc5262a842d8ed2 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad412968ea357bfe7db2f8b1829c91354 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#ad412968ea357bfe7db2f8b1829c91354">step</a> (<a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;, std::shared_ptr&lt; <a class="el" href="structcpid_1_1ReplayBufferFrame.html">ReplayBufferFrame</a> &gt; v, bool <a class="el" href="classcpid_1_1Trainer.html#a8dfdbf82bb3d08a33cc5262a842d8ed2">isDone</a>=false)</td></tr>
 <tr class="separator:ad412968ea357bfe7db2f8b1829c91354 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1df3cb2891fa6a56f0368b4871b58258 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a1df3cb2891fa6a56f0368b4871b58258">startEpisode</a> ()</td></tr>
-<tr class="memdesc:a1df3cb2891fa6a56f0368b4871b58258 inherit pub_methods_classcpid_1_1Trainer"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if succeeded to register an episode, and false otherwise.  <a href="#a1df3cb2891fa6a56f0368b4871b58258">More...</a><br /></td></tr>
-<tr class="separator:a1df3cb2891fa6a56f0368b4871b58258 inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afabe12b24393cb8b3d60bcf528f4285d inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#afabe12b24393cb8b3d60bcf528f4285d">forceStopEpisode</a> (<a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;)</td></tr>
-<tr class="separator:afabe12b24393cb8b3d60bcf528f4285d inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5d9c9f365face81e4d446be52b69a6d inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#ad5d9c9f365face81e4d446be52b69a6d">isActive</a> (<a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;)</td></tr>
 <tr class="separator:ad5d9c9f365face81e4d446be52b69a6d inherit pub_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae83e7aa739689681176898611413f6f3 inherit pub_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#ae83e7aa739689681176898611413f6f3">reset</a> ()</td></tr>
@@ -189,11 +198,22 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a190669643a56f94c52fd31d25aa6b313"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a190669643a56f94c52fd31d25aa6b313">receivedFrames</a> (<a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> const &amp;, std::string const &amp;)=0</td></tr>
 <tr class="memdesc:a190669643a56f94c52fd31d25aa6b313"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback for new episodes.  <a href="#a190669643a56f94c52fd31d25aa6b313">More...</a><br /></td></tr>
 <tr class="separator:a190669643a56f94c52fd31d25aa6b313"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba9fec19f4081c6ef4b0e32046bcee7b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#aba9fec19f4081c6ef4b0e32046bcee7b">episodeClientEnqueue</a> (<a class="el" href="structcpid_1_1EpisodeData.html">EpisodeData</a> const &amp;)</td></tr>
+<tr class="memdesc:aba9fec19f4081c6ef4b0e32046bcee7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback for locally generated episode data that can be sent out.  <a href="#aba9fec19f4081c6ef4b0e32046bcee7b">More...</a><br /></td></tr>
+<tr class="separator:aba9fec19f4081c6ef4b0e32046bcee7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a477942459ef822fa1391e7f91cf828f7"><td class="memItemLeft" align="right" valign="top">virtual uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a477942459ef822fa1391e7f91cf828f7">getMaxBatchLength</a> () const </td></tr>
 <tr class="memdesc:a477942459ef822fa1391e7f91cf828f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows implementing trainers to send partial episodes TODO: set up synchronization so the partial episodes end up on the same node.  <a href="#a477942459ef822fa1391e7f91cf828f7">More...</a><br /></td></tr>
 <tr class="separator:a477942459ef822fa1391e7f91cf828f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a166ca5c084d78094ac8b9701fde980d4"><td class="memItemLeft" align="right" valign="top">virtual uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a166ca5c084d78094ac8b9701fde980d4">getSendInterval</a> () const </td></tr>
 <tr class="separator:a166ca5c084d78094ac8b9701fde980d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad62c759e7ae12374bee59a1bac190aec"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#ad62c759e7ae12374bee59a1bac190aec">serveContinuously</a> () const </td></tr>
+<tr class="memdesc:ad62c759e7ae12374bee59a1bac190aec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows implementing trainers to decide whether to serve end-of-frame in the middle of the episode or not.  <a href="#ad62c759e7ae12374bee59a1bac190aec">More...</a><br /></td></tr>
+<tr class="separator:ad62c759e7ae12374bee59a1bac190aec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada052d4e09d0430a0c0db1f078b3f249"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#ada052d4e09d0430a0c0db1f078b3f249">CentralTrainer</a> (ag::Container <a class="el" href="classcpid_1_1Trainer.html#a725e7be593702910a92eb8e27b100a73">model</a>, ag::Optimizer <a class="el" href="classcpid_1_1Trainer.html#ad0f87b4190a741893c7050af55ba17f5">optim</a>, std::unique_ptr&lt; <a class="el" href="classcpid_1_1BaseSampler.html">BaseSampler</a> &gt; sampler, std::unique_ptr&lt; <a class="el" href="classcpid_1_1AsyncBatcher.html">AsyncBatcher</a> &gt; batcher=nullptr)</td></tr>
+<tr class="memdesc:ada052d4e09d0430a0c0db1f078b3f249"><td class="mdescLeft">&#160;</td><td class="mdescRight">A protected constructor that doesn't set up a server.  <a href="#ada052d4e09d0430a0c0db1f078b3f249">More...</a><br /></td></tr>
+<tr class="separator:ada052d4e09d0430a0c0db1f078b3f249"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a383f3d43f86647b62bf9e089b626e9ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a383f3d43f86647b62bf9e089b626e9ad">dequeueEpisodes</a> ()</td></tr>
+<tr class="separator:a383f3d43f86647b62bf9e089b626e9ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
 <tr class="memitem:aefb741f9671366397b8b43f0d8e1a884 inherit pro_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#aefb741f9671366397b8b43f0d8e1a884">stepGame</a> (<a class="el" href="namespacecpid.html#aa8cf44de209adffc9e01a1d11376beae">GameUID</a> const &amp;game)</td></tr>
 <tr class="separator:aefb741f9671366397b8b43f0d8e1a884 inherit pro_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,14 +221,24 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a55f02f63709e0fad3f548a4d87d5171a inherit pro_methods_classcpid_1_1Trainer"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T const * &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a55f02f63709e0fad3f548a4d87d5171a">cast</a> (<a class="el" href="classcpid_1_1ReplayBuffer.html#a42603e043c83dd89036b8230d1adca74">ReplayBuffer::Episode</a> const &amp;e)</td></tr>
 <tr class="separator:a55f02f63709e0fad3f548a4d87d5171a inherit pro_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_types_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
-<tr class="memitem:a775a2b5afa4cb841f48366602286544b inherit pro_types_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a775a2b5afa4cb841f48366602286544b">ForwardFunction</a> = std::function&lt; ag::Variant(ag::Variant, <a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;)&gt;</td></tr>
-<tr class="separator:a775a2b5afa4cb841f48366602286544b inherit pro_types_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_static_methods_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
-<tr class="memitem:a5a08fcc8beac1528491bca7706832f0c inherit pro_static_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classcpid_1_1Evaluator.html">Evaluator</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a5a08fcc8beac1528491bca7706832f0c">evaluatorFactory</a> (ag::Container <a class="el" href="classcpid_1_1Trainer.html#a725e7be593702910a92eb8e27b100a73">model</a>, std::unique_ptr&lt; <a class="el" href="classcpid_1_1BaseSampler.html">BaseSampler</a> &gt; s, size_t n, <a class="el" href="classcpid_1_1Trainer.html#a775a2b5afa4cb841f48366602286544b">ForwardFunction</a> func)</td></tr>
-<tr class="separator:a5a08fcc8beac1528491bca7706832f0c inherit pro_static_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a3bb32fdbfc32be48bed37e36e829d6ea"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="namespacecpid.html#a07fe4b753be19c4dfbe070e70924930e">EpisodeServer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a3bb32fdbfc32be48bed37e36e829d6ea">server_</a></td></tr>
+<tr class="separator:a3bb32fdbfc32be48bed37e36e829d6ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93866d927a5f024718006b1bf82137fe"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="namespacecpid.html#a5560f28719dfc769a6833e758bac323d">EpisodeClient</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a93866d927a5f024718006b1bf82137fe">client_</a></td></tr>
+<tr class="separator:a93866d927a5f024718006b1bf82137fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c6c8735d831c6d74f6a4aa4686a304b"><td class="memItemLeft" align="right" valign="top">std::thread&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a1c6c8735d831c6d74f6a4aa4686a304b">dequeueEpisodes_</a></td></tr>
+<tr class="separator:a1c6c8735d831c6d74f6a4aa4686a304b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a294f3de57c658dcd22e3fac3558f3ace"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a294f3de57c658dcd22e3fac3558f3ace">newGamesMutex_</a></td></tr>
+<tr class="separator:a294f3de57c658dcd22e3fac3558f3ace"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb1c3be30906402c43cc82560f5181d4"><td class="memItemLeft" align="right" valign="top">std::queue&lt; <a class="el" href="structcpid_1_1EpisodeTuple.html">EpisodeTuple</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#abb1c3be30906402c43cc82560f5181d4">newBatches_</a></td></tr>
+<tr class="separator:abb1c3be30906402c43cc82560f5181d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35cd57d31bd425ffff648185457aee27"><td class="memItemLeft" align="right" valign="top">std::shared_timed_mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#a35cd57d31bd425ffff648185457aee27">modelMutex_</a></td></tr>
+<tr class="separator:a35cd57d31bd425ffff648185457aee27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af15a3ea46af3c76e2c0c498a1f2c1eaf"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#af15a3ea46af3c76e2c0c498a1f2c1eaf">stop_</a> {false}</td></tr>
+<tr class="separator:af15a3ea46af3c76e2c0c498a1f2c1eaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae46b8bb1653b3cdf1f1b6c5b3c39da5a"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classcpid_1_1CentralTrainer_1_1BufferPool.html">BufferPool</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1CentralTrainer.html#ae46b8bb1653b3cdf1f1b6c5b3c39da5a">bufferPool_</a></td></tr>
+<tr class="separator:ae46b8bb1653b3cdf1f1b6c5b3c39da5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
 <tr class="memitem:a106ea9ef0d96566aa2908a17da10ea6e inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">ag::Container&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a106ea9ef0d96566aa2908a17da10ea6e">model_</a></td></tr>
 <tr class="separator:a106ea9ef0d96566aa2908a17da10ea6e inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -234,6 +264,15 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a3fb39ecbab796b12bddf4cc2fc20a454 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad8d5a01d29393aa8549c4dce022dff6 inherit pro_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcpid_1_1ReplayBuffer.html#a284cfd916c6bc35daa833c665ee25ccb">ReplayBuffer::UIDKeyStore</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#aad8d5a01d29393aa8549c4dce022dff6">actives_</a></td></tr>
 <tr class="separator:aad8d5a01d29393aa8549c4dce022dff6 inherit pro_attribs_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_types_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
+<tr class="memitem:a775a2b5afa4cb841f48366602286544b inherit pro_types_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a775a2b5afa4cb841f48366602286544b">ForwardFunction</a> = std::function&lt; ag::Variant(ag::Variant, <a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;)&gt;</td></tr>
+<tr class="separator:a775a2b5afa4cb841f48366602286544b inherit pro_types_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_static_methods_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
+<tr class="memitem:a5a08fcc8beac1528491bca7706832f0c inherit pro_static_methods_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classcpid_1_1Evaluator.html">Evaluator</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#a5a08fcc8beac1528491bca7706832f0c">evaluatorFactory</a> (ag::Container <a class="el" href="classcpid_1_1Trainer.html#a725e7be593702910a92eb8e27b100a73">model</a>, std::unique_ptr&lt; <a class="el" href="classcpid_1_1BaseSampler.html">BaseSampler</a> &gt; s, size_t n, <a class="el" href="classcpid_1_1Trainer.html#a775a2b5afa4cb841f48366602286544b">ForwardFunction</a> func)</td></tr>
+<tr class="separator:a5a08fcc8beac1528491bca7706832f0c inherit pro_static_methods_classcpid_1_1Trainer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_static_attribs_classcpid_1_1Trainer"><td colspan="2" onclick="javascript:toggleInherit('pro_static_attribs_classcpid_1_1Trainer')"><img src="closed.png" alt="-"/>&#160;Static Protected Attributes inherited from <a class="el" href="classcpid_1_1Trainer.html">cpid::Trainer</a></td></tr>
 <tr class="memitem:aa05722c92b009206ce29999a4c687ab8 inherit pro_static_attribs_classcpid_1_1Trainer"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1Trainer.html#aa05722c92b009206ce29999a4c687ab8">kFwdMetricsSubsampling</a> = 0.1</td></tr>
 <tr class="memdesc:aa05722c92b009206ce29999a4c687ab8 inherit pro_static_attribs_classcpid_1_1Trainer"><td class="mdescLeft">&#160;</td><td class="mdescRight">We subsample kFwdMetricsSubsampling of the <a class="el" href="classcpid_1_1Trainer.html#ab88ff7def681074e1a2423fd46f94485">forward()</a> events when measuring their duration.  <a href="#aa05722c92b009206ce29999a4c687ab8">More...</a><br /></td></tr>
@@ -312,7 +351,131 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ada052d4e09d0430a0c0db1f078b3f249"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">cpid::CentralTrainer::CentralTrainer </td>
+          <td>(</td>
+          <td class="paramtype">ag::Container&#160;</td>
+          <td class="paramname"><em>model</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ag::Optimizer&#160;</td>
+          <td class="paramname"><em>optim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classcpid_1_1BaseSampler.html">BaseSampler</a> &gt;&#160;</td>
+          <td class="paramname"><em>sampler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="classcpid_1_1AsyncBatcher.html">AsyncBatcher</a> &gt;&#160;</td>
+          <td class="paramname"><em>batcher</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A protected constructor that doesn't set up a server. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a383f3d43f86647b62bf9e089b626e9ad"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cpid::CentralTrainer::dequeueEpisodes </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aba9fec19f4081c6ef4b0e32046bcee7b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cpid::CentralTrainer::episodeClientEnqueue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcpid_1_1EpisodeData.html">EpisodeData</a> const &amp;&#160;</td>
+          <td class="paramname"><em>epData</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Callback for locally generated episode data that can be sent out. </p>
+<p>If this returns <code>false</code>, the data will be put into the local replay buffer. </p>
+
+</div>
+</div>
+<a class="anchor" id="a28310271c5c14bf906d2063b0eea906b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cpid::CentralTrainer::forceStopEpisode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> const &amp;&#160;</td>
+          <td class="paramname"><em>handle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classcpid_1_1Trainer.html#afabe12b24393cb8b3d60bcf528f4285d">cpid::Trainer</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a3a2d1b3ff2e114ed4af4f989375c88df"></a>
 <div class="memitem">
 <div class="memproto">
@@ -529,6 +692,59 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ad62c759e7ae12374bee59a1bac190aec"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cpid::CentralTrainer::serveContinuously </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Allows implementing trainers to decide whether to serve end-of-frame in the middle of the episode or not. </p>
+
+</div>
+</div>
+<a class="anchor" id="a64bef9d54de04e1ea019fb254b62490b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structcpid_1_1Trainer_1_1EpisodeHandle.html">EpisodeHandle</a> cpid::CentralTrainer::startEpisode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if succeeded to register an episode, and false otherwise. </p>
+<p>After receiving false, a worker thread should check stopping conditins and re-try. </p>
+
+<p>Reimplemented from <a class="el" href="classcpid_1_1Trainer.html#a1df3cb2891fa6a56f0368b4871b58258">cpid::Trainer</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a8e9d7e2b3131950b26c75bac39fabd63"></a>
 <div class="memitem">
 <div class="memproto">
@@ -546,7 +762,7 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespacecpid.html#a202d873acf77413b254487acf07bfe0b">EpisodeKey</a> const &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>key</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -636,6 +852,169 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classcpid_1_1Trainer.html#accc38f8679853d75e431ac0ba7b6e089">cpid::Trainer</a>.</p>
 
+<p>Reimplemented in <a class="el" href="classcpid_1_1CentralCpid2kTrainer.html#a28df55f7665026ce6f363c0d9e41b7b9">cpid::CentralCpid2kTrainer</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ae46b8bb1653b3cdf1f1b6c5b3c39da5a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classcpid_1_1CentralTrainer_1_1BufferPool.html">BufferPool</a>&gt; cpid::CentralTrainer::bufferPool_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a93866d927a5f024718006b1bf82137fe"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="namespacecpid.html#a5560f28719dfc769a6833e758bac323d">EpisodeClient</a>&gt; cpid::CentralTrainer::client_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1c6c8735d831c6d74f6a4aa4686a304b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::thread cpid::CentralTrainer::dequeueEpisodes_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a35cd57d31bd425ffff648185457aee27"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_timed_mutex cpid::CentralTrainer::modelMutex_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abb1c3be30906402c43cc82560f5181d4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::queue&lt;<a class="el" href="structcpid_1_1EpisodeTuple.html">EpisodeTuple</a>&gt; cpid::CentralTrainer::newBatches_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a294f3de57c658dcd22e3fac3558f3ace"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex cpid::CentralTrainer::newGamesMutex_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3bb32fdbfc32be48bed37e36e829d6ea"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="namespacecpid.html#a07fe4b753be19c4dfbe070e70924930e">EpisodeServer</a>&gt; cpid::CentralTrainer::server_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af15a3ea46af3c76e2c0c498a1f2c1eaf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;bool&gt; cpid::CentralTrainer::stop_ {false}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -645,7 +1024,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

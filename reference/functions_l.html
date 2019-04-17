@@ -158,6 +158,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>lastEpochStamp_
 : <a class="el" href="classcpid_1_1Checkpointer.html#ab1b3c537abbdd12d3f27d73d4acd2b00">cpid::Checkpointer</a>
 </li>
+<li>lastEpochUpdateNum_
+: <a class="el" href="classcpid_1_1Checkpointer.html#a662a7dcb053e45878e5bc7017954eb95">cpid::Checkpointer</a>
+</li>
 <li>lastEvaluate
 : <a class="el" href="classcherrypi_1_1AutoBuildTask.html#a4a6b57784ad0f3372f3dcae4390870e5">cherrypi::AutoBuildTask</a>
 </li>
@@ -175,6 +178,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>lastFowCreepUpdate_
 : <a class="el" href="classcherrypi_1_1TilesInfo.html#a069b6f1d6433dc0d002add6bf6b55258">cherrypi::TilesInfo</a>
+</li>
+<li>lastFrame_
+: <a class="el" href="classcherrypi_1_1Snapshotter.html#abc637c131afc5400056bd6be7499a6a8">cherrypi::Snapshotter</a>
 </li>
 <li>lastFrameStepped_
 : <a class="el" href="classcherrypi_1_1BasePlayer.html#aabe40ee99276eb8cd20bad921f7e5f44">cherrypi::BasePlayer</a>
@@ -202,9 +208,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>lastPosition
 : <a class="el" href="classcherrypi_1_1Agent.html#ae91b9673b6d92098bfdb045d93a877a1">cherrypi::Agent</a>
-</li>
-<li>lastPossibleAttack_
-: <a class="el" href="classcherrypi_1_1ScenarioProvider.html#ada42fb5c36e15fe8df8544df8ee272bf">cherrypi::ScenarioProvider</a>
 </li>
 <li>lastProcess_
 : <a class="el" href="classcherrypi_1_1TacticsModule.html#a9b63060a10457469a5915526ec366674">cherrypi::TacticsModule</a>
@@ -291,8 +294,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>latencyFrames()
 : <a class="el" href="classcherrypi_1_1State.html#a7674edff24f7e73c4afc6ac10c437b15">cherrypi::State</a>
 </li>
-<li>launchedWithReplay_
-: <a class="el" href="classcherrypi_1_1BaseMicroScenario.html#aef5e5241b5a3b2395f8bb101c8f2a2a4">cherrypi::BaseMicroScenario</a>
+<li>launchedWithReplay()
+: <a class="el" href="classcherrypi_1_1MicroScenarioProvider.html#a88f6ffcdab05a0fe6a5d51e91ab6fb2d">cherrypi::MicroScenarioProvider</a>
 </li>
 <li>LayeredJitter()
 : <a class="el" href="classcherrypi_1_1LayeredJitter.html#a530c48f0278360a3200f85cf66109c8d">cherrypi::LayeredJitter</a>
@@ -320,6 +323,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>level
 : <a class="el" href="structcherrypi_1_1BuildType.html#ababac6e8746d70decf70525cdbe2e839">cherrypi::BuildType</a>
+, <a class="el" href="structcherrypi_1_1ScenarioUpgradeLevel.html#acbdc3a0d69e992c3fe00fce2daf71e2d">cherrypi::ScenarioUpgradeLevel</a>
 </li>
 <li>lifted()
 : <a class="el" href="structcherrypi_1_1Unit.html#af48b0781231bb3f16f31519a42967dbb">cherrypi::Unit</a>
@@ -329,13 +333,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>line
 : <a class="el" href="classcommon_1_1Exception.html#a8e76c4a6e299cb68e9451556d6cc0339">common::Exception</a>
-, <a class="el" href="classvisdom_1_1Visdom.html#a68738a804f999279eb5aa4986602d51a">visdom::Visdom</a>
+, <a class="el" href="classvisdom_1_1Visdom.html#a4178990cb737ab432dc428c35ce9c6a9">visdom::Visdom</a>
 </li>
 <li>line_
 : <a class="el" href="classcherrypi_1_1CherryVisDumperModule_1_1Logger_1_1LoggerStream.html#af4c7379270a46864287deb60ad5f1a4e">cherrypi::CherryVisDumperModule::Logger::LoggerStream</a>
 </li>
 <li>listScenarios()
-: <a class="el" href="classcherrypi_1_1MicroFixedScenario.html#a91081f3999c74f40f2d4e51d92168969">cherrypi::MicroFixedScenario</a>
+: <a class="el" href="classcherrypi_1_1MicroScenarioProviderFixed.html#aa89e5c8be31a94685e7dac406fa83c78">cherrypi::MicroScenarioProviderFixed</a>
 </li>
 <li>liveUnits
 : <a class="el" href="structcherrypi_1_1Area.html#ad035e2597a9892a4572460681bd558fa">cherrypi::Area</a>
@@ -359,7 +363,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classcherrypi_1_1ScenarioProvider.html#addc41d07034c8cde53476e666804143d">cherrypi::ScenarioProvider</a>
 </li>
 <li>loadScenario()
-: <a class="el" href="classcherrypi_1_1MicroFixedScenario.html#a0aa022bd43b9afc404adc7139cc474f4">cherrypi::MicroFixedScenario</a>
+: <a class="el" href="classcherrypi_1_1MicroScenarioProviderFixed.html#a60487f7c52f7151c5e0c1892e988dab3">cherrypi::MicroScenarioProviderFixed</a>
+</li>
+<li>loadSnapshot_()
+: <a class="el" href="classcherrypi_1_1MicroScenarioProviderSnapshot.html#aa2352f97151e068e44bdad963fbcec4e">cherrypi::MicroScenarioProviderSnapshot</a>
 </li>
 <li>localRandEngine_
 : <a class="el" href="classcommon_1_1Rand.html#ab51284f1141db325151aa7f4e884f48c">common::Rand</a>
@@ -375,7 +382,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>lock()
 : <a class="el" href="classcpid_1_1permanent__lock.html#a1331105713f90e948e0a1d3d97c6a82c">cpid::permanent_lock&lt; Mutex_t &gt;</a>
-, <a class="el" href="classcpid_1_1priority__lock.html#a6929f053f75129c31ffe6ad39030dd30">cpid::priority_lock</a>
+, <a class="el" href="classcpid_1_1priority__lock.html#a755209a6cadd181ca6249f1d291746f9">cpid::priority_lock</a>
 , <a class="el" href="classcpid_1_1priority__mutex.html#a762a3623c4b65527120c9799c51d1a36">cpid::priority_mutex</a>
 </li>
 <li>Lockdown
@@ -426,7 +433,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:57 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

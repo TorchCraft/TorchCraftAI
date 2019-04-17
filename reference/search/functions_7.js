@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['handlerequest',['handleRequest',['../classcpid_1_1ZeroMQBufferedProducer.html#ac34bdf85b399cbbc8195a10fca99e263',1,'cpid::ZeroMQBufferedProducer']]],
+  ['handlerequest',['handleRequest',['../classcpid_1_1ZeroMQBufferedProducer.html#a8df4e3c3e66b88b379e23b8c32e2444e',1,'cpid::ZeroMQBufferedProducer']]],
   ['harasstask',['HarassTask',['../classcherrypi_1_1HarassTask.html#a5b27692def98c7332974dd01fb4197f3',1,'cherrypi::HarassTask']]],
   ['has',['has',['../classcpid_1_1ReplayBuffer.html#a5818961feb4a4cd93b741a2c21017cb3',1,'cpid::ReplayBuffer::has()'],['../namespacecherrypi_1_1autobuild.html#a632c2c8286708a524726f9e1113775c5',1,'cherrypi::autobuild::has()']]],
   ['hascounter',['hasCounter',['../classcpid_1_1MetricsContext.html#a2bfed0b5a87d225872ad87df5315ee81',1,'cpid::MetricsContext']]],
@@ -12,10 +12,11 @@ var searchData=
   ['hasorinproduction',['hasOrInProduction',['../namespacecherrypi_1_1autobuild.html#a17fe27e2c2d4b3e350746de1270c9ce7',1,'cherrypi::autobuild']]],
   ['haspowerprecise',['hasPowerPrecise',['../classtcbwapi_1_1TCGame.html#afe684391ef9db4c5da75e71f1573bc70',1,'tcbwapi::TCGame']]],
   ['hasresearched',['hasResearched',['../classcherrypi_1_1State.html#a102cbe3022dba210b6b10d2a634a01d8',1,'cherrypi::State::hasResearched()'],['../classtorchcraft_1_1State.html#a74f479926800baf05161bbeb5689b802',1,'torchcraft::State::hasResearched()']]],
-  ['hastech',['hasTech',['../namespacecherrypi_1_1autobuild.html#a872e95a4d812a2592f3c96fab50394d4',1,'cherrypi::autobuild']]],
+  ['hastech',['hasTech',['../structcherrypi_1_1FixedScenarioPlayer.html#abbe60029cfc87b4812d756b2d381650e',1,'cherrypi::FixedScenarioPlayer::hasTech()'],['../structcherrypi_1_1SnapshotPlayer.html#a9006fcc1f9a05ce3ccf95b8284f5177d',1,'cherrypi::SnapshotPlayer::hasTech()'],['../namespacecherrypi_1_1autobuild.html#a872e95a4d812a2592f3c96fab50394d4',1,'cherrypi::autobuild::hasTech()']]],
   ['hasunit',['hasUnit',['../namespacecherrypi_1_1autobuild.html#a2c690a426320476f5bfe70e15d2b457e',1,'cherrypi::autobuild']]],
   ['hasupgrade',['hasUpgrade',['../namespacecherrypi_1_1autobuild.html#ab537e1f556a944c3a48ca1b989197bec',1,'cherrypi::autobuild']]],
   ['hatcherytechbuilderscore',['hatcheryTechBuilderScore',['../classcherrypi_1_1BuilderControllerBase.html#a2b57a3a31e774dde11da8ca17a102c39',1,'cherrypi::BuilderControllerBase']]],
+  ['heartbeater',['heartBeater',['../classcpid_1_1Cpid2kWorker.html#a64694674eb32426920fa4ed5afc010c1',1,'cpid::Cpid2kWorker']]],
   ['heatmap',['heatmap',['../classvisdom_1_1Visdom.html#a1a87811b139f0a560c906ade9e4a3e02',1,'visdom::Visdom::heatmap(torch::Tensor tensor, Options const &amp;opts=Options())'],['../classvisdom_1_1Visdom.html#aa53287fbee06748320d779a32d722e6f',1,'visdom::Visdom::heatmap(torch::Tensor tensor, std::string const &amp;win, Options const &amp;opts=Options())'],['../classvisdom_1_1Visdom.html#a02678704fd0b3c6bdf3a2ed5f9937b94',1,'visdom::Visdom::heatmap(torch::Tensor tensor, std::string const &amp;win, std::string const &amp;env, Options const &amp;opts=Options())']]],
   ['height',['height',['../classcherrypi_1_1Rect2T.html#af17f7130d098c31cb29faa5a47a4cc7d',1,'cherrypi::Rect2T']]],
   ['hiddenunits',['hiddenUnits',['../classcherrypi_1_1UnitsInfo.html#a1f185dd160f9b130f8e200221cd7a7c2',1,'cherrypi::UnitsInfo']]],

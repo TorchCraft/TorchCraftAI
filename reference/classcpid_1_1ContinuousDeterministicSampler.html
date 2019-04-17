@@ -105,8 +105,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa7a0bd9fe0a08ac78034910d40cd35c0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ContinuousDeterministicSampler.html#aa7a0bd9fe0a08ac78034910d40cd35c0">ContinuousDeterministicSampler</a> (const std::string &amp;policyKey=<a class="el" href="namespacecpid.html#a5e012a3c47f8a7f24c96e60fe8b12836">kPiKey</a>, const std::string &amp;actionKey=<a class="el" href="namespacecpid.html#a02d0c11bc655972a72aa213f138a8118">kActionKey</a>, const std::string &amp;pActionKey=<a class="el" href="namespacecpid.html#a66fbdc827ecce8857ed3a2149614c5b4">kPActionKey</a>)</td></tr>
-<tr class="separator:aa7a0bd9fe0a08ac78034910d40cd35c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc8b22061110215b81c38d00f6b59a8f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ContinuousDeterministicSampler.html#afc8b22061110215b81c38d00f6b59a8f">ContinuousDeterministicSampler</a> (const std::string &amp;policyKey=<a class="el" href="namespacecpid.html#a5e012a3c47f8a7f24c96e60fe8b12836">kPiKey</a>, const std::string &amp;actionKey=<a class="el" href="namespacecpid.html#a02d0c11bc655972a72aa213f138a8118">kActionKey</a>)</td></tr>
+<tr class="separator:afc8b22061110215b81c38d00f6b59a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1be4886f175b648259d4b415050df9a"><td class="memItemLeft" align="right" valign="top">ag::Variant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ContinuousDeterministicSampler.html#ab1be4886f175b648259d4b415050df9a">sample</a> (ag::Variant in) override</td></tr>
 <tr class="separator:ab1be4886f175b648259d4b415050df9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcpid_1_1BaseSampler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcpid_1_1BaseSampler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcpid_1_1BaseSampler.html">cpid::BaseSampler</a></td></tr>
@@ -123,14 +123,12 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a68bfb7226af672e0cf661a60300cee9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8328ce6a2ed4817d582a4f9c766202e1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ContinuousDeterministicSampler.html#a8328ce6a2ed4817d582a4f9c766202e1">actionKey_</a></td></tr>
 <tr class="separator:a8328ce6a2ed4817d582a4f9c766202e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af15ea8acadf3aff01e7357a77c558cb1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ContinuousDeterministicSampler.html#af15ea8acadf3aff01e7357a77c558cb1">pActionKey_</a></td></tr>
-<tr class="separator:af15ea8acadf3aff01e7357a77c558cb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This sampler expects as input an unordered_map&lt;string, Variant&gt; containing an entry policyKey, which is a tensor of size [b, n]. </p>
-<p>It outputs the same map, with a new key kActionKey, a clone of the policy. It also adds a key pActionKey which corresponds to the probability of the sampled action (always 1 in this case) </p>
+<p>It outputs the same map, with a new key kActionKey, a clone of the policy. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aa7a0bd9fe0a08ac78034910d40cd35c0"></a>
+<a class="anchor" id="afc8b22061110215b81c38d00f6b59a8f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -144,13 +142,7 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>actionKey</em> = <code><a class="el" href="namespacecpid.html#a02d0c11bc655972a72aa213f138a8118">kActionKey</a></code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>pActionKey</em> = <code><a class="el" href="namespacecpid.html#a66fbdc827ecce8857ed3a2149614c5b4">kPActionKey</a></code>&#160;</td>
+          <td class="paramname"><em>actionKey</em> = <code><a class="el" href="namespacecpid.html#a02d0c11bc655972a72aa213f138a8118">kActionKey</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -210,26 +202,6 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af15ea8acadf3aff01e7357a77c558cb1"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string cpid::ContinuousDeterministicSampler::pActionKey_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a68bfb7226af672e0cf661a60300cee9f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -257,7 +229,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

@@ -108,9 +108,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a74fbbcd5e9106da89bde3a62d914f20f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1SquadCombatModule.html#a74fbbcd5e9106da89bde3a62d914f20f">step</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *s) override</td></tr>
 <tr class="separator:a74fbbcd5e9106da89bde3a62d914f20f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd9017337b66346065f1008f2c3fe2c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1SquadCombatModule.html#abd9017337b66346065f1008f2c3fe2c6">enqueueModel</a> (std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1MicroModel.html">MicroModel</a> &gt;)</td></tr>
-<tr class="memdesc:abd9017337b66346065f1008f2c3fe2c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a <a class="el" href="structcherrypi_1_1MicroModel.html">MicroModel</a> to the end of the list of models which will be updated and solicited for UPCs.  <a href="#abd9017337b66346065f1008f2c3fe2c6">More...</a><br /></td></tr>
-<tr class="separator:abd9017337b66346065f1008f2c3fe2c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a775e3a3ba02d7f413e7442bc82102a5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1SquadCombatModule.html#a775e3a3ba02d7f413e7442bc82102a5d">enqueueModel</a> (std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1MicroModel.html">MicroModel</a> &gt; model, std::string <a class="el" href="classcherrypi_1_1Module.html#ad7300b77897752ed01933510e3ce70aa">name</a>)</td></tr>
+<tr class="memdesc:a775e3a3ba02d7f413e7442bc82102a5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a <a class="el" href="structcherrypi_1_1MicroModel.html">MicroModel</a> to the end of the list of models which will be updated and solicited for UPCs.  <a href="#a775e3a3ba02d7f413e7442bc82102a5d">More...</a><br /></td></tr>
+<tr class="separator:a775e3a3ba02d7f413e7442bc82102a5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeefcbc237c4e8680d4bb38a5e408307b"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1MicroModel.html">MicroModel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1SquadCombatModule.html#aeefcbc237c4e8680d4bb38a5e408307b">getModel</a> (std::string)</td></tr>
+<tr class="separator:aeefcbc237c4e8680d4bb38a5e408307b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03704a15391b106d3355d8824406fc26"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1SquadCombatModule.html#a03704a15391b106d3355d8824406fc26">onGameEnd</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *<a class="el" href="classcherrypi_1_1SquadCombatModule.html#a4787b3a63d296c7223b6daae556caeea">state</a>) override</td></tr>
+<tr class="separator:a03704a15391b106d3355d8824406fc26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e753bd8221f1aa2231f1ba98c1c1e04"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1SquadCombatModule.html#a3e753bd8221f1aa2231f1ba98c1c1e04">onGameStart</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *<a class="el" href="classcherrypi_1_1SquadCombatModule.html#a4787b3a63d296c7223b6daae556caeea">state</a>) override</td></tr>
+<tr class="separator:a3e753bd8221f1aa2231f1ba98c1c1e04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcherrypi_1_1Module"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcherrypi_1_1Module')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcherrypi_1_1Module.html">cherrypi::Module</a></td></tr>
 <tr class="memitem:a3f87ef741ff90f5ed09c3de245afb035 inherit pub_methods_classcherrypi_1_1Module"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Module.html#a3f87ef741ff90f5ed09c3de245afb035">~Module</a> ()=default</td></tr>
 <tr class="separator:a3f87ef741ff90f5ed09c3de245afb035 inherit pub_methods_classcherrypi_1_1Module"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -120,10 +126,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a754316ba9d84ce93290216f905790fb7 inherit pub_methods_classcherrypi_1_1Module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7300b77897752ed01933510e3ce70aa inherit pub_methods_classcherrypi_1_1Module"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Module.html#ad7300b77897752ed01933510e3ce70aa">name</a> ()</td></tr>
 <tr class="separator:ad7300b77897752ed01933510e3ce70aa inherit pub_methods_classcherrypi_1_1Module"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1313b3cf2187ee02120060be33383da1 inherit pub_methods_classcherrypi_1_1Module"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Module.html#a1313b3cf2187ee02120060be33383da1">onGameStart</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *s)</td></tr>
-<tr class="separator:a1313b3cf2187ee02120060be33383da1 inherit pub_methods_classcherrypi_1_1Module"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c78547bd07308f815980d13472e08e6 inherit pub_methods_classcherrypi_1_1Module"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Module.html#a5c78547bd07308f815980d13472e08e6">onGameEnd</a> (<a class="el" href="classcherrypi_1_1State.html">State</a> *s)</td></tr>
-<tr class="separator:a5c78547bd07308f815980d13472e08e6 inherit pub_methods_classcherrypi_1_1Module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -152,9 +154,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a61fa858fa5720db3a15524ccfb02eabf"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="structcherrypi_1_1Unit.html">Unit</a> const *, <a class="el" href="structcherrypi_1_1EnemyState.html">EnemyState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1SquadCombatModule.html#a61fa858fa5720db3a15524ccfb02eabf">enemyStates_</a></td></tr>
 <tr class="memdesc:a61fa858fa5720db3a15524ccfb02eabf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Micromanagement state of enemy units.  <a href="#a61fa858fa5720db3a15524ccfb02eabf">More...</a><br /></td></tr>
 <tr class="separator:a61fa858fa5720db3a15524ccfb02eabf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae39df0b1304638e0b68cb3e1e00a173d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1MicroModel.html">MicroModel</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1SquadCombatModule.html#ae39df0b1304638e0b68cb3e1e00a173d">models_</a></td></tr>
-<tr class="memdesc:ae39df0b1304638e0b68cb3e1e00a173d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Models for SquadCombat to solicit for unit UPCs.  <a href="#ae39df0b1304638e0b68cb3e1e00a173d">More...</a><br /></td></tr>
-<tr class="separator:ae39df0b1304638e0b68cb3e1e00a173d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04637dd89854c97f0a14d5bdbfd56b32"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1MicroModel.html">MicroModel</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1SquadCombatModule.html#a04637dd89854c97f0a14d5bdbfd56b32">models_</a></td></tr>
+<tr class="memdesc:a04637dd89854c97f0a14d5bdbfd56b32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Models for SquadCombat to solicit for unit UPCs.  <a href="#a04637dd89854c97f0a14d5bdbfd56b32">More...</a><br /></td></tr>
+<tr class="separator:a04637dd89854c97f0a14d5bdbfd56b32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classcherrypi_1_1Module"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcherrypi_1_1Module')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcherrypi_1_1Module.html">cherrypi::Module</a></td></tr>
 <tr class="memitem:a4740d6e3af84270958dc7f131f90aba2 inherit pro_attribs_classcherrypi_1_1Module"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Module.html#a4740d6e3af84270958dc7f131f90aba2">player_</a></td></tr>
 <tr class="separator:a4740d6e3af84270958dc7f131f90aba2 inherit pro_attribs_classcherrypi_1_1Module"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,7 +183,7 @@ Additional Inherited Members</h2></td></tr>
 <li><a class="el" href="classcherrypi_1_1Agent.html" title="An Agent represents the micromanagement state of one of our units. ">Agent</a>: Controls individual units using Behaviors </li>
 </ul>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="abd9017337b66346065f1008f2c3fe2c6"></a>
+<a class="anchor" id="a775e3a3ba02d7f413e7442bc82102a5d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -189,8 +191,18 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void cherrypi::SquadCombatModule::enqueueModel </td>
           <td>(</td>
           <td class="paramtype">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1MicroModel.html">MicroModel</a> &gt;&#160;</td>
-          <td class="paramname"><em>model</em></td><td>)</td>
+          <td class="paramname"><em>model</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -232,6 +244,22 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Takes incoming UPCs (usually from the Tactics module) and forms clusters of units that fight collaboratively. </p>
+
+</div>
+</div>
+<a class="anchor" id="aeefcbc237c4e8680d4bb38a5e408307b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="structcherrypi_1_1MicroModel.html">MicroModel</a> &gt; cherrypi::SquadCombatModule::getModel </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -284,6 +312,58 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Produces new flee Behaviors for an <a class="el" href="classcherrypi_1_1Agent.html" title="An Agent represents the micromanagement state of one of our units. ">Agent</a>. </p>
 <p>Intended for override by subclasses which insert baseline or ML-powered behaviors. </p>
+
+</div>
+</div>
+<a class="anchor" id="a03704a15391b106d3355d8824406fc26"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::SquadCombatModule::onGameEnd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classcherrypi_1_1Module.html#a5c78547bd07308f815980d13472e08e6">cherrypi::Module</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3e753bd8221f1aa2231f1ba98c1c1e04"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::SquadCombatModule::onGameStart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classcherrypi_1_1Module.html#a1313b3cf2187ee02120060be33383da1">cherrypi::Module</a>.</p>
 
 </div>
 </div>
@@ -382,7 +462,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae39df0b1304638e0b68cb3e1e00a173d"></a>
+<a class="anchor" id="a04637dd89854c97f0a14d5bdbfd56b32"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -390,7 +470,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;std::shared_ptr&lt;<a class="el" href="structcherrypi_1_1MicroModel.html">MicroModel</a>&gt; &gt; cherrypi::SquadCombatModule::models_</td>
+          <td class="memname">std::unordered_map&lt;std::string, std::shared_ptr&lt;<a class="el" href="structcherrypi_1_1MicroModel.html">MicroModel</a>&gt; &gt; cherrypi::SquadCombatModule::models_</td>
         </tr>
       </table>
   </td>
@@ -431,7 +511,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

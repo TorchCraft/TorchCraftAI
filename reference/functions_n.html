@@ -134,12 +134,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>name
 : <a class="el" href="structcherrypi_1_1BuildType.html#a397a9b21943580a58d521a4c4e9d2dce">cherrypi::BuildType</a>
 , <a class="el" href="structcherrypi_1_1FeatureDescriptor.html#a76108d5c09add57b3682a39a55819b41">cherrypi::FeatureDescriptor</a>
+, <a class="el" href="structcherrypi_1_1FixedScenario.html#a90ceed652b82a2475d4b692bb03392e8">cherrypi::FixedScenario</a>
 , <a class="el" href="structcherrypi_1_1FixedScenarioGroup.html#a9426b3f58256135afbaba217916cf7ea">cherrypi::FixedScenarioGroup</a>
 , <a class="el" href="classcherrypi_1_1Module.html#ad7300b77897752ed01933510e3ce70aa">cherrypi::Module</a>
-, <a class="el" href="structcherrypi_1_1ScenarioInfo.html#a6ce37d97138b328d1201ff2239ba44d1">cherrypi::ScenarioInfo</a>
 , <a class="el" href="classcherrypi_1_1SubclassRegistry.html#ab9a591388132a38bdd5be41f72eed9f8">cherrypi::SubclassRegistry&lt; Base, Args &gt;</a>
 , <a class="el" href="structcherrypi_1_1SubclassRegistry_1_1SubclassInfo.html#af17c20ba8a03920774fd0dff87b4201c">cherrypi::SubclassRegistry&lt; Base, Args &gt;::SubclassInfo</a>
 , <a class="el" href="structcherrypi_1_1UnitAttributeFeaturizer.html#a73248cf03d5337f29ff5c919c31a25e6">cherrypi::UnitAttributeFeaturizer</a>
+, <a class="el" href="structcpid_1_1Cpid2kMetrics_1_1EventMetric.html#a905a4c0e7fede3a008f06f76a6ccc11d">cpid::Cpid2kMetrics::EventMetric</a>
 , <a class="el" href="structtorchcraft_1_1State_1_1PlayerInfo.html#a669e9fbcbbbe3096c5a8a66ba9ae4df6">torchcraft::State::PlayerInfo</a>
 </li>
 <li>name_
@@ -209,12 +210,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>neutralUnits_
 : <a class="el" href="classcherrypi_1_1UnitsInfo.html#a7f67542fec111c4bb577193185add67b">cherrypi::UnitsInfo</a>
 </li>
+<li>newBatches_
+: <a class="el" href="classcpid_1_1CentralTrainer.html#abb1c3be30906402c43cc82560f5181d4">cpid::CentralTrainer</a>
+</li>
 <li>NewData
 : <a class="el" href="classcpid_1_1BlobPublisher.html#a57d6e633cf3f48c0de10dd41df6031c8a70ab82c0ec1202f511b0a7837f027bc6">cpid::BlobPublisher</a>
 </li>
 <li>newGames_
 : <a class="el" href="classcpid_1_1ESTrainer.html#a3edfc01c16b47197f8640fc56f23fa48">cpid::ESTrainer</a>
 , <a class="el" href="classcpid_1_1Evaluator.html#ab763146e79e75777dd4361d949b1f21f">cpid::Evaluator</a>
+</li>
+<li>newGamesMutex_
+: <a class="el" href="classcpid_1_1CentralTrainer.html#a294f3de57c658dcd22e3fac3558f3ace">cpid::CentralTrainer</a>
 </li>
 <li>newUnits_
 : <a class="el" href="classcherrypi_1_1UnitsInfo.html#acfe6c444124964885bb98421afe6b299">cherrypi::UnitsInfo</a>
@@ -274,9 +281,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>normalize()
 : <a class="el" href="classcherrypi_1_1Vec2T.html#ab9062bf35655e09be3496e6343b68852">cherrypi::Vec2T&lt; T &gt;</a>
 </li>
-<li>nthreads
-: <a class="el" href="classcherrypi_1_1BufferedConsumer.html#a2efb19cff6971f044ccf07d2ba7316a7">cherrypi::BufferedConsumer&lt; T, N &gt;</a>
-</li>
 <li>Nuclear_Strike
 : <a class="el" href="structtorchcraft_1_1replayer_1_1Resources.html#af952d20c39931b01a111fb62369261cdaabfcb00bb2254061952dc9cd31852c1e">torchcraft::replayer::Resources</a>
 </li>
@@ -298,7 +302,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classcherrypi_1_1model_1_1BuildOrderCount.html#ac278192f64790f063d35b916c1d3e934">cherrypi::model::BuildOrderCount</a>
 </li>
 <li>numGamesStarted()
-: <a class="el" href="classcherrypi_1_1PlayScriptScenario.html#a81e13dbb821a1d8b8aafe34264f5725c">cherrypi::PlayScriptScenario</a>
+: <a class="el" href="classcherrypi_1_1GameVsBotInWine.html#ab9b6b4e418e839c29087746e7de2fb49">cherrypi::GameVsBotInWine</a>
 </li>
 <li>numGroundAttacks
 : <a class="el" href="structcherrypi_1_1BuildType.html#ae3be766e7e497665a12210f0f446c209">cherrypi::BuildType</a>
@@ -309,14 +313,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>numMyBases()
 : <a class="el" href="classcherrypi_1_1AreaInfo.html#a6d5cfa27e21e2f700167e4e7c008986c">cherrypi::AreaInfo</a>
 </li>
-<li>numScheduledForRetry()
-: <a class="el" href="classcpid_1_1detail_1_1RRClientWrapper.html#a49353d086801125a56a35b3170e53717">cpid::detail::RRClientWrapper</a>
-</li>
 <li>numThreads_
 : <a class="el" href="classcommon_1_1DataReader.html#a6ef0b350f908dc6d21bf77aca92b221f">common::DataReader&lt; T, F &gt;</a>
 </li>
-<li>numUpdates
-: <a class="el" href="classtorchcraft_1_1State.html#ad2819c62095a0be8383cd84f4c52ca92">torchcraft::State</a>
+<li>numUpdates()
+: <a class="el" href="classcpid_1_1CentralCpid2kTrainer.html#a1f052303ed12b114db7581a1281c0670">cpid::CentralCpid2kTrainer</a>
+, <a class="el" href="classtorchcraft_1_1State.html#ad2819c62095a0be8383cd84f4c52ca92">torchcraft::State</a>
+</li>
+<li>numUpdates_
+: <a class="el" href="classcpid_1_1CentralCpid2kTrainer.html#ade92f89ee972f856213bfb64cde84db4">cpid::CentralCpid2kTrainer</a>
 </li>
 <li>numWins()
 : <a class="el" href="classcherrypi_1_1model_1_1BuildOrderCount.html#a9a860ffa237c73bf902d4c3209081338">cherrypi::model::BuildOrderCount</a>
@@ -325,7 +330,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:57 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

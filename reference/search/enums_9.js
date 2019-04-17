@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['taskstatus',['TaskStatus',['../namespacecherrypi.html#a6e6db380f6fd47b28c76f1db16e61a25',1,'cherrypi']]],
-  ['techs',['Techs',['../structtorchcraft_1_1replayer_1_1Resources.html#af952d20c39931b01a111fb62369261cd',1,'torchcraft::replayer::Resources']]],
-  ['trackerstatus',['TrackerStatus',['../namespacecherrypi.html#af2386b7dab3bfecc1df2dcef144dc342',1,'cherrypi']]]
+  ['scoutinggoal',['ScoutingGoal',['../namespacecherrypi.html#ae37e1b4b755d052c20326e05337db7ce',1,'cherrypi']]],
+  ['style',['Style',['../classcherrypi_1_1ABBOzvt2basehivebase.html#aa6fa6931c32b3401864f3efe2e7d7ea0',1,'cherrypi::ABBOzvt2basehivebase']]],
+  ['subsamplemethod',['SubsampleMethod',['../namespacecherrypi.html#a32ba27ff01921c2b9cfa083edeb1e5cd',1,'cherrypi']]]
 ];

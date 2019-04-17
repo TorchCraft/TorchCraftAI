@@ -2,12 +2,24 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://torchcraft.github.io/TorchCraftAI/blog</id>
     <title>TorchCraftAI Blog</title>
-    <updated>2018-11-28T06:00:00Z</updated>
+    <updated>2019-02-20T06:00:00Z</updated>
     <generator>Feed for Node.js</generator>
     <link rel="alternate" href="https://torchcraft.github.io/TorchCraftAI/blog"/>
     <subtitle>The best place to stay up-to-date with the latest TorchCraftAI news and events.</subtitle>
     <logo>https://torchcraft.github.io/TorchCraftAI/img/tclogosqlightgrey.png</logo>
     <rights>Copyright © 2019 Facebook</rights>
+    <entry>
+        <title type="html"><![CDATA[Releasing CherryVis: a replay viewer for TorchCraftAI]]></title>
+        <id>https://torchcraft.github.io/TorchCraftAI/blog/2019/02/20/releasing-cherryvis.html</id>
+        <link href="https://torchcraft.github.io/TorchCraftAI/blog/2019/02/20/releasing-cherryvis.html">
+        </link>
+        <updated>2019-02-20T06:00:00Z</updated>
+        <summary type="html"><![CDATA[  <p>We're glad to announce today that we are open sourcing CherryVis. Based on OpenBW's <a href="http://www.openbw.com/replay-viewer/">replay viewer</a>, CherryVis allows you to to view StarCraft replays alongside information about the bot's state. It's a powerful tool to simultaneously understand, dev...</p>]]></summary>
+        <author>
+            <name>Danthe3rd</name>
+            <uri>https://github.com/danthe3rd</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Build Order Switch Retraining Has Arrived]]></title>
         <id>https://torchcraft.github.io/TorchCraftAI/blog/2018/11/28/build-order-switch-retraining-has-arrived.html</id>

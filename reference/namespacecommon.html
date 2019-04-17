@@ -218,6 +218,9 @@ Functions</h2></td></tr>
 <tr class="separator:a1722115063aa872f70355ab48c2b0c4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3207d3b5ed49cd34d43d779a1c5bfda"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#ab3207d3b5ed49cd34d43d779a1c5bfda">operator&lt;&lt;</a> (std::ostream &amp;out, const <a class="el" href="structcommon_1_1WeightSummary.html">WeightSummary</a> &amp;summary)</td></tr>
 <tr class="separator:ab3207d3b5ed49cd34d43d779a1c5bfda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca552ba150cae3a0fd8bea053b3d298f"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int64_t, int64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#aca552ba150cae3a0fd8bea053b3d298f">torchMemoryUsage</a> (int device=0)</td></tr>
+<tr class="memdesc:aca552ba150cae3a0fd8bea053b3d298f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show the current memory usage, the first element is the amount allocated, or currently used by tensors that are alive, and the second element is the amount cached by the caching allocator.  <a href="#aca552ba150cae3a0fd8bea053b3d298f">More...</a><br /></td></tr>
+<tr class="separator:aca552ba150cae3a0fd8bea053b3d298f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafe019d691deac5c07646f046796bc9f"><td class="memItemLeft" align="right" valign="top">torch::Tensor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#aafe019d691deac5c07646f046796bc9f">normalPDF</a> (torch::Tensor x, torch::Tensor mean, torch::Tensor std)</td></tr>
 <tr class="memdesc:aafe019d691deac5c07646f046796bc9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the PDF of the normal law.  <a href="#aafe019d691deac5c07646f046796bc9f">More...</a><br /></td></tr>
 <tr class="separator:aafe019d691deac5c07646f046796bc9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -247,9 +250,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a0f02d76dc0416dbe2e684e40eda6fc92"><td class="memItemLeft" align="right" valign="top">ag::Variant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#a0f02d76dc0416dbe2e684e40eda6fc92">makeBatchVariant</a> (const std::vector&lt; ag::Variant &gt; &amp;queries, double pad=0)</td></tr>
 <tr class="memdesc:a0f02d76dc0416dbe2e684e40eda6fc92"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function works similarly as makeBatch but handles more input types.  <a href="#a0f02d76dc0416dbe2e684e40eda6fc92">More...</a><br /></td></tr>
 <tr class="separator:a0f02d76dc0416dbe2e684e40eda6fc92"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6875c702673bffa084bc33a2b88d997"><td class="memItemLeft" align="right" valign="top">std::vector&lt; ag::Variant &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#af6875c702673bffa084bc33a2b88d997">unBatchVariant</a> (ag::Variant batch, int stride=1, bool maskOut=false, double maskValue=-1)</td></tr>
-<tr class="memdesc:af6875c702673bffa084bc33a2b88d997"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function is the opposite of makeBatchVariant.  <a href="#af6875c702673bffa084bc33a2b88d997">More...</a><br /></td></tr>
-<tr class="separator:af6875c702673bffa084bc33a2b88d997"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51261f4ccf1b17801edc494fc3025b9f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; ag::Variant &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#a51261f4ccf1b17801edc494fc3025b9f">unBatchVariant</a> (ag::Variant const &amp;batch, int stride=1, bool maskOut=false, double maskValue=-1)</td></tr>
+<tr class="memdesc:a51261f4ccf1b17801edc494fc3025b9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function is the opposite of makeBatchVariant.  <a href="#a51261f4ccf1b17801edc494fc3025b9f">More...</a><br /></td></tr>
+<tr class="separator:a51261f4ccf1b17801edc494fc3025b9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0206c43d70412a65070cc5fe14c31104"><td class="memItemLeft" align="right" valign="top">torch::Tensor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#a0206c43d70412a65070cc5fe14c31104">pad2d</a> (torch::Tensor input, at::IntList pad)</td></tr>
 <tr class="memdesc:a0206c43d70412a65070cc5fe14c31104"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zero-padding (only supports 3d input)  <a href="#a0206c43d70412a65070cc5fe14c31104">More...</a><br /></td></tr>
 <tr class="separator:a0206c43d70412a65070cc5fe14c31104"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -327,9 +330,9 @@ Functions</h2></td></tr>
 <tr class="separator:ae17e8aba9ee9fcc37164ac86fce0b52b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ab3d9995a952d2e4c4c2bab436f0541"><td class="memItemLeft" align="right" valign="top">ag::Variant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#a2ab3d9995a952d2e4c4c2bab436f0541">applyTransform</a> (ag::Variant input, const <a class="el" href="namespacecommon.html#a54cd622e23826275f4fc3b580c73dcf0">TensorTransform</a> &amp;fun)</td></tr>
 <tr class="separator:a2ab3d9995a952d2e4c4c2bab436f0541"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a048a13249fa22958d877f55a96f8c585"><td class="memItemLeft" align="right" valign="top">at::Device&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#a048a13249fa22958d877f55a96f8c585">getVariantDevice</a> (ag::Variant x)</td></tr>
-<tr class="memdesc:a048a13249fa22958d877f55a96f8c585"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility to get the device of a variant.  <a href="#a048a13249fa22958d877f55a96f8c585">More...</a><br /></td></tr>
-<tr class="separator:a048a13249fa22958d877f55a96f8c585"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75f3733f568bd4f6abaf04cb3b95d588"><td class="memItemLeft" align="right" valign="top">at::Device&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#a75f3733f568bd4f6abaf04cb3b95d588">getVariantDevice</a> (ag::Variant const &amp;x)</td></tr>
+<tr class="memdesc:a75f3733f568bd4f6abaf04cb3b95d588"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility to get the device of a variant.  <a href="#a75f3733f568bd4f6abaf04cb3b95d588">More...</a><br /></td></tr>
+<tr class="separator:a75f3733f568bd4f6abaf04cb3b95d588"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bdcc11eaa0149740bea8a2503662758"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#a4bdcc11eaa0149740bea8a2503662758">gpuAvailable</a> ()</td></tr>
 <tr class="memdesc:a4bdcc11eaa0149740bea8a2503662758"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a CUDA GPU is available.  <a href="#a4bdcc11eaa0149740bea8a2503662758">More...</a><br /></td></tr>
 <tr class="separator:a4bdcc11eaa0149740bea8a2503662758"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -399,6 +402,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a47ed567becb9c0777c4a5ce7b852e151"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a47ed567becb9c0777c4a5ce7b852e151"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacecommon.html#a47ed567becb9c0777c4a5ce7b852e151">joinVector</a> (std::vector&lt; T &gt; const &amp;v, char sep)</td></tr>
 <tr class="separator:a47ed567becb9c0777c4a5ce7b852e151"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0bfb541b62a14c4f91047be32e5189f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#aa0bfb541b62a14c4f91047be32e5189f">memoryUsage</a> ()</td></tr>
+<tr class="separator:aa0bfb541b62a14c4f91047be32e5189f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56672240469955261cf6e02fe96cdca2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#a56672240469955261cf6e02fe96cdca2">setCurrentThreadName</a> (std::string const &amp;name)</td></tr>
+<tr class="separator:a56672240469955261cf6e02fe96cdca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae86fb819ef49e0baa73bc4cab9eb2174"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecommon.html#ae86fb819ef49e0baa73bc4cab9eb2174">timestamp</a> (std::chrono::system_clock::time_point tp=std::chrono::system_clock::now())</td></tr>
+<tr class="separator:ae86fb819ef49e0baa73bc4cab9eb2174"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -1168,14 +1177,14 @@ template&lt;typename Enumeration &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a048a13249fa22958d877f55a96f8c585"></a>
+<a class="anchor" id="a75f3733f568bd4f6abaf04cb3b95d588"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">at::Device common::getVariantDevice </td>
           <td>(</td>
-          <td class="paramtype">ag::Variant&#160;</td>
+          <td class="paramtype">ag::Variant const &amp;&#160;</td>
           <td class="paramname"><em>x</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1775,6 +1784,9 @@ template&lt;class Function &gt; </div>
 <a class="anchor" id="a0715f0339bc9259e43162035e313c204"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;uint8_t&gt; common::md5sum </td>
@@ -1784,6 +1796,11 @@ template&lt;class Function &gt; </div>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -1791,6 +1808,9 @@ template&lt;class Function &gt; </div>
 <a class="anchor" id="a4963b461ac47972bfa158fb47d51a281"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;uint8_t&gt; common::md5sum </td>
@@ -1800,6 +1820,11 @@ template&lt;class Function &gt; </div>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -1824,6 +1849,21 @@ template&lt;class Function &gt; </div>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa0bfb541b62a14c4f91047be32e5189f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double common::memoryUsage </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2330,9 +2370,36 @@ template&lt;typename Iter , typename RandomGenerator &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a56672240469955261cf6e02fe96cdca2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void common::setCurrentThreadName </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1de170b4b067d43d139ae986bf78c842"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;uint8_t&gt; common::sha256sum </td>
@@ -2342,6 +2409,11 @@ template&lt;typename Iter , typename RandomGenerator &gt; </div>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -2349,6 +2421,9 @@ template&lt;typename Iter , typename RandomGenerator &gt; </div>
 <a class="anchor" id="a5c52510f1a58f2330aa65d0800f78395"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;uint8_t&gt; common::sha256sum </td>
@@ -2358,6 +2433,11 @@ template&lt;typename Iter , typename RandomGenerator &gt; </div>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -2663,6 +2743,30 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ae86fb819ef49e0baa73bc4cab9eb2174"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double common::timestamp </td>
+          <td>(</td>
+          <td class="paramtype">std::chrono::system_clock::time_point&#160;</td>
+          <td class="paramname"><em>tp</em> = <code>std::chrono::system_clock::now()</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a63e26830a3ec74de71978e51f2163de3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2679,14 +2783,33 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="af6875c702673bffa084bc33a2b88d997"></a>
+<a class="anchor" id="aca552ba150cae3a0fd8bea053b3d298f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; int64_t, int64_t &gt; common::torchMemoryUsage </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>device</em> = <code>0</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Show the current memory usage, the first element is the amount allocated, or currently used by tensors that are alive, and the second element is the amount cached by the caching allocator. </p>
+<p>WARNING: This function will call cudaDeviceSynchronize, so it's extremely expensive, and should not be in any training runs unless it's hidden behind an if statement. </p>
+
+</div>
+</div>
+<a class="anchor" id="a51261f4ccf1b17801edc494fc3025b9f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt; ag::Variant &gt; common::unBatchVariant </td>
           <td>(</td>
-          <td class="paramtype">ag::Variant&#160;</td>
+          <td class="paramtype">ag::Variant const &amp;&#160;</td>
           <td class="paramname"><em>batch</em>, </td>
         </tr>
         <tr>
@@ -2958,7 +3081,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

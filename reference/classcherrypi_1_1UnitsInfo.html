@@ -180,6 +180,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afebb97987fbb4dd12c4d844b03e3a9b3"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classcherrypi_1_1UnitsInfo.html#a316f776e3cb54b955287361480932555">Units</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1UnitsInfo.html#afebb97987fbb4dd12c4d844b03e3a9b3">getDestroyUnits</a> ()</td></tr>
 <tr class="memdesc:afebb97987fbb4dd12c4d844b03e3a9b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">All units that died since the previous update/step.  <a href="#afebb97987fbb4dd12c4d844b03e3a9b3">More...</a><br /></td></tr>
 <tr class="separator:afebb97987fbb4dd12c4d844b03e3a9b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63d213caafbe11f7e3137630f23ffcca"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classcherrypi_1_1UnitsInfo.html#a316f776e3cb54b955287361480932555">Units</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1UnitsInfo.html#a63d213caafbe11f7e3137630f23ffcca">mapHacked</a> ()</td></tr>
+<tr class="memdesc:a63d213caafbe11f7e3137630f23ffcca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the units directly from the tcstate, this is only reasonable when we have mapHack on.  <a href="#a63d213caafbe11f7e3137630f23ffcca">More...</a><br /></td></tr>
+<tr class="separator:a63d213caafbe11f7e3137630f23ffcca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7090b9c37b91f0a977f28d5ebaf4b7ef"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; const <a class="el" href="structcherrypi_1_1BuildType.html">BuildType</a> *, int &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1UnitsInfo.html#a7090b9c37b91f0a977f28d5ebaf4b7ef">inferredEnemyUnitTypes</a> ()</td></tr>
 <tr class="separator:a7090b9c37b91f0a977f28d5ebaf4b7ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b270b8f6a31145696eafa1ae77e8b47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1UnitsInfo.html#a1b270b8f6a31145696eafa1ae77e8b47">update</a> ()</td></tr>
@@ -187,8 +190,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:afb664bd6ac8e33164090906da23dd201"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1UnitsInfo.html#afb664bd6ac8e33164090906da23dd201">updateUnit</a> (<a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *i, const <a class="el" href="namespacetorchcraft.html#a0311f2e412bed192278b70dec39c5f39">tc::Unit</a> &amp;u, <a class="el" href="classtorchcraft_1_1State.html">tc::State</a> *tcstate)</td></tr>
-<tr class="separator:afb664bd6ac8e33164090906da23dd201"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9a38039c65a69947d292e2e3f1e29e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1UnitsInfo.html#af9a38039c65a69947d292e2e3f1e29e1">updateUnit</a> (<a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *, const <a class="el" href="namespacetorchcraft.html#a0311f2e412bed192278b70dec39c5f39">tc::Unit</a> &amp;, <a class="el" href="classtorchcraft_1_1State.html">tc::State</a> *, bool maphack=false)</td></tr>
+<tr class="separator:af9a38039c65a69947d292e2e3f1e29e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e2efa5b2f966d867522e1fb715d36d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1UnitsInfo.html#a8e2efa5b2f966d867522e1fb715d36d9">updateGroups</a> (<a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *i)</td></tr>
 <tr class="separator:a8e2efa5b2f966d867522e1fb715d36d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d9022f68d0e6d387823c6345c1aeaea"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1UnitsInfo.html#a5d9022f68d0e6d387823c6345c1aeaea">inferPositionsUnitAtIndex</a> (<a class="el" href="namespacecherrypi.html#a0f262d8316a4fb34411d8743238258cf">Position</a> pos)</td></tr>
@@ -260,6 +263,10 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a42db8d68d229ec7ec8436ca9f376d100"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a527e020186fb78b1b49328009fcdac26"><td class="memItemLeft" align="right" valign="top">std::minstd_rand&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1UnitsInfo.html#a527e020186fb78b1b49328009fcdac26">rngEngine</a></td></tr>
 <tr class="separator:a527e020186fb78b1b49328009fcdac26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd26cfe3a41967e967f6193abf080797"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="namespacecherrypi.html#ab2a03a82ec853df1994f92ca8b3b36b4">UnitId</a>, <a class="el" href="structcherrypi_1_1Unit.html">Unit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1UnitsInfo.html#acd26cfe3a41967e967f6193abf080797">mapHackUnitsMap_</a></td></tr>
+<tr class="separator:acd26cfe3a41967e967f6193abf080797"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c159cac03cdf7594c996938539e48c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1UnitsInfo.html#a316f776e3cb54b955287361480932555">Units</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1UnitsInfo.html#a0c159cac03cdf7594c996938539e48c5">mapHackUnits_</a> = <a class="el" href="classcherrypi_1_1UnitsInfo.html#a3eeb5c50bb113e0b97ba0bad6f6fd9de">unitContainers_</a>[15]</td></tr>
+<tr class="separator:a0c159cac03cdf7594c996938539e48c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Updates and organizes information about all the units in the game. </p>
@@ -735,6 +742,24 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a63d213caafbe11f7e3137630f23ffcca"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classcherrypi_1_1UnitsInfo.html#a316f776e3cb54b955287361480932555">UnitsInfo::Units</a> &amp; cherrypi::UnitsInfo::mapHacked </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parse the units directly from the tcstate, this is only reasonable when we have mapHack on. </p>
+<p>Keep in mind not all things that we precompute, like beingAttackedByEnemies, etc, are filled out in the mapHacked units. </p>
+
+</div>
+</div>
 <a class="anchor" id="ac25b6f444256370139e788cc85db868b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -978,7 +1003,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="afb664bd6ac8e33164090906da23dd201"></a>
+<a class="anchor" id="af9a38039c65a69947d292e2e3f1e29e1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -989,19 +1014,25 @@ Protected Attributes</h2></td></tr>
           <td class="memname">void cherrypi::UnitsInfo::updateUnit </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structcherrypi_1_1Unit.html">Unit</a> *&#160;</td>
-          <td class="paramname"><em>i</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacetorchcraft.html#a0311f2e412bed192278b70dec39c5f39">tc::Unit</a> &amp;&#160;</td>
           <td class="paramname"><em>u</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="namespacetorchcraft.html#a0311f2e412bed192278b70dec39c5f39">tc::Unit</a> &amp;&#160;</td>
+          <td class="paramname"><em>tcu</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype"><a class="el" href="classtorchcraft_1_1State.html">tc::State</a> *&#160;</td>
-          <td class="paramname"><em>tcstate</em>&#160;</td>
+          <td class="paramname"><em>tcstate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>maphack</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1263,6 +1294,46 @@ Protected Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classcherrypi_1_1UnitsInfo.html#a316f776e3cb54b955287361480932555">Units</a>&amp; cherrypi::UnitsInfo::liveUnits_ = <a class="el" href="classcherrypi_1_1UnitsInfo.html#a3eeb5c50bb113e0b97ba0bad6f6fd9de">unitContainers_</a>[1]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0c159cac03cdf7594c996938539e48c5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcherrypi_1_1UnitsInfo.html#a316f776e3cb54b955287361480932555">Units</a>&amp; cherrypi::UnitsInfo::mapHackUnits_ = <a class="el" href="classcherrypi_1_1UnitsInfo.html#a3eeb5c50bb113e0b97ba0bad6f6fd9de">unitContainers_</a>[15]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="acd26cfe3a41967e967f6193abf080797"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="namespacecherrypi.html#ab2a03a82ec853df1994f92ca8b3b36b4">UnitId</a>, <a class="el" href="structcherrypi_1_1Unit.html">Unit</a>&gt; cherrypi::UnitsInfo::mapHackUnitsMap_</td>
         </tr>
       </table>
   </td>
@@ -1681,7 +1752,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

@@ -102,88 +102,50 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p><code>#include &lt;<a class="el" href="scenarioprovider_8h_source.html">scenarioprovider.h</a>&gt;</code></p>
 
-<p>Inherited by <a class="el" href="classcherrypi_1_1BaseMicroScenario.html">cherrypi::BaseMicroScenario</a>.</p>
+<p>Inherited by <a class="el" href="classcherrypi_1_1MicroScenarioProvider.html">cherrypi::MicroScenarioProvider</a>.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af6296c43de37dc5a7bca6e63049dce96"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#af6296c43de37dc5a7bca6e63049dce96">ScenarioProvider</a> (int maxFrame, bool gui=false)</td></tr>
-<tr class="separator:af6296c43de37dc5a7bca6e63049dce96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72c928ee728a2847342cd26d3eb83fb7"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#a72c928ee728a2847342cd26d3eb83fb7">~ScenarioProvider</a> ()</td></tr>
-<tr class="separator:a72c928ee728a2847342cd26d3eb83fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4168803432e3d754f2e598c32f2137c8"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> &gt;, std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#a4168803432e3d754f2e598c32f2137c8">spawnNextScenario</a> (const std::function&lt; void(<a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> *)&gt; &amp;setup1, const std::function&lt; void(<a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> *)&gt; &amp;setup2)=0</td></tr>
-<tr class="memdesc:a4168803432e3d754f2e598c32f2137c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spawns the scenario.  <a href="#a4168803432e3d754f2e598c32f2137c8">More...</a><br /></td></tr>
-<tr class="separator:a4168803432e3d754f2e598c32f2137c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a398fb51ba794eba7cf470e1136374e27"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#a398fb51ba794eba7cf470e1136374e27">isFinished</a> (int currentStep, bool checkAttack=true)</td></tr>
-<tr class="memdesc:a398fb51ba794eba7cf470e1136374e27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the scenario is finished.  <a href="#a398fb51ba794eba7cf470e1136374e27">More...</a><br /></td></tr>
-<tr class="separator:a398fb51ba794eba7cf470e1136374e27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c48a4371a60921e0bf43c6abf4cd6a8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#a1c48a4371a60921e0bf43c6abf4cd6a8">cleanScenario</a> ()</td></tr>
-<tr class="memdesc:a1c48a4371a60921e0bf43c6abf4cd6a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clean the possible left-overs of the last scenario.  <a href="#a1c48a4371a60921e0bf43c6abf4cd6a8">More...</a><br /></td></tr>
-<tr class="separator:a1c48a4371a60921e0bf43c6abf4cd6a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33c30d5ba83f432ebffdb05ff249b1dd"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#a33c30d5ba83f432ebffdb05ff249b1dd">~ScenarioProvider</a> ()=default</td></tr>
+<tr class="separator:a33c30d5ba83f432ebffdb05ff249b1dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdadb24dd68b9889f6b72b2c651e657f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1ScenarioProvider.html">ScenarioProvider</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#acdadb24dd68b9889f6b72b2c651e657f">setMaxFrames</a> (int value)</td></tr>
+<tr class="memdesc:acdadb24dd68b9889f6b72b2c651e657f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum number of steps to play before considering a scenario finished Defaults to -1, which indicates no maximum.  <a href="#acdadb24dd68b9889f6b72b2c651e657f">More...</a><br /></td></tr>
+<tr class="separator:acdadb24dd68b9889f6b72b2c651e657f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b83a9f74cf9b5ebef7d0b46617d13d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1ScenarioProvider.html">ScenarioProvider</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#a7b83a9f74cf9b5ebef7d0b46617d13d8">setGui</a> (bool value)</td></tr>
+<tr class="memdesc:a7b83a9f74cf9b5ebef7d0b46617d13d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies whether to run OpenBW headfully.  <a href="#a7b83a9f74cf9b5ebef7d0b46617d13d8">More...</a><br /></td></tr>
+<tr class="separator:a7b83a9f74cf9b5ebef7d0b46617d13d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace8cedbadbcb3289b571f2f20baaf5e2"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> &gt;, std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#ace8cedbadbcb3289b571f2f20baaf5e2">startNewScenario</a> (const std::function&lt; void(<a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> *)&gt; &amp;setup1, const std::function&lt; void(<a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> *)&gt; &amp;setup2)=0</td></tr>
+<tr class="memdesc:ace8cedbadbcb3289b571f2f20baaf5e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spawns a scenario.  <a href="#ace8cedbadbcb3289b571f2f20baaf5e2">More...</a><br /></td></tr>
+<tr class="separator:ace8cedbadbcb3289b571f2f20baaf5e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeeed3f41e261ecdd3241ce3ba8948dc8"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#aeeed3f41e261ecdd3241ce3ba8948dc8">isFinished</a> (int currentStep)</td></tr>
+<tr class="memdesc:aeeed3f41e261ecdd3241ce3ba8948dc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the scenario is finished.  <a href="#aeeed3f41e261ecdd3241ce3ba8948dc8">More...</a><br /></td></tr>
+<tr class="separator:aeeed3f41e261ecdd3241ce3ba8948dc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:addc41d07034c8cde53476e666804143d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:addc41d07034c8cde53476e666804143d"><td class="memTemplParams" colspan="2">template&lt;typename TPlayer &gt; </td></tr>
 <tr class="memitem:addc41d07034c8cde53476e666804143d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#addc41d07034c8cde53476e666804143d">loadMap</a> (std::string const &amp;map, tc::BW::Race race1, tc::BW::Race race2, <a class="el" href="namespacecherrypi.html#a6c72971bf84ad3c50618e5c5dd016b6d">GameType</a> gameType, std::string const &amp;replayPath=std::string())</td></tr>
 <tr class="separator:addc41d07034c8cde53476e666804143d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a38e60af4dea9ee885419cc500af3caad"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#a38e60af4dea9ee885419cc500af3caad">maxFrame_</a></td></tr>
+<tr class="memitem:a38e60af4dea9ee885419cc500af3caad"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#a38e60af4dea9ee885419cc500af3caad">maxFrame_</a> = 24 * 60 * 60 * 2</td></tr>
 <tr class="separator:a38e60af4dea9ee885419cc500af3caad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac92e2e0c75c283d7e49d710e7e768e97"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#ac92e2e0c75c283d7e49d710e7e768e97">gui_</a></td></tr>
+<tr class="memitem:ac92e2e0c75c283d7e49d710e7e768e97"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#ac92e2e0c75c283d7e49d710e7e768e97">gui_</a> = false</td></tr>
 <tr class="separator:ac92e2e0c75c283d7e49d710e7e768e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a196885c7db9908932b0194edd9a66563"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#a196885c7db9908932b0194edd9a66563">player1_</a></td></tr>
 <tr class="separator:a196885c7db9908932b0194edd9a66563"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b428a1399148a99a27d3f7806c6449d"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#a5b428a1399148a99a27d3f7806c6449d">player2_</a></td></tr>
 <tr class="separator:a5b428a1399148a99a27d3f7806c6449d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac64b651abf1d9eeb88a90953fa21382c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1SelfPlayScenario.html">SelfPlayScenario</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#ac64b651abf1d9eeb88a90953fa21382c">scenario_</a></td></tr>
-<tr class="separator:ac64b651abf1d9eeb88a90953fa21382c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada42fb5c36e15fe8df8544df8ee272bf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#ada42fb5c36e15fe8df8544df8ee272bf">lastPossibleAttack_</a> = -1</td></tr>
-<tr class="separator:ada42fb5c36e15fe8df8544df8ee272bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5c0ecabc849a62c8a5fb345f3e9b4bf"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcherrypi_1_1GameMultiPlayer.html">GameMultiPlayer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1ScenarioProvider.html#af5c0ecabc849a62c8a5fb345f3e9b4bf">game_</a></td></tr>
+<tr class="separator:af5c0ecabc849a62c8a5fb345f3e9b4bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base class for providing scenarios. </p>
 <p>Returns a pair of players to be used by the training code.</p>
 <p>Detects game end and cleans up after the scenario. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="af6296c43de37dc5a7bca6e63049dce96"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">cherrypi::ScenarioProvider::ScenarioProvider </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>maxFrame</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>gui</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<ul>
-<li>maxFrame Frame limit of the scenario </li>
-</ul>
-
-</div>
-</div>
-<a class="anchor" id="a72c928ee728a2847342cd26d3eb83fb7"></a>
+<a class="anchor" id="a33c30d5ba83f432ebffdb05ff249b1dd"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -199,7 +161,7 @@ Protected Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -207,35 +169,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a1c48a4371a60921e0bf43c6abf4cd6a8"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void cherrypi::ScenarioProvider::cleanScenario </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Clean the possible left-overs of the last scenario. </p>
-<p>Must be called before spawnNextScenario </p>
-
-<p>Reimplemented in <a class="el" href="classcherrypi_1_1BaseMicroScenario.html#a4dade460cd22ffced3da31ba44b07857">cherrypi::BaseMicroScenario</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a398fb51ba794eba7cf470e1136374e27"></a>
+<a class="anchor" id="aeeed3f41e261ecdd3241ce3ba8948dc8"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -246,18 +180,8 @@ Protected Attributes</h2></td></tr>
           <td class="memname">bool cherrypi::ScenarioProvider::isFinished </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>currentStep</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>currentStep</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>checkAttack</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -268,7 +192,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Check whether the scenario is finished. </p>
-<p>By default, return true whenever the number of frames is exceeded or one of the players don't have any units left If checkAttack is true, it will also check that at least one unit in one army is able to attack at least one unit in the opponent't army. </p>
+<p>By default, return true whenever the number of frames is exceeded or one of the players don't have any units left </p>
 
 </div>
 </div>
@@ -276,7 +200,7 @@ Protected Attributes</h2></td></tr>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename TPlayer &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -326,7 +250,7 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a4168803432e3d754f2e598c32f2137c8"></a>
+<a class="anchor" id="a7b83a9f74cf9b5ebef7d0b46617d13d8"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -334,7 +258,60 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::pair&lt;std::shared_ptr&lt;<a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a>&gt;, std::shared_ptr&lt;<a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a>&gt; &gt; cherrypi::ScenarioProvider::spawnNextScenario </td>
+          <td class="memname"><a class="el" href="classcherrypi_1_1ScenarioProvider.html">ScenarioProvider</a>&amp; cherrypi::ScenarioProvider::setGui </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Specifies whether to run OpenBW headfully. </p>
+<p>Takes effect only when spawning a new OpenBWProcess; so generally you want to invoke this before using the <a class="el" href="classcherrypi_1_1ScenarioProvider.html" title="Base class for providing scenarios. ">ScenarioProvider</a>. </p>
+
+</div>
+</div>
+<a class="anchor" id="acdadb24dd68b9889f6b72b2c651e657f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcherrypi_1_1ScenarioProvider.html">ScenarioProvider</a>&amp; cherrypi::ScenarioProvider::setMaxFrames </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The maximum number of steps to play before considering a scenario finished Defaults to -1, which indicates no maximum. </p>
+
+</div>
+</div>
+<a class="anchor" id="ace8cedbadbcb3289b571f2f20baaf5e2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::pair&lt;std::shared_ptr&lt;<a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a>&gt;, std::shared_ptr&lt;<a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a>&gt; &gt; cherrypi::ScenarioProvider::startNewScenario </td>
           <td>(</td>
           <td class="paramtype">const std::function&lt; void(<a class="el" href="classcherrypi_1_1BasePlayer.html">BasePlayer</a> *)&gt; &amp;&#160;</td>
           <td class="paramname"><em>setup1</em>, </td>
@@ -358,15 +335,15 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Spawns the scenario. </p>
+<p>Spawns a scenario. </p>
 <p>It takes as parameters the setup functions for both players (this should take care of adding modules), and returns the pointers to the created players </p>
 
-<p>Implemented in <a class="el" href="classcherrypi_1_1BaseMicroScenario.html#a3f159a8236925e5613efd7f6bc295499">cherrypi::BaseMicroScenario</a>.</p>
+<p>Implemented in <a class="el" href="classcherrypi_1_1MicroScenarioProvider.html#aadf09544e6d4f4a6311ed130ed0813e3">cherrypi::MicroScenarioProvider</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="ac92e2e0c75c283d7e49d710e7e768e97"></a>
+<a class="anchor" id="af5c0ecabc849a62c8a5fb345f3e9b4bf"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -374,7 +351,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool cherrypi::ScenarioProvider::gui_</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classcherrypi_1_1GameMultiPlayer.html">GameMultiPlayer</a>&gt; cherrypi::ScenarioProvider::game_</td>
         </tr>
       </table>
   </td>
@@ -386,7 +363,7 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ada42fb5c36e15fe8df8544df8ee272bf"></a>
+<a class="anchor" id="ac92e2e0c75c283d7e49d710e7e768e97"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -394,7 +371,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int cherrypi::ScenarioProvider::lastPossibleAttack_ = -1</td>
+          <td class="memname">bool cherrypi::ScenarioProvider::gui_ = false</td>
         </tr>
       </table>
   </td>
@@ -414,7 +391,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int cherrypi::ScenarioProvider::maxFrame_</td>
+          <td class="memname">int cherrypi::ScenarioProvider::maxFrame_ = 24 * 60 * 60 * 2</td>
         </tr>
       </table>
   </td>
@@ -466,26 +443,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ac64b651abf1d9eeb88a90953fa21382c"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classcherrypi_1_1SelfPlayScenario.html">SelfPlayScenario</a>&gt; cherrypi::ScenarioProvider::scenario_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/gameutils/<a class="el" href="scenarioprovider_8h_source.html">scenarioprovider.h</a></li>
 <li>src/gameutils/scenarioprovider.cpp</li>
@@ -493,7 +450,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

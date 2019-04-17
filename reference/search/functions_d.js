@@ -19,10 +19,10 @@ var searchData=
   ['numchannels',['numChannels',['../structcherrypi_1_1FeatureData.html#aae4c38a7780aff111c7b457a7641cb50',1,'cherrypi::FeatureData']]],
   ['numenemybases',['numEnemyBases',['../classcherrypi_1_1AreaInfo.html#ae7a9827ebe92110be4e527e5153760bb',1,'cherrypi::AreaInfo']]],
   ['numgames',['numGames',['../classcherrypi_1_1model_1_1BuildOrderCount.html#ac278192f64790f063d35b916c1d3e934',1,'cherrypi::model::BuildOrderCount']]],
-  ['numgamesstarted',['numGamesStarted',['../classcherrypi_1_1PlayScriptScenario.html#a81e13dbb821a1d8b8aafe34264f5725c',1,'cherrypi::PlayScriptScenario']]],
+  ['numgamesstarted',['numGamesStarted',['../classcherrypi_1_1GameVsBotInWine.html#ab9b6b4e418e839c29087746e7de2fb49',1,'cherrypi::GameVsBotInWine']]],
   ['numlosses',['numLosses',['../classcherrypi_1_1model_1_1BuildOrderCount.html#a390f3ecd9eafd8302e14f297292d71d1',1,'cherrypi::model::BuildOrderCount']]],
   ['nummybases',['numMyBases',['../classcherrypi_1_1AreaInfo.html#a6d5cfa27e21e2f700167e4e7c008986c',1,'cherrypi::AreaInfo']]],
-  ['numscheduledforretry',['numScheduledForRetry',['../classcpid_1_1detail_1_1RRClientWrapper.html#a49353d086801125a56a35b3170e53717',1,'cpid::detail::RRClientWrapper']]],
   ['numupccommands',['numUpcCommands',['../namespacecherrypi.html#afffb62e32d862a8fc939c4d88cab3fea',1,'cherrypi']]],
+  ['numupdates',['numUpdates',['../classcpid_1_1CentralCpid2kTrainer.html#a1f052303ed12b114db7581a1281c0670',1,'cpid::CentralCpid2kTrainer']]],
   ['numwins',['numWins',['../classcherrypi_1_1model_1_1BuildOrderCount.html#a9a860ffa237c73bf902d4c3209081338',1,'cherrypi::model::BuildOrderCount']]]
 ];

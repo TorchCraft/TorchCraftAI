@@ -21,6 +21,7 @@ var searchData=
   ['window_5fpos',['window_pos',['../structtorchcraft_1_1Client_1_1Options.html#a79096d4ec3d4e3aa7b0861f4c6059386',1,'torchcraft::Client::Options']]],
   ['window_5fsize',['window_size',['../structtorchcraft_1_1Client_1_1Options.html#a27014ad1395865588f138c750e6d5a9f',1,'torchcraft::Client::Options']]],
   ['won',['won',['../structcherrypi_1_1bos_1_1StaticData.html#a13a79f7fbc041c0c27309213099dc521',1,'cherrypi::bos::StaticData']]],
+  ['worker_5f',['worker_',['../classcpid_1_1CentralCpid2kTrainer.html#a0b20ac3d36533f6c08a307492fe7e54f',1,'cpid::CentralCpid2kTrainer::worker_()'],['../classcpid_1_1Cpid2kMetrics.html#a2fb42f5a32ab51635e6079570e86a3b4',1,'cpid::Cpid2kMetrics::worker_()']]],
   ['workers',['workers',['../structcherrypi_1_1autobuild_1_1BuildState.html#a96bcac5a816cb31f7a11e07313188b29',1,'cherrypi::autobuild::BuildState::workers()'],['../structcherrypi_1_1GathererAssignments.html#a3aee298a012181b4fbcdbfcaa0e7b7ef',1,'cherrypi::GathererAssignments::workers()']]],
   ['workersbyresource',['workersByResource',['../structcherrypi_1_1ResourceWorkers.html#a33ab6c50045c86c61977d9c59a71474e',1,'cherrypi::ResourceWorkers']]]
 ];

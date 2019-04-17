@@ -26,6 +26,7 @@ var searchData=
   ['bomask',['boMask',['../structcherrypi_1_1bos_1_1ModelRunner.html#a15a208076727c517de326599d0fae4f9',1,'cherrypi::bos::ModelRunner']]],
   ['bottomright',['bottomRight',['../structcherrypi_1_1Area.html#a6ad66e6947f41c67be59c06265d556c0',1,'cherrypi::Area']]],
   ['boundingbox',['boundingBox',['../structcherrypi_1_1UnitAttributeFeaturizer_1_1Data.html#adf260d49dafb7977999cc5ec9c7253a9',1,'cherrypi::UnitAttributeFeaturizer::Data']]],
+  ['bufferpool_5f',['bufferPool_',['../classcpid_1_1CentralTrainer.html#ae46b8bb1653b3cdf1f1b6c5b3c39da5a',1,'cpid::CentralTrainer']]],
   ['buildable',['buildable',['../structcherrypi_1_1Tile.html#ab2610f1f77e4c9a6cc14019ef6dd1e24',1,'cherrypi::Tile']]],
   ['buildable_5fdata',['buildable_data',['../classtorchcraft_1_1State.html#ab6245886a8d6676b721d5b626842c87e',1,'torchcraft::State']]],
   ['buildarmysupply',['buildArmySupply',['../classcherrypi_1_1ABBOmidmassling.html#aebab30fcf2a6eacc9e6521a7497c7f7a',1,'cherrypi::ABBOmidmassling']]],

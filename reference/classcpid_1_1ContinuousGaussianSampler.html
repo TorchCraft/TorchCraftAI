@@ -130,7 +130,7 @@ Protected Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This sampler expects as input an unordered_map&lt;string, Variant&gt;, containing an entry policyKey, which is a tensor of size [b, n]. </p>
-<p>It outputs the same map, with a new key kActionKey, a tensor of size [b] where each entry action[i] is sampled from a normal distribution centered in policy[i]. It also expects the stdKey to be set, it will be used as the standard deviation of the normal. It can be either a float/double, in which case the deviation will be the same for the batch, or it can be the same shape as the policy, for a finer control. It also adds a key pActionKey which corresponds to the probability of the sampled action </p>
+<p>It outputs the same map, with a new key kActionKey, a tensor of size [b] where each entry action[i] is sampled from a normal distribution centered in policy[i]. It also expects the stdKey to be set, it will be used as the standard deviation of the normal. It can be either a float/double, in which case the deviation will be the same for the batch, or it can be the same shape as the policy, for a finer control. It also adds a key pActionKey which corresponds to the probability of the sampled action. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a93540a8d17e2b15afa715689c586e2fa"></a>
 <div class="memitem">
@@ -321,7 +321,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

@@ -50,5 +50,6 @@ var searchData=
   ['zerg_5fultralisk',['Zerg_Ultralisk',['../namespacecherrypi_1_1buildtypes.html#a264a432eb757b6ac43058bd0d82eb392',1,'cherrypi::buildtypes']]],
   ['zerg_5fultralisk_5fcavern',['Zerg_Ultralisk_Cavern',['../namespacecherrypi_1_1buildtypes.html#a6a9162efe15f254e573afd1bc9f42179',1,'cherrypi::buildtypes']]],
   ['zerg_5fzergling',['Zerg_Zergling',['../namespacecherrypi_1_1buildtypes.html#ac4acb67d5ff886e0c2273be7c1ce2797',1,'cherrypi::buildtypes']]],
-  ['zeroes',['zeroes',['../structcommon_1_1WeightSummary.html#a149914b05e90517e81b5206b42ee410f',1,'common::WeightSummary']]]
+  ['zeroes',['zeroes',['../structcommon_1_1WeightSummary.html#a149914b05e90517e81b5206b42ee410f',1,'common::WeightSummary']]],
+  ['zmqcontext_5f',['zmqContext_',['../classcpid_1_1CentralCpid2kTrainer.html#a9eaa63f604f6c78add13266e6b07e480',1,'cpid::CentralCpid2kTrainer']]]
 ];

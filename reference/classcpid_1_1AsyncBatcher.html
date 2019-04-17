@@ -162,6 +162,8 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a8032456e4af9362c8dc206d50ae47fe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2eb6b73c4204525b45683103ec4dc582"><td class="memItemLeft" align="right" valign="top">std::shared_mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1AsyncBatcher.html#a2eb6b73c4204525b45683103ec4dc582">modelMutex_</a></td></tr>
 <tr class="separator:a2eb6b73c4204525b45683103ec4dc582"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a599b61435b904eeaa33c4681b474e107"><td class="memItemLeft" align="right" valign="top">std::atomic_size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1AsyncBatcher.html#a599b61435b904eeaa33c4681b474e107">querySize_</a></td></tr>
+<tr class="separator:a599b61435b904eeaa33c4681b474e107"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e538f22dd4fd55fb5fe3c0498b9917f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; ag::Variant &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1AsyncBatcher.html#a0e538f22dd4fd55fb5fe3c0498b9917f">queries_</a></td></tr>
 <tr class="separator:a0e538f22dd4fd55fb5fe3c0498b9917f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a3233df7a522a029c342b5add4f9657"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; std::promise&lt; ag::Variant &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1AsyncBatcher.html#a4a3233df7a522a029c342b5add4f9657">replies_</a></td></tr>
@@ -743,6 +745,26 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a599b61435b904eeaa33c4681b474e107"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic_size_t cpid::AsyncBatcher::querySize_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a4a3233df7a522a029c342b5add4f9657"></a>
 <div class="memitem">
 <div class="memproto">
@@ -830,7 +852,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

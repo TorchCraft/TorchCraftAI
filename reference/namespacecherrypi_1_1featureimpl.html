@@ -106,7 +106,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:ae9f158ab77366250e9a7da85552c8765"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts a 2D tensor of whether the terrain on a walktile is walkable by ground units.  <a href="#ae9f158ab77366250e9a7da85552c8765">More...</a><br /></td></tr>
 <tr class="separator:ae9f158ab77366250e9a7da85552c8765"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a803c03dd5033912d4373c81022607309"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecherrypi_1_1featureimpl.html#a803c03dd5033912d4373c81022607309">extractOneHotGroundHeight</a> (torch::Tensor t, <a class="el" href="classcherrypi_1_1State.html">State</a> *state, <a class="el" href="namespacecherrypi.html#a96c4323379420a40ddbcbe09e3de6f32">Rect</a> const &amp;r)</td></tr>
-<tr class="memdesc:a803c03dd5033912d4373c81022607309"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts a 3D tensor of ground height, where each of the 3 ground heights (plus "not on the map") is a one-hot dimension.  <a href="#a803c03dd5033912d4373c81022607309">More...</a><br /></td></tr>
+<tr class="memdesc:a803c03dd5033912d4373c81022607309"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts a 3D tensor of ground height, where each of the 3 ground heights (plus "on the map") is a one-hot dimension.  <a href="#a803c03dd5033912d4373c81022607309">More...</a><br /></td></tr>
 <tr class="separator:a803c03dd5033912d4373c81022607309"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a2ce237548fdfc1d0890603165d3a8e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecherrypi_1_1featureimpl.html#a1a2ce237548fdfc1d0890603165d3a8e">extractBuildability</a> (torch::Tensor, <a class="el" href="classcherrypi_1_1State.html">State</a> *, <a class="el" href="namespacecherrypi.html#a96c4323379420a40ddbcbe09e3de6f32">Rect</a> const &amp;)</td></tr>
 <tr class="separator:a1a2ce237548fdfc1d0890603165d3a8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -116,6 +116,15 @@ Functions</h2></td></tr>
 <tr class="memitem:ac836c5e4b4296a05cec9151d28314451"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecherrypi_1_1featureimpl.html#ac836c5e4b4296a05cec9151d28314451">extractStartLocations</a> (torch::Tensor t, <a class="el" href="classcherrypi_1_1State.html">State</a> *state, <a class="el" href="namespacecherrypi.html#a96c4323379420a40ddbcbe09e3de6f32">Rect</a> const &amp;r)</td></tr>
 <tr class="memdesc:ac836c5e4b4296a05cec9151d28314451"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set tensor to '1' for every start location reported by TorchCraft.  <a href="#ac836c5e4b4296a05cec9151d28314451">More...</a><br /></td></tr>
 <tr class="separator:ac836c5e4b4296a05cec9151d28314451"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ea9a22369a1f0bf77d2d95651c6098b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecherrypi_1_1featureimpl.html#a3ea9a22369a1f0bf77d2d95651c6098b">extractXYGrid</a> (torch::Tensor t, <a class="el" href="classcherrypi_1_1State.html">State</a> *state, <a class="el" href="namespacecherrypi.html#a96c4323379420a40ddbcbe09e3de6f32">Rect</a> const &amp;r)</td></tr>
+<tr class="memdesc:a3ea9a22369a1f0bf77d2d95651c6098b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Grid of X/Y coordinates.  <a href="#a3ea9a22369a1f0bf77d2d95651c6098b">More...</a><br /></td></tr>
+<tr class="separator:a3ea9a22369a1f0bf77d2d95651c6098b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2caf6494286ba149025796cf2f94e7b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecherrypi_1_1featureimpl.html#a2caf6494286ba149025796cf2f94e7b4">extractResources</a> (torch::Tensor t, <a class="el" href="classcherrypi_1_1State.html">State</a> *state, <a class="el" href="namespacecherrypi.html#a96c4323379420a40ddbcbe09e3de6f32">Rect</a> const &amp;r)</td></tr>
+<tr class="memdesc:a2caf6494286ba149025796cf2f94e7b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set tensor to '1' for every walktile occupied by resources.  <a href="#a2caf6494286ba149025796cf2f94e7b4">More...</a><br /></td></tr>
+<tr class="separator:a2caf6494286ba149025796cf2f94e7b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38344e9b3c789dac68663ded6ba35a4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecherrypi_1_1featureimpl.html#a38344e9b3c789dac68663ded6ba35a4e">extractHasStructure</a> (torch::Tensor t, <a class="el" href="classcherrypi_1_1State.html">State</a> *state, <a class="el" href="namespacecherrypi.html#a96c4323379420a40ddbcbe09e3de6f32">Rect</a> const &amp;r)</td></tr>
+<tr class="memdesc:a38344e9b3c789dac68663ded6ba35a4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set tensor to '1' for every walktile occupied by a structure.  <a href="#a38344e9b3c789dac68663ded6ba35a4e">More...</a><br /></td></tr>
+<tr class="separator:a38344e9b3c789dac68663ded6ba35a4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97ef1aec64766dd6657f3aba54d1baaf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecherrypi_1_1featureimpl.html#a97ef1aec64766dd6657f3aba54d1baaf">extractFogOfWar</a> (torch::Tensor t, <a class="el" href="classcherrypi_1_1State.html">State</a> *state, <a class="el" href="namespacecherrypi.html#a96c4323379420a40ddbcbe09e3de6f32">Rect</a> const &amp;r)</td></tr>
 <tr class="memdesc:a97ef1aec64766dd6657f3aba54d1baaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">2D tensor representation of whether a tile is visible to the current player (as opposed to being in the fog of war).  <a href="#a97ef1aec64766dd6657f3aba54d1baaf">More...</a><br /></td></tr>
 <tr class="separator:a97ef1aec64766dd6657f3aba54d1baaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -302,6 +311,40 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a38344e9b3c789dac68663ded6ba35a4e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::featureimpl::extractHasStructure </td>
+          <td>(</td>
+          <td class="paramtype">torch::Tensor&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacecherrypi.html#a96c4323379420a40ddbcbe09e3de6f32">Rect</a> const &amp;&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set tensor to '1' for every walktile occupied by a structure. </p>
+
+</div>
+</div>
 <a class="anchor" id="a803c03dd5033912d4373c81022607309"></a>
 <div class="memitem">
 <div class="memproto">
@@ -332,7 +375,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Extracts a 3D tensor of ground height, where each of the 3 ground heights (plus "not on the map") is a one-hot dimension. </p>
+<p>Extracts a 3D tensor of ground height, where each of the 3 ground heights (plus "on the map") is a one-hot dimension. </p>
 <p>Ignores the presence of doodads.</p>
 <p>See <a href="https://bwapi.github.io/class_b_w_a_p_i_1_1_game.html#a94eb3e3fe7850078c2086638a46214be">https://bwapi.github.io/class_b_w_a_p_i_1_1_game.html#a94eb3e3fe7850078c2086638a46214be</a> </p>
 
@@ -369,6 +412,40 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>2D tensor representation of whether we have reserved this area for placing a building, rendering it unavailable for further buildings. </p>
+
+</div>
+</div>
+<a class="anchor" id="a2caf6494286ba149025796cf2f94e7b4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::featureimpl::extractResources </td>
+          <td>(</td>
+          <td class="paramtype">torch::Tensor&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacecherrypi.html#a96c4323379420a40ddbcbe09e3de6f32">Rect</a> const &amp;&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set tensor to '1' for every walktile occupied by resources. </p>
 
 </div>
 </div>
@@ -480,6 +557,41 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a3ea9a22369a1f0bf77d2d95651c6098b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cherrypi::featureimpl::extractXYGrid </td>
+          <td>(</td>
+          <td class="paramtype">torch::Tensor&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcherrypi_1_1State.html">State</a> *&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacecherrypi.html#a96c4323379420a40ddbcbe09e3de6f32">Rect</a> const &amp;&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Grid of X/Y coordinates. </p>
+<p>Channel 0 for Y, channel 1 for X. Uniform stepping with 1/512 </p>
+
+</div>
+</div>
 <a class="anchor" id="af41fce00b7f5a982f4d1114136db0cad"></a>
 <div class="memitem">
 <div class="memproto">
@@ -515,7 +627,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

@@ -9,8 +9,9 @@ var searchData=
   ['refcounted',['RefCounted',['../classRefCounted.html',1,'']]],
   ['replaybuffer',['ReplayBuffer',['../classcpid_1_1ReplayBuffer.html',1,'cpid']]],
   ['replaybufferframe',['ReplayBufferFrame',['../structcpid_1_1ReplayBufferFrame.html',1,'cpid']]],
-  ['replayer',['Replayer',['../classtorchcraft_1_1replayer_1_1Replayer.html',1,'torchcraft::replayer']]],
   ['replayer',['Replayer',['../classcherrypi_1_1Replayer.html',1,'cherrypi']]],
+  ['replayer',['Replayer',['../classtorchcraft_1_1replayer_1_1Replayer.html',1,'torchcraft::replayer']]],
+  ['replayerconfiguration',['ReplayerConfiguration',['../structcherrypi_1_1ReplayerConfiguration.html',1,'cherrypi']]],
   ['reqrepclient',['ReqRepClient',['../classcpid_1_1ReqRepClient.html',1,'cpid']]],
   ['reqrepserver',['ReqRepServer',['../classcpid_1_1ReqRepServer.html',1,'cpid']]],
   ['researchtracker',['ResearchTracker',['../classcherrypi_1_1ResearchTracker.html',1,'cherrypi']]],
@@ -24,6 +25,5 @@ var searchData=
   ['rewardkillspeed',['RewardKillSpeed',['../structcherrypi_1_1RewardKillSpeed.html',1,'cherrypi']]],
   ['rewardprotectcivilians',['RewardProtectCivilians',['../structcherrypi_1_1RewardProtectCivilians.html',1,'cherrypi']]],
   ['rewardproximityto',['RewardProximityTo',['../structcherrypi_1_1RewardProximityTo.html',1,'cherrypi']]],
-  ['rewardproximitytoenemy',['RewardProximityToEnemy',['../structcherrypi_1_1RewardProximityToEnemy.html',1,'cherrypi']]],
-  ['rrclientwrapper',['RRClientWrapper',['../classcpid_1_1detail_1_1RRClientWrapper.html',1,'cpid::detail']]]
+  ['rewardproximitytoenemy',['RewardProximityToEnemy',['../structcherrypi_1_1RewardProximityToEnemy.html',1,'cherrypi']]]
 ];

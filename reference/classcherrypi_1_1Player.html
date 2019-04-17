@@ -111,7 +111,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af8c99ff88a7e763f336010a5482d078c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcherrypi_1_1Player.html">Player</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Player.html#af8c99ff88a7e763f336010a5482d078c">operator=</a> (const <a class="el" href="classcherrypi_1_1Player.html">Player</a> &amp;)=delete</td></tr>
 <tr class="separator:af8c99ff88a7e763f336010a5482d078c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8e006f59ab0ef43e9b4521f12af4ba8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Player.html#ab8e006f59ab0ef43e9b4521f12af4ba8">setFrameskip</a> (int n)</td></tr>
-<tr class="memdesc:ab8e006f59ab0ef43e9b4521f12af4ba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">UI update frequency of Broodwar instance. Set this before calling <a class="el" href="classcherrypi_1_1Player.html#a6af2a4c3bfea2a43d199fc4adb59ede6">init()</a>.  <a href="#ab8e006f59ab0ef43e9b4521f12af4ba8">More...</a><br /></td></tr>
+<tr class="memdesc:ab8e006f59ab0ef43e9b4521f12af4ba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">UI update frequency of Broodwar instance. Set this before calling <a class="el" href="classcherrypi_1_1Player.html#a4d720fd1dcbc049a3c5149bcff1cd90b">init()</a>.  <a href="#ab8e006f59ab0ef43e9b4521f12af4ba8">More...</a><br /></td></tr>
 <tr class="separator:ab8e006f59ab0ef43e9b4521f12af4ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5884a23843d90941d66dc02e698c512"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Player.html#ab5884a23843d90941d66dc02e698c512">setCombineFrames</a> (int n)</td></tr>
 <tr class="memdesc:ab5884a23843d90941d66dc02e698c512"><td class="mdescLeft">&#160;</td><td class="mdescRight">Combine n server-side frames before taking any action.  <a href="#ab5884a23843d90941d66dc02e698c512">More...</a><br /></td></tr>
@@ -121,8 +121,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a546b5942908d5fd76ad430ac12c55363"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdc39c743cf187fcc6129bd381ee8488"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Player.html#acdc39c743cf187fcc6129bd381ee8488">setMapHack</a> (bool on)</td></tr>
 <tr class="separator:acdc39c743cf187fcc6129bd381ee8488"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6af2a4c3bfea2a43d199fc4adb59ede6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Player.html#a6af2a4c3bfea2a43d199fc4adb59ede6">init</a> ()</td></tr>
-<tr class="separator:a6af2a4c3bfea2a43d199fc4adb59ede6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d720fd1dcbc049a3c5149bcff1cd90b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Player.html#a4d720fd1dcbc049a3c5149bcff1cd90b">init</a> () override</td></tr>
+<tr class="separator:a4d720fd1dcbc049a3c5149bcff1cd90b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab8562ce9f3432928ef46eb3353d4b4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcherrypi_1_1Player.html#aab8562ce9f3432928ef46eb3353d4b4e">run</a> ()</td></tr>
 <tr class="separator:aab8562ce9f3432928ef46eb3353d4b4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcherrypi_1_1BasePlayer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcherrypi_1_1BasePlayer')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcherrypi_1_1BasePlayer.html">cherrypi::BasePlayer</a></td></tr>
@@ -296,9 +296,12 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a6af2a4c3bfea2a43d199fc4adb59ede6"></a>
+<a class="anchor" id="a4d720fd1dcbc049a3c5149bcff1cd90b"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void cherrypi::Player::init </td>
@@ -307,7 +310,14 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classcherrypi_1_1BasePlayer.html#afb124ed8d523486be495f86fd0daea7f">cherrypi::BasePlayer</a>.</p>
 
 </div>
 </div>
@@ -365,7 +375,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Combine n server-side frames before taking any action. </p>
-<p>Set this before calling <a class="el" href="classcherrypi_1_1Player.html#a6af2a4c3bfea2a43d199fc4adb59ede6">init()</a>. </p>
+<p>Set this before calling <a class="el" href="classcherrypi_1_1Player.html#a4d720fd1dcbc049a3c5149bcff1cd90b">init()</a>. </p>
 
 </div>
 </div>
@@ -383,7 +393,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>UI update frequency of Broodwar instance. Set this before calling <a class="el" href="classcherrypi_1_1Player.html#a6af2a4c3bfea2a43d199fc4adb59ede6">init()</a>. </p>
+<p>UI update frequency of Broodwar instance. Set this before calling <a class="el" href="classcherrypi_1_1Player.html#a4d720fd1dcbc049a3c5149bcff1cd90b">init()</a>. </p>
 
 </div>
 </div>
@@ -437,7 +447,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:56 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

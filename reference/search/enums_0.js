@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['action',['Action',['../classcpid_1_1detail_1_1RRClientWrapper.html#a0bf08299a597bc15ce74b5c75d34bf35',1,'cpid::detail::RRClientWrapper']]]
+  ['aggregationtype',['AggregationType',['../classcpid_1_1Cpid2kMetrics.html#afb8e7a22187dabbe12fddcf17bb28ed4',1,'cpid::Cpid2kMetrics']]]
 ];

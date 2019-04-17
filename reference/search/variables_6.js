@@ -1,10 +1,11 @@
 var searchData=
 [
+  ['game_5f',['game_',['../classcherrypi_1_1ScenarioProvider.html#af5c0ecabc849a62c8a5fb345f3e9b4bf',1,'cherrypi::ScenarioProvider']]],
   ['game_5fended',['game_ended',['../classtorchcraft_1_1State.html#ade1a803c624fb14f2dc3eaa6a9c7f34f',1,'torchcraft::State']]],
   ['game_5fwon',['game_won',['../classtorchcraft_1_1State.html#a221e49654484901ac1c39087ae5ac428',1,'torchcraft::State']]],
-  ['gamecount_5f',['gameCount_',['../classcherrypi_1_1BaseMicroScenario.html#a0f98decada0c22ab2a8ac34a14dcc5dd',1,'cherrypi::BaseMicroScenario']]],
   ['gameid',['gameID',['../structcpid_1_1EpisodeTuple.html#a3f46235098213815d11f75ad353ddf9d',1,'cpid::EpisodeTuple::gameID()'],['../structcherrypi_1_1bos_1_1StaticData.html#ac49632f7cd0104406957184982210158',1,'cherrypi::bos::StaticData::gameId()']]],
   ['gamesstarted_5f',['gamesStarted_',['../classcpid_1_1ESTrainer.html#a46b73ad10c10859aa41a8a314bcca899',1,'cpid::ESTrainer::gamesStarted_()'],['../classcpid_1_1Evaluator.html#ade2bb633c312173709d5a690426e09ce',1,'cpid::Evaluator::gamesStarted_()']]],
+  ['gamestarted_5f',['gameStarted_',['../classcherrypi_1_1MicroPlayer.html#ada55e906a69c94bbc7e311d47c1d5929',1,'cherrypi::MicroPlayer']]],
   ['gamete_5fmeiosis',['Gamete_Meiosis',['../namespacecherrypi_1_1buildtypes.html#a8aff2531d23435afa3637220bb570216',1,'cherrypi::buildtypes']]],
   ['gametogenerationseed_5f',['gameToGenerationSeed_',['../classcpid_1_1ESTrainer.html#a9bd8febbb748f6b406918ba9ae42d606',1,'cpid::ESTrainer']]],
   ['gamevalues_5f',['gameValues_',['../structcherrypi_1_1CherryVisDumperModule_1_1TraceData.html#a641432b0b979fda97086e68cb5038378',1,'cherrypi::CherryVisDumperModule::TraceData']]],

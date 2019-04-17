@@ -2,8 +2,10 @@ var searchData=
 [
   ['data',['Data',['../structcherrypi_1_1UnitAttributeFeaturizer_1_1Data.html',1,'cherrypi::UnitAttributeFeaturizer']]],
   ['datareader',['DataReader',['../classcommon_1_1DataReader.html',1,'common']]],
+  ['datareader_3c_20cherrypi_3a_3asnapshot_20_3e',['DataReader&lt; cherrypi::Snapshot &gt;',['../classcommon_1_1DataReader.html',1,'common']]],
   ['datareader_5fnotransform',['DataReader_NoTransform',['../structcommon_1_1DataReader__NoTransform.html',1,'common']]],
   ['datareaderiterator',['DataReaderIterator',['../classcommon_1_1DataReaderIterator.html',1,'common']]],
+  ['datareaderiterator_3c_20cherrypi_3a_3asnapshot_20_3e',['DataReaderIterator&lt; cherrypi::Snapshot &gt;',['../classcommon_1_1DataReaderIterator.html',1,'common']]],
   ['datareadertransform',['DataReaderTransform',['../classcommon_1_1DataReaderTransform.html',1,'common']]],
   ['defaultautobuildtask',['DefaultAutoBuildTask',['../classcherrypi_1_1DefaultAutoBuildTask.html',1,'cherrypi']]],
   ['defoggerfeaturizer',['DefoggerFeaturizer',['../classcherrypi_1_1DefoggerFeaturizer.html',1,'cherrypi']]],

@@ -88,15 +88,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classcpid_1_1ReqRepClient-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">cpid::ReqRepClient Class Reference</div>  </div>
+<div class="title">cpid::ReqRepClient Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Client for ZeroMQ REQ-REP pattern.  
+<p>A request-reply client backed by ZeroMQ.  
  <a href="classcpid_1_1ReqRepClient.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="reqrepserver_8h_source.html">reqrepserver.h</a>&gt;</code></p>
@@ -107,38 +108,38 @@ Public Types</h2></td></tr>
 <tr class="separator:a84926f21314f78e13b83d80c4fdbbb74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab698dd7ef830f1bb4de24ff778d4b15c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#ab698dd7ef830f1bb4de24ff778d4b15c">TimePoint</a> = std::chrono::time_point&lt; <a class="el" href="classcpid_1_1ReqRepClient.html#a84926f21314f78e13b83d80c4fdbbb74">Clock</a> &gt;</td></tr>
 <tr class="separator:ab698dd7ef830f1bb4de24ff778d4b15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa46b42c7459323d8ba9320973969c8d0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#aa46b42c7459323d8ba9320973969c8d0">CallbackFn</a> = std::function&lt; void(std::vector&lt; char &gt; &amp;&amp;<a class="el" href="classcpid_1_1ReqRepClient.html#a9d01793c47ec61168151df883ec9485a">request</a>, void const *reply, size_t len)&gt;</td></tr>
-<tr class="separator:aa46b42c7459323d8ba9320973969c8d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76a9b0a8f6cfae03a5b8bf1858f2937c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a76a9b0a8f6cfae03a5b8bf1858f2937c">Blob</a> = std::vector&lt; char &gt;</td></tr>
+<tr class="separator:a76a9b0a8f6cfae03a5b8bf1858f2937c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5d364b5687eedc2a5b2b403ac8280e7b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a5d364b5687eedc2a5b2b403ac8280e7b">ReqRepClient</a> (<a class="el" href="classcpid_1_1ReqRepClient.html#aa46b42c7459323d8ba9320973969c8d0">CallbackFn</a> callback, size_t maxBacklogSize, std::vector&lt; std::string &gt; endpoints, std::shared_ptr&lt; zmq::context_t &gt; context=nullptr)</td></tr>
-<tr class="separator:a5d364b5687eedc2a5b2b403ac8280e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07e5fdef465613578ab19b497aa4388f"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a07e5fdef465613578ab19b497aa4388f">~ReqRepClient</a> ()</td></tr>
+<tr class="memitem:a9d7030e00e7489f0776cc6087bf2cdf7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a9d7030e00e7489f0776cc6087bf2cdf7">ReqRepClient</a> (size_t maxConcurrentRequests, std::vector&lt; std::string &gt; endpoints, std::shared_ptr&lt; zmq::context_t &gt; context=nullptr)</td></tr>
+<tr class="separator:a9d7030e00e7489f0776cc6087bf2cdf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07e5fdef465613578ab19b497aa4388f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a07e5fdef465613578ab19b497aa4388f">~ReqRepClient</a> ()</td></tr>
 <tr class="separator:a07e5fdef465613578ab19b497aa4388f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d01793c47ec61168151df883ec9485a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a9d01793c47ec61168151df883ec9485a">request</a> (std::vector&lt; char &gt; msg)</td></tr>
-<tr class="separator:a9d01793c47ec61168151df883ec9485a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade5ff57f651be6e5d1160ebb04ff913d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#ade5ff57f651be6e5d1160ebb04ff913d">waitForReplies</a> ()</td></tr>
-<tr class="separator:ade5ff57f651be6e5d1160ebb04ff913d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e59153fd5e4457a45b375efc197e0a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a6e59153fd5e4457a45b375efc197e0a3">updateEndpoints</a> (std::vector&lt; std::string &gt; endpoints)</td></tr>
-<tr class="separator:a6e59153fd5e4457a45b375efc197e0a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a569b3a944f793da8a5b493e7bf2a569f"><td class="memItemLeft" align="right" valign="top">std::future&lt; std::vector&lt; char &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a569b3a944f793da8a5b493e7bf2a569f">request</a> (std::vector&lt; char &gt; msg)</td></tr>
+<tr class="separator:a569b3a944f793da8a5b493e7bf2a569f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3526e3a2e313b701fbf373e440446485"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a3526e3a2e313b701fbf373e440446485">updateEndpoints</a> (std::vector&lt; std::string &gt; endpoints)</td></tr>
+<tr class="memdesc:a3526e3a2e313b701fbf373e440446485"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the endpoints changed.  <a href="#a3526e3a2e313b701fbf373e440446485">More...</a><br /></td></tr>
+<tr class="separator:a3526e3a2e313b701fbf373e440446485"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ac48050f197de00b6420d2e6a166760"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a0ac48050f197de00b6420d2e6a166760">setReplyTimeout</a> (std::chrono::milliseconds timeout)</td></tr>
 <tr class="separator:a0ac48050f197de00b6420d2e6a166760"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ee0aeb481524817135ef2137e6b0248"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a8ee0aeb481524817135ef2137e6b0248">setReplyTimeoutMs</a> (size_t timeoutMs)</td></tr>
 <tr class="separator:a8ee0aeb481524817135ef2137e6b0248"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bddc459b1f6e4325fdc3b74eb8c7aa2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcpid_1_1ReqRepClient.html#a3bddc459b1f6e4325fdc3b74eb8c7aa2">setMaxRetries</a> (size_t count)</td></tr>
+<tr class="separator:a3bddc459b1f6e4325fdc3b74eb8c7aa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Client for ZeroMQ REQ-REP pattern. </p>
-<p>This client can be connected to multiple ReqRepServers and will send out requests in a round-robin fashion. It provides some basic robustness regarding slow or crashing servers by implementing the ZeroMQ Lazy Pirate pattern: if the server does not send a reply in time, retries will be attempted. Once a reply has been received, the <code>handleReply()</code> function will be called (to be provided by subclasses). The server list can be updated without loss of messages.</p>
-<p>The client keeps a backlog of requests that could not be delivered yet and for which delivery should be attempted at a later point. The size of this backlog has to be specified during construction.</p>
-<p>A few words regarding retries and the callback function: since this class provides a purely synchronous interface, send and receive operations are only performed during <code><a class="el" href="classcpid_1_1ReqRepClient.html#a9d01793c47ec61168151df883ec9485a">request()</a></code>, <code><a class="el" href="classcpid_1_1ReqRepClient.html#ade5ff57f651be6e5d1160ebb04ff913d">waitForReplies()</a></code> and <code><a class="el" href="classcpid_1_1ReqRepClient.html#a6e59153fd5e4457a45b375efc197e0a3">updateEndpoints()</a></code> calls. These are the functions that might result in a call to the supplied callback function. </p>
+<div class="textblock"><p>A request-reply client backed by ZeroMQ. </p>
+<p>This class provides a futures-based interface to the request-reply pattern. You call <a class="el" href="classcpid_1_1ReqRepClient.html#a569b3a944f793da8a5b493e7bf2a569f">request()</a> and get a future fo your (future) reply. Note that requests() will always happily accept the request and move into in internal queue. This queue is <em>unbounded</em> &ndash; if this is a concern you should add some manual blocking logic; see ZeroMQBufferedConsumer() for an example.</p>
+<p>The client can be connected to multiple ReqRepServers and will send out requests in a round-robin fashion. The number of concurrent replies that can be sent is controlled with the <code>maxConcurrentRequests</code> parameter. There are some basic robustness guarantees regarding slow or crashing servers: if a server does not send a reply in time, retries will be attempted. The number of retries can be limited; in this case, the future will be fulfilled with an exception. The server list can be updated loss of messages. </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a class="anchor" id="aa46b42c7459323d8ba9320973969c8d0"></a>
+<a class="anchor" id="a76a9b0a8f6cfae03a5b8bf1858f2937c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classcpid_1_1ReqRepClient.html#aa46b42c7459323d8ba9320973969c8d0">cpid::ReqRepClient::CallbackFn</a> =  std::function&lt; void(std::vector&lt;char&gt;&amp;&amp; <a class="el" href="classcpid_1_1ReqRepClient.html#a9d01793c47ec61168151df883ec9485a">request</a>, void const* reply, size_t len)&gt;</td>
+          <td class="memname">using <a class="el" href="classcpid_1_1ReqRepClient.html#a76a9b0a8f6cfae03a5b8bf1858f2937c">cpid::ReqRepClient::Blob</a> =  std::vector&lt;char&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -170,21 +171,15 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a5d364b5687eedc2a5b2b403ac8280e7b"></a>
+<a class="anchor" id="a9d7030e00e7489f0776cc6087bf2cdf7"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">cpid::ReqRepClient::ReqRepClient </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcpid_1_1ReqRepClient.html#aa46b42c7459323d8ba9320973969c8d0">CallbackFn</a>&#160;</td>
-          <td class="paramname"><em>callback</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>maxBacklogSize</em>, </td>
+          <td class="paramname"><em>maxConcurrentRequests</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -211,9 +206,6 @@ Public Member Functions</h2></td></tr>
 <a class="anchor" id="a07e5fdef465613578ab19b497aa4388f"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">cpid::ReqRepClient::~ReqRepClient </td>
@@ -222,22 +214,17 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a9d01793c47ec61168151df883ec9485a"></a>
+<a class="anchor" id="a569b3a944f793da8a5b493e7bf2a569f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cpid::ReqRepClient::request </td>
+          <td class="memname">std::future&lt; std::vector&lt; char &gt; &gt; cpid::ReqRepClient::request </td>
           <td>(</td>
           <td class="paramtype">std::vector&lt; char &gt;&#160;</td>
           <td class="paramname"><em>msg</em></td><td>)</td>
@@ -248,15 +235,15 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0ac48050f197de00b6420d2e6a166760"></a>
+<a class="anchor" id="a3bddc459b1f6e4325fdc3b74eb8c7aa2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cpid::ReqRepClient::setReplyTimeout </td>
+          <td class="memname">void cpid::ReqRepClient::setMaxRetries </td>
           <td>(</td>
-          <td class="paramtype">std::chrono::milliseconds&#160;</td>
-          <td class="paramname"><em>timeout</em></td><td>)</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>count</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -264,7 +251,7 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8ee0aeb481524817135ef2137e6b0248"></a>
+<a class="anchor" id="a0ac48050f197de00b6420d2e6a166760"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -272,10 +259,10 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void cpid::ReqRepClient::setReplyTimeoutMs </td>
+          <td class="memname">void cpid::ReqRepClient::setReplyTimeout </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>timeoutMs</em></td><td>)</td>
+          <td class="paramtype">std::chrono::milliseconds&#160;</td>
+          <td class="paramname"><em>timeout</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -288,12 +275,28 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6e59153fd5e4457a45b375efc197e0a3"></a>
+<a class="anchor" id="a8ee0aeb481524817135ef2137e6b0248"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cpid::ReqRepClient::updateEndpoints </td>
+          <td class="memname">void cpid::ReqRepClient::setReplyTimeoutMs </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>timeoutMs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3526e3a2e313b701fbf373e440446485"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cpid::ReqRepClient::updateEndpoints </td>
           <td>(</td>
           <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
           <td class="paramname"><em>endpoints</em></td><td>)</td>
@@ -302,20 +305,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a class="anchor" id="ade5ff57f651be6e5d1160ebb04ff913d"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cpid::ReqRepClient::waitForReplies </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Returns true if the endpoints changed. </p>
 
 </div>
 </div>
@@ -326,7 +316,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 12 2019 12:44:04 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 17 2019 18:31:57 for TorchCraftAI by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

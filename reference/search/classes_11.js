@@ -12,6 +12,7 @@ var searchData=
   ['task',['Task',['../classcherrypi_1_1Task.html',1,'cherrypi']]],
   ['taskdata',['TaskData',['../structcherrypi_1_1TaskData.html',1,'cherrypi']]],
   ['tcgame',['TCGame',['../classtcbwapi_1_1TCGame.html',1,'tcbwapi']]],
+  ['tcreplayer',['TCReplayer',['../classcherrypi_1_1TCReplayer.html',1,'cherrypi']]],
   ['tcunit',['TCUnit',['../classtcbwapi_1_1TCUnit.html',1,'tcbwapi']]],
   ['team',['Team',['../structcherrypi_1_1CombatSim_1_1Team.html',1,'cherrypi::CombatSim']]],
   ['tile',['Tile',['../structcherrypi_1_1Tile.html',1,'cherrypi']]],
