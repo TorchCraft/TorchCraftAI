@@ -7,12 +7,14 @@
 
 #pragma once
 
-#include "game.h"
+#include "initialconditions.h"
 #include "modules/once.h"
-#include "scenariospecification.h"
+#include "selfplayscenario.h"
 #include "state.h"
 
 namespace cherrypi {
+
+class MicroPlayer;
 
 /**
  * Base class for providing scenarios.
@@ -22,58 +24,82 @@ namespace cherrypi {
  */
 class ScenarioProvider {
  public:
-  virtual ~ScenarioProvider() = default;
+  /// \arg maxFrame Frame limit of the scenario
+  ScenarioProvider(int maxFrame, bool gui = false)
+      : maxFrame_(maxFrame), gui_(gui) {}
+  virtual ~ScenarioProvider() {}
 
-  /// The maximum number of steps to play before considering a scenario finished
-  /// Defaults to -1, which indicates no maximum.
-  ScenarioProvider& setMaxFrames(int value) {
-    maxFrame_ = value;
-    return *this;
-  }
-
-  /// Specifies whether to run OpenBW headfully.
-  /// Takes effect only when spawning a new OpenBWProcess; so generally you want
-  /// to invoke this before using the ScenarioProvider.
-  ScenarioProvider& setGui(bool value) {
-    gui_ = value;
-    return *this;
-  }
-
-  /// Spawns a scenario. It takes as parameters the setup functions for both
+  /// Spawns the scenario. It takes as parameters the setup functions for both
   /// players (this should take care of adding modules), and returns the
-  /// pointers to the created players
+  /// pointers
+  /// to the created players
   virtual std::pair<std::shared_ptr<BasePlayer>, std::shared_ptr<BasePlayer>>
-  startNewScenario(
+  spawnNextScenario(
       const std::function<void(BasePlayer*)>& setup1,
       const std::function<void(BasePlayer*)>& setup2) = 0;
 
   /// Check whether the scenario is finished.
   /// By default, return true whenever the number of frames is exceeded or one
-  /// of the players don't have any units left
-  virtual bool isFinished(int currentStep);
+  /// of
+  /// the players don't have any units left
+  /// If checkAttack is true, it will also check that at least one unit in one
+  /// army is able to attack at least one unit in the opponent't army.
+  virtual bool isFinished(int currentStep, bool checkAttack = true);
+
+  /// Clean the possible left-overs of the last scenario. Must be called before
+  /// spawnNextScenario
+  virtual void cleanScenario() {}
 
  protected:
-  template <typename TPlayer>
+  template <typename T>
   void loadMap(
       std::string const& map,
       tc::BW::Race race1,
       tc::BW::Race race2,
       GameType gameType,
       std::string const& replayPath = std::string()) {
-    game_ = std::make_shared<GameMultiPlayer>(
+    scenario_ = std::make_shared<SelfPlayScenario>(
         map, race1, race2, gameType, replayPath, gui_);
-    player1_ = std::make_shared<TPlayer>(game_->makeClient1());
-    player2_ = std::make_shared<TPlayer>(game_->makeClient2());
-  };
+    player1_ = std::make_shared<T>(scenario_->makeClient1());
+    player2_ = std::make_shared<T>(scenario_->makeClient2());
+  }
 
-  // Two hours, which is longer than any reasonable game but short enough to
-  // finish in reasonable time if a scenario goes off the rails.
-  int maxFrame_ = 24 * 60 * 60 * 2;
-  bool gui_ = false;
-
+  int maxFrame_;
+  bool gui_;
   std::shared_ptr<BasePlayer> player1_;
   std::shared_ptr<BasePlayer> player2_;
-  std::shared_ptr<GameMultiPlayer> game_;
+  std::shared_ptr<SelfPlayScenario> scenario_;
+
+  int lastPossibleAttack_ = -1;
 };
 
+class BaseMicroScenario : public ScenarioProvider {
+ public:
+  BaseMicroScenario(int maxFrame, bool gui = false);
+
+  void setReplay(std::string const& path) {
+    replay_ = path;
+  }
+
+  std::pair<std::shared_ptr<BasePlayer>, std::shared_ptr<BasePlayer>>
+  spawnNextScenario(
+      const std::function<void(BasePlayer*)>& setup1,
+      const std::function<void(BasePlayer*)>& setup2) override;
+
+  void cleanScenario() override;
+
+ protected:
+  virtual ScenarioInfo getScenarioInfo() = 0;
+
+  void sendKillCmds();
+
+  std::shared_ptr<tc::Client> client1_;
+  std::shared_ptr<tc::Client> client2_;
+  std::string replay_;
+  bool launchedWithReplay_{false};
+
+  int gameCount_ = 0;
+
+  std::string mapPathPrefix_;
+};
 } // namespace cherrypi

@@ -81,11 +81,13 @@ UnitAttributeFeaturizer::Data UnitAttributeFeaturizer::extract(
 
   if (n > 0) {
     data.positions.resize_({n, data.positions.size(1)});
+    //data.postype.resize_({n, data.postype.size(1)});
     data.data.resize_({n, data.data.size(1)});
   } else {
     // undefined means empty
     data.positions = torch::Tensor();
     data.data = torch::Tensor();
+    //data.postype = torch::Tensor();
   }
   return data;
 }
@@ -390,6 +392,75 @@ UnitAttributeFeaturizer::Data UnitTypeMDefoggerFeaturizer::extract(
   if (n > 0) {
     data.positions.resize_({n, data.positions.size(1)});
     data.data.resize_({n}).unsqueeze_(1); // NxC expected
+  } else {
+    // undefined means empty
+    data.positions = torch::Tensor();
+    data.data = torch::Tensor();
+  }
+  return data;
+}
+
+UnitTypeGasFeaturizer::UnitTypeGasFeaturizer() {
+  type = CustomFeatureType::UnitTypeGas;
+  name = "UnitTypeGas";
+  numChannels = UnitStatFeaturizer::kNumChannels;
+}
+
+
+UnitAttributeFeaturizer::Data UnitTypeGasFeaturizer::extract(
+    State* state,
+    UnitsInfo::Units const& units,
+    Rect const& boundingBox) {
+  /// XXX copy-pasta from UnitAttributeFeaturizer...
+  Data data;
+  if (boundingBox.empty()) {
+    data.boundingBox = state->mapRect();
+  } else {
+    data.boundingBox = boundingBox;
+  }
+  if (units.empty()) {
+    return data;
+  }
+  auto numUnitTypes = unittypemap_.size();
+  if (numUnitTypes == 0 ) { // we need to assign unit types 1 hot values
+    // needs to be deterministic for consistency over all episodes
+    std::set<int> unitTypes = std::set<int>();
+    for (auto* u : units) {
+      unitTypes.insert(u->type->unit);
+    }
+    int i = 0;
+    for (auto it = unitTypes.begin(); it != unitTypes.end(); ++it) {
+      unittypemap_[*it] = i;
+      i ++;
+    }
+    numUnitTypes = unittypemap_.size();
+  }
+  data.positions = torch::zeros({int(units.size()), 2}, torch::kI32);
+  //data.postype = torch::zeros({numUnits, 2 + numUnitTypes}, torch::kI32);
+  data.data = torch::zeros({int(units.size()), numUnitTypes}, torch::kI32); // small optim, add channel dim later
+
+  FeaturePositionMapper mapper(data.boundingBox, state->mapRect());
+  auto& jr = *jitter.get();
+  auto ap = data.positions.accessor<int, 2>();
+  //auto apt = data.postype.accessor<int, 2 + numUnitTypes>();
+  auto ad = data.data.accessor<int, 2>();
+  int n = 0;
+  for (auto* unit : units) {
+    // Determine resulting position by jittering and mapping to desired bounding
+    // box.
+    auto pos = mapper(jr(unit));
+    if (pos.x >= 0) {
+      ap[n][0] = pos.y;
+      ap[n][1] = pos.x;
+      //ap[n][unittypemap_[2+ unit->type->unit]] = 1;
+      ad[n][unittypemap_[unit->type->unit]] = 1;
+      n++;
+    }
+  }
+
+  if (n > 0) {
+    data.positions.resize_({n, data.positions.size(1)});
+    data.data.resize_({n, data.data.size(1)}); // NxC expected
   } else {
     // undefined means empty
     data.positions = torch::Tensor();

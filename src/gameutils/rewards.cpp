@@ -5,7 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "rewards.h"
+#include "initialconditions.h"
+#include "state.h"
 #include "utils.h"
 
 namespace cherrypi {
@@ -23,6 +24,8 @@ bool Reward::terminate(State* state) {
   return state->unitsInfo().myUnits().empty() ||
       state->unitsInfo().enemyUnits().empty();
 }
+
+void Reward::stepDrawReward(cherrypi::State* state) {}
 
 bool Reward::terminateOnPeace() {
   return true;
@@ -54,6 +57,43 @@ struct RewardCombat : public Reward {
 };
 std::unique_ptr<Reward> combatReward() {
   return std::make_unique<RewardCombat>();
+}
+
+struct RewardCombatDelta : public RewardCombat {
+  RewardCombatDelta(
+      float dmgScale,
+      float dmgTakenScale,
+      float deathScale,
+      float killScale,
+      float winScale)
+      : dmgScale_(dmgScale),
+        dmgTakenScale_(dmgTakenScale),
+        deathScale_(deathScale),
+        killScale_(killScale),
+        winScale_(winScale) {
+    reward = 0;
+    totScale_ = dmgScale_ + deathScale_ + killScale_ + winScale_;
+  }
+  void begin(State* state) override;
+  void stepReward(State* state) override;
+  void stepDrawReward(State* state) override;
+  bool terminate(State* state) override;
+  int lastAllyCount = 0;
+  int lastAllyHp = 0;
+  int lastEnemyCount = 0;
+  int lastEnemyHp = 0;
+
+ private:
+  float dmgScale_, dmgTakenScale_, deathScale_, killScale_, winScale_, totScale_;
+};
+std::unique_ptr<Reward> combatDeltaReward(
+    float dmgScale,
+    float dmgTakenScale,
+    float deathScale,
+    float killScale,
+    float winScale) {
+  return std::make_unique<RewardCombatDelta>(
+      dmgScale, dmgTakenScale, deathScale, killScale, winScale);
 }
 
 struct RewardKillSpeed : public Reward {
@@ -150,6 +190,79 @@ void RewardCombat::stepReward(State* state) {
   float win = enemyCount == 0 && allyCount != 0;
 
   reward = (enemyDamage + lives * 2 + kills * 4 + win * 8) / 16;
+}
+
+void RewardCombatDelta::begin(State* state) {
+  for (auto unit : state->unitsInfo().allUnitsEver()) {
+    auto hp = unit->type->maxHp + unit->type->maxShields;
+    if (unit->isMine) {
+      ++initialAllyCount;
+      initialAllyHp += hp;
+    }
+    if (unit->isEnemy) {
+      ++initialEnemyCount;
+      initialEnemyHp += hp;
+    }
+  }
+  lastAllyCount = initialAllyCount;
+  lastAllyHp = initialAllyHp;
+  initialEnemyCount = initialEnemyCount > 0 ? initialEnemyCount : 1;
+  initialEnemyHp = initialEnemyHp > 0 ? initialEnemyHp : 1;
+  lastEnemyCount = initialEnemyCount;
+  lastEnemyHp = initialEnemyHp;
+}
+void RewardCombatDelta::stepReward(State* state) {
+  float allyCount, enemyCount, allyHp, enemyHp;
+  std::tie(allyCount, enemyCount, allyHp, enemyHp) = getUnitCountsHealth(state);
+  if (enemyHp > initialEnemyHp) {
+    initialEnemyHp = enemyHp;
+  }
+  if (enemyCount > initialEnemyCount) {
+    initialEnemyCount = enemyCount;
+  }
+  float kills = (lastEnemyCount - enemyCount) / initialEnemyCount;
+  float enemyDamage = (lastEnemyHp - enemyHp) / initialEnemyHp;
+  if (kills < 0) {
+    kills *= -0.5; // TODO: flag
+  }
+  if (enemyDamage < 0) {
+    enemyDamage = 0; // TODO: flag
+  }
+  float damage = (lastAllyHp - allyHp) / initialAllyHp;
+  float deaths = (lastAllyCount - allyCount) / initialAllyCount;
+  float win = enemyCount == 0 && allyCount != 0;
+  lastAllyCount = allyCount;
+  lastAllyHp = allyHp;
+  lastEnemyCount = enemyCount;
+  lastEnemyHp = enemyHp;
+
+  reward = (enemyDamage * dmgScale_ - deaths * deathScale_ - 
+            damage * dmgTakenScale_ + kills * killScale_ + win * winScale_) /
+      totScale_;
+}
+
+bool RewardCombatDelta::terminate(State* state) {
+  return state->unitsInfo().myUnits().empty();
+}
+
+void RewardCombatDelta::stepDrawReward(State* state) {
+  float allyCount, enemyCount, allyHp, enemyHp;
+  std::tie(allyCount, enemyCount, allyHp, enemyHp) = getUnitCountsHealth(state);
+  float win = enemyCount == 0 && allyCount != 0;
+  allyCount=0.0;
+  allyHp=0.0;
+  float kills = (lastEnemyCount - enemyCount) / initialEnemyCount;
+  float enemyDamage = (lastEnemyHp - enemyHp) / initialEnemyHp;
+  float damage = (lastAllyHp - allyHp) / initialAllyHp;
+  float deaths = (lastAllyCount - allyCount) / initialAllyCount;
+  lastAllyCount = allyCount;
+  lastAllyHp = allyHp;
+  lastEnemyCount = enemyCount;
+  lastEnemyHp = enemyHp;
+
+  reward = (enemyDamage * dmgScale_ - deaths * deathScale_ - 
+            damage * dmgTakenScale_ + kills * killScale_ + win * winScale_) /
+      totScale_;
 }
 
 void RewardKillSpeed::stepReward(State* state) {

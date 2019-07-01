@@ -197,6 +197,7 @@ struct UnitTypeMDefoggerFeaturizer : UnitTypeDefoggerFeaturizer {
       Rect const& boundingBox = Rect());
 };
 
+
 /**
  * Sparse featurizer for unit flags.
  *
@@ -233,6 +234,32 @@ struct UnitStatFeaturizer : UnitAttributeFeaturizer {
 
  protected:
   virtual void extractUnit(TensorDest, cherrypi::Unit*) override;
+};
+
+struct UnitTypeGasFeaturizer : UnitStatFeaturizer {
+  UnitTypeGasFeaturizer();
+  /*
+  struct GasData : Data {
+    Rect boundingBox;
+    // TODO Undefined position and data tensors currently represent an empty set
+    // of units. Are tensors with a 0-sized dimension possible?
+    torch::Tensor positions; /// #units X 2 (y, x)
+    torch::Tensor postype;
+    torch::Tensor data; /// #units X nchannels
+
+    template <typename Archive>
+    void serialize(Archive& ar) {
+      ar(CEREAL_NVP(boundingBox), CEREAL_NVP(positions), CEREAL_NVP(data), CEREAL_NVP(postype));
+    }
+  };
+  */
+
+  virtual Data extract(
+     State* state,
+     UnitsInfo::Units const& units,
+     Rect const& boundingBox = Rect());
+
+  std::map<int, int> unittypemap_;
 };
 
 /**
