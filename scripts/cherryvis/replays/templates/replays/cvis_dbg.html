@@ -1,0 +1,131 @@
+<nav tabindex="0" class="openbw-side-of-viewer sidebar-style sidebar-cdb show-when-game-on collapse">
+    <div class="sidebar-header">
+        <h3>
+
+          <button type="button" class="btn btn-outline-light cvis-expand-collapse cvis-expand-button" data-toggle="tooltip" data-placement="bottom" title="Expand CherryVis"><i class="fas fa-chevron-left"></i></button>
+          <button type="button" class="btn btn-outline-light cvis-expand-collapse cvis-collapse-button" data-toggle="tooltip" data-placement="bottom" title="Collapse CherryVis"><i class="fas fa-chevron-right"></i></button>
+          <button type="button" class="btn btn-outline-light cvis-reload-current-replay" data-toggle="tooltip" data-placement="bottom" title="Reload current replay"><i class="fas fa-sync-alt"></i></button>
+          CherryVis
+          <span class="text-monospace cvis-dbg-show-when-running">[f <span class="cvis-dbg-current-frame">0</span>]</span>
+        </h3>
+        <div class="input-group mb-3">
+          <input type="text" id="cvisSetFrame" class="form-control" placeholder="Jump to frame" aria-label="Jump to frame" aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="cvisSetFrameBtn">Jump</button>
+            <button class="btn btn-outline-secondary cvis-jump-frame-relative" type="button" data-jump-frame="10">+10</button>
+            <button class="btn btn-outline-secondary cvis-jump-frame-relative" type="button" data-jump-frame="1">+1</button>
+            <button class="btn btn-outline-secondary cvis-jump-frame-relative" type="button" data-jump-frame="-1">-1</button>
+            <button class="btn btn-outline-secondary cvis-jump-frame-relative" type="button" data-jump-frame="-10">-10</button>
+          </div>
+        </div>
+    </div>
+    <div class="cvis-dbg-show-when-loading">
+      <div class="alert alert-info">
+        <strong>Info!</strong> We are loading the CherryVis information file (<strong class="cvis-loading-file-path"></strong>)... Please wait :)
+      </div>
+
+      <div class="alert alert-info cvis-dbg-show-when-matching-units">
+        <strong>Info!</strong> Matching BW units with CherryPi units...
+        <div class="row">
+          <div class="col-sm-8">
+            <div class="progress">
+              <div class="progress-bar bg-info cvis-matching-units-progress-bar" role="progressbar" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <button type="button" class="btn btn-warning cvis-matching-units-skip">skip</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cvis-dbg-show-when-loading-failed">
+      Error: Unable to load file as a JSON<br />
+      <strong class="cvis-loading-file-path"></strong>
+    </div>
+
+    <ul class="list-unstyled components cvis-dbg-show-when-running pb-0">
+        {% include "replays/cvis_dbg_cherrypi_state.html" %}
+        <li>
+            <a href=".graph-view-all" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                <i class="fas fa-tree"></i>
+                Graphs
+            </a>
+            <div class="graph-view-all collapse">
+              <ul class="nav nav-tabs" id="graphs-tabs-nav" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" href="#trees-list" role="tab" aria-controls="trees-list" aria-selected="false">Trees</a>
+                </li>
+                <li>
+                  <a class="nav-link active" data-toggle="tab" href="#game-values" role="tab" aria-controls="game-values" aria-selected="true">Game values</a>
+                </li>
+              </ul>
+
+              <div class="tab-content" id="graphs-tabs">
+                <!-- SEARCH / LOAD TREES -->
+                <div class="tab-pane fade" id="trees-list" role="tabpanel">
+                  <ul class="collapse list-unstyled" id="cdbTreesView">
+                    <li>
+                      <div class="sidebar-item-container">
+                        <div class="form-group row">
+                          <input type="text" class="form-control" id="cdbTreesSearch" placeholder="Search trees">
+                        </div>
+                        <div class="cvis-hide-when-disabled">
+                          <span class="cvis-num-results"></span> results (<span class="cvis-num-results-displayed"></span> displayed)
+                        </div>
+                      </div>
+                    </li>
+                    <li class="cvis-graph-entry cvis-has-frame-id template collapse">
+                      <div class="sidebar-item-container">
+                        <div class="row">
+                          <div class="col-md-3">
+                            <a class="cvis-link-frame"></a>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="row">
+                              <div class="col-md-4"><p class="cvis-graphs-multi"></p></div>
+                              <div class="col-md-8"><p class="cvis-graphs-name"></p></div>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <button type="button" class="btn btn-primary btn-sm load-tree-button">Load</button>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                  <div id="cdbLoadedTreePlaceholder" style="display: none">
+                    <div class="form-inline d-flex">
+                      <input type="text" class="flex-fill form-control" id="cdbLoadedTreeSearch" placeholder="Search for a node">
+                      <button id="cdbLoadedTreeClose" class="align-self-stretch btn btn-danger btn-sm" type="button"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="d-flex cvis-draw-tree"></div>
+                  </div>
+                </div>
+                <!-- GAME VALUES -->
+                <div class="tab-pane fade show active" id="game-values" role="tabpanel">
+                  <div style="position: relative;">
+                    <canvas class="chart-placeholder-canvas"></canvas>
+                  </div>
+                  <div class="when-no-chart">
+                    No game value has been found. You can dump float values during the game, and they will be rendered here in a graph (see <em>cherryvisdumper_t.cpp</em>).
+                  </div>
+                </div>
+              </div>
+            </div>
+        </li>
+        {% include "replays/cvis_dbg_tensors.html" %}
+        <li class="collapse cvisPerspectivePanel">
+          <div class="row">
+            <div class="col-md-4">
+              <label for="cvisPerspective">Perspective</label>
+            </div>
+            <div class="col-md-8">
+              <select id="cvisPerspective" class="form-control">
+                <option>Default</option>
+                <option>p2</option>
+              </select>
+            </div>
+          </div>
+        </li>
+    </ul>
+</nav>

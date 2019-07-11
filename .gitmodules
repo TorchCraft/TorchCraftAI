@@ -1,0 +1,36 @@
+[submodule "pytorch"]
+	path = 3rdparty/pytorch
+	url = https://github.com/ebetica/pytorch
+[submodule "torchcraft"]
+	path = 3rdparty/torchcraft
+	url = https://github.com/TorchCraft/TorchCraft
+[submodule "openbw/openbw"]
+	path = 3rdparty/openbw/openbw
+	url = https://github.com/openbw/openbw
+[submodule "openbw/bwapi"]
+	path = 3rdparty/openbw/bwapi
+	url = https://github.com/openbw/bwapi
+[submodule "deps/gflags"]
+	path = 3rdparty/gflags
+	url = https://github.com/gflags/gflags
+[submodule "deps/glog"]
+	path = 3rdparty/glog
+	url = https://github.com/google/glog
+[submodule "3rdparty/cnpy"]
+	path = 3rdparty/cnpy
+	url = https://github.com/rogersce/cnpy.git
+[submodule "3rdparty/fmt"]
+	path = 3rdparty/fmt
+	url = https://github.com/fmtlib/fmt
+[submodule "3rdparty/prettyprint"]
+	path = 3rdparty/prettyprint
+	url = https://github.com/jgehring/cxx-prettyprint
+[submodule "3rdparty/range-v3"]
+	path = 3rdparty/range-v3
+	url = https://github.com/ericniebler/range-v3
+[submodule "3rdparty/cereal"]
+	path = 3rdparty/cereal
+	url = https://github.com/USCiLab/cereal
+[submodule "3rdparty/Arcade-Learning-Environment"]
+	path = 3rdparty/ale
+	url = https://github.com/mgbellemare/Arcade-Learning-Environment

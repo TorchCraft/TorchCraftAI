@@ -1,0 +1,1 @@
+A collection of maps mostly taken from ICCup, intended to be used for fuzzy-matching against the names of maps used in StarData, for medium-fidelity reconstruction of game states from Snapshots.

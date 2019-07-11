@@ -1,0 +1,7 @@
+The license of this project is unfortunately unclear. The location of the
+original Windows version is http://www.bwchart.net:80/us/bwlib.php; a version of
+the site from 2004 is accessible here:
+https://web.archive.org/web/20040805050311/http://www.bwchart.net:80/us/bwlib.php .
+
+Numerous other projects picked up the code over the years, e.g.
+https://github.com/HearthSim/pyreplib (MIT license).
