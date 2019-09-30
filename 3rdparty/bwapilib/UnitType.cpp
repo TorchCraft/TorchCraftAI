@@ -10,6 +10,8 @@
 #include <BWAPI/UpgradeType.h>
 #include <BWAPI/Race.h>
 
+#include <Debug.h>
+
 namespace BWAPI
 {
   // NAMES

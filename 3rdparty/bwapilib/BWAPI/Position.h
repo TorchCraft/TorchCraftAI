@@ -66,10 +66,8 @@ namespace BWAPI
     ///     The type being converted to type T.
     template<typename FromT> Point(const Point<FromT, Scale> &pt) : x( static_cast<T>(pt.x) ), y( static_cast<T>(pt.y) ) {}
 
-#ifdef _MSC_VER
 #pragma warning( push )
 #pragma warning( disable: 4723 )
-#endif
     /// <summary>A conversion copy constructor to convert positions of different scales to one
     /// another.</summary>
     ///
@@ -80,9 +78,7 @@ namespace BWAPI
     template<typename FromT, int FromScale> explicit Point(const Point<FromT, FromScale> &pt)
       : x(static_cast<T>(FromScale > Scale ? pt.x*(FromScale / Scale) : pt.x / (Scale / FromScale)))
       , y(static_cast<T>(FromScale > Scale ? pt.y*(FromScale / Scale) : pt.y / (Scale / FromScale))) { }
-#ifdef _MSC_VER
 #pragma warning( pop )
-#endif
 
     // Operators
     /// <summary>A convenience for use with if statements to identify if a position is valid.</summary>
@@ -90,8 +86,8 @@ namespace BWAPI
     explicit operator bool() const { return this->isValid(); };
     
     bool operator == (const Point<T,Scale> &pos) const
-    { 
-      return std::tie(this->x, this->y) == std::tie(pos.x, pos.y);
+    {
+      return this->x == pos.x && this->y == pos.y;
     }; 
     bool operator != (const Point<T,Scale> &pos) const
     { 
@@ -102,7 +98,9 @@ namespace BWAPI
     /// Compares lexicographically the x position, followed by the y position.
     bool operator  < (const Point<T,Scale> &position) const
     {
-      return std::tie(this->x, this->y) < std::tie(position.x, position.y);
+      if(this->x == position.x)
+        return this->y < position.y;
+      return this->x < position.x;
     };
 
     inline Point<T, Scale> &operator += (const Point<T, Scale> &p)
@@ -305,12 +303,12 @@ namespace BWAPI
     /// @see getDistance
     int getApproxDistance(const Point<T,Scale> &position) const
     {
-      unsigned int min = abs((int)(this->x - position.x));
-      unsigned int max = abs((int)(this->y - position.y));
+      unsigned int max = abs((int)(this->x - position.x));
+      unsigned int min = abs((int)(this->y - position.y));
       if ( max < min )
         std::swap(min, max);
 
-      if ( min < (max >> 2) )
+      if ( min <= (max >> 2) )
         return max;
 
       unsigned int minCalc = (3*min) >> 3;

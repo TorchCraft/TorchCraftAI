@@ -23,8 +23,6 @@ namespace BWAPI
     /// return value for BWAPI interface functions that have encountered an error.
     static const Unitset none;
 
-    Unitset() : SetContainer<BWAPI::Unit, std::hash<void*>>() {}
-
     Unitset& operator = (const Unitset& other) {
         clear();
         std::copy(other.begin(), other.end(), std::inserter(*this, begin()));
