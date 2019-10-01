@@ -4,6 +4,8 @@
 #include <BWAPI/UpgradeType.h>
 #include <tuple>
 
+#include <Debug.h>
+
 namespace BWAPI
 {
   UnitCommand::UnitCommand(Unit _unit, UnitCommandType _type, Unit _target, int _x, int _y, int _extra)

@@ -1,6 +1,8 @@
 #include <string>
 #include <BWAPI/GameType.h>
 
+#include <Debug.h>
+
 namespace BWAPI
 {
   template <>
