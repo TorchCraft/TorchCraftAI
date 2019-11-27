@@ -169,8 +169,8 @@ ag::Variant ContinuousGaussianSampler::computeProba(
     double dev = stdVar.isDouble() ? stdVar.getDouble() : stdVar.getFloat();
     return ag::Variant(common::normalPDF(action.get(), pi, dev));
   }
-  torch::Tensor dev = in[stdKey_];
-  return ag::Variant(common::normalPDF(action.get(), pi, dev));
+  torch::Tensor dev = stdVar.get().view_as(pi);
+  return ag::Variant(common::normalPDF(action.get().view_as(pi), pi, dev));
 }
 
 ContinuousDeterministicSampler::ContinuousDeterministicSampler(

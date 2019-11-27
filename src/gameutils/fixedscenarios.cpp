@@ -5,7 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#include "common/assert.h"
 #include "common/rand.h"
+#include "modules/builderhelper.h"
+#include "modules/cherryvisdumper.h"
 #include "scenariospecification.h"
 #include "state.h"
 #include "utils.h"
@@ -538,11 +541,12 @@ FixedScenarioGroup miscellaneousScenarios() {
         {{bt::Protoss_Zealot, x}, {bt::Protoss_Dragoon, y}});
   }
 
-  auto addSpreadGroup = [&](std::string const& name,
-                            float varUnits,
-                            std::vector<UnitCount> const& counts) {
+  auto addSpreadGroup =
+      [&](std::string const& name,
+          float varUnits,
+          std::vector<UnitCount> const& counts) -> FixedScenario& {
     // The NN should try to gather its units together, and attack
-    auto& zvzScenario = group.add(name);
+    auto& scenario = group.add(name);
     std::array<float, 2> globalMult;
     for (auto& v : globalMult) {
       v = common::Rand::sample(
@@ -561,12 +565,61 @@ FixedScenarioGroup miscellaneousScenarios() {
           int(u.count * globalMult[0]),
           int(u.count * globalMult[1]),
       };
-      zvzScenario.allies().emplace_back(SpawnPosition{
+      scenario.allies().emplace_back(SpawnPosition{
           playerCounts[0], u.unitType, xCenter[0], mapMidpointY, 25.0, 25.0});
-      zvzScenario.enemies().emplace_back(SpawnPosition{
+      scenario.enemies().emplace_back(SpawnPosition{
           playerCounts[1], u.unitType, xCenter[1], mapMidpointY, 25.0, 25.0});
     }
+    return scenario;
   };
+  auto moveUnitsTo =
+      [](std::vector<SpawnPosition> const& units,
+         std::vector<Position> const& pos) -> std::vector<SpawnPosition> {
+    std::vector<SpawnPosition> moved;
+    for (auto& u : units) {
+      for (int i = 0; i < u.count; ++i) {
+        auto const& p = pos[rand() % pos.size()];
+        moved.emplace_back(SpawnPosition{1, u.type, p.x, p.y, 2.0, 2.0});
+      }
+    }
+    return moved;
+  };
+  auto addRevealers = [](FixedScenario& scenario) {
+    // Add revealers
+    constexpr auto kMapRevealerRange = 4 * 6;
+    constexpr auto kMapSz = 4 * 96; // in walk tiles
+    for (int x = kMapRevealerRange / 2; x < kMapSz; x += kMapRevealerRange) {
+      for (int y = kMapRevealerRange / 2; y < kMapSz; y += kMapRevealerRange) {
+        auto mr = bt::UnitType::_from_integral_unchecked(
+            buildtypes::Special_Map_Revealer->unit);
+        scenario.allies().emplace_back(SpawnPosition{1, mr, x, y, 0.0, 0.0});
+        scenario.enemies().emplace_back(SpawnPosition{1, mr, x, y, 0.0, 0.0});
+      }
+    }
+  };
+  auto makeParanoid = [moveUnitsTo, addRevealers](FixedScenario& scenario) {
+    scenario.map = "maps/paranoid_android_2p.scx";
+    std::array<std::vector<Position>, 2> pos = {
+        std::vector<Position>{// Position is in walk tiles
+                              {212, 62},
+                              {121, 130},
+                              {41, 38}},
+        std::vector<Position>{{341, 166}, {223, 277}, {275, 250}},
+    };
+    // Move units to the correct start position
+    auto p1 = rand() % 2;
+    scenario.allies() = moveUnitsTo(scenario.allies(), pos[p1]);
+    scenario.enemies() = moveUnitsTo(scenario.enemies(), pos[1 - p1]);
+    addRevealers(scenario);
+  };
+  addSpreadGroup(
+      "zvz_target_workers",
+      1.0f,
+      {
+          {bt::Zerg_Drone, rangeOn(5, 10)},
+          {bt::Terran_SCV, rangeOn(20, 40)},
+          {bt::Zerg_Guardian, rangeOn(2, 4)},
+      });
   addSpreadGroup(
       "spread_zvz",
       2.0f,
@@ -590,7 +643,137 @@ FixedScenarioGroup miscellaneousScenarios() {
       {
           {bt::Zerg_Zergling, rangeOn(5, 10)},
       });
+  auto& dz = addSpreadGroup(
+      "spread_dragoon_zealots",
+      1.5f,
+      {
+          {bt::Protoss_Zealot, rangeOn(2, 8)},
+          {bt::Protoss_Dragoon, int(rangeOn(0, 100) < 80) * rangeOn(2, 8)},
+      });
+  auto dzParanoid = dz;
+  makeParanoid(dzParanoid);
+  dzParanoid.name = "spread_dragoon_zealots_paranoid";
+  group.scenarios.push_back(std::move(dzParanoid));
 
+  // Blood Bath - 2 basis + a small army
+  [&]() {
+    auto& scenario = group.add("zvz_late_game");
+    scenario.gameType = GameType::Melee;
+    scenario.map = "maps/blood_bath_4p.scm";
+
+    scenario.stepFunctions.push_back([](State* s) {
+      if (s->board()->get<bool>("_initialized", false)) {
+        return;
+      }
+      s->board()->post("_initialized", true);
+      std::array<Position, 2> startPos;
+      startPos[0] = s->areaInfo().myStartLocation();
+      startPos[1] = [s]() {
+        for (auto u : s->unitsInfo().mapHacked()) {
+          if (u->type->isResourceDepot && u->isEnemy) {
+            for (auto& loc : s->tcstate()->start_locations) {
+              auto d = utils::distance(loc.x, loc.y, u->x, u->y);
+              if (d < 50.0f) {
+                return Position(loc.x, loc.y);
+              }
+            }
+          }
+        }
+        throw std::runtime_error("Unable to find enemy start pos!");
+      }();
+      auto loc2hatch = [](Position const& loc) {
+        if (loc.x > 200 && loc.y > 200) {
+          return Position(220, 226);
+        } else if (loc.y > 200) {
+          return Position(36, 226);
+        } else if (loc.x > 200) {
+          return Position(220, 30);
+        } else {
+          return Position(16, 30);
+        }
+      };
+      std::vector<Position> freeStartLocations;
+      for (auto& loc : s->tcstate()->start_locations) {
+        if (loc.x == startPos[0].x && loc.y == startPos[0].y) {
+          continue;
+        }
+        if (loc.x == startPos[1].x && loc.y == startPos[1].y) {
+          continue;
+        }
+        freeStartLocations.push_back(Position(loc.x, loc.y));
+      }
+
+      ASSERT(
+          freeStartLocations.size() == 2,
+          fmt::format(
+              "found {} free start pos! startPos=(({}, {}), ({}, {})), ",
+              freeStartLocations.size(),
+              startPos[0].x,
+              startPos[0].y,
+              startPos[1].x,
+              startPos[1].y));
+      std::array<int, 2> playerIds = {s->playerId(), s->firstOpponent()};
+      for (int i = 0; i < 2; ++i) {
+        auto spawn = [s, playerId = playerIds[i]](
+                         Position const& pos, tc::BW::UnitType type) {
+          s->board()->postCommand(
+              {tc::BW::Command::CommandOpenbw,
+               tc::BW::OpenBWCommandType::SpawnUnit,
+               playerId,
+               type,
+               tc::BW::XYPixelsPerWalktile * pos.x,
+               tc::BW::XYPixelsPerWalktile * pos.y},
+              kRootUpcId);
+        };
+        auto nearby = [](Position const& p, int delta = 5) {
+          return Position(
+              p.x - delta + rand() % (2 * delta),
+              p.y - delta + rand() % (2 * delta));
+        };
+        Position expHatch = loc2hatch(freeStartLocations[i]);
+        spawn(expHatch, tc::BW::UnitType::Zerg_Hatchery);
+        auto spawnBuilding =
+            [&](Position const& hatch, int x, int y, auto type) {
+              int dx = hatch.x < 100 ? 12 + buildtypes::Zerg_Hatchery->tileWidth
+                                     : -12;
+              int dy = hatch.y < 100
+                  ? 12 + buildtypes::Zerg_Hatchery->tileHeight
+                  : -12;
+              spawn(hatch + Position(x * dx, y * dy), type);
+            };
+        // Spawn some defense buildings on the main base
+        auto mainHatch = loc2hatch(startPos[i]);
+        spawnBuilding(mainHatch, 1, 0, tc::BW::UnitType::Zerg_Sunken_Colony);
+        spawnBuilding(mainHatch, 0, 1, tc::BW::UnitType::Zerg_Spore_Colony);
+        spawnBuilding(mainHatch, 1, 1, tc::BW::UnitType::Zerg_Spawning_Pool);
+        spawnBuilding(mainHatch, 2, 0, tc::BW::UnitType::Zerg_Spire);
+        spawnBuilding(expHatch, 1, 1, tc::BW::UnitType::Zerg_Spore_Colony);
+        for (Position p : {expHatch, mainHatch}) {
+          for (int j = 0; j < 8; ++j) {
+            spawn(nearby(p), tc::BW::UnitType::Zerg_Drone);
+          }
+          // Spawn some army
+          for (int j = 0; j < 4; ++j) {
+            spawn(nearby(p), tc::BW::UnitType::Zerg_Zergling);
+          }
+          for (int j = 0; j < 2; ++j) {
+            spawn(nearby(p, 20), tc::BW::UnitType::Zerg_Mutalisk);
+          }
+          for (int j = 0; j < 2; ++j) {
+            spawn(nearby(p, 20), tc::BW::UnitType::Zerg_Overlord);
+          }
+        }
+
+        // Add some money
+        s->board()->postCommand(
+            {tc::BW::Command::CommandOpenbw,
+             tc::BW::OpenBWCommandType::SetPlayerGas,
+             playerIds[i],
+             450},
+            kRootUpcId);
+      }
+    });
+  }();
   return group;
 }
 

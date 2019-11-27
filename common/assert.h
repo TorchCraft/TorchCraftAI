@@ -75,8 +75,15 @@ backward::StackTrace createStackTrace();
 #define GET_3RD_ARG(arg1, arg2, arg3, ...) arg3
 #define ASSERT_MACRO_CHOOSER(...) GET_3RD_ARG(__VA_ARGS__, ASSERT_2, ASSERT_1, )
 
+// MSVC preprocessor is broken and doesn't like our smart trick to overload
+// macros See
+// https://stackoverflow.com/questions/52537699/preprocessor-inconsistencies-in-visual-studio
+#ifdef _MSC_VER
+#define ASSERT(cond, ...) ASSERT_1(cond)
+#else
 // Takes 1 or 2 arguments: the condition, and an optional message
 #define ASSERT(...) ASSERT_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
+#endif
 
 #ifndef NDEBUG
 // Debug mode
@@ -95,5 +102,10 @@ backward::StackTrace createStackTrace();
   } while (false)
 #define DASSERT_MACRO_CHOOSER(...) \
   GET_3RD_ARG(__VA_ARGS__, DASSERT_2, DASSERT_1, )
+#ifdef _MSC_VER
+#define DASSERT(cond, ...) DASSERT_1(cond)
+#else
 #define DASSERT(...) DASSERT_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
+#endif
+
 #endif

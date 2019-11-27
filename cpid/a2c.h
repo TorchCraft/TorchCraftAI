@@ -38,7 +38,9 @@ class A2C : public SyncTrainer {
       bool overlappingUpdates = true,
       bool gpuMemoryEfficient = false,
       bool reduceGradients = true,
-      float maxGradientNorm = -1);
+      float maxGradientNorm = -1,
+      const std::string& polSizeKey = "pol_size");
+
 
   void setPolicyRatio(float pr);
 
@@ -62,6 +64,7 @@ class A2C : public SyncTrainer {
   float ratio_clamp_ = 10.;
   float entropy_ratio_ = 0.01;
   float policy_ratio_ = 1.;
+  std::string polSizeKey_;
 };
 
 class ContinuousA2C : public A2C {

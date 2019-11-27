@@ -1,6 +1,6 @@
 [submodule "pytorch"]
-	path = 3rdparty/pytorch
-	url = https://github.com/ebetica/pytorch
+       path = 3rdparty/pytorch
+       url = https://github.com/ebetica/pytorch
 [submodule "torchcraft"]
 	path = 3rdparty/torchcraft
 	url = https://github.com/TorchCraft/TorchCraft
@@ -31,6 +31,9 @@
 [submodule "3rdparty/cereal"]
 	path = 3rdparty/cereal
 	url = https://github.com/USCiLab/cereal
+[submodule "3rdparty/eigen-git-mirror"]
+	path = 3rdparty/eigen
+	url = https://github.com/eigenteam/eigen-git-mirror.git
 [submodule "3rdparty/Arcade-Learning-Environment"]
 	path = 3rdparty/ale
 	url = https://github.com/mgbellemare/Arcade-Learning-Environment

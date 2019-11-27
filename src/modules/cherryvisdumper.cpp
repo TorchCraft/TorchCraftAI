@@ -30,6 +30,10 @@ namespace cherrypi {
 
 REGISTER_SUBCLASS_0(Module, CherryVisDumperModule);
 
+CherryVisDumperModule::~CherryVisDumperModule() {
+  writeTrace();
+}
+
 void CherryVisDumperModule::step(State* s) {
   ASSERT(s);
   std::string frameNow = std::to_string(s->currentFrame());
@@ -87,6 +91,7 @@ void CherryVisDumperModule::step(State* s) {
 void CherryVisDumperModule::onGameStart(State* state) {
   logSink_.reset();
   trace_ = {};
+  trace_.gameStarted_ = true;
   if (state && enableLogsSink_) {
     logSink_ = std::make_unique<CherryVisLogSink>(this, state);
     if (FLAGS_trace_upc_details) {
@@ -130,8 +135,35 @@ std::string CherryVisDumperModule::parseReplayPath(std::string parsed) {
 }
 
 void CherryVisDumperModule::onGameEnd(State* state) {
+  if (!trace_.gameStarted_) {
+    return;
+  }
   if (replayFileName_.empty()) {
     VLOG(1) << "No replay file provided, will not dump bot trace data";
+    return;
+  }
+
+  // Stop catching logs
+  logSink_.reset();
+
+  if (!state) {
+    return;
+  }
+
+  // Dump all UPCs
+  dumpGameUpcs(state);
+
+  try {
+    std::string dumpDirectory = getDumpDirectory();
+    common::fsutils::mkdir(dumpDirectory);
+    writeGameSummary(state, dumpDirectory + "game_summary.json");
+  } catch (std::exception const& e) {
+    LOG(ERROR) << "Exception while writing CVis game summary: " << e.what();
+  }
+}
+
+void CherryVisDumperModule::writeTrace() {
+  if (!trace_.gameStarted_) {
     return;
   }
 
@@ -139,14 +171,6 @@ void CherryVisDumperModule::onGameEnd(State* state) {
   std::unordered_map<std::string, std::string> buildTypesToName;
   for (auto it : buildtypes::allUnitTypes) {
     buildTypesToName[std::to_string(it->unit)] = it->name;
-  }
-
-  // Stop logging
-  logSink_.reset();
-
-  // Dump all UPCs
-  if (state) {
-    dumpGameUpcs(state);
   }
 
   auto tensorsData = trace_.getTensorsData();
@@ -179,16 +203,12 @@ void CherryVisDumperModule::onGameEnd(State* state) {
     replayFile << bot_dump.dump(-1, ' ', true);
     replayFile.close();
 
-    // game_summary.json
-    if (state) {
-      writeGameSummary(state, dumpDirectory + "game_summary.json");
-    }
-
     // tree__XXXX.json.zstd
     writeTrees(dumpDirectory);
   } catch (std::exception const& e) {
     LOG(ERROR) << "Exception while writing bot trace for CVis: " << e.what();
   }
+  trace_ = {};
 }
 
 void CherryVisDumperModule::onDrawCommand(
@@ -423,10 +443,10 @@ void CherryVisDumperModule::setMultiDump(std::string cvisSuffix) {
     // Try to autogenerate a suffix
     // NOTE: This is a race condition
     int i = 2;
-    while (fsutils::isdir(fmt::format("{}.civs.{}", replayFileName_, i))) {
+    while (fsutils::isdir(fmt::format("{}.cvis.{}", replayFileName_, i))) {
       ++i;
     }
-    fsutils::mkdir(fmt::format("{}.civs.{}", replayFileName_, i));
+    fsutils::mkdir(fmt::format("{}.cvis.{}", replayFileName_, i));
     cvisSuffix = std::to_string(i);
   }
   cvisSuffix_ = "." + cvisSuffix;

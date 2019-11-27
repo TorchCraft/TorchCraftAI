@@ -41,7 +41,7 @@ echo "Building CherryPi"
 if [ "$BUILD_CHERRYPI" -eq "0" ]; then
   echo "-- skipped"
 else
-  mkdir $BUILD_DIR
+  mkdir -p $BUILD_DIR
   pushd $BUILD_DIR
   if [ "$BUILD_WITH_NINJA" -eq 1 ]; then
     cmake .. -G Ninja -DCMAKE_BUILD_TYPE=relwithdebinfo -DBWAPI_DIR=$BWAPI_INSTALL_PREFIX $CP_CMAKE_OPTIONS

@@ -40,7 +40,7 @@ namespace cherrypi {
 
 namespace {
 
-int constexpr kPollTimeout = 1000;
+int constexpr kPollTimeout = 100000;
 int constexpr kMaxTimedoutPolls = 10;
 auto constexpr kDtorGraceTime = std::chrono::milliseconds(500);
 

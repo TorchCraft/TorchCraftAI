@@ -195,6 +195,7 @@ void Checkpointer::onEpoch(int updateCount) {
       lastEpochStamp_ = now;
     }
 
+    auto means = metrics->getMeanEventValues();
     if (printMetricsSummary_ || (visdomKeys_.size() != 0 && visdomOnEpoch_)) {
       if (visdomKeys_.size() != 0 && visdomOnEpoch_) {
         std::vector<float> values;

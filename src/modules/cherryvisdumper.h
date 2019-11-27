@@ -145,7 +145,7 @@ class CherryVisDumperModule : public Module {
     std::vector<nlohmann::json> logs_;
   };
 
-  virtual ~CherryVisDumperModule() = default;
+  virtual ~CherryVisDumperModule();
 
   void setReplayFile(std::string const& replayFile) {
     replayFileName_ = replayFile;
@@ -161,6 +161,8 @@ class CherryVisDumperModule : public Module {
   virtual void step(State* s) override;
   virtual void onGameStart(State* s) override;
   virtual void onGameEnd(State* s) override;
+
+  void writeTrace();
 
   void enableLogsSink(State* state, bool on);
 
@@ -261,6 +263,8 @@ class CherryVisDumperModule : public Module {
     std::vector<std::shared_ptr<TreeNode>> allNodes;
   };
   struct TraceData {
+    bool gameStarted_ = false;
+
     // We assign IDs to tasks so we can store them only once
     std::unordered_map<std::shared_ptr<Task>, int32_t> taskToId_;
     std::vector<nlohmann::json> tasks_;

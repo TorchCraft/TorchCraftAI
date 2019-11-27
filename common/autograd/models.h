@@ -239,4 +239,29 @@ AUTOGRAD_CONTAINER_CLASS(MHAttention) {
   virtual ag::Variant forward(ag::Variant x) override;
 };
 
+// Implementation:
+// https://pytorch.org/docs/stable/_modules/torch/nn/modules/normalization.html
+// Original paper:
+// http://openaccess.thecvf.com/content_ECCV_2018/papers/Yuxin_Wu_Group_Normalization_ECCV_2018_paper.pdf
+AUTOGRAD_CONTAINER_CLASS(GroupNorm) {
+  // If numGroups = 1, equivalent to LayerNorm
+  // If numGroups = numChannels, equivalent to InstanceNorm
+  TORCH_ARG(int64_t, numGroups) = -1;
+
+  // We expect an input of size [bsz, numChannels, y, x]
+  TORCH_ARG(int64_t, numChannels) = -1;
+
+  // If enabled, the mean and variance will be learnable
+  TORCH_ARG(bool, affine) = true;
+
+  // Recommended initial value is 1, except for the last normalization of a
+  // ResNet block (so that it default to identity)
+  TORCH_ARG(float, initVariance) = 1.0f;
+
+  torch::Tensor variance_, mean_;
+
+  virtual void reset() override;
+  virtual ag::Variant forward(ag::Variant input) override;
+};
+
 } // namespace common

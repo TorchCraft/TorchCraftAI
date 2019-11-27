@@ -111,7 +111,7 @@ class Context {
       std::shared_ptr<Store> store,
       int rank,
       int size,
-      std::chrono::milliseconds timeout = std::chrono::seconds(1000));
+      std::chrono::milliseconds timeout = std::chrono::seconds(10000));
 
   int rank;
   int size;

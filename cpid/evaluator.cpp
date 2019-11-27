@@ -82,16 +82,6 @@ bool Evaluator::update() {
 Trainer::EpisodeHandle Evaluator::startEpisode() {
   using namespace std::chrono_literals;
   std::unique_lock<std::mutex> updateLock(updateMutex_);
-  while (true) {
-    // we need to produce a game, so we proceed
-    if (gamesStarted_ < batchSize_) {
-      break;
-    }
-    auto wakeReason = batchBarrier_.wait_for(updateLock, 100ms);
-    if (wakeReason == std::cv_status::timeout) {
-      return EpisodeHandle();
-    }
-  }
   auto handle = Trainer::startEpisode();
   if (handle) {
     gamesStarted_++;

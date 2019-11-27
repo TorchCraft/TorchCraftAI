@@ -20,7 +20,8 @@
 
 namespace cherrypi {
 
-Player::Player(std::shared_ptr<tc::Client> client) : BasePlayer(client) {}
+Player::Player(std::shared_ptr<tc::Client> client, const StateConfig& conf)
+    : BasePlayer(client, conf) {}
 
 void Player::setFrameskip(int n) {
   if (initialized_) {

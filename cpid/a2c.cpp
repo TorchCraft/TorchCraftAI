@@ -18,7 +18,7 @@ const std::string kSigmaKey = "std";
 const std::string kActionQKey = "actionQ";
 const std::string kActionKey = "action";
 const std::string kPActionKey = "pAction";
-const std::string kPolSize = "polSize";
+const std::string kPolSize = "pol_size";
 } // namespace
 
 namespace cpid {
@@ -37,7 +37,8 @@ A2C::A2C(
     bool overlappingUpdates,
     bool gpuMemoryEfficient,
     bool reduceGradients,
-    float maxGradientNorm)
+    float maxGradientNorm,
+    const std::string& polSizeKey)
     : SyncTrainer(
           model,
           optim,
@@ -54,7 +55,8 @@ A2C::A2C(
       discount_(discount),
       ratio_clamp_(ratio_clamp),
       entropy_ratio_(entropy_ratio),
-      policy_ratio_(policy_ratio) {}
+      policy_ratio_(policy_ratio),
+      polSizeKey_(polSizeKey) {}
 
 torch::Tensor A2C::computePolicyLoss(
     std::shared_ptr<BatchedFrame> currentFrame,
@@ -62,7 +64,8 @@ torch::Tensor A2C::computePolicyLoss(
     int batchSize) {
   torch::Tensor currentActions = currentFrame->action.view({-1, 1});
   auto const& currentOut = currentFrame->forwarded_state;
-  auto currentPolicy = currentOut[kPiKey].view({currentActions.size(0), -1});
+  auto currentPolicy =
+      currentOut[kPiKey]; //.view({currentactions.size(0), -1});
 
   auto pg_weights = advantage;
   std::vector<int64_t> pol_size;

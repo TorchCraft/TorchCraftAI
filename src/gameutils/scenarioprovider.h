@@ -50,7 +50,9 @@ class ScenarioProvider {
   /// Check whether the scenario is finished.
   /// By default, return true whenever the number of frames is exceeded or one
   /// of the players don't have any units left
-  virtual bool isFinished(int currentStep);
+  /// If checkAttack = true, it will check that the remaining units can attack
+  /// eachother (detecting stale-mate)
+  virtual bool isFinished(int currentStep, bool checkAttack = false);
 
  protected:
   // Two hours, which is longer than any reasonable game but short enough to
@@ -61,6 +63,8 @@ class ScenarioProvider {
   std::shared_ptr<BasePlayer> player1_;
   std::shared_ptr<BasePlayer> player2_;
   std::shared_ptr<GameMultiPlayer> game_;
+
+  int lastPossibleAttack_ = -1;
 };
 
 } // namespace cherrypi

@@ -88,7 +88,7 @@ sbatch_script_path = job.create_sbatch_script_array(
     link_aux_dlls=True,
     restart=False)
 sbatch_cmd = [
-    'sbatch', '--workdir', jobdir, '--array', '1-{}%{}'.format(
+    'sbatch', '--chdir', jobdir, '--array', '1-{}%{}'.format(
         len(array), args.num_parallel_jobs), sbatch_script_path
 ]
 

@@ -816,6 +816,7 @@ std::string Visdom::line(
                  .contiguous()
                  .view(-1);
   }
+  LOG(ERROR) << "linedata "<<linedata<<" labels "<<labels;
 
   return scatter(linedata, labels, win, env, name, defopts, update);
 }

@@ -6,13 +6,18 @@
  */
 
 #include "models.h"
+#include "common/assert.h"
 #include "debug.h"
 #include "operations.h"
+#include <fmt/format.h>
 
 namespace common {
 
 void MLP::reset() {
   auto seq = ag::Sequential();
+  if (nHid_ == 0) {
+    LOG(FATAL) << "Can't construct a MLP with 0 hidden size";
+  }
   for (auto i = 0; i < nLayers_; i++) {
     bool isLastLayer = i == nLayers_ - 1;
     auto nIn = i == 0 ? nIn_ : nHid_;
@@ -553,4 +558,20 @@ ag::Variant MHAttention::forward(ag::Variant x) {
   return {oLinear_->forward(concatted)[0], matmul};
 }
 
+void GroupNorm::reset() {
+  ASSERT(numChannels_ > 0, "numChannels is not set");
+  ASSERT(numGroups_ > 0, "numGroups is not set");
+  ASSERT(numChannels_ % numGroups_ == 0);
+  if (affine_) {
+    AUTOGRAD_REGISTER(variance_, torch::ones({numChannels_}) * initVariance_);
+    AUTOGRAD_REGISTER(mean_, torch::zeros({numChannels_}));
+  } else {
+    AUTOGRAD_REGISTER(variance_, torch::Tensor());
+    AUTOGRAD_REGISTER(mean_, torch::Tensor());
+  }
+}
+
+ag::Variant GroupNorm::forward(ag::Variant input) {
+  return {torch::group_norm(input[0], numGroups_, variance_, mean_)};
+}
 } // namespace common

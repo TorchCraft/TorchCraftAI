@@ -284,22 +284,18 @@ bool canBuildAt(
   unsigned beginY = pos.y / (unsigned)tc::BW::XYWalktilesPerBuildtile;
   unsigned endX = beginX + type->tileWidth;
   unsigned endY = beginY + type->tileHeight;
-  if (beginX >= tt.mapTileWidth() || endX >= tt.mapTileWidth()) {
+  if (beginX >= tt.mapTileWidth() || endX > tt.mapTileWidth()) {
     if (logFailure) {
       VLOG(0) << "Cannot build at " << pos << ": map to small";
     }
     return false;
   }
-  if (beginY >= tt.mapTileHeight() || endY >= tt.mapTileHeight()) {
+  if (beginY >= tt.mapTileHeight() || endY > tt.mapTileHeight()) {
     if (logFailure) {
       VLOG(0) << "Cannot build at " << pos << ": map to small";
     }
     return false;
   }
-  unsigned tileWidth = endX - beginX;
-  unsigned tileHeight = endY - beginY;
-  size_t stride = TilesInfo::tilesWidth - (endX - beginX);
-  const Tile* ptr = &tt.tiles[TilesInfo::tilesWidth * beginY + beginX];
   bool isResourceDepot = type->isResourceDepot;
   bool requiresCreep = type->requiresCreep;
   bool requiresNotCreep = !requiresCreep && type != buildtypes::Zerg_Hatchery;
@@ -317,9 +313,9 @@ bool canBuildAt(
           state, {tile.x + 1, tile.y - 1}, {tile.x - 1, tile.y + 1}, color);
     }
   };
-  for (unsigned iy = tileHeight; iy; --iy, ptr += stride) {
-    for (unsigned ix = tileWidth; ix; --ix, ++ptr) {
-      const Tile& tile = *ptr;
+  for (uint32_t x = beginX; x < endX; ++x) {
+    for (uint32_t y = beginY; y < endY; ++y) {
+      const Tile& tile = tt.tiles[TilesInfo::tilesWidth * y + x];
       if (!tile.buildable || (tile.reservedAsUnbuildable && !ignoreReserved)) {
         if (!tile.buildable) {
           illustrate(tile, tc::BW::Color::Grey);
@@ -414,23 +410,19 @@ bool checkCreepAt(State* state, const BuildType* type, const Position& pos) {
   unsigned beginY = pos.y / (unsigned)tc::BW::XYWalktilesPerBuildtile;
   unsigned endX = beginX + type->tileWidth;
   unsigned endY = beginY + type->tileHeight;
-  if (beginX >= tt.mapTileWidth() || endX >= tt.mapTileWidth()) {
+  if (beginX >= tt.mapTileWidth() || endX > tt.mapTileWidth()) {
     return false;
   }
-  if (beginY >= tt.mapTileHeight() || endY >= tt.mapTileHeight()) {
+  if (beginY >= tt.mapTileHeight() || endY > tt.mapTileHeight()) {
     return false;
   }
   if (type == buildtypes::Zerg_Hatchery) {
     return true;
   }
-  unsigned tileWidth = endX - beginX;
-  unsigned tileHeight = endY - beginY;
-  size_t stride = TilesInfo::tilesWidth - (endX - beginX);
-  const Tile* ptr = &tt.tiles[TilesInfo::tilesWidth * beginY + beginX];
   bool requiresCreep = type->requiresCreep;
-  for (unsigned iy = tileHeight; iy; --iy, ptr += stride) {
-    for (unsigned ix = tileWidth; ix; --ix, ++ptr) {
-      const Tile& tile = *ptr;
+  for (uint32_t x = beginX; x < endX; ++x) {
+    for (uint32_t y = beginY; y < endY; ++y) {
+      const Tile& tile = tt.tiles[TilesInfo::tilesWidth * y + x];
       if (tile.hasCreep != requiresCreep) {
         return false;
       }

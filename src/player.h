@@ -30,7 +30,7 @@ class Player : public BasePlayer {
   using ClientCommands = std::vector<tc::Client::Command>;
 
  public:
-  Player(std::shared_ptr<tc::Client> client);
+  Player(std::shared_ptr<tc::Client> client, const StateConfig& = {});
   Player(const Player&) = delete;
   Player& operator=(const Player&) = delete;
 

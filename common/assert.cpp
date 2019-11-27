@@ -1,6 +1,7 @@
 #include "assert.h"
 #include <fmt/format.h>
 #include <glog/logging.h>
+#include <mutex>
 
 DEFINE_bool(continue_on_assert, false, "Don't abort when an assert fails");
 
@@ -44,6 +45,8 @@ AssertionFailure::AssertionFailure(
           line,
           st),
       condition(condition) {
+  static std::mutex m; // Display only one stack trace at a time
+  std::unique_lock l(m);
   print();
   LOG_IF(FATAL, !FLAGS_continue_on_assert)
       << "Aborting after exception failure. Use -continue_on_assert to throw"

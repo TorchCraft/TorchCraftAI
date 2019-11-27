@@ -242,6 +242,7 @@ function cvis_init_with_data(path, init_data, config) {
         cvis_dbg_heatmaps_merge(global_data, cvis_state, other);
         cvis_dbg_trees_merge(global_data, cvis_state, other);
         cvis_dbg_tensors_summaries_merge(global_data, cvis_state, other);
+        cvis_dbg_values_graph_merge(global_data, cvis_state, other);
       });
 
 

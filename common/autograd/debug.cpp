@@ -106,7 +106,7 @@ std::string tensorStats(torch::Tensor x) {
 void checkTensor(torch::Tensor x, bool logOnError) {
   if (!std::isfinite(x.sum().item<float>())) {
     if (logOnError) {
-      VLOG(0) << "Tensor with a NaN or infinity: " << x;
+      LOG(ERROR) << "Tensor with a NaN or infinity: " << x;
     }
 
     throw std::runtime_error("checkTensor: tensor has a NaN or infinity!");

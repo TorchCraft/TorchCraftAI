@@ -392,31 +392,27 @@ reserveAreaImpl(TilesInfo& tt, const BuildType* type, int walkX, int walkY) {
   unsigned beginY = walkY / (unsigned)tc::BW::XYWalktilesPerBuildtile;
   unsigned endX = beginX + type->tileWidth;
   unsigned endY = beginY + type->tileHeight;
-  if (beginX >= tt.mapTileWidth() || endX >= tt.mapTileWidth() ||
-      beginY >= tt.mapTileHeight() || endY >= tt.mapTileHeight()) {
+  if (beginX >= tt.mapTileWidth() || endX > tt.mapTileWidth() ||
+      beginY >= tt.mapTileHeight() || endY > tt.mapTileHeight()) {
     if (reserve) {
       throw std::runtime_error("attempt to reserve area out of bounds");
     } else {
       throw std::runtime_error("attempt to unreserve area out of bounds");
     }
   }
-  unsigned tileWidth = endX - beginX;
-  unsigned tileHeight = endY - beginY;
-  size_t stride = TilesInfo::tilesWidth - (endX - beginX);
-  Tile* ptr = &tt.tiles[TilesInfo::tilesWidth * beginY + beginX];
 
   std::vector<Tile*> changedTiles;
-  changedTiles.reserve(tileWidth * tileHeight);
+  changedTiles.reserve(type->tileWidth * type->tileHeight);
   auto rollback = [&]() {
     for (auto* t : changedTiles) {
       t->reservedAsUnbuildable = !reserve;
     }
   };
 
-  for (unsigned iy = tileHeight; iy; --iy, ptr += stride) {
-    for (unsigned ix = tileWidth; ix; --ix, ++ptr) {
-      Tile& t = *ptr;
-      if (t.reservedAsUnbuildable != !reserve) {
+  for (uint32_t x = beginX; x < endX; ++x) {
+    for (uint32_t y = beginY; y < endY; ++y) {
+      Tile* ptr = &tt.tiles[TilesInfo::tilesWidth * y + x];
+      if (ptr->reservedAsUnbuildable != !reserve) {
         if (reserve) {
           rollback();
           throw std::runtime_error("attempt to reserve reserved tile");
@@ -425,7 +421,7 @@ reserveAreaImpl(TilesInfo& tt, const BuildType* type, int walkX, int walkY) {
           throw std::runtime_error("attempt to unreserve unreserved tile");
         }
       }
-      t.reservedAsUnbuildable = reserve;
+      ptr->reservedAsUnbuildable = reserve;
       changedTiles.push_back(ptr);
     }
   }

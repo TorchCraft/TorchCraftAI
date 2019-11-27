@@ -176,21 +176,87 @@ function cvis_dbg_values_graph_init(global_data, cvis_state) {
       },
   });
 
+  var TEMPLATE_TITLE = $('#game-values-template-title');
+  var TEMPLATE_BODY = $('#game-values-template');
+  var idCounter = 0;
+  function add_game_values_graph(name, game_values, show_active) {
+    var id = '_game_value_' + (idCounter++);
+    var tabTitle = TEMPLATE_TITLE.clone().removeClass('collapse').addClass('delete-on-reset-cvis').removeAttr('id');
+    var tabContent = TEMPLATE_BODY.clone().removeClass('collapse').addClass('delete-on-reset-cvis').attr('id', id);
+    tabTitle.find('a').attr('href', '#' + id).attr('aria-selected', false).removeClass('show active').text(name);
+    if (show_active) {
+      tabTitle.find('a').attr('aria-selected', 'false').addClass('show active');
+      tabContent.addClass('active show');
+    }
+    TEMPLATE_TITLE.parent().append(tabTitle);
+    TEMPLATE_BODY.parent().append(tabContent);
+    var chartPlaceholder = tabContent.find('.chart-placeholder-canvas')[0];
+    chartPlaceholder = linechart_destroy(chartPlaceholder);
+    var c = linechart_create(chartPlaceholder, 'frame', game_values, 'LineWithFrameNum');
+    if (c !== null) {
+      tabContent.find('.when-no-chart').hide();
+    }
+    else {
+      tabContent.find('.when-no-chart').show();
+    }
+  };
+
+  function add_player_values(name, game_values) {
+    var dataByPrefix = {};
+    $.each(game_values, function(frame, frame_data) {
+      $.each(frame_data, function(key, value) {
+        var parts = key.split('.');
+        if (parts.length < 2) {
+          parts = [''].concat(parts);
+        }
+        if (!dataByPrefix.hasOwnProperty(parts[0])) {
+          dataByPrefix[parts[0]] = {};
+        }
+        if (!dataByPrefix[parts[0]].hasOwnProperty(frame)) {
+          dataByPrefix[parts[0]][frame] = {};
+        }
+        dataByPrefix[parts[0]][frame][parts[1]] = value;
+      });
+    });
+    var e = Object.entries(dataByPrefix);
+    e.sort(function(a, b) { return a[0].length - b[0].length; });
+    $.each(e, function(_, entry) {
+      const prefix = entry[0];
+      const values = entry[1];
+      var show_active = false;
+      var graph_name = prefix;
+      if (prefix == '' && name == '') {
+        show_active = true;
+      }
+      if (graph_name == '') {
+        graph_name = name == '' ? 'Game values' : '';
+      }
+      if (name != '') {
+        if (graph_name == '') {
+          graph_name = name;
+        }
+        else {
+          graph_name = name + '/' + graph_name;
+        }
+      }
+      add_game_values_graph(graph_name, values, show_active);
+    });
+  };
+
   cvis_state.functions.linechart_create = linechart_create;
   cvis_state.functions.linechart_destroy = linechart_destroy;
-
-  var DOM_ROOT = $('#game-values');
-  var chartPlaceholder = DOM_ROOT.find('.chart-placeholder-canvas')[0];
-  chartPlaceholder = linechart_destroy(chartPlaceholder);
+  cvis_state.functions.add_game_values_graph = add_game_values_graph;
+  cvis_state.functions.add_player_values = add_player_values;
   cvis_state.linecharts = {
     charts_with_frame_marker: [],
   };
-  var c = linechart_create(chartPlaceholder, 'frame', global_data.game_values, 'LineWithFrameNum');
-  if (c !== null) {
-    DOM_ROOT.find('.when-no-chart').hide();
-  }
-  else {
-    DOM_ROOT.find('.when-no-chart').show();
+
+  add_player_values("", global_data.game_values);
+}
+
+function cvis_dbg_values_graph_merge(global_data, cvis_state, other) {
+  if (Object.keys(other.data.game_values).length > 0) {
+    cvis_state.functions.add_player_values(other.name, other.data.game_values);
   }
 }
 

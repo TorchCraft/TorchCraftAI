@@ -638,28 +638,30 @@ void WorkerBuilderController::step(State* state) {
 
   if (type_->isBuilding) {
     if (builder_ && (pos_.x != -1 || pos_.y != -1)) {
-      if (!detector_) {
-        detector_ = utils::getBestScoreCopy(
-            state->unitsInfo().myUnits(),
-            [&](Unit* u) {
-              if (!u->type->isDetector || u->type->isBuilding || !u->active() ||
-                  board->taskWithUnit(u)) {
-                return kdInfty;
-              }
-              return (double)utils::distance(u, pos_);
-            },
-            kdInfty);
-        if (detector_) {
-          grabUnit(state, detector_);
-        }
-      } else {
-        auto tgt = movefilters::safeMoveTo(state, detector_, pos_);
-        if (tgt.x < 0 || tgt.y < 0) {
-          VLOG(1) << "detector stuck";
-          tgt = pos_;
-        } else if (tgt.distanceTo(detector_->getMovingTarget()) > 4) {
-          // condition made to avoid sending too many commands
-          addUpc(detector_, tgt, Command::Move);
+      if (state->board()->get<bool>("builder_use_detector", true)) {
+        if (!detector_) {
+          detector_ = utils::getBestScoreCopy(
+              state->unitsInfo().myUnits(),
+              [&](Unit* u) {
+                if (!u->type->isDetector || u->type->isBuilding ||
+                    !u->active() || board->taskWithUnit(u)) {
+                  return kdInfty;
+                }
+                return (double)utils::distance(u, pos_);
+              },
+              kdInfty);
+          if (detector_) {
+            grabUnit(state, detector_);
+          }
+        } else {
+          auto tgt = movefilters::safeMoveTo(state, detector_, pos_);
+          if (tgt.x < 0 || tgt.y < 0) {
+            VLOG(1) << "detector stuck";
+            tgt = pos_;
+          } else if (tgt.distanceTo(detector_->getMovingTarget()) > 4) {
+            // condition made to avoid sending too many commands
+            addUpc(detector_, tgt, Command::Move);
+          }
         }
       }
 
