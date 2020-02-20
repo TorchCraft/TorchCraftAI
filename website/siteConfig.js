@@ -96,6 +96,11 @@ const siteConfig = {
   opImage: 'img/tclogolinesmall.png',
   twitterImage: 'img/tclogolinesmall.png',
 
+   algolia: {
+    apiKey: '50ee43f5129c39b00710f2ce647d9249',
+    indexName: 'torchcraft',
+   },
+
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
   //   repoUrl: 'https://github.com/facebook/test-site',
