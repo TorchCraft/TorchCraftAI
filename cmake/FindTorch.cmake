@@ -20,16 +20,16 @@
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/FindCUDA")
 
-FIND_PATH(PYTORCH_DIR torch/csrc/api/include/torch/torch.h 
+FIND_PATH(PYTORCH_DIR include/torch/csrc/api/include/torch/torch.h
   PATHS
     "${PYTORCH_DIRECTORY}"
-    "${PROJECT_SOURCE_DIR}/3rdparty/pytorch"
+    "${PROJECT_SOURCE_DIR}/3rdparty/pytorch/torch/lib/tmp_install"
     NO_DEFAULT_PATH
   )
 IF(MSVC)
   SET(TORCH_LIBDIR "${PYTORCH_DIR}/torch/lib/")
 ELSE(MSVC)
-  SET(TORCH_LIBDIR "${PYTORCH_DIR}/torch/lib/tmp_install/lib")
+  SET(TORCH_LIBDIR "${PYTORCH_DIR}/lib")
 ENDIF(MSVC)
 
 FIND_LIBRARY(TORCH_LIBRARY torch
@@ -46,14 +46,10 @@ FIND_LIBRARY(C10_LIB c10
   )
 SET(TORCH_INCLUDE_DIRECTORIES
   ${PYTORCH_DIR}
-  "${PYTORCH_DIR}/torch/csrc/api/include"
-  "${PYTORCH_DIR}/aten/src"
-  "${PYTORCH_DIR}/aten/src/TH"
-  "${PYTORCH_DIR}/c10"
-  # These are hard coded ATEN_BUILDPATHs
-  "${PYTORCH_DIR}/torch/lib/tmp_install/include"
-  "${PYTORCH_DIR}/torch/lib/tmp_install/include/ATen"
-  "${PYTORCH_DIR}/torch/lib/tmp_install/include/TH"
+  "${PYTORCH_DIR}/include/torch/csrc/api/include"
+  "${PYTORCH_DIR}/include"
+  "${PYTORCH_DIR}/include/ATen"
+  "${PYTORCH_DIR}/include/TH"
   )
 
 INCLUDE(FindPackageHandleStandardArgs)
@@ -80,8 +76,7 @@ IF(CUDA_FOUND)
   ELSE(MSVC)
 	LIST(APPEND CAFFE2_LIB -L"${CUDA_TOOLKIT_ROOT_DIR}/lib64" cuda cudart nvrtc nvToolsExt)
   ENDIF(MSVC)
-  LIST(APPEND TORCH_INCLUDE_DIRECTORIES "${PYTORCH_DIR}/aten/src/THC")
-  LIST(APPEND TORCH_INCLUDE_DIRECTORIES "${PYTORCH_DIR}/torch/lib/tmp_install/include/THC")
+  LIST(APPEND TORCH_INCLUDE_DIRECTORIES "${PYTORCH_DIR}/include/THC")
 ENDIF(CUDA_FOUND)
 
 ADD_DEFINITIONS(-DNO_PYTHON)
