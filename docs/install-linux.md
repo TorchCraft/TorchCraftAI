@@ -10,14 +10,14 @@ The follow instructions are tailored to the latest LTS release of Ubuntu, 18.04.
 ### TL;DR
 
 Here's a short overview of everything that's required:
-- Libraries and development files for zeromq (version 4.2), gflags, glog, curl and sdl2
+- Libraries and development files for zeromq (version 4.2), gflags, glog, curl, sdl2 and hiredis
 - All PyTorch requirements to compile PyTorch
 - [NCCL2](https://developer.nvidia.com/nccl) in order to use TorchCraftAI's model training library
 
 ### Install Required Packages
 ```bash
 sudo apt-get update
-sudo apt-get install git libsdl2-dev libzmq3-dev binutils-dev libdw-dev libgflags-dev libnuma-dev cmake curl libcurl-dev libgoogle-glog-dev
+sudo apt-get install git cmake curl libsdl2-dev libzmq3-dev binutils-dev libdw-dev libgflags-dev libnuma-dev libcurl-dev libssl-dev libgoogle-glog-dev libhiredis-dev
 ```
 
 `apt-get` may complain about not finding an installation candidate for `libcurl-dev`.
@@ -35,18 +35,17 @@ cd TorchCraftAI
 ### Build PyTorch Backend Libraries
 Since we live on the bleeding edge of PyTorch, you'll unfortunately have to compile your own pytorch libraries.
 
-Here's a summary for compiling with an Anaconda installation:
+Here's a summary for compiling with a Miniconda installation:
 
 ```bash
 
-# Download Anaconda from https://www.anaconda.com/download/#linux
-bash Anaconda-latest-Linux-x86_64.sh
+# Download Miniconda for Python 3.7 from https://docs.conda.io/en/latest/miniconda.html#linux-installers
+bash Miniconda3-latest-Linux-x86_64.sh
 
 export CMAKE_PREFIX_PATH="$(dirname $(which conda))/../" # [anaconda root directory]
 
 # Install basic dependencies
-conda install numpy pyyaml mkl mkl-include setuptools cmake cffi typing
-conda install -c mingfeima mkldnn
+conda install numpy==1.15.0 mkl==2018.0 mkl-include==2018.0 setuptools cmake cffi typing pyyaml
 
 # Add LAPACK support for the GPU
 conda install -c pytorch magma-cuda92 # or [magma-cuda80 | magma-cuda91] depending on your cuda version
@@ -57,9 +56,9 @@ popd
 ```
 
 We recommend the [github instructions](https://github.com/ebetica/pytorch/tree/agppv0.4-1#from-source) if you run into issues with these steps.
-Alternatively, instead of using Anaconda, you may install everything yourself, or choose not to install every optimization, such as mkl-dnn, if you prefer for a simpler installation process.
+Alternatively, instead of using Miniconda, you may install everything yourself, or choose not to install every optimization, if you prefer for a simpler installation process.
 
-PyTorch will run most performantly using the environment variable `OMP_NUM_THREADS=1`. If you have no specific need for this value to differ, we recommend setting this in your dotfiles.
+PyTorch will run most performantly using the environment variable `OMP_NUM_THREADS=1`. If you have no specific need for this value to differ, we recommend setting this in your shell's configuration file.
 
 ### Build and install Zstandard
 
