@@ -1,6 +1,7 @@
 [submodule "pytorch"]
 	path = 3rdparty/pytorch
 	url = https://github.com/ebetica/pytorch
+	ignore = untracked
 [submodule "torchcraft"]
 	path = 3rdparty/torchcraft
 	url = https://github.com/TorchCraft/TorchCraft
