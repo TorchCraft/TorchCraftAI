@@ -14,10 +14,6 @@ ENDIF(CUDA_FOUND)
 
 FILE(GLOB SRCS *.cpp)
 
-SET(C10D_INCLUDES
-  "${PROJECT_SOURCE_DIR}/3rdparty/pytorch/lib/tmp_install/include"
-  )
-
 IF(NOT TORCH_FOUND)
   FIND_PACKAGE(Torch REQUIRED)
   ADD_DEFINITIONS(-DHAVE_ATEN)
@@ -28,15 +24,15 @@ IF(NOT CPID_DISTRIBUTED)
   MESSAGE(WARNING "C10D/GLOO are only built on Linux - cpid will NOT have distributed support")
 ELSE()
   FIND_LIBRARY(C10D c10d
-    PATHS "${PROJECT_SOURCE_DIR}/3rdparty/pytorch/torch/lib/tmp_install/lib"
+    PATHS "${PYTORCH_DIR}/lib"
     NO_DEFAULT_PATH
   )
   FIND_LIBRARY(GLOO gloo
-    PATHS "${PROJECT_SOURCE_DIR}/3rdparty/pytorch/torch/lib/tmp_install/lib"
+    PATHS "${PYTORCH_DIR}/lib"
     NO_DEFAULT_PATH
   )
   FIND_LIBRARY(GLOO_BUILDER gloo_builder
-    PATHS "${PROJECT_SOURCE_DIR}/3rdparty/pytorch/torch/lib/tmp_install/lib"
+    PATHS "${PYTORCH_DIR}/lib"
     NO_DEFAULT_PATH
   )
   TARGET_LINK_LIBRARIES(cpid
@@ -49,7 +45,7 @@ ENDIF()
 
 IF(CUDA_FOUND)
   FIND_LIBRARY(GLOO_CUDA gloo_cuda
-    PATHS "${PROJECT_SOURCE_DIR}/3rdparty/pytorch/torch/lib/tmp_install/lib"
+    PATHS "${PYTORCH_DIR}/lib"
     NO_DEFAULT_PATH
   )
   TARGET_LINK_LIBRARIES(cpid cudart "${GLOO_CUDA}")
